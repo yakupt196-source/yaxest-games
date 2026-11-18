@@ -23,4 +23,4 @@ addEventListener('keydown',e=>{const d={arrowleft:0,a:0,arrowup:3,w:3,arrowright
 let tx,ty;document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY});
 document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.max(Math.abs(dx),Math.abs(dy))<25)return;move(Math.abs(dx)>Math.abs(dy)?(dx<0?0:2):(dy<0?3:1))});
 document.getElementById('r').onclick=init;init();
-</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../menu.js"></script></body></html>
+</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../menu.js"></script></body></html>

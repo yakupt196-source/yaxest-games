@@ -12,3 +12,6 @@ Metinler `i18n-dict.js` içindeki sözlükten otomatik çevrilir (`i18n.js`). Ye
 
 ## Yaxest Ritim
 Geometry Dash tarzı, yandan görünümlü ritim koşusu: dikenler, bloklar (üstüne konulur), sıçrama pedleri, geniş çukurlar, tavandan sarkan engeller. Dünya saniye tabanlıdır; her seviye daha uzun ve hızlıdır. Müzik tamamen kodla (WebAudio) üretilir ve yumuşaktır (yankı, düşük geçiş filtresi). Müzik seçimi: Lo-fi, Synthwave, House, Piyano. **Kendi müziğin**: cihazdan bir ses dosyası seç; tempo ve vuruşlar tarayıcıda analiz edilir, engeller şarkıya göre dizilir (dosya hiçbir yere yüklenmez).
+
+## Ses (tüm oyunlar)
+`sfx.js`: dosyasız, tamamen kodla üretilen ortak ses motoru. Tüm sesler aynı pentatonik gamdadır (puan, hata, bitiş, kazanma, dokunma). Oyunlara otomatik bağlanır (skor, can, bitiş mesajı gözlemlenir). Ses, duraklatma menüsündeki "Ses" düğmesiyle kapatılır (`yx-mute`). Ritim kendi ses motorunu kullanır.
