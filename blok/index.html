@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yaxest Blok</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&display=swap">
+<style>
+:root{--bg:#0a1220;--orange:#ff7a2e;--text:#e8f1ff;--dim:#8ea2c4;--cyan:#28d7ff;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:"Chakra Petch",system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#back{position:fixed;left:14px;top:calc(env(safe-area-inset-top,0px) + 10px);color:var(--dim);font-size:14px;text-decoration:none}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;background:rgba(10,18,32,.9)}
+.screen.hide{display:none}
+h1{margin:0;font-size:clamp(34px,9vw,56px)}
+p{margin:0;color:var(--dim);line-height:1.55}
+button{font:inherit;font-weight:700;font-size:18px;padding:12px 34px;border:0;border-radius:10px;background:var(--orange);color:#1a0b00;cursor:pointer}
+button:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<a id="back" href="../">← Yaxest Games</a>
+<div class="screen" id="ov">
+  <h1 id="ot">Yaxest Blok</h1>
+  <p id="ox">Alttaki blokları tahtaya sürükle. Dolan satır ve sütunlar silinir. Peş peşe silersen kombo yaparsın.</p>
+  <button id="go">Oyna</button>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cv=$('c'),ctx=cv.getContext('2d');
+const SH=[[[1]],[[1,1]],[[1],[1]],[[1,1,1]],[[1],[1],[1]],[[1,1],[1,1]],[[1,1,1],[1,1,1],[1,1,1]],[[1,0],[1,1]],[[0,1],[1,1]],[[1,1],[1,0]],[[1,1],[0,1]],[[1,0],[1,0],[1,1]],[[1,1,1],[1,0,0]],[[1,1,1,1]],[[1],[1],[1],[1]],[[1,1,1],[0,1,0]]];
+const TH=[
+{n:'Orman',bg:'#0b2417',ce:'#143a26',co:['#6ee7a0','#facc15','#fb923c','#a3e635','#5eead4','#f472b6']},
+{n:'Şehir',bg:'#161a2b',ce:'#222a45',co:['#7aa2ff','#ff7a2e','#f472b6','#facc15','#5eead4','#a78bfa']},
+{n:'Uzay',bg:'#05030f',ce:'#1a1240',co:['#c084fc','#28d7ff','#f472b6','#facc15','#a3e635','#fb923c']}];
+let grid,tray,score=0,best=0,combo=0,over=true,drag=null,W,H,dpr,cs,bx,by,ty;
+try{best=+localStorage.getItem('yb')||0}catch(e){}
+const th=()=>TH[score>=800?2:score>=300?1:0];
+const F=s=>'700 '+s+'px "Chakra Petch",system-ui,sans-serif';
+function rs(){
+  dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+  cv.width=W*dpr;cv.height=H*dpr;
+  cs=Math.min(56,Math.floor(Math.min((W-24)/8,(H-250)/8)));
+  bx=(W-8*cs)/2;by=100;ty=by+8*cs+(H-by-8*cs)/2;
+}
+addEventListener('resize',rs);rs();
+
+function newPiece(){const s=SH[Math.random()*SH.length|0];return{s,c:Math.random()*6|0,w:s[0].length,h:s.length}}
+function init(){
+  grid=Array.from({length:8},()=>Array(8).fill(null));
+  tray=[newPiece(),newPiece(),newPiece()];
+  score=0;combo=0;over=false;drag=null;
+  $('ov').classList.add('hide');
+}
+function can(p,r,c){
+  if(r<0||c<0||r+p.h>8||c+p.w>8)return false;
+  for(let i=0;i<p.h;i++)for(let j=0;j<p.w;j++)if(p.s[i][j]&&grid[r+i][c+j]!==null)return false;
+  return true;
+}
+function fits(p){for(let r=0;r<=8-p.h;r++)for(let c=0;c<=8-p.w;c++)if(can(p,r,c))return true;return false}
+function put(p,r,c){
+  let n=0;
+  for(let i=0;i<p.h;i++)for(let j=0;j<p.w;j++)if(p.s[i][j]){grid[r+i][c+j]=p.c;n++}
+  const rows=[],cols=[];
+  for(let i=0;i<8;i++){
+    if(grid[i].every(v=>v!==null))rows.push(i);
+    if(grid.every(row=>row[i]!==null))cols.push(i);
+  }
+  for(const i of rows)for(let j=0;j<8;j++)grid[i][j]=null;
+  for(const j of cols)for(let i=0;i<8;i++)grid[i][j]=null;
+  const L=rows.length+cols.length;
+  score+=n+L*10*(1+combo);
+  combo=L?combo+1:0;
+}
+function checkOver(){
+  if(tray.filter(Boolean).every(p=>!fits(p))){
+    over=true;
+    if(score>best){best=score;try{localStorage.setItem('yb',best)}catch(e){}}
+    $('ot').textContent='Oyun bitti';
+    $('ox').textContent='Puanın: '+score+'. En iyi: '+best+'.';
+    $('go').textContent='Tekrar oyna';
+    $('ov').classList.remove('hide');
+  }
+}
+function snap(){
+  const p=tray[drag.i];
+  return{r:Math.round((drag.y-p.h*cs/2-cs*2.2-by)/cs),c:Math.round((drag.x-p.w*cs/2-bx)/cs)};
+}
+cv.addEventListener('pointerdown',e=>{
+  if(over||e.clientY<by+8*cs)return;
+  const i=Math.min(2,Math.floor(e.clientX/(W/3)));
+  if(!tray[i])return;
+  drag={i,x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId);
+});
+cv.addEventListener('pointermove',e=>{if(drag){drag.x=e.clientX;drag.y=e.clientY}});
+cv.addEventListener('pointercancel',()=>{drag=null});
+cv.addEventListener('pointerup',()=>{
+  if(!drag)return;
+  const p=tray[drag.i],g=snap();
+  if(can(p,g.r,g.c)){
+    put(p,g.r,g.c);tray[drag.i]=null;
+    if(tray.every(t=>!t))tray=[newPiece(),newPiece(),newPiece()];
+    checkOver();
+  }
+  drag=null;
+});
+
+function cell(x,y,s,col,a){
+  ctx.globalAlpha=a||1;ctx.fillStyle=col;
+  ctx.beginPath();ctx.roundRect(x+1,y+1,s-2,s-2,Math.max(3,s*.18));ctx.fill();
+  ctx.globalAlpha=1;
+}
+function piece(p,x,y,s,a){
+  const T=th();
+  for(let i=0;i<p.h;i++)for(let j=0;j<p.w;j++)if(p.s[i][j])cell(x+j*s,y+i*s,s,T.co[p.c],a);
+}
+function draw(){
+  const T=th();
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle=T.bg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#e8f1ff';ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  ctx.font=F(34);ctx.fillText(score,bx,by-34);
+  ctx.textAlign='right';ctx.font=F(15);ctx.fillStyle='#8ea2c4';
+  ctx.fillText('En iyi: '+Math.max(best,score),bx+8*cs,by-46);
+  ctx.fillText(T.n+(combo>0?'  |  Kombo x'+combo:''),bx+8*cs,by-22);
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const v=grid[r][c];
+    cell(bx+c*cs,by+r*cs,cs,v===null?T.ce:T.co[v]);
+  }
+  if(drag&&tray[drag.i]){
+    const p=tray[drag.i],g=snap();
+    if(can(p,g.r,g.c))piece(p,bx+g.c*cs,by+g.r*cs,cs,.35);
+  }
+  tray.forEach((p,i)=>{
+    if(!p||(drag&&drag.i===i))return;
+    const s=cs*.6;
+    piece(p,W*(i+.5)/3-p.w*s/2,ty-p.h*s/2,s);
+  });
+  if(drag&&tray[drag.i]){
+    const p=tray[drag.i];
+    piece(p,drag.x-p.w*cs/2,drag.y-p.h*cs/2-cs*2.2,cs);
+  }
+}
+function loop(){draw();requestAnimationFrame(loop)}
+$('go').onclick=init;
+grid=Array.from({length:8},()=>Array(8).fill(null));tray=[newPiece(),newPiece(),newPiece()];
+loop();
+</script>
+</body>
+</html>

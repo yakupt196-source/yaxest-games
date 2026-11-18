@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Karo | Yaxest Games</title>
+<meta name="description" content="Düşen karolara dokun, boş yere dokunma, hiçbirini kaçırma.">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:10%;left:0;right:0;text-align:center;font-size:4rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.84);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><canvas id="c"></canvas><div id="big">0</div>
+<div id="ov"><h2 id="ot">Yaxest Karo</h2><p id="op"><b>En alttaki renkli karoya</b> dokun.<br>Yanlış şeride dokunursan ya da karo kaçarsa biter. Hız artar.</p><button id="go">Başla</button></div></div>
+<script>
+const $=id=>document.getElementById(id);
+
+const c=$('c'),x=c.getContext('2d');
+let W=360,H=600,rh=150,state='menu',best=0,sc=0,rows=[],overAt=0,bad=-1,hue=0;
+try{best=+localStorage.getItem('yk3-best')||0}catch(e){}$('bs').textContent=best;
+function rs(){const d=Math.min(devicePixelRatio||1,2),r=c.getBoundingClientRect();W=r.width||360;H=r.height||600;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);rh=H/4}
+addEventListener('resize',rs);
+const rnd=p=>{let l;do{l=Math.floor(Math.random()*4)}while(l===p);return l};
+function start(){sc=0;rows=[];bad=-1;let y=H-rh*2.3,p=-1;for(let i=0;i<5;i++){p=rnd(p);rows.push({lane:p,y:y-i*rh,hit:0})}state='play';$('big').textContent=0;$('ov').classList.add('hid')}
+function over(why){state='over';overAt=performance.now()+500;if(sc>best){best=sc;try{localStorage.setItem('yk3-best',best)}catch(e){}}$('bs').textContent=best;
+  try{navigator.vibrate&&navigator.vibrate(100)}catch(e){}$('ot').textContent=why;$('op').innerHTML='Skor <b>'+sc+'</b><br>Rekor <b>'+best+'</b>';$('go').textContent='Tekrar oyna';$('ov').classList.remove('hid')}
+const speed=()=>H*(.5+Math.min(1.1,sc*.012));
+function update(dt){if(state!=='play')return;const v=speed()*dt;for(const r of rows)r.y+=v;
+  const top=rows.reduce((m,r)=>Math.min(m,r.y),1e9);if(top>-rh*.5){rows.push({lane:rnd(rows[rows.length-1].lane),y:top-rh,hit:0})}
+  for(const r of rows)if(!r.hit&&r.y>=H){bad=r.lane;return over('Karo kaçtı!')}
+  rows=rows.filter(r=>r.y<H+rh)}
+function tap(px){if(state!=='play')return;const lane=Math.min(3,Math.max(0,Math.floor(px/(W/4))));
+  let low=null;for(const r of rows)if(!r.hit&&(!low||r.y>low.y))low=r;if(!low)return;
+  if(low.lane===lane){low.hit=1;sc++;hue=(hue+7)%360;$('big').textContent=sc}else{bad=lane;over('Yanlış şerit!')}}
+function render(){x.fillStyle='#14102b';x.fillRect(0,0,W,H);const lw=W/4;
+  for(const r of rows){x.fillStyle=r.hit?'#2b2559':`hsl(${(r.lane*70+hue)%360},80%,58%)`;x.beginPath();x.roundRect(r.lane*lw+4,r.y+4,lw-8,rh-8,12);x.fill()}
+  if(bad>=0&&state==='over'){x.fillStyle='rgba(255,92,138,.5)';x.fillRect(bad*lw,0,lw,H)}
+  x.strokeStyle='rgba(255,255,255,.08)';x.lineWidth=2;for(let i=1;i<4;i++){x.beginPath();x.moveTo(i*lw,0);x.lineTo(i*lw,H);x.stroke()}
+  x.fillStyle='#ff5c8a';x.fillRect(0,H-3,W,3)}
+let last=0;function loop(ts){requestAnimationFrame(loop);const dt=Math.min(.05,(ts-last)/1000||0);last=ts;update(dt);render()}
+c.addEventListener('pointerdown',e=>{e.preventDefault();const r=c.getBoundingClientRect();tap(e.clientX-r.left)});
+addEventListener('keydown',e=>{const k=['a','s','d','f'].indexOf(e.key.toLowerCase());if(k>=0&&state==='play')tap((k+.5)*W/4);else if(e.key==='Enter'&&state!=='play'&&performance.now()>overAt)start()});
+$('go').onclick=()=>{if(performance.now()>overAt)start()};
+rs();start();state='menu';$('ov').classList.remove('hid');requestAnimationFrame(loop);
+
+</script></body></html>

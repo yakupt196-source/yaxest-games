@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet"><title>Yaxest Yılan | Yaxest Games</title><style>*{box-sizing:border-box;margin:0}body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));gap:12px;touch-action:manipulation;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overflow-x:hidden}header{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}header a{color:#a9a3cf;text-decoration:none}h1{font-size:1.4rem;font-weight:800}.stat{color:#ffd23f;font-weight:700}button{font:inherit;font-weight:700;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:12px 26px;min-height:44px;cursor:pointer}button:focus-visible{outline:3px solid #fff}</style>
+<style>body{touch-action:none}canvas{width:min(100%,calc(100dvh - 240px));min-width:240px;max-width:420px;aspect-ratio:1;background:#1f1a42;border-radius:18px;touch-action:none}p{color:#a9a3cf;font-size:.9rem;text-align:center}</style></head><body>
+<header><a href="../">← Yaxest Games</a><h1>🐍 Yılan</h1><span class="stat">Skor <span id="s">0</span> · Rekor <span id="b">0</span></span></header>
+<canvas id="c" width="400" height="400"></canvas>
+<button id="r">Başlat</button>
+<p>Ok tuşları, WASD veya ekranda kaydırma ile yönlendir.</p>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d'),N=20,S=20;
+let sn,d,nd,ap,sc,t,best=0;
+try{best=+localStorage.getItem('yy-best')||0}catch(e){}
+document.getElementById('b').textContent=best;
+function rnd(){do{ap={x:Math.floor(Math.random()*N),y:Math.floor(Math.random()*N)}}while(sn.some(p=>p.x==ap.x&&p.y==ap.y))}
+function start(){sn=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];d=nd={x:1,y:0};sc=0;document.getElementById('s').textContent=0;rnd();clearInterval(t);t=setInterval(step,130);document.getElementById('r').textContent='Yeniden başlat'}
+function step(){d=nd;const h={x:sn[0].x+d.x,y:sn[0].y+d.y};
+if(h.x<0||h.y<0||h.x>=N||h.y>=N||sn.some(p=>p.x==h.x&&p.y==h.y)){return over()}
+sn.unshift(h);
+if(h.x==ap.x&&h.y==ap.y){sc++;document.getElementById('s').textContent=sc;rnd();clearInterval(t);t=setInterval(step,Math.max(60,130-sc*3))}else sn.pop();draw()}
+function over(){clearInterval(t);if(sc>best){best=sc;document.getElementById('b').textContent=best;try{localStorage.setItem('yy-best',best)}catch(e){}}
+x.fillStyle='rgba(20,16,43,.8)';x.fillRect(0,0,400,400);x.fillStyle='#ff5c8a';x.font='800 40px sans-serif';x.textAlign='center';x.fillText('Oyun bitti',200,205)}
+function draw(){x.fillStyle='#1f1a42';x.fillRect(0,0,400,400);
+x.fillStyle='#ff5c8a';x.beginPath();x.arc(ap.x*S+10,ap.y*S+10,8,0,7);x.fill();
+sn.forEach((p,i)=>{x.fillStyle=i?'#3ddbb0':'#ffd23f';x.beginPath();x.roundRect(p.x*S+1,p.y*S+1,S-2,S-2,6);x.fill()})}
+function turn(a,b){if(a!==-d.x||b!==-d.y)nd={x:a,y:b}}
+addEventListener('keydown',e=>{const m={arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1],arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0]}[e.key.toLowerCase()];if(m){e.preventDefault();turn(...m)}});
+let tx,ty;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;Math.abs(dx)>Math.abs(dy)?turn(dx>0?1:-1,0):turn(0,dy>0?1:-1)});
+document.getElementById('r').onclick=start;
+sn=[{x:10,y:10}];d=nd={x:1,y:0};ap={x:5,y:5};draw();
+</script></body></html>

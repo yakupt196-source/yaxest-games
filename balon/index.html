@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Balon | Yaxest Games</title>
+<meta name="description" content="Balonları patlat, bombalara dokunma, kaçırma.">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:10%;left:0;right:0;text-align:center;font-size:4rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.84);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+#lv{position:absolute;top:calc(10% + 4.6rem);left:0;right:0;text-align:center;font-size:1.4rem;pointer-events:none;letter-spacing:4px}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><canvas id="c"></canvas><div id="big">0</div><div id="lv">❤️❤️❤️</div>
+<div id="ov"><h2 id="ot">Yaxest Balon</h2><p id="op"><b>Dokun</b> ve balonu patlat.<br>Üç balon kaçırırsan biter. Siyah bombalara dokunma, altın balon 5 puan.</p><button id="go">Başla</button></div></div>
+<script>
+const $=id=>document.getElementById(id);
+
+const c=$('c'),x=c.getContext('2d'),GW=360;
+let W=360,H=600,s=1,GH=600,state='menu',best=0,sc=0,lives=3,bl=[],pops=[],spT=0,overAt=0,shake=0;
+try{best=+localStorage.getItem('yb2-best')||0}catch(e){}$('bs').textContent=best;
+const COLS=['#ff5c8a','#3df0ff','#3ddbb0','#b388ff','#ff9f43'];
+function rs(){const d=Math.min(devicePixelRatio||1,2),r=c.getBoundingClientRect();W=r.width||360;H=r.height||600;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);s=W/GW;GH=H/s}
+addEventListener('resize',rs);
+function hearts(){$('lv').textContent='❤️'.repeat(Math.max(0,lives))+'🖤'.repeat(Math.max(0,3-lives))}
+function start(){sc=0;lives=3;bl=[];pops=[];spT=0;shake=0;state='play';$('big').textContent=0;hearts();$('ov').classList.add('hid')}
+function over(){state='over';overAt=performance.now()+500;if(sc>best){best=sc;try{localStorage.setItem('yb2-best',best)}catch(e){}}$('bs').textContent=best;
+  try{navigator.vibrate&&navigator.vibrate(100)}catch(e){}$('ot').textContent='Oyun bitti';$('op').innerHTML='Skor <b>'+sc+'</b><br>Rekor <b>'+best+'</b>';$('go').textContent='Tekrar oyna';$('ov').classList.remove('hid')}
+function lose(){lives--;shake=1;hearts();if(lives<=0)over()}
+function spawn(){const r=Math.random(),t=r<.14?'b':r<.2?'g':'n',rad=t==='b'?26:22+Math.random()*12;
+  bl.push({x:rad+8+Math.random()*(GW-2*rad-16),y:GH+rad+10,r:rad,t,vy:Math.min(230,80+sc*1.3)*(.85+Math.random()*.4),col:COLS[Math.floor(Math.random()*5)],ph:Math.random()*6})}
+function update(dt){shake=Math.max(0,shake-dt*3);for(const p of pops)p.t+=dt*3;pops=pops.filter(p=>p.t<1);
+  if(state!=='play')return;spT-=dt;if(spT<=0){spawn();spT=Math.max(.32,1-sc*.012)*(.8+Math.random()*.5)}
+  for(const b of bl){b.y-=b.vy*dt;b.x+=Math.sin(b.y/40+b.ph)*12*dt}
+  for(const b of bl)if(b.y+b.r<0){b.gone=1;if(b.t!=='b'){lose();if(state!=='play')break}}
+  bl=bl.filter(b=>!b.gone)}
+function tap(px,py){if(state!=='play')return;let best=null;for(const b of bl){const d=Math.hypot(b.x-px,b.y-py);if(d<=b.r+10&&(!best||b.y<best.y))best=b}
+  if(!best)return;bl=bl.filter(b=>b!==best);pops.push({x:best.x,y:best.y,t:0,col:best.t==='b'?'#fff':best.col});
+  if(best.t==='b'){lose()}else{sc+=best.t==='g'?5:1;$('big').textContent=sc}}
+function render(){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#1d1450');g.addColorStop(1,'#3a1c63');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.save();if(shake>0)x.translate((Math.random()-.5)*10*shake,(Math.random()-.5)*10*shake);
+  for(const b of bl){const X=b.x*s,Y=b.y*s,R=b.r*s;
+    x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=1.5;x.beginPath();x.moveTo(X,Y+R*1.1);x.quadraticCurveTo(X+6,Y+R*1.8,X,Y+R*2.4);x.stroke();
+    x.fillStyle=b.t==='b'?'#1b1b2f':b.t==='g'?'#ffd23f':b.col;x.beginPath();x.ellipse(X,Y,R*.88,R,0,0,7);x.fill();
+    x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(X-R*.3,Y-R*.4,R*.18,R*.28,.5,0,7);x.fill();
+    if(b.t==='b'){x.strokeStyle='#ff5c8a';x.lineWidth=3;x.beginPath();x.moveTo(X-R*.35,Y-R*.25);x.lineTo(X+R*.35,Y+R*.45);x.moveTo(X+R*.35,Y-R*.25);x.lineTo(X-R*.35,Y+R*.45);x.stroke()}
+    if(b.t==='g'){x.fillStyle='#14102b';x.font='800 '+R*.9+'px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('5',X,Y)}}
+  for(const p of pops){x.strokeStyle=p.col;x.globalAlpha=1-p.t;x.lineWidth=4*(1-p.t)+1;x.beginPath();x.arc(p.x*s,p.y*s,(14+p.t*40)*s,0,7);x.stroke();x.globalAlpha=1}
+  x.restore()}
+let last=0;function loop(ts){requestAnimationFrame(loop);const dt=Math.min(.05,(ts-last)/1000||0);last=ts;update(dt);render()}
+c.addEventListener('pointerdown',e=>{e.preventDefault();const r=c.getBoundingClientRect();tap((e.clientX-r.left)/s,(e.clientY-r.top)/s)});
+addEventListener('keydown',e=>{if(e.key==='Enter'&&state!=='play'&&performance.now()>overAt)start()});
+$('go').onclick=()=>{if(performance.now()>overAt)start()};
+rs();requestAnimationFrame(loop);
+
+</script></body></html>

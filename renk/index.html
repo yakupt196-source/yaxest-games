@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Renk | Yaxest Games</title>
+<meta name="description" content="Yazının rengini seç, yazıya aldanma. Süre her turda kısalır.">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:10%;left:0;right:0;text-align:center;font-size:4rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.84);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+#word{position:absolute;top:22%;left:0;right:0;text-align:center;font-size:clamp(3rem,16vw,5.5rem);font-weight:800;letter-spacing:-.02em}
+#barw{position:absolute;top:calc(22% + 7rem);left:10%;right:10%;height:10px;background:#2b2559;border-radius:9px;overflow:hidden}
+#bar{height:100%;width:100%;background:#ffd23f}
+#pad{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.o{background:#2b2559;color:#f6f3ff;border-radius:18px;min-height:76px;font-size:1.25rem;padding:0}
+.o:active{background:#3a3470}
+#big{top:4%}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><div id="word">—</div><div id="barw"><div id="bar"></div></div><div id="pad"></div><div id="big">0</div>
+<div id="ov"><h2 id="ot">Yaxest Renk</h2><p id="op">Ekrandaki kelime bir renk adı yazar ama başka bir renkle boyanmıştır.<br><b>Boyanın rengini</b> seç, ne yazdığını değil.</p><button id="go">Başla</button></div></div>
+<script>
+const $=id=>document.getElementById(id);
+
+const C=[{n:'KIRMIZI',c:'#ff4d6d'},{n:'MAVİ',c:'#4da3ff'},{n:'YEŞİL',c:'#3ddbb0'},{n:'SARI',c:'#ffd23f'}];
+let state='menu',best=0,sc=0,ans=0,T=2,left=0,overAt=0,raf=0,lt=0;
+try{best=+localStorage.getItem('yr-best')||0}catch(e){}$('bs').textContent=best;
+$('pad').innerHTML=C.map((k,i)=>`<button class="o" data-i="${i}">${k.n}</button>`).join('');
+function nextQ(){const a=Math.floor(Math.random()*4);let b=Math.floor(Math.random()*4);if(Math.random()<.78)while(b===a)b=Math.floor(Math.random()*4);
+  ans=b;$('word').textContent=C[a].n;$('word').style.color=C[b].c;T=Math.max(.9,2.2-sc*.04);left=T}
+function start(){sc=0;$('big').textContent='0';state='play';$('ov').classList.add('hid');nextQ();lt=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}
+function over(why){state='over';cancelAnimationFrame(raf);overAt=performance.now()+500;if(sc>best){best=sc;try{localStorage.setItem('yr-best',best)}catch(e){}}$('bs').textContent=best;
+  try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}$('ot').textContent=why;$('op').innerHTML='Skor <b>'+sc+'</b><br>Rekor <b>'+best+'</b>';$('go').textContent='Tekrar oyna';$('ov').classList.remove('hid')}
+function tick(n){if(state!=='play')return;left-=(n-lt)/1000;lt=n;$('bar').style.width=Math.max(0,left/T*100)+'%';if(left<=0)return over('Süre doldu!');raf=requestAnimationFrame(tick)}
+$('pad').onpointerdown=e=>{const b=e.target.closest('.o');if(!b||state!=='play')return;e.preventDefault();
+  if(+b.dataset.i===ans){sc++;$('big').textContent=sc;nextQ()}else over('Yanlış renk!')};
+addEventListener('keydown',e=>{if(e.key==='Enter'&&state!=='play'&&performance.now()>overAt)start();const k=['1','2','3','4'].indexOf(e.key);if(k>=0&&state==='play'){if(k===ans){sc++;$('big').textContent=sc;nextQ()}else over('Yanlış renk!')}});
+$('go').onclick=()=>{if(performance.now()>overAt)start()};
+
+</script></body></html>

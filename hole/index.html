@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yaxest Hole</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&display=swap">
+<style>
+:root{--bg:#0a1220;--ac:#6ee7a0;--cyan:#28d7ff;--orange:#ff7a2e;--text:#e8f1ff;--dim:#8ea2c4;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:"Chakra Petch",system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 0;pointer-events:none;font-weight:700}
+#ln{font-size:18px}
+#bar{width:min(240px,55vw);height:10px;border-radius:6px;background:rgba(255,255,255,.14);margin:8px 0 6px;overflow:hidden}
+#bi{display:block;height:100%;width:0;background:var(--ac);transition:width .15s}
+#can{font-size:14px;color:var(--dim)}
+#tm{font-size:30px;line-height:1;text-align:right}
+#hint{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);text-align:center;color:var(--text);font-size:15px;pointer-events:none;opacity:0;transition:opacity .4s}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;gap:14px;padding:calc(env(safe-area-inset-top,0px) + 24px) 20px calc(env(safe-area-inset-bottom,0px) + 24px);text-align:center;background:rgba(10,18,32,.88);overflow-y:auto;touch-action:pan-y}
+.screen>:first-child{margin-top:auto}.screen>:last-child{margin-bottom:auto}
+.screen.hide{display:none}
+h1{margin:0;font-size:clamp(34px,9vw,60px);letter-spacing:.01em}
+p{margin:0;max-width:36ch;color:var(--dim);line-height:1.55}
+button{font:inherit;font-weight:700;font-size:18px;padding:12px 34px;border:0;border-radius:10px;background:var(--orange);color:#1a0b00;cursor:pointer}
+button:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+button.o{font-size:15px;padding:8px 12px;background:#16233d;color:var(--text);border:2px solid transparent}
+button.o.on{border-color:#fff}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <div><div id="ln"></div><div id="bar"><i id="bi"></i></div><div id="can"></div></div>
+  <div id="tm"></div>
+</div>
+<div id="hint"></div>
+<div class="screen" id="s1">
+  <h1 id="mt">Yaxest Hole</h1>
+  <p id="mx">5 dünya, her dünyada 20 seviye. İlk seviyede 15 şey yut, sonraki her seviyede 15 şey daha.</p>
+  <canvas id="pv" width="120" height="120"></canvas>
+  <div class="row" id="rc"></div>
+  <div class="row" id="rs"></div>
+  <div class="row" id="rf"></div>
+  <button id="go">Oyna</button>
+  <button class="o" id="rp">Tekrar oyna</button>
+  <button class="o" id="nw">Baştan başla</button>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cv=$('c'),ctx=cv.getContext('2d');
+let W,H,dpr;
+function rs(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr}
+addEventListener('resize',rs);rs();
+
+const WORLD=2200,NOBJ=280,PER=20,STEP=15,MAXG=100;
+const SZ=[8,12,18,24,38,52];
+const TH=[
+{n:'Orman',bg:'#0b2417',gr:'#123a24',ac:'#6ee7a0',em:['🍄','🌼','🐿️','🌳','🐻','🌲']},
+{n:'Şehir',bg:'#161a2b',gr:'#222a45',ac:'#7aa2ff',em:['🚲','🚗','🚌','🏠','🏢','🏙️']},
+{n:'Uzay',bg:'#05030f',gr:'#150f33',ac:'#c084fc',em:['⭐','☄️','🛰️','🛸','🌙','🪐']},
+{n:'Okyanus',bg:'#052a3f',gr:'#0b4561',ac:'#38d6ff',em:['🐚','🐟','🐠','🐙','🐋','🚢']},
+{n:'Çöl',bg:'#2e1f10',gr:'#46301a',ac:'#fbbf24',em:['🦂','🦎','🌵','🐪','⛺','🏜️']}];
+const COLS=['#28d7ff','#ff7a2e','#f472b6','#a3e635','#facc15','#a78bfa'];
+const EMO='"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+let sk={c:COLS[0],s:1,f:''};
+try{Object.assign(sk,JSON.parse(localStorage.getItem('yh')||'{}'))}catch(e){}
+let g=1;
+try{g=Math.min(MAXG,Math.max(1,parseInt(localStorage.getItem('yg'))||1))}catch(e){}
+let best=g,doneLv=0,fin=false;
+function sv(){try{localStorage.setItem('yg',best)}catch(e){}}
+
+let prog=0,holes=[],objs=[],state='menu',ptr=null,keys={},hintT=0,hudT=0,nextAct=null;
+const cam={x:WORLD/2,y:WORLD/2};let zoom=1.1;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const wd=gg=>Math.floor(((gg||g)-1)/PER);
+const lw=()=>(g-1)%PER+1;
+const goal=()=>STEP*lw();
+const rad=gg=>26+((gg||g)-1)*.45;
+function maxT(r){let k=0;while(k<5&&SZ[k+1]<r*.8)k++;return k}
+
+function drawHole(c,x,y,r,k){
+  c.save();
+  c.beginPath();c.arc(x,y,r,0,6.2832);
+  c.fillStyle='#000';c.shadowColor=k.c;c.shadowBlur=k.s===1?36:12;c.fill();
+  c.shadowBlur=0;c.strokeStyle=k.c;c.lineWidth=k.s===2?3:5;
+  if(k.s===3)c.setLineDash([r*.3,r*.2]);
+  c.stroke();c.setLineDash([]);
+  if(k.s===2){c.beginPath();c.arc(x,y,r*.72,0,6.2832);c.lineWidth=2;c.stroke()}
+  if(k.f){c.font=Math.round(r*.8)+'px '+EMO;c.textAlign='center';c.textBaseline='middle';c.fillText(k.f,x,y)}
+  c.restore();
+}
+function pv(){const c=$('pv').getContext('2d');c.clearRect(0,0,120,120);drawHole(c,60,60,38,sk)}
+function opts(id,list,key,mk){
+  const el=$(id);el.innerHTML='';
+  list.forEach(v=>{
+    const b=document.createElement('button');
+    b.className='o'+(sk[key]===v?' on':'');mk(b,v);
+    b.onclick=()=>{sk[key]=v;try{localStorage.setItem('yh',JSON.stringify(sk))}catch(e){}build()};
+    el.appendChild(b);
+  });
+}
+function build(){
+  opts('rc',COLS,'c',(b,v)=>{b.style.background=v;b.style.width='36px';b.style.height='36px';b.setAttribute('aria-label','Renk')});
+  opts('rs',[0,1,2,3],'s',(b,v)=>{b.textContent=['Düz','Parlak','Çift halka','Kesikli'][v]});
+  opts('rf',['','👁️','😈','🌀'],'f',(b,v)=>{b.textContent=v||'Yüz yok'});
+  const pl=best>1||doneLv>0;
+  $('go').style.display=fin?'none':'';
+  $('go').textContent=pl?'Devam et: seviye '+best:'Oyna';
+  $('rp').style.display=doneLv?'':'none';
+  $('rp').textContent='Tekrar oyna: seviye '+doneLv;
+  $('nw').style.display=pl?'':'none';
+  pv();
+}
+
+function mkObj(){
+  const m=maxT(rad()),r=Math.random();
+  let k=m-(r<.35?0:r<.65?1:r<.88?2:3);
+  if(Math.random()<.08&&m<5)k=m+1;
+  k=Math.max(0,k);
+  return{x:rnd(60,WORLD-60),y:rnd(60,WORLD-60),k,s:SZ[k],f:0,h:null};
+}
+function mkBot(s,c){
+  return{p:0,sc:s,r:rad()*s,x:rnd(200,WORLD-200),y:rnd(200,WORLD-200),vx:0,vy:0,dx:0,dy:0,think:0,sk:{c,s:0,f:''}};
+}
+function startLv(){
+  prog=0;ptr=null;
+  holes=[{p:1,sc:1,r:rad(g>1?g-1:1),x:WORLD/2,y:WORLD/2,vx:0,vy:0,dx:0,dy:0},mkBot(.85,'#8892a8'),mkBot(.7,'#c08a5a')];
+  objs=Array.from({length:NOBJ},mkObj);
+  cam.x=WORLD/2;cam.y=WORLD/2;
+  document.documentElement.style.setProperty('--ac',TH[wd()].ac);
+  say('Hedef: '+goal()+' şey yut. Soluk görünenler henüz çok büyük.',4);
+}
+function say(t,s){const h=$('hint');h.textContent=t;h.style.opacity=1;hintT=s}
+
+addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.buttons)ptr={x:e.clientX,y:e.clientY}});
+addEventListener('pointerdown',e=>{ptr={x:e.clientX,y:e.clientY}});
+addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')ptr=null});
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1});
+addEventListener('keyup',e=>{delete keys[e.key.toLowerCase()]});
+
+function ctrl(h){
+  const x=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);
+  const y=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);
+  if(x||y){const d=Math.hypot(x,y);h.dx=x/d;h.dy=y/d}
+  else if(ptr){
+    const dx=ptr.x-W/2,dy=ptr.y-H/2,d=Math.hypot(dx,dy);
+    if(d>10){const f=Math.min(1,d/110);h.dx=dx/d*f;h.dy=dy/d*f}else{h.dx=0;h.dy=0}
+  }else{h.dx=0;h.dy=0}
+}
+function ai(h,dt){
+  h.think-=dt;if(h.think>0)return;
+  h.think=.5+Math.random()*.5;
+  let tx=null,ty=null,best=0;
+  for(const o of objs){
+    if(o.h||o.s>=h.r*.8)continue;
+    const v=o.s*o.s/(Math.hypot(o.x-h.x,o.y-h.y)+80);
+    if(v>best){best=v;tx=o.x;ty=o.y}
+  }
+  if(tx===null){tx=WORLD/2;ty=WORLD/2}
+  const dx=tx-h.x,dy=ty-h.y,d=Math.hypot(dx,dy)||1;
+  h.dx=dx/d;h.dy=dy/d;
+}
+
+function update(dt){
+  const R=rad();
+  for(const h of holes){
+    h.r+=(R*h.sc-h.r)*Math.min(1,dt*3);
+    if(h.p)ctrl(h);else ai(h,dt);
+    const sp=Math.min(420,200*Math.pow(h.r/26,.5))*(h.p?1:.8),k=Math.min(1,dt*8);
+    h.vx+=(h.dx*sp-h.vx)*k;h.vy+=(h.dy*sp-h.vy)*k;
+    h.x=clamp(h.x+h.vx*dt,h.r,WORLD-h.r);
+    h.y=clamp(h.y+h.vy*dt,h.r,WORLD-h.r);
+  }
+  for(const h of holes)for(const o of objs){
+    if(o.h)continue;
+    const dx=o.x-h.x,dy=o.y-h.y,lim=h.r-o.s*.3;
+    if(o.s<h.r*.8&&dx*dx+dy*dy<lim*lim){o.h=h;if(h.p)prog++}
+  }
+  for(const o of objs)if(o.h){
+    o.f+=dt*5;const k=Math.min(1,dt*10);
+    o.x+=(o.h.x-o.x)*k;o.y+=(o.h.y-o.y)*k;
+  }
+  objs=objs.filter(o=>o.f<1);
+  while(objs.length<NOBJ)objs.push(mkObj());
+  if(prog>=goal())done();
+}
+
+function showMenu(t,x){
+  state='menu';$('hint').style.opacity=0;
+  $('mt').textContent=t;$('mx').textContent=x;
+  build();$('s1').classList.remove('hide');
+}
+function done(){
+  doneLv=g;fin=false;
+  let t='Seviye '+g+' tamam',x;
+  if(g>=MAXG){fin=true;best=MAXG;t='Hepsini yuttun';x='Beş dünyayı da bitirdin. İstersen deliğini değiştirip baştan oyna.'}
+  else{
+    best=Math.max(best,g+1);
+    x=lw()<PER?'Sıradaki: seviye '+(g%PER+1)+', hedef '+STEP*(g%PER+1)+' şey.':TH[wd()].n+' bitti. Sıradaki dünya: '+TH[wd()+1].n+'.';
+  }
+  sv();showMenu(t,x);
+}
+
+function draw(){
+  const L=TH[wd()],z=zoom;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.fillStyle=L.bg;ctx.fillRect(0,0,W,H);
+  ctx.setTransform(dpr*z,0,0,dpr*z,dpr*(W/2-cam.x*z),dpr*(H/2-cam.y*z));
+  const x0=cam.x-W/2/z,x1=cam.x+W/2/z,y0=cam.y-H/2/z,y1=cam.y+H/2/z;
+  ctx.strokeStyle=L.gr;ctx.lineWidth=1/z;
+  for(let q=Math.max(0,Math.floor(x0/100)*100);q<=Math.min(WORLD,x1);q+=100){
+    ctx.beginPath();ctx.moveTo(q,Math.max(0,y0));ctx.lineTo(q,Math.min(WORLD,y1));ctx.stroke();
+  }
+  for(let q=Math.max(0,Math.floor(y0/100)*100);q<=Math.min(WORLD,y1);q+=100){
+    ctx.beginPath();ctx.moveTo(Math.max(0,x0),q);ctx.lineTo(Math.min(WORLD,x1),q);ctx.stroke();
+  }
+  ctx.strokeStyle=L.ac;ctx.globalAlpha=.5;ctx.lineWidth=4;ctx.strokeRect(0,0,WORLD,WORLD);ctx.globalAlpha=1;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  for(const o of objs){
+    if(o.x+o.s<x0||o.x-o.s>x1||o.y+o.s<y0||o.y-o.s>y1)continue;
+    ctx.font=Math.max(2,Math.round(2*o.s*(1-o.f)))+'px '+EMO;
+    ctx.globalAlpha=o.s<holes[0].r*.8?1:.4;ctx.fillText(L.em[o.k],o.x,o.y);
+  }
+  ctx.globalAlpha=1;
+  for(const h of holes)drawHole(ctx,h.x,h.y,h.r,h.p?sk:h.sk);
+}
+
+function hud(){
+  const L=TH[wd()],m=maxT(rad());
+  $('ln').textContent=L.n+': seviye '+lw()+'/'+PER;
+  $('tm').textContent=prog+' / '+goal();
+  $('bi').style.width=Math.min(100,prog/goal()*100)+'%';
+  $('can').textContent='Yutabilirsin: '+L.em.slice(0,m+1).join(' ');
+}
+
+let last=performance.now();
+function loop(n){
+  const dt=Math.min(.05,(n-last)/1000);last=n;
+  if(state==='play')update(dt);
+  const p=holes[0];
+  cam.x+=(p.x-cam.x)*Math.min(1,dt*8);cam.y+=(p.y-cam.y)*Math.min(1,dt*8);
+  zoom+=(clamp(40/p.r,.35,1.15)-zoom)*Math.min(1,dt*3);
+  draw();
+  hudT-=dt;if(hudT<=0){hud();hudT=.1}
+  if(hintT>0){hintT-=dt;if(hintT<=0)$('hint').style.opacity=0}
+  requestAnimationFrame(loop);
+}
+
+function play(n){g=n;startLv();state='play';$('s1').classList.add('hide')}
+$('go').onclick=()=>play(best);
+$('rp').onclick=()=>play(doneLv);
+$('nw').onclick=()=>{best=1;doneLv=0;fin=false;sv();play(1)};
+build();startLv();$('hint').style.opacity=0;requestAnimationFrame(loop);
+</script>
+</body>
+</html>

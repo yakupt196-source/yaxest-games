@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet"><title>Yaxest Birleştir | Yaxest Games</title><style>*{box-sizing:border-box;margin:0}body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));gap:12px;touch-action:manipulation;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overflow-x:hidden}header{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}header a{color:#a9a3cf;text-decoration:none}h1{font-size:1.4rem;font-weight:800}.stat{color:#ffd23f;font-weight:700}button{font:inherit;font-weight:700;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:12px 26px;min-height:44px;cursor:pointer}button:focus-visible{outline:3px solid #fff}p{color:#a9a3cf;font-size:.9rem;text-align:center}</style>
+<style>body{touch-action:none}#g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(100%,calc(100dvh - 240px));min-width:240px;max-width:420px;background:#1f1a42;padding:8px;border-radius:18px;touch-action:none}.t{aspect-ratio:1;border-radius:12px;background:#2b2559;display:grid;place-items:center;font-weight:800;font-size:clamp(1.2rem,6vw,2rem);color:#14102b}#w{color:#ff5c8a;font-weight:800;min-height:1.5em}</style></head><body>
+<header><a href="../">← Yaxest Games</a><h1>🔢 Birleştir</h1><span class="stat">Skor <span id="s">0</span> · Rekor <span id="b">0</span></span></header>
+<div id="g"></div><div id="w"></div><button id="r">Yeni oyun</button>
+<p>Ok tuşları veya kaydırma ile kaydır. Aynı sayılar birleşir. 2048'e ulaş.</p>
+<script>
+const g=document.getElementById('g'),S=document.getElementById('s'),B=document.getElementById('b'),W=document.getElementById('w');
+const col={2:'#ffe9a8',4:'#ffd23f',8:'#ff9f43',16:'#ff7a5c',32:'#ff5c8a',64:'#e04bd0',128:'#b388ff',256:'#6aa8ff',512:'#3ddbb0',1024:'#7ff0c8',2048:'#fff'};
+let m,sc,best=0,over;
+try{best=+localStorage.getItem('yb-best')||0}catch(e){}B.textContent=best;
+function add(){const e=[];m.forEach((r,i)=>r.forEach((v,j)=>v||e.push([i,j])));if(!e.length)return;const [i,j]=e[Math.floor(Math.random()*e.length)];m[i][j]=Math.random()<.9?2:4}
+function init(){m=[0,0,0,0].map(()=>[0,0,0,0]);sc=0;over=false;W.textContent='';add();add();draw()}
+function draw(){g.innerHTML='';m.flat().forEach(v=>{const t=document.createElement('div');t.className='t';if(v){t.textContent=v;t.style.background=col[v]||'#fff'}g.appendChild(t)});S.textContent=sc;
+if(sc>best){best=sc;B.textContent=best;try{localStorage.setItem('yb-best',best)}catch(e){}}}
+function slide(r){const a=r.filter(v=>v),o=[];for(let i=0;i<a.length;i++){if(a[i]==a[i+1]){o.push(a[i]*2);sc+=a[i]*2;i++}else o.push(a[i])}while(o.length<4)o.push(0);return o}
+function rot(x){return x[0].map((_,i)=>x.map(r=>r[i]).reverse())}
+function move(dir){if(over)return;let x=m;for(let i=0;i<dir;i++)x=rot(x);const n=x.map(slide);let y=n;for(let i=0;i<(4-dir)%4;i++)y=rot(y);
+if(JSON.stringify(y)==JSON.stringify(m))return;m=y;add();draw();
+const can=m.some((r,i)=>r.some((v,j)=>!v||v==r[j+1]||(m[i+1]&&m[i+1][j]==v)));
+if(m.flat().includes(2048)){W.textContent='2048! Kazandın 🎉'}else if(!can){over=true;W.textContent='Oyun bitti'}}
+// dir = saat yönünde döndürme sayısı: 0 sol, 3 yukarı, 2 sağ, 1 aşağı
+addEventListener('keydown',e=>{const d={arrowleft:0,a:0,arrowup:3,w:3,arrowright:2,d:2,arrowdown:1,s:1}[e.key.toLowerCase()];if(d!==undefined){e.preventDefault();move(d)}});
+let tx,ty;document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.max(Math.abs(dx),Math.abs(dy))<25)return;move(Math.abs(dx)>Math.abs(dy)?(dx<0?0:2):(dy<0?3:1))});
+document.getElementById('r').onclick=init;init();
+</script></body></html>

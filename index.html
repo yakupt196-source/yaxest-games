@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yaxest Games | Tarayıcıda ücretsiz mini oyunlar</title>
+<meta name="description" content="Yaxest Games: indirmeden, kayıt olmadan tarayıcıda oyna. Hole, Blok, Koşu, Kule, Zıpla, Balon ve daha fazlası. Telefonda da çalışır.">
+<meta name="theme-color" content="#14102b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yaxest Games">
+<meta property="og:description" content="İndirmeden, kayıt olmadan tarayıcıda oyna. Telefonda da çalışır.">
+<meta property="og:url" content="https://yaxest-games.netlify.app/">
+<meta name="twitter:card" content="summary">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#14102b;--card:#1f1a42;--ink:#f6f3ff;--mute:#a9a3cf;--pink:#ff5c8a;--yellow:#ffd23f;--mint:#3ddbb0;--blue:#6aa8ff}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.5;min-height:100vh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-weight:800;font-size:1.1rem}
+nav span{color:var(--yellow)}
+nav a{color:var(--mute);text-decoration:none;font-weight:400;font-size:1rem;margin-left:18px}
+nav a:hover{color:var(--ink)}
+.hero{padding:40px 0 48px;display:grid;gap:26px}
+h1{font-size:clamp(3.2rem,13vw,8.5rem);line-height:.9;font-weight:800;letter-spacing:-.04em}
+h1 em{font-style:normal;display:inline-block;background:var(--pink);color:var(--bg);padding:0 .12em;border-radius:.12em;transform:rotate(-2deg)}
+.hero p{max-width:36ch;font-size:1.2rem;color:var(--mute)}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-block;background:var(--yellow);color:var(--bg);font-weight:800;padding:14px 26px;min-height:48px;border-radius:999px;text-decoration:none;transition:transform .15s;border:0;font:inherit;font-weight:800;cursor:pointer}
+.btn:hover{transform:translateY(-3px)}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid #3a3470}
+.facts{display:flex;gap:26px;flex-wrap:wrap;color:var(--mute);font-size:.98rem}
+.facts b{color:var(--ink);font-size:1.5rem;display:block;line-height:1.1}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 20px}
+h2{font-size:1.6rem;margin-right:auto}
+#q{background:var(--card);border:2px solid transparent;color:var(--ink);font:inherit;padding:10px 16px;border-radius:999px;min-height:44px;min-width:0;width:200px}
+#q:focus{outline:none;border-color:var(--yellow)}
+.chip{background:var(--card);color:var(--mute);border:2px solid transparent;font:inherit;font-weight:700;padding:8px 16px;min-height:44px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--yellow);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding-bottom:56px}
+.card{background:var(--card);border-radius:22px;padding:22px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px;border:2px solid transparent;transition:border-color .2s,transform .2s;position:relative}
+.card:hover,.card:focus-visible{border-color:var(--c);transform:translateY(-4px);outline:none}
+.ico{font-size:2.6rem;width:76px;height:76px;display:grid;place-items:center;background:var(--c);border-radius:20px}
+.card h3{font-size:1.3rem}
+.card p{color:var(--mute);font-size:.95rem;flex:1}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--mute)}
+.meta b{color:var(--c);font-size:1rem}
+.new{position:absolute;top:16px;right:16px;background:var(--pink);color:var(--bg);font-weight:800;font-size:.75rem;padding:3px 10px;border-radius:999px}
+.empty{grid-column:1/-1;color:var(--mute);padding:20px 0}
+.about{background:var(--card);border-radius:26px;padding:28px;margin-bottom:56px;display:grid;gap:12px}
+.about h2{margin:0}
+.about p{color:var(--mute);max-width:62ch}
+.about a{color:var(--yellow)}
+.fm{display:grid;gap:12px;max-width:62ch}.fm label{display:grid;gap:6px;color:var(--mute);font-size:.95rem}.fm textarea{background:var(--bg);color:var(--ink);border:2px solid #3a3470;border-radius:14px;padding:12px;font:inherit;resize:vertical;min-height:84px}.fm textarea:focus{outline:none;border-color:var(--yellow)}.fm .btn{width:max-content}
+footer{border-top:1px solid #2f2a5c;padding:26px 0 40px;color:var(--mute);font-size:.95rem}
+footer a{color:var(--yellow)}
+@media (max-width:480px){.hero{padding:20px 0 32px}.grid{grid-template-columns:1fr 1fr;gap:12px}.card{padding:16px}.ico{width:60px;height:60px;font-size:2rem}.card p{font-size:.85rem}#q{width:100%}.about{padding:20px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><div>Yaxest<span>.</span>Games</div><div><a href="#oyunlar">Oyunlar</a><a href="#hakkinda">Hakkında</a></div></nav>
+<header class="hero">
+<h1>Yaxest<br><em>Games</em></h1>
+<p>Küçük, hızlı oyunlar. Tarayıcıda aç, hemen oyna. İndirmek yok, kayıt yok.</p>
+<div class="row"><a class="btn" href="#oyunlar">Oyun seç</a><button class="btn alt" id="rnd" type="button">Şansıma bir oyun</button></div>
+<div class="facts"><div><b id="cnt">0</b>oyun</div><div><b>0 ₺</b>ücretsiz</div><div><b>Mobil</b>uyumlu</div></div>
+</header>
+<main id="oyunlar">
+<div class="bar"><h2>Oyunlar</h2>
+<input id="q" type="search" placeholder="Oyun ara" aria-label="Oyun ara" autocomplete="off">
+<div class="row" id="chips" role="group" aria-label="Kategori"></div></div>
+<div class="grid" id="grid"></div>
+</main>
+<section class="about" id="hakkinda">
+<h2>Yaxest Games kimin?</h2>
+<p>Yaxest Games, Diyarbakır'da Yakup Turhan tarafından geliştirilen bağımsız bir oyun markası. Hedef: tarayıcıda oynanan, kısa ve akılda kalan oyunlar yapmak, sonra bunları mobil oyunlara taşıyıp sağlam bir oyun stüdyosuna dönüşmek.</p>
+<p>Fikrin ya da yaptığın bir hata bildirimi varsa <a href="https://www.linkedin.com/search/results/people/?keywords=Yakup%20Turhan">LinkedIn'den</a> yaz.</p>
+<form name="oneri" method="POST" action="/tesekkurler.html" data-netlify="true" netlify-honeypot="bot-alani" class="fm">
+<p hidden><label>Bunu boş bırak: <input name="bot-alani"></label></p>
+<label>Oyun önerin ya da hata bildirimin<textarea name="mesaj" rows="3" required maxlength="800" placeholder="Örn: Zıpla'da çift zıplama olsun"></textarea></label>
+<button class="btn" type="submit">Gönder</button>
+</form>
+<div class="row"><button class="btn" id="inst" type="button" hidden>Telefona ekle</button></div>
+</section>
+<footer>© Yaxest Games, Diyarbakır. Oyun ve web geliştirme. · <a href="gizlilik.html">Gizlilik</a></footer>
+</div>
+<script>
+const GAMES=[
+{id:'zipla',n:'Yaxest Zıpla',i:'🦘',c:'#3df0ff',k:'Refleks',d:'Tek dokunuşla zıpla, engellerden kaç. Giderek hızlanır.',new:1},
+{id:'renk',n:'Yaxest Renk',i:'🎨',c:'#ffd23f',k:'Bulmaca',d:'Yazının rengini seç, yazıya aldanma. Süre her turda kısalır.',new:1},
+{id:'balon',n:'Yaxest Balon',i:'🎈',c:'#ff5c8a',k:'Arcade',d:'Balonları patlat, bombalara dokunma. Altın balon 5 puan.',new:1},
+{id:'karo',n:'Yaxest Karo',i:'🎹',c:'#b388ff',k:'Refleks',d:'Düşen karolara dokun, yanlış şeride basma. Hız artar.',new:1},
+{id:'kule',n:'Yaxest Kule',i:'🏗️',c:'#ff9f43',k:'Refleks',d:'Tek dokunuşla bloğu bırak, tam oturtursan kule genişler. En yükseğe çık.'},
+{id:'kosu',n:'Yaxest Koşu',i:'🏃',c:'#3df0ff',k:'Refleks',d:'Şerit değiştir, rengini değiştir, duvarlardan kaç. Giderek hızlanır.'},
+{id:'hole',n:'Yaxest Hole',i:'🕳️',c:'#6aa8ff',k:'Arcade',d:'Bir delik kontrol et, nesneleri yut, büyü. 5 dünya, 100 seviye.'},
+{id:'blok',n:'Yaxest Blok',i:'🧱',c:'#3ddbb0',k:'Bulmaca',d:'Blokları tahtaya yerleştir, satır ve sütunları temizle. Puan arttıkça dünya değişir.'},
+{id:'yilan',n:'Yaxest Yılan',i:'🐍',c:'#ffd23f',k:'Arcade',d:'Elmaları ye, uzadıkça hızlan. Duvara ve kendine çarpma.'},
+{id:'hafiza',n:'Yaxest Hafıza',i:'🃏',c:'#ff5c8a',k:'Bulmaca',d:'Kartları çevir, eşleri bul. En az hamleyle bitir.'},
+{id:'birlestir',n:'Yaxest Birleştir',i:'🔢',c:'#ff9f43',k:'Bulmaca',d:"Aynı sayıları kaydırıp birleştir ve 2048'e ulaş."},
+{id:'kostebek',n:'Yaxest Köstebek',i:'🐹',c:'#b388ff',k:'Refleks',d:'30 saniyede çıkan köstebeklere dokun, rekoru kır.'}];
+const $=id=>document.getElementById(id);let cat='Hepsi';
+const cats=['Hepsi',...new Set(GAMES.map(g=>g.k))];
+$('cnt').textContent=GAMES.length;
+$('chips').innerHTML=cats.map(k=>`<button class="chip" type="button" aria-pressed="${k===cat}" data-k="${k}">${k}</button>`).join('');
+function draw(){const q=$('q').value.trim().toLocaleLowerCase('tr');
+  const l=GAMES.filter(g=>(cat==='Hepsi'||g.k===cat)&&(g.n+' '+g.d+' '+g.k).toLocaleLowerCase('tr').includes(q));
+  $('grid').innerHTML=l.length?l.map(g=>`<a class="card" style="--c:${g.c}" href="${g.id}/">${g.new?'<span class="new">Yeni</span>':''}<div class="ico">${g.i}</div><h3>${g.n}</h3><p>${g.d}</p><div class="meta"><span>${g.k}</span><b>Oyna</b></div></a>`).join(''):'<p class="empty">Eşleşen oyun yok. Başka bir kelime dene.</p>'}
+$('q').oninput=draw;
+$('chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.k;[...$('chips').children].forEach(x=>x.setAttribute('aria-pressed',x===b));draw()};
+$('rnd').onclick=()=>{location.href=GAMES[Math.floor(Math.random()*GAMES.length)].id+'/'};
+draw();
+let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
+$('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
