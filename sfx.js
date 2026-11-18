@@ -54,6 +54,7 @@
     yol:{milestone:'big',ov:1,tap:'#c',tapName:'tap'},zipla:{milestone:'big',ov:1,tap:'#c',tapName:'jump'},kule:{score:'big',ov:1,tap:'#c',tapName:'tap'},blok:{ov:1,tap:'#c',tapName:'tap',score:'sc'},kosu:{milestone:'sc',gem:'gm',ov:1,tap:'#c',tapName:'tap'},
     kostebek:{score:'s',scoreName:'pop',msg:'w'},yilan:{score:'s',msg:'',canvasOver:1},
     hafiza:{msg:'w',match:1,tap:'#g',tapName:'tap'},birlestir:{msg:'w',score:'s',tap:'#g',tapName:'tap'},isik:{msg:'msg',tap:'#grid',tapName:'tap'},
+    yorunge:{score:'big',ov:1,tap:'#c',tapName:'jump'},
     hole:{bar:'bi',menuTitle:'mt'}
   }[cur]||{};
   function bind(){

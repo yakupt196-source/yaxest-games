@@ -1,6 +1,7 @@
 // Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
 window.YAXEST_GAMES=[
-{id:'ritim',n:'Yaxest Ritim',i:'🎵',c:'#b388ff',k:'Refleks',d:'Müziğin ritmine göre zıpla, engellerden geç, bayrağa ulaş. Her seviye daha uzun ve hızlı.',new:1},
+{id:'yorunge',n:'Yaxest Yörünge',i:'🪐',c:'#3df0ff',k:'Refleks',d:'Gezegenlerin yörüngesinde dön, doğru anda dokun ve bir sonrakine fırla. Yıldızları topla, uzaya savrulma.',new:1},
+{id:'ritim',n:'Yaxest Ritim',i:'🎵',c:'#b388ff',k:'Refleks',d:'Müziğin ritmine göre zıpla, engellerden geç, bayrağa ulaş. Her seviye daha uzun ve hızlı.'},
 {id:'hedef',n:'Yaxest Hedef',i:'🎯',c:'#3ddbb0',k:'Refleks',d:'Gezen çizgiyi yeşil bölgede durdur. Bölge daraldıkça zorlaşır.'},
 {id:'sayi',n:'Yaxest Sayı',i:'🧮',c:'#ffd23f',k:'Bulmaca',d:'Hızlı hesap yap, doğru sonucu seç. Süre kısalır.'},
 {id:'yol',n:'Yaxest Yol',i:'🛤️',c:'#ff5c8a',k:'Arcade',d:'Dokunarak yönünü değiştir, yoldan çıkma. Hız artar.'},

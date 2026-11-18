@@ -1628,5 +1628,32 @@ window.YAXEST_DICT={
 "🔇 Som: desligado",
 "🔇 Звук: выкл.",
 "🔇 Audio: disattivato"
+],
+"Gezegenlerin yörüngesinde dön, doğru anda dokun ve bir sonrakine fırla. Yıldızları topla, uzaya savrulma.": [
+"Orbit planets, tap at the right moment and launch to the next one. Collect stars, do not get flung into space.",
+"Kreise um Planeten, tippe im richtigen Moment und schieße zum nächsten. Sammle Sterne und werde nicht ins All geschleudert.",
+"Orbita planetas, toca en el momento justo y salta al siguiente. Recoge estrellas y no salgas despedido al espacio.",
+"Orbite autour des planètes, touche au bon moment et lance-toi vers la suivante. Ramasse les étoiles, ne sois pas projeté dans l'espace.",
+"Orbite planetas, toque no momento certo e lance-se para o próximo. Colete estrelas e não seja lançado ao espaço.",
+"Вращайся вокруг планет, нажми в нужный момент и лети к следующей. Собирай звёзды и не улети в космос.",
+"Orbita attorno ai pianeti, tocca al momento giusto e lanciati verso il prossimo. Raccogli le stelle e non farti scagliare nello spazio."
+],
+"<b>Dokun</b> (veya Boşluk) ve yörüngeden fırla.<br>Bir sonraki gezegenin halkasına gir, yıldızları topla. Uzaya savrulma!": [
+"<b>Tap</b> (or Space) to leave the orbit.<br>Enter the next planet's ring and collect stars. Don't get flung into space!",
+"<b>Tippe</b> (oder Leertaste), um die Umlaufbahn zu verlassen.<br>Fliege in den Ring des nächsten Planeten und sammle Sterne. Lass dich nicht ins All schleudern!",
+"<b>Toca</b> (o Espacio) para salir de la órbita.<br>Entra en el anillo del siguiente planeta y recoge estrellas. ¡No salgas despedido al espacio!",
+"<b>Touche</b> (ou Espace) pour quitter l'orbite.<br>Entre dans l'anneau de la planète suivante et ramasse les étoiles. Ne te fais pas projeter dans l'espace !",
+"<b>Toque</b> (ou Espaço) para sair da órbita.<br>Entre no anel do próximo planeta e colete estrelas. Não seja lançado ao espaço!",
+"<b>Нажми</b> (или пробел), чтобы покинуть орбиту.<br>Влети в кольцо следующей планеты и собери звёзды. Не улети в космос!",
+"<b>Tocca</b> (o Spazio) per lasciare l'orbita.<br>Entra nell'anello del prossimo pianeta e raccogli le stelle. Non farti scagliare nello spazio!"
+],
+"Uzaya savruldun!": [
+"Flung into space!",
+"Ins All geschleudert!",
+"¡Saliste despedido al espacio!",
+"Projeté dans l'espace !",
+"Lançado ao espaço!",
+"Улетел в космос!",
+"Scagliato nello spazio!"
 ]
 };
