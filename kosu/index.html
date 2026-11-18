@@ -94,7 +94,7 @@ function render(){
   x.fillStyle='#fff';x.beginPath();x.arc(cx-s*.18,by-s*.66,s*.1,0,7);x.arc(cx+s*.18,by-s*.66,s*.1,0,7);x.fill();
   x.fillStyle='#14102b';x.beginPath();x.arc(cx-s*.18,by-s*.65,s*.045,0,7);x.arc(cx+s*.18,by-s*.65,s*.045,0,7);x.fill();
   sym(pc,cx,by-s*.28,s*.13,'#14102b',Math.max(2,s*.05));
-  if(hint&&state==='play'){const g1=objs.find(o=>o.t==='g'&&o.z-dist>0&&o.z-dist<28);if(g1&&g1.c!==pc){x.fillStyle='#fff';x.font='800 20px "Bricolage Grotesque",sans-serif';x.textAlign='center';x.fillText('DOKUN: rengini değiştir',W/2,H*.5)}}
+  if(hint&&state==='play'){const g1=objs.find(o=>o.t==='g'&&o.z-dist>0&&o.z-dist<28);if(g1&&g1.c!==pc){x.fillStyle='#fff';x.font='800 20px "Bricolage Grotesque",sans-serif';x.textAlign='center';x.fillText((window.YT?YT('DOKUN: rengini değiştir'):'DOKUN: rengini değiştir'),W/2,H*.5)}}
   x.restore();
 }
 let last=0;
@@ -111,4 +111,4 @@ addEventListener('keydown',e=>{const k=e.key.toLowerCase();
   else if(k==='enter'&&state!=='play'&&performance.now()>overAt)start()});
 $('go').onclick=()=>{if(performance.now()>overAt)start()};
 rs();requestAnimationFrame(loop);
-</script><script src="../games.js"></script><script src="../menu.js"></script></body></html>
+</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../menu.js"></script></body></html>

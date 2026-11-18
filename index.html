@@ -24,8 +24,9 @@ body{background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",sys
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
 nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-weight:800;font-size:1.1rem}
 nav span{color:var(--yellow)}
-nav a{color:var(--mute);text-decoration:none;font-weight:400;font-size:1rem;margin-left:18px}
+nav a{color:var(--mute);text-decoration:none;font-weight:400;font-size:.95rem;margin-left:12px;white-space:nowrap}
 nav a:hover{color:var(--ink)}
+.ylang{min-height:40px;padding:0 10px;border-radius:10px;border:1px solid #4b4390;background:#241d52;color:#f4f1ff;font-weight:600;font-size:.95rem;font-family:inherit;max-width:130px}
 .hero{padding:40px 0 48px;display:grid;gap:26px}
 h1{font-size:clamp(3.2rem,13vw,8.5rem);line-height:.9;font-weight:800;letter-spacing:-.04em}
 h1 em{font-style:normal;display:inline-block;background:var(--pink);color:var(--bg);padding:0 .12em;border-radius:.12em;transform:rotate(-2deg)}
@@ -65,7 +66,7 @@ footer a{color:var(--yellow)}
 </head>
 <body>
 <div class="wrap">
-<nav><div>Yaxest<span>.</span>Games</div><div><a href="#oyunlar">Oyunlar</a><a href="#hakkinda">Hakkında</a></div></nav>
+<nav><div>Yaxest<span>.</span>Games</div><div style="display:flex;align-items:center"><a href="#oyunlar">Oyunlar</a><a href="#hakkinda">Hakkında</a><span id="langslot" style="margin-left:12px"></span></div></nav>
 <header class="hero">
 <h1>Yaxest<br><em>Games</em></h1>
 <p>Küçük, hızlı oyunlar. Tarayıcıda aç, hemen oyna. İndirmek yok, kayıt yok.</p>
@@ -91,7 +92,7 @@ footer a{color:var(--yellow)}
 </section>
 <footer>© Yaxest Games, Diyarbakır. Oyun ve web geliştirme. · <a href="gizlilik.html">Gizlilik</a></footer>
 </div>
-<script src="games.js"></script>
+<script src="games.js"></script><script src="i18n-dict.js"></script><script src="i18n.js"></script>
 <script>
 const GAMES=window.YAXEST_GAMES;
 const $=id=>document.getElementById(id);let cat='Hepsi';
@@ -99,11 +100,12 @@ const cats=['Hepsi',...new Set(GAMES.map(g=>g.k))];
 $('cnt').textContent=GAMES.length;
 $('chips').innerHTML=cats.map(k=>`<button class="chip" type="button" aria-pressed="${k===cat}" data-k="${k}">${k}</button>`).join('');
 function draw(){const q=$('q').value.trim().toLocaleLowerCase('tr');
-  const l=GAMES.filter(g=>(cat==='Hepsi'||g.k===cat)&&(g.n+' '+g.d+' '+g.k).toLocaleLowerCase('tr').includes(q));
+  const l=GAMES.filter(g=>(cat==='Hepsi'||g.k===cat)&&(g.n+' '+g.d+' '+g.k+' '+(window.YT?YT(g.d)+' '+YT(g.k):'')).toLocaleLowerCase('tr').includes(q));
   $('grid').innerHTML=l.length?l.map(g=>`<a class="card" style="--c:${g.c}" href="${g.id}/">${g.new?'<span class="new">Yeni</span>':''}<div class="ico">${g.i}</div><h3>${g.n}</h3><p>${g.d}</p><div class="meta"><span>${g.k}</span><b>Oyna</b></div></a>`).join(''):'<p class="empty">Eşleşen oyun yok. Başka bir kelime dene.</p>'}
 $('q').oninput=draw;
 $('chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.k;[...$('chips').children].forEach(x=>x.setAttribute('aria-pressed',x===b));draw()};
 $('rnd').onclick=()=>{location.href=GAMES[Math.floor(Math.random()*GAMES.length)].id+'/'};
+if(window.YI18N){$('langslot').appendChild(YI18N.select());addEventListener('ylang',draw)}
 draw();
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
 $('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};

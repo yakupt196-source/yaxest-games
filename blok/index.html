@@ -123,8 +123,8 @@ function draw(){
   ctx.fillStyle='#e8f1ff';ctx.textAlign='left';ctx.textBaseline='alphabetic';
   ctx.font=F(34);ctx.fillText(score,bx,by-34);
   ctx.textAlign='right';ctx.font=F(15);ctx.fillStyle='#8ea2c4';
-  ctx.fillText('En iyi: '+Math.max(best,score),bx+8*cs,by-46);
-  ctx.fillText(T.n+(combo>0?'  |  Kombo x'+combo:''),bx+8*cs,by-22);
+  ctx.fillText((window.YT?YT('En iyi: '):'En iyi: ')+Math.max(best,score),bx+8*cs,by-46);
+  ctx.fillText((window.YT?YT(T.n):T.n)+(combo>0?'  |  '+(window.YT?YT('Kombo x'):'Kombo x')+combo:''),bx+8*cs,by-22);
   for(let r=0;r<8;r++)for(let c=0;c<8;c++){
     const v=grid[r][c];
     cell(bx+c*cs,by+r*cs,cs,v===null?T.ce:T.co[v]);
@@ -148,5 +148,5 @@ $('go').onclick=init;
 grid=Array.from({length:8},()=>Array(8).fill(null));tray=[newPiece(),newPiece(),newPiece()];
 loop();
 </script>
-<script src="../games.js"></script><script src="../menu.js"></script></body>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../menu.js"></script></body>
 </html>
