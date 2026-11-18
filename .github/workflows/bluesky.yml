@@ -1,0 +1,16 @@
+name: Bluesky paylaşımı
+on:
+  push:
+    branches: [main]
+    paths: ['social/sonraki.txt']
+  workflow_dispatch:
+jobs:
+  paylas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Paylaş
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+        run: python3 social/bluesky_post.py
