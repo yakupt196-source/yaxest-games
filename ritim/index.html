@@ -375,6 +375,7 @@ $('pb').addEventListener('click',e=>{e.stopPropagation();pauseGame()});$('pb').a
 $('pr').onclick=resumeGame;
 $('prs').onclick=()=>{pz=false;cdEnd=0;$('pz').classList.add('hid');const cu=custom&&custom.on;setup(cu?1:lvl,cu)};
 $('pm').onclick=()=>{pz=false;cdEnd=0;$('pz').classList.add('hid');clearInterval(timer);stopMusic();state='menu';startLvl=lvl;$('ot').textContent='Yaxest Ritim';$('op').innerHTML=document.getElementById('op').dataset.intro||$('op').innerHTML;$('go').textContent='Başla';$('ms').classList.remove('hid');$('ov').classList.remove('hid')};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseGame()});
 addEventListener('keydown',e=>{if(e.key==='Escape'||e.key.toLowerCase()==='p'){if(pz&&!cdEnd)resumeGame();else pauseGame()}});
 
 /* ===== GİRİŞ / ARAYÜZ ===== */

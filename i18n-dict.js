@@ -1601,5 +1601,32 @@ window.YAXEST_DICT={
 "← Todos os jogos",
 "← Все игры",
 "← Tutti i giochi"
+],
+"Tüm oyunlar": [
+"All games",
+"Alle Spiele",
+"Todos los juegos",
+"Tous les jeux",
+"Todos os jogos",
+"Все игры",
+"Tutti i giochi"
+],
+"🔊 Ses: açık": [
+"🔊 Sound: on",
+"🔊 Ton: an",
+"🔊 Sonido: activado",
+"🔊 Son : activé",
+"🔊 Som: ligado",
+"🔊 Звук: вкл.",
+"🔊 Audio: attivo"
+],
+"🔇 Ses: kapalı": [
+"🔇 Sound: off",
+"🔇 Ton: aus",
+"🔇 Sonido: desactivado",
+"🔇 Son : coupé",
+"🔇 Som: desligado",
+"🔇 Звук: выкл.",
+"🔇 Audio: disattivato"
 ]
 };
