@@ -12,7 +12,6 @@ G.run({key:'sallan',
   for(let i=0;i<4;i++){const h=dt/4;ball.vy+=g*h;ball.x+=ball.vx*h;ball.y+=ball.vy*h;
    if(att){const dx=ball.x-att.x,dy=ball.y-att.y,l=Math.hypot(dx,dy);if(l>att.L){const nx=dx/l,ny=dy/l;ball.x=att.x+nx*att.L;ball.y=att.y+ny*att.L;const vn=ball.vx*nx+ball.vy*ny;if(vn>0){ball.vx-=nx*vn;ball.vy-=ny*vn}}}
    if(ball.y<14){ball.y=14;if(ball.vy<0)ball.vy*=-.5}}
-  if(att&&!hold){att=null}
   cam+=((ball.x-G.W*.3)-cam)*Math.min(1,dt*5);
   while(nextAx<cam+G.W*2.2)genAnchor();
   const d=Math.max(0,Math.floor((ball.x-G.W*.3)/10));if(d>maxX/10|0){if(d%25===0&&d>0)G.sfx('good')}if(d*10>maxX){maxX=d*10;G.setScore(d)}
@@ -27,5 +26,5 @@ G.run({key:'sallan',
   if(att){x.strokeStyle='#ffd23f';x.lineWidth=3;x.beginPath();x.moveTo(att.x,att.y);x.lineTo(ball.x,ball.y);x.stroke()}
   if(ball)G.circle(ball.x,ball.y,13,'#ff5c8a',16);
   x.restore();
-  if(G.state==='play'&&!att&&G.t<4)G.text('Basılı tut',G.W/2,G.H*.62,20,'rgba(255,255,255,.6)')}
+  if(G.state==='play'&&G.t<5)G.text(att?'Dokun: bırak ve fırla':'Basılı tut: kancaya tutun',G.W/2,G.H*.62,18,'rgba(255,255,255,.7)')}
 });

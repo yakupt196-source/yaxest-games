@@ -2357,5 +2357,41 @@ window.YAXEST_DICT={
 "＋ Tubo",
 "＋ Пробирка",
 "＋ Provetta"
+],
+"günlük seri": [
+"day streak",
+"Tage in Folge",
+"días seguidos",
+"jours d'affilée",
+"dias seguidos",
+"дней подряд",
+"giorni di fila"
+],
+"Günün oyunu": [
+"Game of the day",
+"Spiel des Tages",
+"Juego del día",
+"Jeu du jour",
+"Jogo do dia",
+"Игра дня",
+"Gioco del giorno"
+],
+"Dokun: bırak ve fırla": [
+"Tap: release and fly",
+"Tippen: loslassen und fliegen",
+"Toca: suelta y vuela",
+"Touche : lâche et vole",
+"Toque: solte e voe",
+"Нажми: отпусти и лети",
+"Tocca: rilascia e vola"
+],
+"Basılı tut: kancaya tutun": [
+"Hold: grab a hook",
+"Halten: Haken greifen",
+"Mantén: agarra un gancho",
+"Maintiens : accroche-toi",
+"Segure: agarre um gancho",
+"Удерживай: хватайся за крюк",
+"Tieni premuto: aggancia"
 ]
 };

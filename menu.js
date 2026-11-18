@@ -85,3 +85,5 @@
   document.addEventListener('visibilitychange',function(){if(document.hidden&&cur!=='ritim')zshow()});
   if(cur!=='ritim')document.body.appendChild(pbtn);
 })();
+
+;(function(){try{var d=new Date(),k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),a=JSON.parse(localStorage.getItem('yx-days')||'[]');if(a.indexOf(k)<0){a.push(k);localStorage.setItem('yx-days',JSON.stringify(a.slice(-90)))}}catch(e){}})();

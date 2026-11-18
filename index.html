@@ -72,7 +72,7 @@ footer{border-top:1px solid #2f2a5c;padding:26px 0 40px;color:var(--mute);font-s
 footer a{color:var(--yellow)}
 @media (max-width:480px){.hero{padding:20px 0 32px}.grid{grid-template-columns:1fr 1fr;gap:12px}.card{padding:16px}.ico{width:60px;height:60px;font-size:2rem}.card p{font-size:.85rem}#q{width:100%}.about{padding:20px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-</style>
+.daily{max-width:1040px;margin:18px auto 0;padding:0 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}.daily>*{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 16px;color:#fff;text-decoration:none;display:flex;gap:8px;align-items:center}.daily>a{flex:1;min-width:230px;justify-content:space-between;border-color:#ffd23f}.daily small{color:#a9a3cf}.daily a span{background:#ffd23f;color:#14102b;font-weight:800;border-radius:999px;padding:4px 12px}#langslot{margin-left:4px!important}@media(max-width:430px){nav a{padding-left:6px!important;padding-right:6px!important;margin:0!important}.ylang{max-width:96px}}</style>
 </head>
 <body>
 <div class="wrap">
@@ -83,6 +83,7 @@ footer a{color:var(--yellow)}
 <div class="row"><a class="btn" href="#oyunlar">Oyun seç</a><button class="btn alt" id="rnd" type="button">Şansıma bir oyun</button></div>
 <div class="facts"><div><b id="cnt">0</b>oyun</div><div><b>0 ₺</b>ücretsiz</div><div><b>Mobil</b>uyumlu</div></div>
 </header>
+<div id="daily" class="daily" hidden><div><span>🔥</span> <b id="streak">0</b> <span>günlük seri</span></div><a id="dgame" href="#"><small>Günün oyunu</small><b id="dname"></b><span>Oyna</span></a></div>
 <main id="oyunlar">
 <div class="bar"><h2>Oyunlar</h2>
 <input id="q" type="search" placeholder="Oyun ara" aria-label="Oyun ara" autocomplete="off">
@@ -117,6 +118,11 @@ $('q').oninput=draw;
 $('chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.k;[...$('chips').children].forEach(x=>x.setAttribute('aria-pressed',x===b));draw()};
 $('rnd').onclick=()=>{location.href=GAMES[Math.floor(Math.random()*GAMES.length)].id+'/'};
 if(window.YI18N){$('langslot').appendChild(YI18N.select());addEventListener('ylang',draw)}
+
+(function(){try{var a=JSON.parse(localStorage.getItem('yx-days')||'[]'),S=new Set(a),d=new Date(),n=0,f=x=>x.getFullYear()+'-'+(x.getMonth()+1)+'-'+x.getDate();
+if(!S.has(f(d)))d.setDate(d.getDate()-1);while(S.has(f(d))){n++;d.setDate(d.getDate()-1)}
+var t=new Date(),h=(t.getFullYear()*372+t.getMonth()*31+t.getDate())%GAMES.length,g=GAMES[h];
+$('streak').textContent=n;$('dname').textContent=g.n;$('dgame').href=g.id+'/';$('daily').hidden=false}catch(e){}})();
 draw();
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
 $('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};
