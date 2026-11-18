@@ -1431,14 +1431,14 @@ window.YAXEST_DICT={
 "Прыгай в ритм музыке, преодолевай препятствия и добегай до флага. Каждый уровень длиннее и быстрее.",
 "Salta a ritmo di musica, supera gli ostacoli e raggiungi la bandiera. Ogni livello è più lungo e veloce."
 ],
-"<b>Dokun</b> ve ritme göre zıpla.<br><b>Kaydır</b> ← → şerit değiştir.<br>Bayrağa ulaş. Her seviye daha uzun ve hızlı.<br>🎧 Kulaklıkla daha güzel.": [
-"<b>Tap</b> to jump to the beat.<br><b>Swipe</b> ← → to change lane.<br>Reach the flag. Every level is longer and faster.<br>🎧 Sounds better with headphones.",
-"<b>Tippe</b>, um im Takt zu springen.<br><b>Wische</b> ← → zum Spurwechsel.<br>Erreiche die Flagge. Jedes Level ist länger und schneller.<br>🎧 Mit Kopfhörern klingt es besser.",
-"<b>Toca</b> para saltar al ritmo.<br><b>Desliza</b> ← → para cambiar de carril.<br>Llega a la bandera. Cada nivel es más largo y rápido.<br>🎧 Suena mejor con auriculares.",
-"<b>Touche</b> pour sauter en rythme.<br><b>Glisse</b> ← → pour changer de voie.<br>Atteins le drapeau. Chaque niveau est plus long et plus rapide.<br>🎧 C’est meilleur au casque.",
-"<b>Toque</b> para pular no ritmo.<br><b>Deslize</b> ← → para trocar de faixa.<br>Alcance a bandeira. Cada nível é mais longo e rápido.<br>🎧 Fica melhor com fones.",
-"<b>Нажми</b>, чтобы прыгать в ритм.<br><b>Свайп</b> ← → — смена дорожки.<br>Добеги до флага. Каждый уровень длиннее и быстрее.<br>🎧 В наушниках звучит лучше.",
-"<b>Tocca</b> per saltare a ritmo.<br><b>Scorri</b> ← → per cambiare corsia.<br>Raggiungi la bandiera. Ogni livello è più lungo e veloce.<br>🎧 Suona meglio con le cuffie."
+"<b>Dokun</b> ve ritme göre zıpla (basılı tutarsan arka arkaya).<br>Dikenlerden, çukurlardan ve tavandan sarkan engellerden geç.<br>Bayrağa ulaş. Her seviye daha uzun ve hızlı.<br>🎧 Kulaklıkla daha güzel.": [
+"<b>Tap</b> to jump to the beat (hold to keep jumping).<br>Get past spikes, pits and hanging obstacles.<br>Reach the flag. Every level is longer and faster.<br>🎧 Sounds better with headphones.",
+"<b>Tippe</b>, um im Takt zu springen (gedrückt halten für Dauersprünge).<br>Überwinde Stacheln, Gruben und hängende Hindernisse.<br>Erreiche die Flagge. Jedes Level ist länger und schneller.<br>🎧 Mit Kopfhörern klingt es besser.",
+"<b>Toca</b> para saltar al ritmo (mantén pulsado para saltar seguido).<br>Supera pinchos, fosos y obstáculos colgantes.<br>Llega a la bandera. Cada nivel es más largo y rápido.<br>🎧 Suena mejor con auriculares.",
+"<b>Touche</b> pour sauter en rythme (maintiens pour enchaîner).<br>Franchis piques, trous et obstacles suspendus.<br>Atteins le drapeau. Chaque niveau est plus long et plus rapide.<br>🎧 C’est meilleur au casque.",
+"<b>Toque</b> para pular no ritmo (segure para pular em sequência).<br>Passe por espinhos, buracos e obstáculos pendurados.<br>Alcance a bandeira. Cada nível é mais longo e rápido.<br>🎧 Fica melhor com fones.",
+"<b>Нажми</b>, чтобы прыгать в ритм (удерживай для серии прыжков).<br>Проходи шипы, ямы и подвесные препятствия.<br>Добеги до флага. Каждый уровень длиннее и быстрее.<br>🎧 В наушниках звучит лучше.",
+"<b>Tocca</b> per saltare a ritmo (tieni premuto per saltare di continuo).<br>Supera spuntoni, buche e ostacoli sospesi.<br>Raggiungi la bandiera. Ogni livello è più lungo e veloce.<br>🎧 Suona meglio con le cuffie."
 ],
 "Ses": [
 "Sound",
