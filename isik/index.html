@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Işık | Yaxest Games</title>
+<meta name="description" content="Bir ışığa dokununca komşuları da değişir. Hepsini söndür.">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:10%;left:0;right:0;text-align:center;font-size:4rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.84);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+#info{position:absolute;top:4%;left:0;right:0;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-weight:700;color:#c9c4ee}
+#info b{color:#ffd23f}
+#grid{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:min(92%,calc(100dvh - 330px),420px);min-width:230px;aspect-ratio:1;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;touch-action:manipulation}
+.cell{border:0;border-radius:14px;background:#2b2559;padding:0;min-height:0;transition:background .12s,box-shadow .12s}
+.cell.on{background:#ffd23f;box-shadow:0 0 18px rgba(255,210,63,.7)}
+#msg{position:absolute;bottom:calc(70px + 52px);left:0;right:0;text-align:center;font-weight:800;font-size:1.3rem;color:#3ddbb0;min-height:1.6em;pointer-events:none}
+#rs{position:absolute;bottom:72px;left:50%;transform:translateX(-50%);background:#2b2559;color:#f6f3ff;font-size:1rem;padding:10px 22px;min-height:44px}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><div id="info"><span>Seviye <b id="lvl">1</b></span><span>Hamle <b id="mv">0</b></span><span id="par"></span></div><div id="grid"></div><div id="msg"></div><button id="rs" type="button">Seviyeyi sıfırla</button>
+<div id="ov"><h2 id="ot">Yaxest Işık</h2><p id="op"><b>Bir ışığa dokun:</b> kendisi ve üst, alt, sağ, sol komşusu açılır ya da söner.<br>Hepsini söndürünce bir üst seviyeye geçersin.</p><button id="go">Başla</button></div></div>
+<script>
+const $=id=>document.getElementById(id);
+
+const N=5;let g=[],init=[],sol=[],lvl=1,mv=0,best=1,state='menu',lock=false;
+try{best=+localStorage.getItem('yi-best')||1}catch(e){}$('bs').textContent=best;
+const R=n=>Math.floor(Math.random()*n);
+$('grid').innerHTML=Array.from({length:N*N},(_,i)=>`<button class="cell" data-i="${i}" aria-label="Işık ${i+1}"></button>`).join('');
+const cells=[...document.querySelectorAll('.cell')];
+function flipAt(i){const r=Math.floor(i/N),c=i%N;for(const[dr,dc]of[[0,0],[1,0],[-1,0],[0,1],[0,-1]]){const rr=r+dr,cc=c+dc;if(rr>=0&&rr<N&&cc>=0&&cc<N)g[rr*N+cc]^=1}}
+function render(){cells.forEach((b,i)=>b.classList.toggle('on',!!g[i]));$('lvl').textContent=lvl;$('mv').textContent=mv;$('par').textContent='En az '+sol.length+' hamle'}
+function gen(){do{g=Array(N*N).fill(0);const k=Math.min(2+lvl,12);sol=[];while(sol.length<k){const i=R(N*N);if(!sol.includes(i))sol.push(i)}for(const i of sol)flipAt(i)}while(g.every(v=>!v));init=g.slice();mv=0;$('msg').textContent='';render()}
+function start(){lvl=1;state='play';lock=false;$('ov').classList.add('hid');gen()}
+function tap(i){if(state!=='play'||lock)return;flipAt(i);mv++;render();
+  if(g.every(v=>!v)){lock=true;$('msg').textContent='Seviye tamam!';lvl++;if(lvl>best){best=lvl;try{localStorage.setItem('yi-best',best)}catch(e){}}$('bs').textContent=best;setTimeout(()=>{lock=false;gen()},800)}}
+$('grid').onpointerdown=e=>{const b=e.target.closest('.cell');if(!b)return;e.preventDefault();tap(+b.dataset.i)};
+$('rs').onclick=()=>{if(state!=='play'||lock)return;g=init.slice();mv=0;$('msg').textContent='';render()};
+addEventListener('keydown',e=>{if(e.key==='Enter'&&state!=='play')start()});
+$('go').onclick=start;g=Array(N*N).fill(0);render();
+
+</script>
+<script src="../games.js"></script><script src="../menu.js"></script></body></html>

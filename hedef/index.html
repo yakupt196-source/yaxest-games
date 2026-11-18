@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Hedef | Yaxest Games</title>
+<meta name="description" content="Gezen çizgiyi yeşil bölgede durdur. Bölge daraldıkça zorlaşır.">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:10%;left:0;right:0;text-align:center;font-size:4rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.84);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+#trk{position:absolute;top:44%;left:6%;right:6%;height:68px;background:#2b2559;border-radius:34px}
+#zone{position:absolute;top:0;bottom:0;background:#3ddbb0;border-radius:34px;opacity:.92}
+#mk{position:absolute;top:-10px;bottom:-10px;width:8px;margin-left:-4px;background:#fff;border-radius:6px;box-shadow:0 0 14px #fff}
+#lv{position:absolute;top:calc(10% + 4.4rem);left:0;right:0;text-align:center;font-size:1.4rem;pointer-events:none;letter-spacing:4px}
+#msg{position:absolute;top:calc(44% + 100px);left:0;right:0;text-align:center;font-weight:800;font-size:1.4rem;min-height:1.6em;pointer-events:none}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><div id="big">0</div><div id="lv">❤️❤️❤️</div><div id="msg"></div><div id="trk"><div id="zone"></div><div id="mk"></div></div>
+<div id="ov"><h2 id="ot">Yaxest Hedef</h2><p id="op"><b>Dokun</b> (veya Boşluk) ve gezen çizgiyi <b>yeşil bölgede</b> durdur.<br>Tam ortaya vurursan 2 puan. 3 kez ıskalarsan biter.</p><button id="go">Başla</button></div></div>
+<script>
+const $=id=>document.getElementById(id);
+
+let state='menu',best=0,sc=0,lives=3,p=0,dir=1,v=.8,c=.5,w=.3,overAt=0,last=0,msgT=0;
+try{best=+localStorage.getItem('yh2-best')||0}catch(e){}$('bs').textContent=best;
+const mk=$('mk'),zone=$('zone');
+function newZone(){w=Math.max(.07,.3-sc*.012);c=w/2+.03+Math.random()*(1-w-.06);zone.style.left=((c-w/2)*100)+'%';zone.style.width=(w*100)+'%'}
+function hearts(){$('lv').textContent='❤️'.repeat(Math.max(0,lives))+'🖤'.repeat(Math.max(0,3-lives))}
+function say(t,col){$('msg').textContent=t;$('msg').style.color=col||'#ffd23f';msgT=1}
+function start(){sc=0;lives=3;p=0;dir=1;v=.8;state='play';$('big').textContent=0;hearts();newZone();say('');$('ov').classList.add('hid')}
+function over(){state='over';overAt=performance.now()+500;if(sc>best){best=sc;try{localStorage.setItem('yh2-best',best)}catch(e){}}$('bs').textContent=best;
+  $('ot').textContent='Oyun bitti';$('op').innerHTML='Skor <b>'+sc+'</b><br>Rekor <b>'+best+'</b>';$('go').textContent='Tekrar oyna';$('ov').classList.remove('hid')}
+function hit(){if(state!=='play')return;const d=Math.abs(p-c);
+  if(d<=w/2){const perfect=d<=w*.15;sc+=perfect?2:1;say(perfect?'Tam isabet! +2':'İsabet!',perfect?'#3ddbb0':'#ffd23f');v=Math.min(2.4,.8+sc*.04);newZone()}
+  else{lives--;hearts();say('Iska!','#ff5c8a');try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}if(lives<=0)over()}
+  $('big').textContent=sc}
+function tick(ts){requestAnimationFrame(tick);const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+  if(state==='play'){p+=dir*v*dt;if(p>=1){p=1;dir=-1}else if(p<=0){p=0;dir=1}}
+  mk.style.left=(p*100)+'%';if(msgT>0){msgT-=dt*1.2;if(msgT<=0)$('msg').textContent=''}}
+$('wrap').addEventListener('pointerdown',e=>{if(e.target.closest('#ov'))return;e.preventDefault();hit()});
+addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();if(state==='play')hit();else if(performance.now()>overAt)start()}});
+$('go').onclick=()=>{if(performance.now()>overAt)start()};
+requestAnimationFrame(tick);
+
+</script>
+<script src="../games.js"></script><script src="../menu.js"></script></body></html>

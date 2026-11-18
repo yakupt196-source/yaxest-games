@@ -46,10 +46,10 @@ function nextQ(){const a=Math.floor(Math.random()*4);let b=Math.floor(Math.rando
 function start(){sc=0;$('big').textContent='0';state='play';$('ov').classList.add('hid');nextQ();lt=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}
 function over(why){state='over';cancelAnimationFrame(raf);overAt=performance.now()+500;if(sc>best){best=sc;try{localStorage.setItem('yr-best',best)}catch(e){}}$('bs').textContent=best;
   try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}$('ot').textContent=why;$('op').innerHTML='Skor <b>'+sc+'</b><br>Rekor <b>'+best+'</b>';$('go').textContent='Tekrar oyna';$('ov').classList.remove('hid')}
-function tick(n){if(state!=='play')return;left-=(n-lt)/1000;lt=n;$('bar').style.width=Math.max(0,left/T*100)+'%';if(left<=0)return over('Süre doldu!');raf=requestAnimationFrame(tick)}
+function tick(n){if(state!=='play')return;left-=Math.min(.05,(n-lt)/1000);lt=n;$('bar').style.width=Math.max(0,left/T*100)+'%';if(left<=0)return over('Süre doldu!');raf=requestAnimationFrame(tick)}
 $('pad').onpointerdown=e=>{const b=e.target.closest('.o');if(!b||state!=='play')return;e.preventDefault();
   if(+b.dataset.i===ans){sc++;$('big').textContent=sc;nextQ()}else over('Yanlış renk!')};
 addEventListener('keydown',e=>{if(e.key==='Enter'&&state!=='play'&&performance.now()>overAt)start();const k=['1','2','3','4'].indexOf(e.key);if(k>=0&&state==='play'){if(k===ans){sc++;$('big').textContent=sc;nextQ()}else over('Yanlış renk!')}});
 $('go').onclick=()=>{if(performance.now()>overAt)start()};
 
-</script></body></html>
+</script><script src="../games.js"></script><script src="../menu.js"></script></body></html>

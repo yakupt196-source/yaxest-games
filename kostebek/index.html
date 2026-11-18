@@ -9,9 +9,9 @@ let hs=[],sc=0,left=30,cur=-1,tm,tk,best=0,run=false;
 try{best=+localStorage.getItem('yk-best')||0}catch(e){}B.textContent=best;
 for(let i=0;i<9;i++){const h=document.createElement('button');h.className='h';h.textContent='🐹';h.setAttribute('aria-label','Delik');h.onclick=()=>hit(i);g.appendChild(h);hs.push(h)}
 function hit(i){if(!run||i!==cur)return;sc++;S.textContent=sc;hs[i].classList.remove('up');cur=-1}
-function pop(){if(!run)return;if(cur>-1)hs[cur].classList.remove('up');let n;do{n=Math.floor(Math.random()*9)}while(n===cur);cur=n;hs[n].classList.add('up');tm=setTimeout(pop,Math.max(350,800-sc*12))}
+function pop(){if(!run)return;if(window.YMENU){tm=setTimeout(pop,200);return}if(cur>-1)hs[cur].classList.remove('up');let n;do{n=Math.floor(Math.random()*9)}while(n===cur);cur=n;hs[n].classList.add('up');tm=setTimeout(pop,Math.max(350,800-sc*12))}
 function start(){clearTimeout(tm);clearInterval(tk);hs.forEach(h=>h.classList.remove('up'));sc=0;left=30;cur=-1;run=true;S.textContent=0;T.textContent=30;W.textContent='';document.getElementById('r').textContent='Yeniden başlat';pop();
-tk=setInterval(()=>{T.textContent=--left;if(left<=0)end()},1000)}
+tk=setInterval(()=>{if(window.YMENU)return;T.textContent=--left;if(left<=0)end()},1000)}
 function end(){run=false;clearTimeout(tm);clearInterval(tk);hs.forEach(h=>h.classList.remove('up'));W.textContent='Süre doldu! '+sc+' puan.';if(sc>best){best=sc;B.textContent=best;try{localStorage.setItem('yk-best',best)}catch(e){}}}
 document.getElementById('r').onclick=start;
-</script></body></html>
+</script><script src="../games.js"></script><script src="../menu.js"></script></body></html>

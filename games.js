@@ -1,0 +1,18 @@
+// Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
+window.YAXEST_GAMES=[
+{id:'hedef',n:'Yaxest Hedef',i:'🎯',c:'#3ddbb0',k:'Refleks',d:'Gezen çizgiyi yeşil bölgede durdur. Bölge daraldıkça zorlaşır.',new:1},
+{id:'sayi',n:'Yaxest Sayı',i:'🧮',c:'#ffd23f',k:'Bulmaca',d:'Hızlı hesap yap, doğru sonucu seç. Süre kısalır.',new:1},
+{id:'yol',n:'Yaxest Yol',i:'🛤️',c:'#ff5c8a',k:'Arcade',d:'Dokunarak yönünü değiştir, yoldan çıkma. Hız artar.',new:1},
+{id:'isik',n:'Yaxest Işık',i:'💡',c:'#b388ff',k:'Bulmaca',d:'Bir ışığa dokununca komşuları da değişir. Hepsini söndür.',new:1},
+{id:'zipla',n:'Yaxest Zıpla',i:'🦘',c:'#3df0ff',k:'Refleks',d:'Tek dokunuşla zıpla, engellerden kaç. Giderek hızlanır.'},
+{id:'renk',n:'Yaxest Renk',i:'🎨',c:'#ffd23f',k:'Bulmaca',d:'Yazının rengini seç, yazıya aldanma. Süre her turda kısalır.'},
+{id:'balon',n:'Yaxest Balon',i:'🎈',c:'#ff5c8a',k:'Arcade',d:'Balonları patlat, bombalara dokunma. Altın balon 5 puan.'},
+{id:'karo',n:'Yaxest Karo',i:'🎹',c:'#b388ff',k:'Refleks',d:'Düşen karolara dokun, yanlış şeride basma. Hız artar.'},
+{id:'kule',n:'Yaxest Kule',i:'🏗️',c:'#ff9f43',k:'Refleks',d:'Tek dokunuşla bloğu bırak, tam oturtursan kule genişler. En yükseğe çık.'},
+{id:'kosu',n:'Yaxest Koşu',i:'🏃',c:'#3df0ff',k:'Refleks',d:'Şerit değiştir, rengini değiştir, duvarlardan kaç. Giderek hızlanır.'},
+{id:'hole',n:'Yaxest Hole',i:'🕳️',c:'#6aa8ff',k:'Arcade',d:'Bir delik kontrol et, nesneleri yut, büyü. 5 dünya, 100 seviye.'},
+{id:'blok',n:'Yaxest Blok',i:'🧱',c:'#3ddbb0',k:'Bulmaca',d:'Blokları tahtaya yerleştir, satır ve sütunları temizle. Puan arttıkça dünya değişir.'},
+{id:'yilan',n:'Yaxest Yılan',i:'🐍',c:'#ffd23f',k:'Arcade',d:'Elmaları ye, uzadıkça hızlan. Duvara ve kendine çarpma.'},
+{id:'hafiza',n:'Yaxest Hafıza',i:'🃏',c:'#ff5c8a',k:'Bulmaca',d:'Kartları çevir, eşleri bul. En az hamleyle bitir.'},
+{id:'birlestir',n:'Yaxest Birleştir',i:'🔢',c:'#ff9f43',k:'Bulmaca',d:"Aynı sayıları kaydırıp birleştir ve 2048'e ulaş."},
+{id:'kostebek',n:'Yaxest Köstebek',i:'🐹',c:'#b388ff',k:'Refleks',d:'30 saniyede çıkan köstebeklere dokun, rekoru kır.'}];
