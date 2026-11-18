@@ -38,9 +38,9 @@ function rs(){const k=Math.min(devicePixelRatio||1,2),r=c.getBoundingClientRect(
 addEventListener('resize',rs);
 const score=()=>Math.floor(wy/10),speed=()=>Math.min(340,170+score()*.9);
 function endOf(g){return{y:g.y0+g.len,x:g.x0+g.s*g.len}}
-function addSeg(){const l=segs[segs.length-1],e=endOf(l),len=110+Math.random()*170;let sl=Math.random()<.65?-l.s:l.s;
-  if(e.x+sl*len>GW-60)sl=-1;else if(e.x+sl*len<60)sl=1;segs.push({y0:e.y,x0:e.x,s:sl,len})}
-function init(){segs=[{y0:-100,x0:GW/2-100,s:1,len:260}];while(endOf(segs[segs.length-1]).y<H/s+400)addSeg()}
+function addSeg(){const l=segs[segs.length-1],e=endOf(l);let sl=Math.random()<.65?-l.s:l.s;const room=d=>d>0?GW-92-e.x:e.x-92;
+  if(room(sl)<60)sl=-sl; /* yol her zaman ekranın içinde kalsın */
+  const len=Math.max(50,Math.min(110+Math.random()*170,room(sl)));segs.push({y0:e.y,x0:e.x,s:sl,len})}function init(){segs=[{y0:-100,x0:GW/2-80,s:1,len:260}];while(endOf(segs[segs.length-1]).y<H/s+400)addSeg()}
 function segAt(y){for(const g of segs)if(y>=g.y0&&y<g.y0+g.len)return g;return segs[segs.length-1]}
 const cx=y=>{const g=segAt(y);return g.x0+g.s*(y-g.y0)};
 function start(){wy=0;wx=GW/2;d=1;trail=[];init();state='play';$('big').textContent=0;$('ov').classList.add('hid')}
