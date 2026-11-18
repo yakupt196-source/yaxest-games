@@ -26,11 +26,18 @@ button:focus-visible{outline:3px solid #fff}
 .ch{min-height:40px;padding:8px 16px;font-size:.95rem;background:#2b2559;color:#fff;border:2px solid transparent}
 .ch.on{border-color:#ffd23f;background:#3a3175}
 #ai{color:#3df0ff;font-size:.9rem;min-height:1.2em}
+#pb{position:absolute;top:8px;right:60px;width:44px;height:44px;min-height:0;padding:0;border-radius:50%;background:rgba(43,37,89,.85);color:#fff;font-size:18px;line-height:1;z-index:5}
+#pz{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;background:rgba(13,10,36,.9);z-index:6}
+#pz h2{font-size:2rem;font-weight:800;margin-bottom:6px}
+#pz button{min-width:230px}
+#pz a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center;font-weight:700}
 #mt{position:absolute;top:8px;right:8px;width:44px;height:44px;min-height:0;padding:0;border-radius:50%;background:rgba(43,37,89,.85);color:#fff;font-size:20px;line-height:1;z-index:5}
 .hid{display:none!important}
 </style></head><body>
 <header><a href="../">← Yaxest Games</a><span class="st">Seviye <span id="lv">1</span> · <span id="hp">❤️❤️❤️</span> · Rekor <span id="bs">1</span></span></header>
 <div id="wrap"><canvas id="c"></canvas><button id="mt" type="button" aria-label="Ses">🔊</button>
+<button id="pb" type="button" class="hid" aria-label="Duraklat">⏸</button>
+<div id="pz" class="hid"><h2>Duraklatıldı</h2><button id="pr" type="button">Devam et</button><button id="prs" type="button" class="o">Seviyeyi yeniden başlat</button><button id="pm" type="button" class="o">Ana menü</button><a href="../">← Tüm oyunlar</a></div>
 <div id="ov"><h2 id="ot">Yaxest Ritim</h2>
 <p id="op"><b>Dokun</b> ve ritme göre zıpla (basılı tutarsan arka arkaya).<br>Dikenlerden, çukurlardan ve tavandan sarkan engellerden geç. Bloklara konabilirsin.<br>Bayrağa ulaş. Her seviye daha uzun ve hızlı.</p>
 <div id="ms"><span id="msl">Müzik</span><div id="chips"><button class="ch o" data-s="lofi" type="button">Lo-fi</button><button class="ch o" data-s="synth" type="button">Synthwave</button><button class="ch o" data-s="house" type="button">House</button><button class="ch o" data-s="piyano" type="button">Piyano</button><button class="ch o" data-s="custom" id="cu" type="button">📁 Kendi müziğin</button></div><div id="ai"></div></div>
@@ -40,7 +47,7 @@ button:focus-visible{outline:3px solid #fff}
 const c=document.getElementById('c'),x=c.getContext('2d'),$=id=>document.getElementById(id);
 const T_AIR=.66,HJ=2.0,G=8*HJ/(T_AIR*T_AIR),V0=4*HJ/T_AIR,PW=.28; // zıplama süresi (sn), tepe (küp boyu), yerçekimi, ilk hız, oyuncu yarı genişliği
 let W=300,H=500,S=34,GY=400,PX=90,VS=5.5; // S: küp boyu (px), VS: saniyede kaç küp ilerlenir
-let state='menu',lvl=1,best=1,lives=3,tm=-1,prevTm=null,hS=0,vy=0,grounded=true,rot=0,queuedUntil=-9,holding=false,inv=-9,perf=0,gems=0,obs=[],endT=0,bpm=100,spb=.6,t0=0,theme=null,nextStep=0,jn=0,popups=[],trail=[],flash=0,shake=0,custom=null,style='lofi',src=null;
+let pz=false,cdEnd=0,state='menu',lvl=1,best=1,lives=3,tm=-1,prevTm=null,hS=0,vy=0,grounded=true,rot=0,queuedUntil=-9,holding=false,inv=-9,perf=0,gems=0,obs=[],endT=0,bpm=100,spb=.6,t0=0,theme=null,nextStep=0,jn=0,popups=[],trail=[],flash=0,shake=0,custom=null,style='lofi',src=null;
 try{best=+localStorage.getItem('yr-best')||1}catch(e){}
 try{const s=localStorage.getItem('yr-style');if(s&&s!=='custom')style=s}catch(e){}
 $('bs').textContent=best;
@@ -354,15 +361,27 @@ function render(){
   if(state==='play'&&t<2.4){x.globalAlpha=Math.max(0,Math.min(1,(2.4-t)/1));x.fillStyle='#fff';x.font='800 '+Math.round(W*.12)+'px "Bricolage Grotesque",sans-serif';x.textAlign='center';
     x.fillText(custom&&custom.on?'♪':tt('Seviye')+' '+lvl,W/2,H*.3);x.font='700 '+Math.round(W*.05)+'px "Bricolage Grotesque",sans-serif';x.fillStyle=C[0];x.fillText(bpm+' BPM',W/2,H*.3+W*.08);x.globalAlpha=1}
   for(const p of popups){x.globalAlpha=Math.max(0,1-p.age/1.1);x.fillStyle=p.col;x.font='800 '+Math.round(W*.065)+'px "Bricolage Grotesque",sans-serif';x.textAlign='center';x.fillText(p.t,PX+W*.22,GY-S*4-p.age*40);x.globalAlpha=1}
+  if(cdEnd){const r=Math.ceil((cdEnd-performance.now())/600);if(r>0){x.fillStyle='rgba(13,10,36,.5)';x.fillRect(0,0,W,H);x.fillStyle='#ffd23f';x.font='800 '+Math.round(W*.3)+'px "Bricolage Grotesque",sans-serif';x.textAlign='center';x.fillText(Math.min(3,r),W/2,H*.45)}}
   x.restore();
 }
 function loop(){requestAnimationFrame(loop);if(state!=='menu')update();render()}
 
+/* ===== DURAKLATMA ===== */
+function pauseGame(){if(state!=='play'||pz)return;pz=true;holding=false;$('pz').classList.remove('hid');if(AC){try{AC.suspend()}catch(e){}paused=true}}
+function resumeGame(){if(!pz)return;$('pz').classList.add('hid');cdEnd=performance.now()+1800;setTimeout(()=>{pz=false;cdEnd=0},1800)}
+function showPb(){$('pb').classList.toggle('hid',state!=='play')}
+setInterval(showPb,150);
+$('pb').addEventListener('click',e=>{e.stopPropagation();pauseGame()});$('pb').addEventListener('pointerdown',e=>e.stopPropagation());
+$('pr').onclick=resumeGame;
+$('prs').onclick=()=>{pz=false;cdEnd=0;$('pz').classList.add('hid');const cu=custom&&custom.on;setup(cu?1:lvl,cu)};
+$('pm').onclick=()=>{pz=false;cdEnd=0;$('pz').classList.add('hid');clearInterval(timer);stopMusic();state='menu';startLvl=lvl;$('ot').textContent='Yaxest Ritim';$('op').innerHTML=document.getElementById('op').dataset.intro||$('op').innerHTML;$('go').textContent='Başla';$('ms').classList.remove('hid');$('ov').classList.remove('hid')};
+addEventListener('keydown',e=>{if(e.key==='Escape'||e.key.toLowerCase()==='p'){if(pz&&!cdEnd)resumeGame();else pauseGame()}});
+
 /* ===== GİRİŞ / ARAYÜZ ===== */
-c.addEventListener('pointerdown',e=>{holding=true;jump();try{c.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+c.addEventListener('pointerdown',e=>{if(pz)return;holding=true;jump();try{c.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
 const rel=()=>{holding=false};c.addEventListener('pointerup',rel);c.addEventListener('pointercancel',rel);
 addEventListener('keydown',e=>{const k=e.key.toLowerCase();
-  if(k===' '||k==='arrowup'||k==='w'){if(state==='play'){holding=true;jump()}else if(!$('ov').classList.contains('hid'))$('go').click();e.preventDefault()}
+  if(k===' '||k==='arrowup'||k==='w'){if(pz){e.preventDefault();return}if(state==='play'){holding=true;jump()}else if(!$('ov').classList.contains('hid'))$('go').click();e.preventDefault()}
   else if(k==='enter'&&state!=='play'&&!$('ov').classList.contains('hid'))$('go').click()});
 addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k===' '||k==='arrowup'||k==='w')holding=false});
 let startLvl=1,sel='lofi';
@@ -386,9 +405,9 @@ $('go').onclick=()=>{if(state==='menu'||state==='over'||state==='win')wrapGo()};
 $('nw').onclick=()=>{startLvl=1;if(sel==='custom'&&!custom)sel=style;setup(1)};
 $('mt').addEventListener('click',e=>{e.stopPropagation();muted=!muted;$('mt').textContent=muted?'🔇':'🔊';try{localStorage.setItem('yr-mute',muted?'1':'0')}catch(_){}if(master)master.gain.value=muted?0:.7});
 $('mt').addEventListener('pointerdown',e=>e.stopPropagation());
-setInterval(()=>{if(!AC)return;const stop=window.YMENU||document.hidden;
+setInterval(()=>{if(!AC)return;const stop=window.YMENU||document.hidden||pz;
   if(stop&&AC.state==='running'){paused=true;AC.suspend()}else if(!stop&&paused){paused=false;AC.resume()}},120);
 if(best>1){startLvl=best;$('go').textContent='Devam et: seviye '+best;$('nw').classList.remove('hid')}
-requestAnimationFrame(loop);rs();
+$('op').dataset.intro=$('op').innerHTML;requestAnimationFrame(loop);rs();
 </script>
 <script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../menu.js"></script></body></html>

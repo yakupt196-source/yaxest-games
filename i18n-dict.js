@@ -1556,5 +1556,50 @@ window.YAXEST_DICT={
 "Música concluída!",
 "Песня пройдена!",
 "Brano completato!"
+],
+"Duraklatıldı": [
+"Paused",
+"Pausiert",
+"En pausa",
+"En pause",
+"Pausado",
+"Пауза",
+"In pausa"
+],
+"Devam et": [
+"Resume",
+"Weiter",
+"Continuar",
+"Reprendre",
+"Continuar",
+"Продолжить",
+"Riprendi"
+],
+"Seviyeyi yeniden başlat": [
+"Restart level",
+"Level neu starten",
+"Reiniciar nivel",
+"Recommencer le niveau",
+"Reiniciar nível",
+"Начать уровень заново",
+"Riavvia livello"
+],
+"Ana menü": [
+"Main menu",
+"Hauptmenü",
+"Menú principal",
+"Menu principal",
+"Menu principal",
+"Главное меню",
+"Menu principale"
+],
+"← Tüm oyunlar": [
+"← All games",
+"← Alle Spiele",
+"← Todos los juegos",
+"← Tous les jeux",
+"← Todos os jogos",
+"← Все игры",
+"← Tutti i giochi"
 ]
 };
