@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Sallan | Yaxest Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:3%;left:0;right:0;text-align:center;font-size:3.2rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25);z-index:2}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.86);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><canvas id="c"></canvas><div id="big">0</div>
+<div id="ov"><h2 id="ot">Yaxest Sallan</h2><p id="op"><b>Basılı tut</b> ve en yakın kancaya tutun, <b>bırak</b> ve fırla.<br>Kancadan kancaya sallanarak olabildiğince uzağa git. Düşme!</p><button id="go">Başla</button></div></div>
+<script src="../lib.js"></script>
+<script>
+const x=G.x;let ball,anch,cam,att,maxX,nextAx,hold;
+function genAnchor(){const gap=G.rnd(120,170)+Math.min(100,maxX/40);nextAx+=gap;anch.push({x:nextAx,y:G.rnd(G.H*.12,G.H*.34)})}
+function nearest(){let b=null,bd=1e9;for(const a of anch){if(a.x<ball.x-30)continue;const d=Math.hypot(a.x-ball.x,a.y-ball.y);if(d<300&&d<bd){bd=d;b=a}}return b}
+G.run({key:'sallan',
+ init(){anch=[{x:G.W*.32,y:G.H*.2}];nextAx=anch[0].x;maxX=0;for(let i=0;i<8;i++)genAnchor();
+  const L=150;ball={x:anch[0].x-L*.7,y:anch[0].y+L*.7,vx:0,vy:0};att=anch[0];att.L=L;cam=0;hold=false},
+ down(){hold=true;if(att)return;const a=nearest();if(a){att=a;att.L=Math.hypot(a.x-ball.x,a.y-ball.y);G.sfx('tap')}},
+ up(){hold=false;if(att){att=null;G.sfx('jump')}},
+ key_(e,d){if(e.key===' '||e.key==='ArrowUp'){if(d&&!hold)this.down();else if(!d)this.up();return true}},
+ update(dt){const g=1100;
+  for(let i=0;i<4;i++){const h=dt/4;ball.vy+=g*h;ball.x+=ball.vx*h;ball.y+=ball.vy*h;
+   if(att){const dx=ball.x-att.x,dy=ball.y-att.y,l=Math.hypot(dx,dy);if(l>att.L){const nx=dx/l,ny=dy/l;ball.x=att.x+nx*att.L;ball.y=att.y+ny*att.L;const vn=ball.vx*nx+ball.vy*ny;if(vn>0){ball.vx-=nx*vn;ball.vy-=ny*vn}}}
+   if(ball.y<14){ball.y=14;if(ball.vy<0)ball.vy*=-.5}}
+  if(att&&!hold){att=null}
+  cam+=((ball.x-G.W*.3)-cam)*Math.min(1,dt*5);
+  while(nextAx<cam+G.W*2.2)genAnchor();
+  const d=Math.max(0,Math.floor((ball.x-G.W*.3)/10));if(d>maxX/10|0){if(d%25===0&&d>0)G.sfx('good')}if(d*10>maxX){maxX=d*10;G.setScore(d)}
+  if(ball.y>G.H+40)G.over()},
+ draw(){G.bg('#0b0a2a','#2a1556');
+  for(let i=0;i<30;i++){const px=((i*97-cam*.2*(1+i%3*.3))%G.W+G.W)%G.W,py=(i*53)%G.H;x.fillStyle='rgba(255,255,255,.25)';x.fillRect(px,py,2,2)}
+  x.save();x.translate(-cam,0);
+  const near=!att&&G.state==='play'?nearest():null;
+  for(const a of anch){if(a.x<cam-40||a.x>cam+G.W+40)continue;const act=a===att,nr=a===near;
+   G.circle(a.x,a.y,act?9:7,act?'#ffd23f':nr?'#3df0ff':'#6b6a9a',act||nr?16:0);
+   if(nr){x.strokeStyle='rgba(61,240,255,.4)';x.setLineDash([4,6]);x.beginPath();x.moveTo(a.x,a.y);x.lineTo(ball.x,ball.y);x.stroke();x.setLineDash([])}}
+  if(att){x.strokeStyle='#ffd23f';x.lineWidth=3;x.beginPath();x.moveTo(att.x,att.y);x.lineTo(ball.x,ball.y);x.stroke()}
+  if(ball)G.circle(ball.x,ball.y,13,'#ff5c8a',16);
+  x.restore();
+  if(G.state==='play'&&!att&&G.t<4)G.text('Basılı tut',G.W/2,G.H*.62,20,'rgba(255,255,255,.6)')}
+});
+
+</script>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>

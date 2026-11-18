@@ -1,0 +1,34 @@
+// Yaxest Kır|<b>Sürükle</b>: platformu hareket ettir, topu düşürme.<br>Tüm tuğlaları kır. Düşen hediyeleri yakala!
+const x=G.x;let pad,balls,bricks,drops,lives,lvl,pw,speed,msg,msgT,serve;
+const BC=['#ff5c8a','#ff9f43','#ffd23f','#3ddbb0','#3df0ff','#b388ff','#6aa8ff','#ff7ad9'];
+function build(){bricks=[];const cols=7,rows=Math.min(8,3+lvl),bw=(G.W-24)/cols,bh=Math.max(18,G.H*.035);
+ for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){if(lvl>2&&(r+c)%5===0&&Math.random()<.5)continue;bricks.push({x:12+c*bw,y:G.H*.12+r*(bh+4),w:bw-4,h:bh,hp:(r<Math.floor(lvl/2)?2:1),col:BC[r%8]})}}
+function launch(){serve=true;balls=[{x:pad.x,y:pad.y-14,vx:0,vy:0,r:7}]}
+function go(){if(!serve)return;serve=false;const b=balls[0],a=G.rnd(-.5,.5);b.vx=Math.sin(a)*speed;b.vy=-Math.cos(a)*speed}
+G.run({key:'kir',resize(){if(pad){pad.y=G.H-70}},
+ init(){lvl=1;lives=3;speed=360;pw=84;pad={x:G.W/2,y:G.H-70,w:pw,h:14};drops=[];build();launch();msg='';msgT=0},
+ down(a){pad.x=a;go()},move(a){pad.x=a},
+ key_(e,d){if(!d)return;if(e.key==='ArrowLeft'){pad.x-=40;return true}if(e.key==='ArrowRight'){pad.x+=40;return true}if(e.key===' '){go();return true}},
+ update(dt){pad.x=G.clamp(pad.x,pad.w/2,G.W-pad.w/2);pad.w+=(pw-pad.w)*Math.min(1,dt*6);msgT-=dt;
+  if(serve){balls[0].x=pad.x;balls[0].y=pad.y-14}
+  for(const b of balls){if(serve)break;const st=Math.ceil(Math.hypot(b.vx,b.vy)*dt/6);for(let s=0;s<st;s++){b.x+=b.vx*dt/st;b.y+=b.vy*dt/st;
+   if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx)}if(b.x>G.W-b.r){b.x=G.W-b.r;b.vx=-Math.abs(b.vx)}if(b.y<b.r){b.y=b.r;b.vy=Math.abs(b.vy)}
+   if(b.vy>0&&b.y+b.r>pad.y&&b.y<pad.y+pad.h&&Math.abs(b.x-pad.x)<pad.w/2+b.r){const rel=G.clamp((b.x-pad.x)/(pad.w/2),-1,1),a=rel*1.05,sp=Math.hypot(b.vx,b.vy);b.vx=Math.sin(a)*sp;b.vy=-Math.cos(a)*sp;b.y=pad.y-b.r;G.sfx('tap')}
+   for(const br of bricks){if(br.dead)continue;if(b.x+b.r>br.x&&b.x-b.r<br.x+br.w&&b.y+b.r>br.y&&b.y-b.r<br.y+br.h){
+     const ox=Math.min(b.x+b.r-br.x,br.x+br.w-(b.x-b.r)),oy=Math.min(b.y+b.r-br.y,br.y+br.h-(b.y-b.r));if(ox<oy)b.vx*=-1;else b.vy*=-1;
+     br.hp--;if(br.hp<=0){br.dead=true;G.setScore(G.score+10);G.sfx('pop');if(Math.random()<.16)drops.push({x:br.x+br.w/2,y:br.y,t:G.pick(['W','M','S'])})}else G.sfx('tap');break}}}}
+  balls=balls.filter(b=>b.y<G.H+20);
+  if(!balls.length&&!serve){lives--;G.sfx('bad');if(lives<=0)return G.over();launch()}
+  for(const d of drops){d.y+=140*dt;if(d.y>pad.y-4&&d.y<pad.y+pad.h+10&&Math.abs(d.x-pad.x)<pad.w/2+10){d.got=true;G.sfx('gem');
+    if(d.t==='W'){pw=130;setTimeout(()=>{pw=84},9000)}else if(d.t==='M'&&!serve){const b=balls[0],sp=Math.hypot(b.vx,b.vy);for(const a of[-.5,.5])balls.push({x:b.x,y:b.y,vx:Math.sin(a)*sp,vy:-Math.cos(a)*sp,r:7})}else if(d.t==='S'){for(const b of balls){b.vx*=.8;b.vy*=.8}}}}
+  drops=drops.filter(d=>!d.got&&d.y<G.H+10);
+  if(bricks.every(b=>b.dead)){lvl++;speed=Math.min(560,speed+25);build();launch();drops=[];msg='Seviye '+lvl;msgT=1.4}},
+ draw(){G.bg('#0a0f2e','#1c1250');
+  for(const br of bricks){if(br.dead)continue;G.rrect(br.x,br.y,br.w,br.h,5,br.hp>1?'#e8e4ff':br.col);G.rrect(br.x+3,br.y+3,br.w-6,br.h*.35,3,'rgba(255,255,255,.28)')}
+  G.rrect(pad.x-pad.w/2,pad.y,pad.w,pad.h,7,'#3df0ff');
+  for(const b of balls)G.circle(b.x,b.y,b.r,'#fff',12);
+  for(const d of drops){G.circle(d.x,d.y,11,d.t==='W'?'#3ddbb0':d.t==='M'?'#ffd23f':'#b388ff',10);G.text(d.t==='W'?'↔':d.t==='M'?'×3':'🐢',d.x,d.y+1,d.t==='S'?11:12,'#14102b')}
+  G.text('❤️'.repeat(lives),70,G.H-30,14,'#fff','left');
+  if(serve)G.text('Dokun ve başlat',G.W/2,G.H*.62,20,'rgba(255,255,255,.65)');
+  if(msgT>0)G.text(msg,G.W/2,G.H*.5,34,'rgba(255,210,63,'+Math.min(1,msgT)+')')}
+});

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Mermi | Yaxest Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:3%;left:0;right:0;text-align:center;font-size:3.2rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25);z-index:2}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.86);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><canvas id="c"></canvas><div id="big">0</div>
+<div id="ov"><h2 id="ot">Yaxest Mermi</h2><p id="op"><b>Parmağını sürükle</b>, kurşun yağmurundan kaç.<br>Ne kadar uzun dayanırsan o kadar puan. Dokunursan biter!</p><button id="go">Başla</button></div></div>
+<script src="../lib.js"></script>
+<script>
+const x=G.x;let me,tx,ty,bul,t,spawn,pat,patT,hasT;
+function add(a,b,vx,vy,r,col){bul.push({x:a,y:b,vx,vy,r:r||6,col:col||'#ff5c8a'})}
+function edge(){const s=G.ri(0,3);return s===0?[G.rnd(0,G.W),-10]:s===1?[G.W+10,G.rnd(0,G.H)]:s===2?[G.rnd(0,G.W),G.H+10]:[-10,G.rnd(0,G.H)]}
+const pats=[
+ ()=>{const [a,b]=edge(),n=8+Math.floor(t/12);for(let i=0;i<n;i++){const an=i/n*6.28,sp=G.rnd(110,160);add(G.rnd(G.W*.2,G.W*.8),G.rnd(G.H*.15,G.H*.4),Math.cos(an)*sp,Math.sin(an)*sp,5,'#ff9f43')}},
+ ()=>{const [a,b]=edge(),dx=me.x-a,dy=me.y-b,l=Math.hypot(dx,dy),sp=170+t*1.5;for(let i=0;i<3+Math.floor(t/20);i++)setTimeout(()=>{if(G.state==='play')add(a,b,dx/l*sp,dy/l*sp,6,'#ff5c8a')},i*140)},
+ ()=>{const gap=G.rnd(.15,.85)*G.W,gw=Math.max(80,150-t);for(let c=0;c<G.W;c+=26){if(Math.abs(c-gap)<gw/2)continue;add(c,-10,0,130+t,6,'#b388ff')}},
+ ()=>{const cx=G.rnd(G.W*.25,G.W*.75),cy=G.rnd(G.H*.2,G.H*.45);for(let i=0;i<14;i++)setTimeout(()=>{if(G.state==='play'){const an=i*.55+G.t;add(cx,cy,Math.cos(an)*150,Math.sin(an)*150,5,'#3df0ff')}},i*90)}];
+G.run({key:'mermi',init(){me={x:G.W/2,y:G.H*.75};tx=me.x;ty=me.y;bul=[];t=0;spawn=1.2;hasT=false},
+ down(a,b){tx=a;ty=b-40;hasT=true},move(a,b){tx=a;ty=b-40},
+ key_(e,d){const s=14;if(!d)return;if(e.key==='ArrowLeft'){tx-=s*4;return true}if(e.key==='ArrowRight'){tx+=s*4;return true}if(e.key==='ArrowUp'){ty-=s*4;return true}if(e.key==='ArrowDown'){ty+=s*4;return true}},
+ update(dt){t+=dt;G.setScore(Math.floor(t));
+  me.x+=(G.clamp(tx,10,G.W-10)-me.x)*Math.min(1,dt*14);me.y+=(G.clamp(ty,G.H*.1,G.H-10)-me.y)*Math.min(1,dt*14);
+  spawn-=dt;if(spawn<=0){spawn=Math.max(.7,2.1-t*.025);const n=t>20?2:1;for(let i=0;i<n;i++)G.pick(pats)();}
+  if(Math.floor(t)%10===0&&Math.floor(t)>0&&Math.floor(t-dt)%10!==0)G.sfx('good');
+  for(const b of bul){b.x+=b.vx*dt;b.y+=b.vy*dt;if(Math.hypot(b.x-me.x,b.y-me.y)<b.r+5){G.over();return}}
+  bul=bul.filter(b=>b.x>-30&&b.x<G.W+30&&b.y>-30&&b.y<G.H+30)},
+ draw(){G.bg('#0d0820','#1c0f3a');
+  for(const b of bul)G.circle(b.x,b.y,b.r,b.col,10);
+  if(me){G.circle(me.x,me.y,5,'#fff',16);x.strokeStyle='rgba(255,255,255,.3)';x.beginPath();x.arc(me.x,me.y,11,0,7);x.stroke()}
+  if(G.state==='play'&&!hasT&&t<3)G.text('Parmağınla sürükle',G.W/2,G.H*.55,18,'rgba(255,255,255,.6)')}
+});
+
+</script>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>

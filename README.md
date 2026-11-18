@@ -1,5 +1,5 @@
 # Yaxest Games
-Oyunlar (17): yorunge, ritim, hedef, sayi, yol, isik, renk, balon, karo, kule, kosu, hole, blok, yilan, hafiza, birlestir, kostebek.
+Oyunlar (32): sallan, kaydir, damla, kir, radar, labirent, pota, mermi, nota, zincir, tirman, lazer, bicak, duello, tup, yorunge, ritim, hedef, sayi, yol, isik, renk, balon, karo, kule, kosu, hole, blok, yilan, hafiza, birlestir, kostebek.
 Yeni oyun eklemek: klasör aç (örn. `yeni/index.html`), sayfanın sonuna
 `<script src="../games.js"></script><script src="../menu.js"></script>` ekle ve `games.js` listesine bir satır yaz.
 Ana sayfa ve oyun içi menü listeyi `games.js` içinden okur.
@@ -18,3 +18,8 @@ Geometry Dash tarzı, yandan görünümlü ritim koşusu: dikenler, bloklar (üs
 
 ## Arama motoru (SEO)
 `python3 tools/seo.py` her sayfaya başlık, açıklama, canonical, Open Graph/Twitter ve JSON-LD (VideoGame, WebSite, ItemList) ekler; `sitemap.xml` ve `robots.txt` üretir. Yeni oyun ekledikten sonra çalıştır. Ana adres: `YX_BASE` ortam değişkeniyle değişir (özel alan adı alınırsa).
+
+## Yeni mini oyunlar (15)
+`lib.js`: yeni oyunlar için ortak çatı (`G.run`, `G.over`, `G.pause`, çizim yardımcıları). Her oyunun kaynağı `tools/src/<id>.js`; `python3 tools/mk.py` ile `<id>/index.html` üretilir (ilk satır: `// Ad|giriş metni`).
+`music.js`: kodla üretilen arka plan müziği (lofi, chill, synth, groove, arcade, piyano). Oyuna göre stil seçer, menüdeki "Müzik" düğmesiyle kapanır (`yx-music`).
+Duello iki kişiliktir (ekran ikiye bölünür).

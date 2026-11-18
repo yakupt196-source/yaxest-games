@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Radar | Yaxest Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:3%;left:0;right:0;text-align:center;font-size:3.2rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25);z-index:2}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.86);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><canvas id="c"></canvas><div id="big">0</div>
+<div id="ov"><h2 id="ot">Yaxest Radar</h2><p id="op">Çizgi dönerken <b>hedef yayın</b> üstüne gelince <b>dokun</b>.<br>Iskalarsan can gider. Kırmızı sahte hedeflere dokunma!</p><button id="go">Başla</button></div></div>
+<script src="../lib.js"></script>
+<script>
+const x=G.x;let ang,spd,tgt,fakes,lives,hits,flash,dir;
+function newT(){const a=G.rnd(0,6.28);const w=Math.max(.32,.75-hits*.018);tgt={a,w};fakes=[];if(hits>=5){const n=Math.min(3,1+Math.floor((hits-5)/6));for(let i=0;i<n;i++)fakes.push({a:a+G.rnd(1.2,5),w:.4})}}
+function diff(a,b){let d=(a-b)%6.2832;if(d>3.1416)d-=6.2832;if(d<-3.1416)d+=6.2832;return d}
+function tap(){if(G.state!=='play')return;
+ for(const f of fakes)if(Math.abs(diff(ang,f.a))<f.w/2){bad();return}
+ if(Math.abs(diff(ang,tgt.a))<tgt.w/2){hits++;G.setScore(hits);spd=Math.min(5.2,2.2+hits*.09);if(hits%7===0&&dir>0)dir=1;if(hits>12&&hits%4===0)dir*=-1;flash=.25;G.sfx('good');try{YS.note(60+hits%7*2,.25,.1)}catch(e){}newT()}else bad()}
+function bad(){lives--;flash=-.3;G.sfx('bad');if(lives<=0)G.over()}
+G.run({key:'radar',init(){ang=0;spd=2.2;hits=0;lives=3;flash=0;dir=1;newT()},
+ down(){tap()},key_(e,d){if(d&&(e.key===' '||e.key==='Enter')){tap();return true}},
+ update(dt){ang+=spd*dt*dir;flash+=flash>0?-dt:flash<0?dt:0},
+ draw(){G.bg('#031a14','#06302a');const cx=G.W/2,cy=G.H*.46,R=Math.min(G.W*.44,G.H*.34);
+  x.strokeStyle='rgba(61,219,176,.25)';x.lineWidth=1.5;for(let i=1;i<=4;i++){x.beginPath();x.arc(cx,cy,R*i/4,0,7);x.stroke()}x.beginPath();x.moveTo(cx-R,cy);x.lineTo(cx+R,cy);x.moveTo(cx,cy-R);x.lineTo(cx,cy+R);x.stroke();
+  if(!tgt)return;
+  const arc=(a,w,col,lw)=>{x.strokeStyle=col;x.lineWidth=lw;x.lineCap='round';x.beginPath();x.arc(cx,cy,R,a-w/2,a+w/2);x.stroke()};
+  for(const f of fakes)arc(f.a,f.w,'#ff5c8a',16);arc(tgt.a,tgt.w,flash>0?'#fff':'#3ddbb0',16);
+  for(let i=0;i<24;i++){const a=ang-i*.035*dir;x.strokeStyle='rgba(61,240,255,'+(.5-i*.02)+')';x.lineWidth=3;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);x.stroke()}
+  x.strokeStyle='#3df0ff';x.lineWidth=4;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(ang)*R,cy+Math.sin(ang)*R);x.stroke();
+  G.circle(cx,cy,6,'#3df0ff',10);
+  G.text('❤️'.repeat(Math.max(0,lives)),cx,cy+R+44,22);if(flash<0){x.fillStyle='rgba(255,92,138,'+(-flash)+')';x.fillRect(0,0,G.W,G.H)}}
+});
+
+</script>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>

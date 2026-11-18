@@ -1301,7 +1301,7 @@ window.YAXEST_DICT={
 "Level geschafft!",
 "¡Nivel completado!",
 "Niveau terminé !",
-"Nível concluído!",
+"Fase concluída!",
 "Уровень пройден!",
 "Livello completato!"
 ],
@@ -1454,7 +1454,7 @@ window.YAXEST_DICT={
 "Nächstes Level",
 "Siguiente nivel",
 "Niveau suivant",
-"Próximo nível",
+"Próxima fase",
 "Следующий уровень",
 "Livello successivo"
 ],
@@ -1664,5 +1664,698 @@ window.YAXEST_DICT={
 "Ex.: uma ideia de jogo ou recurso",
 "Напр.: идея новой игры или функции",
 "Es.: un'idea per un gioco o una funzione"
+],
+"<b>Basılı tut</b> ve en yakın kancaya tutun, <b>bırak</b> ve fırla.<br>Kancadan kancaya sallanarak olabildiğince uzağa git. Düşme!": [
+"<b>Hold</b> to grab the nearest hook, <b>release</b> to fly.<br>Swing from hook to hook as far as you can. Don't fall!",
+"<b>Halten</b>, um den nächsten Haken zu greifen, <b>loslassen</b>, um zu fliegen.<br>Schwing von Haken zu Haken, so weit du kannst. Nicht fallen!",
+"<b>Mantén pulsado</b> para agarrar el gancho más cercano, <b>suelta</b> para salir volando.<br>Balancéate de gancho en gancho lo más lejos posible. ¡No caigas!",
+"<b>Maintiens</b> pour t'accrocher au crochet le plus proche, <b>relâche</b> pour t'envoler.<br>Balance-toi de crochet en crochet le plus loin possible. Ne tombe pas !",
+"<b>Segure</b> para agarrar o gancho mais próximo, <b>solte</b> para voar.<br>Balance de gancho em gancho o mais longe que puder. Não caia!",
+"<b>Удерживай</b>, чтобы зацепиться за ближайший крюк, <b>отпусти</b>, чтобы полететь.<br>Раскачивайся от крюка к крюку как можно дальше. Не упади!",
+"<b>Tieni premuto</b> per agganciare il gancio più vicino, <b>rilascia</b> per volare.<br>Dondola di gancio in gancio il più lontano possibile. Non cadere!"
+],
+"Kancadan kancaya sallan, olabildiğince uzağa git. Düşme!": [
+"Swing from hook to hook and go as far as you can. Don't fall!",
+"Schwing von Haken zu Haken und komm so weit du kannst. Nicht fallen!",
+"Balancéate de gancho en gancho y llega lo más lejos posible. ¡No caigas!",
+"Balance-toi de crochet en crochet et va le plus loin possible. Ne tombe pas !",
+"Balance de gancho em gancho e vá o mais longe que puder. Não caia!",
+"Раскачивайся от крюка к крюку и лети как можно дальше. Не упади!",
+"Dondola di gancio in gancio e vai il più lontano possibile. Non cadere!"
+],
+"<b>Kaydır</b> (veya ok tuşları): taş buz üstünde bir şeye çarpana kadar kayar.<br>Yıldıza ulaş. Az hamleyle bitirirsen daha iyi!": [
+"<b>Swipe</b> (or arrow keys): the stone slides on ice until it hits something.<br>Reach the star. Fewer moves is better!",
+"<b>Wische</b> (oder Pfeiltasten): Der Stein rutscht übers Eis, bis er irgendwo anstößt.<br>Erreiche den Stern. Je weniger Züge, desto besser!",
+"<b>Desliza</b> (o flechas): la piedra se desliza sobre el hielo hasta chocar con algo.<br>Llega a la estrella. ¡Cuantos menos movimientos, mejor!",
+"<b>Glisse</b> (ou flèches) : la pierre glisse sur la glace jusqu'à heurter quelque chose.<br>Atteins l'étoile. Moins de coups, c'est mieux !",
+"<b>Deslize</b> (ou setas): a pedra desliza no gelo até bater em algo.<br>Chegue à estrela. Quanto menos jogadas, melhor!",
+"<b>Свайпай</b> (или стрелки): камень скользит по льду, пока не упрётся.<br>Доберись до звезды. Чем меньше ходов, тем лучше!",
+"<b>Scorri</b> (o frecce): la pietra scivola sul ghiaccio finché non urta qualcosa.<br>Raggiungi la stella. Meno mosse fai, meglio è!"
+],
+"Buz üstünde kay, yıldıza ulaş. Az hamleyle bitir.": [
+"Slide on the ice and reach the star. Finish in few moves.",
+"Rutsch übers Eis und erreiche den Stern. Mit wenigen Zügen.",
+"Desliza sobre el hielo y llega a la estrella. Termina con pocos movimientos.",
+"Glisse sur la glace et atteins l'étoile. Termine en peu de coups.",
+"Deslize no gelo e chegue à estrela. Termine com poucas jogadas.",
+"Скользи по льду и добирайся до звезды. Уложись в минимум ходов.",
+"Scivola sul ghiaccio e raggiungi la stella. Finisci con poche mosse."
+],
+"<b>Sürükle</b> ve bırak: aynı boydaki damlalar birleşip büyür.<br>Kap taşmasın! En büyük damlayı yapmaya çalış.": [
+"<b>Drag</b> and drop: drops of the same size merge and grow.<br>Don't let the jar overflow! Try to make the biggest drop.",
+"<b>Ziehen</b> und loslassen: Tropfen gleicher Größe verschmelzen und wachsen.<br>Lass das Glas nicht überlaufen! Bau den größten Tropfen.",
+"<b>Arrastra</b> y suelta: las gotas del mismo tamaño se fusionan y crecen.<br>¡Que no se desborde el vaso! Intenta crear la gota más grande.",
+"<b>Glisse</b> et lâche : les gouttes de même taille fusionnent et grossissent.<br>Ne laisse pas le bocal déborder ! Crée la plus grosse goutte.",
+"<b>Arraste</b> e solte: gotas do mesmo tamanho se fundem e crescem.<br>Não deixe o pote transbordar! Tente criar a maior gota.",
+"<b>Перетащи</b> и отпусти: капли одного размера сливаются и растут.<br>Не дай банке переполниться! Создай самую большую каплю.",
+"<b>Trascina</b> e rilascia: le gocce della stessa dimensione si fondono e crescono.<br>Non far traboccare il barattolo! Crea la goccia più grande."
+],
+"Aynı boydaki damlaları birleştir, büyüt. Kap taşmasın.": [
+"Merge drops of the same size and grow them. Don't overflow the jar.",
+"Verschmelze gleich große Tropfen und lass sie wachsen. Nicht überlaufen lassen.",
+"Fusiona gotas del mismo tamaño y hazlas crecer. Que no se desborde.",
+"Fusionne les gouttes de même taille et fais-les grossir. Évite le débordement.",
+"Junte gotas do mesmo tamanho e faça-as crescer. Não deixe transbordar.",
+"Сливай капли одного размера и расти. Не дай банке переполниться.",
+"Unisci gocce della stessa dimensione e falle crescere. Non far traboccare."
+],
+"<b>Sürükle</b>: platformu hareket ettir, topu düşürme.<br>Tüm tuğlaları kır. Düşen hediyeleri yakala!": [
+"<b>Drag</b> to move the paddle, don't drop the ball.<br>Break all the bricks. Catch the falling gifts!",
+"<b>Ziehen</b>, um den Schläger zu bewegen, lass den Ball nicht fallen.<br>Zerstöre alle Steine. Fang die fallenden Geschenke!",
+"<b>Arrastra</b> para mover la pala, no dejes caer la bola.<br>Rompe todos los ladrillos. ¡Atrapa los regalos que caen!",
+"<b>Glisse</b> pour bouger la raquette, ne laisse pas tomber la balle.<br>Casse toutes les briques. Attrape les cadeaux qui tombent !",
+"<b>Arraste</b> para mover a raquete, não deixe a bola cair.<br>Quebre todos os tijolos. Pegue os presentes que caem!",
+"<b>Води пальцем</b>, чтобы двигать платформу, не уронив шар.<br>Разбей все кирпичи. Лови падающие подарки!",
+"<b>Trascina</b> per muovere la racchetta, non far cadere la palla.<br>Rompi tutti i mattoni. Prendi i regali che cadono!"
+],
+"Topu zıplat, tüm tuğlaları kır, hediyeleri yakala.": [
+"Bounce the ball, break all the bricks, catch the gifts.",
+"Lass den Ball springen, zerstöre alle Steine, fang die Geschenke.",
+"Rebota la bola, rompe todos los ladrillos, atrapa los regalos.",
+"Fais rebondir la balle, casse toutes les briques, attrape les cadeaux.",
+"Rebata a bola, quebre todos os tijolos, pegue os presentes.",
+"Отбивай шар, разбивай все кирпичи, лови подарки.",
+"Fai rimbalzare la palla, rompi tutti i mattoni, prendi i regali."
+],
+"Çizgi dönerken <b>hedef yayın</b> üstüne gelince <b>dokun</b>.<br>Iskalarsan can gider. Kırmızı sahte hedeflere dokunma!": [
+"When the line sweeps over the <b>target arc</b>, <b>tap</b>.<br>Miss and you lose a life. Don't tap the red decoys!",
+"Wenn die Linie über den <b>Zielbogen</b> läuft, <b>tippe</b>.<br>Wer danebentippt, verliert ein Leben. Tippe nicht auf die roten Köder!",
+"Cuando la línea pase sobre el <b>arco objetivo</b>, <b>toca</b>.<br>Si fallas, pierdes una vida. ¡No toques los señuelos rojos!",
+"Quand la ligne passe sur l'<b>arc cible</b>, <b>touche</b>.<br>Rate et tu perds une vie. Ne touche pas les leurres rouges !",
+"Quando a linha passar sobre o <b>arco alvo</b>, <b>toque</b>.<br>Errou, perde uma vida. Não toque nas iscas vermelhas!",
+"Когда линия проходит над <b>целевой дугой</b>, <b>нажми</b>.<br>Промах — минус жизнь. Не нажимай на красные ловушки!",
+"Quando la linea passa sull'<b>arco bersaglio</b>, <b>tocca</b>.<br>Se sbagli perdi una vita. Non toccare le esche rosse!"
+],
+"Dönen çizgi hedefin üstündeyken dokun. Iskalama, sahte hedeflere kanma.": [
+"Tap when the sweeping line is over the target. Don't miss, don't fall for decoys.",
+"Tippe, wenn die Linie über dem Ziel ist. Nicht danebentippen, nicht auf Köder hereinfallen.",
+"Toca cuando la línea esté sobre el objetivo. No falles ni caigas en los señuelos.",
+"Touche quand la ligne est sur la cible. Ne rate pas, ne tombe pas dans les leurres.",
+"Toque quando a linha estiver sobre o alvo. Não erre, não caia nas iscas.",
+"Нажимай, когда линия над целью. Не промахивайся и не ведись на ловушки.",
+"Tocca quando la linea è sul bersaglio. Non sbagliare, non cadere nelle esche."
+],
+"Karanlık bir labirent! <b>Parmağını sürükle</b>, çıkışı bul.<br>Süre bitmeden yeşil kapıya ulaş.": [
+"A dark maze! <b>Drag your finger</b> and find the exit.<br>Reach the green gate before time runs out.",
+"Ein dunkles Labyrinth! <b>Zieh den Finger</b> und finde den Ausgang.<br>Erreiche das grüne Tor, bevor die Zeit abläuft.",
+"¡Un laberinto oscuro! <b>Arrastra el dedo</b> y encuentra la salida.<br>Llega a la puerta verde antes de que se acabe el tiempo.",
+"Un labyrinthe sombre ! <b>Glisse ton doigt</b> et trouve la sortie.<br>Atteins la porte verte avant la fin du temps.",
+"Um labirinto escuro! <b>Arraste o dedo</b> e encontre a saída.<br>Chegue ao portão verde antes que o tempo acabe.",
+"Тёмный лабиринт! <b>Води пальцем</b> и найди выход.<br>Доберись до зелёных врат, пока не вышло время.",
+"Un labirinto buio! <b>Trascina il dito</b> e trova l'uscita.<br>Raggiungi il portale verde prima che scada il tempo."
+],
+"Karanlık labirentte çıkışı bul. Süreye karşı yarış.": [
+"Find the exit in a dark maze. Race against the clock.",
+"Finde den Ausgang im dunklen Labyrinth. Ein Rennen gegen die Zeit.",
+"Encuentra la salida en un laberinto oscuro. Carrera contra el reloj.",
+"Trouve la sortie d'un labyrinthe sombre. Course contre la montre.",
+"Encontre a saída em um labirinto escuro. Corrida contra o tempo.",
+"Найди выход в тёмном лабиринте. Гонка со временем.",
+"Trova l'uscita in un labirinto buio. Gara contro il tempo."
+],
+"Topu <b>geri çek ve fırlat</b>, potaya sok.<br>3 hakkın var. Üst üste sayı yaparsan bonus!": [
+"<b>Pull back and flick</b> the ball into the hoop.<br>You have 3 lives. Score in a row for a bonus!",
+"<b>Zieh zurück und wirf</b> den Ball in den Korb.<br>Du hast 3 Leben. Mehrere Treffer in Folge geben Bonus!",
+"<b>Tira hacia atrás y lanza</b> la pelota a la canasta.<br>Tienes 3 vidas. ¡Encesta seguido para un bono!",
+"<b>Tire en arrière et lance</b> le ballon dans le panier.<br>Tu as 3 vies. Marque à la suite pour un bonus !",
+"<b>Puxe para trás e lance</b> a bola na cesta.<br>Você tem 3 vidas. Acerte em sequência para ganhar bônus!",
+"<b>Оттяни и брось</b> мяч в кольцо.<br>У тебя 3 жизни. Попадания подряд дают бонус!",
+"<b>Tira indietro e lancia</b> la palla nel canestro.<br>Hai 3 vite. Segna di fila per un bonus!"
+],
+"Topu fırlat, potaya sok, seri yap.": [
+"Flick the ball, sink it, build a streak.",
+"Wirf den Ball, versenke ihn, baue eine Serie auf.",
+"Lanza la pelota, enceste y haz una racha.",
+"Lance le ballon, marque, enchaîne les paniers.",
+"Lance a bola, acerte a cesta, faça uma sequência.",
+"Бросай мяч, попадай в кольцо, делай серии.",
+"Lancia la palla, fai canestro, costruisci una serie."
+],
+"<b>Parmağını sürükle</b>, kurşun yağmurundan kaç.<br>Ne kadar uzun dayanırsan o kadar puan. Dokunursan biter!": [
+"<b>Drag your finger</b> and dodge the rain of bullets.<br>The longer you last, the more points. One hit and it's over!",
+"<b>Zieh den Finger</b> und weiche dem Kugelhagel aus.<br>Je länger du durchhältst, desto mehr Punkte. Ein Treffer und es ist vorbei!",
+"<b>Arrastra el dedo</b> y esquiva la lluvia de balas.<br>Cuanto más aguantes, más puntos. ¡Un toque y se acabó!",
+"<b>Glisse ton doigt</b> et esquive la pluie de balles.<br>Plus tu tiens, plus tu marques. Un impact et c'est fini !",
+"<b>Arraste o dedo</b> e desvie da chuva de balas.<br>Quanto mais durar, mais pontos. Levou um tiro, acabou!",
+"<b>Води пальцем</b> и уворачивайся от града пуль.<br>Чем дольше держишься, тем больше очков. Одно попадание — и конец!",
+"<b>Trascina il dito</b> e schiva la pioggia di proiettili.<br>Più resisti, più punti fai. Un colpo e sei fuori!"
+],
+"Kurşun yağmurundan kaç, ne kadar dayanabilirsin?": [
+"Dodge the bullet storm. How long can you last?",
+"Weiche dem Kugelhagel aus. Wie lange hältst du durch?",
+"Esquiva la tormenta de balas. ¿Cuánto aguantas?",
+"Esquive la pluie de balles. Combien de temps tiendras-tu ?",
+"Desvie da tempestade de balas. Quanto tempo você aguenta?",
+"Уворачивайся от града пуль. Сколько продержишься?",
+"Schiva la tempesta di proiettili. Quanto resisti?"
+],
+"Melodiyi <b>dinle</b>, sonra aynısını <b>çal</b>.<br>Her turda bir nota uzar. Ne kadar uzun hatırlarsın?": [
+"<b>Listen</b> to the melody, then <b>play</b> it back.<br>One note longer each round. How long can you remember?",
+"<b>Hör</b> dir die Melodie an und <b>spiel</b> sie nach.<br>Jede Runde kommt eine Note dazu. Wie lange merkst du sie dir?",
+"<b>Escucha</b> la melodía y luego <b>tócala</b>.<br>Cada ronda se alarga una nota. ¿Cuánto puedes recordar?",
+"<b>Écoute</b> la mélodie, puis <b>rejoue</b>-la.<br>Une note de plus à chaque tour. Jusqu'où te souviendras-tu ?",
+"<b>Ouça</b> a melodia e depois <b>toque</b> igual.<br>Uma nota a mais a cada rodada. Até onde você lembra?",
+"<b>Послушай</b> мелодию и <b>повтори</b> её.<br>С каждым раундом на одну ноту длиннее. Сколько запомнишь?",
+"<b>Ascolta</b> la melodia, poi <b>suonala</b>.<br>Una nota in più a ogni turno. Quanto riesci a ricordare?"
+],
+"Melodiyi dinle, tekrar çal. Her turda bir nota uzar.": [
+"Listen to the melody and play it back. One note longer each round.",
+"Hör die Melodie und spiel sie nach. Jede Runde eine Note mehr.",
+"Escucha la melodía y repítela. Una nota más cada ronda.",
+"Écoute la mélodie et rejoue-la. Une note de plus à chaque tour.",
+"Ouça a melodia e repita. Uma nota a mais a cada rodada.",
+"Слушай мелодию и повторяй. С каждым раундом на ноту длиннее.",
+"Ascolta la melodia e ripetila. Una nota in più a ogni turno."
+],
+"Toplar uçuşuyor. <b>Tek bir dokunuş</b> ile zincirleme patlama başlat.<br>Hedef sayıya ulaşırsan bölüm geçilir. Tek hakkın var!": [
+"Balls are flying around. Start a chain explosion with <b>a single tap</b>.<br>Reach the target count to clear the level. You only get one shot!",
+"Bälle fliegen herum. Starte mit <b>einem einzigen Tipp</b> eine Kettenreaktion.<br>Erreiche die Zielzahl, um das Level zu schaffen. Du hast nur einen Versuch!",
+"Las bolas vuelan por todas partes. Inicia una explosión en cadena con <b>un solo toque</b>.<br>Alcanza el número objetivo para superar el nivel. ¡Solo tienes una oportunidad!",
+"Les balles volent partout. Déclenche une réaction en chaîne avec <b>une seule touche</b>.<br>Atteins le nombre cible pour réussir le niveau. Tu n'as qu'un essai !",
+"Bolas voam por toda parte. Inicie uma explosão em cadeia com <b>um único toque</b>.<br>Atinja o número alvo para passar de fase. Você só tem uma chance!",
+"Шары летают по экрану. Запусти цепную реакцию <b>одним касанием</b>.<br>Набери нужное число, чтобы пройти уровень. Попытка всего одна!",
+"Le palline volano in giro. Avvia un'esplosione a catena con <b>un solo tocco</b>.<br>Raggiungi il numero obiettivo per superare il livello. Hai un solo tentativo!"
+],
+"Tek dokunuşla zincirleme patlama başlat. Hedef sayıya ulaş.": [
+"Start a chain explosion with one tap. Reach the target count.",
+"Starte mit einem Tipp eine Kettenreaktion. Erreiche die Zielzahl.",
+"Inicia una explosión en cadena con un toque. Alcanza el objetivo.",
+"Déclenche une réaction en chaîne d'une touche. Atteins la cible.",
+"Inicie uma explosão em cadeia com um toque. Atinja o alvo.",
+"Запусти цепную реакцию одним касанием. Набери нужное число.",
+"Avvia un'esplosione a catena con un tocco. Raggiungi l'obiettivo."
+],
+"<b>Sürükle</b> (veya ← →): zıplayarak platformlardan yukarı tırman.<br>Yaylar seni uçurur, kırılganlara dikkat! Düşme.": [
+"<b>Drag</b> (or ← →): bounce up the platforms.<br>Springs launch you high, watch out for breakable ones! Don't fall.",
+"<b>Ziehen</b> (oder ← →): Hüpfe die Plattformen hinauf.<br>Federn katapultieren dich hoch, Vorsicht vor zerbrechlichen! Nicht fallen.",
+"<b>Arrastra</b> (o ← →): rebota hacia arriba por las plataformas.<br>Los muelles te lanzan alto, ¡cuidado con las que se rompen! No caigas.",
+"<b>Glisse</b> (ou ← →) : rebondis de plateforme en plateforme vers le haut.<br>Les ressorts te propulsent, attention aux fragiles ! Ne tombe pas.",
+"<b>Arraste</b> (ou ← →): pule pelas plataformas para cima.<br>Molas te lançam alto, cuidado com as quebradiças! Não caia.",
+"<b>Води пальцем</b> (или ← →): прыгай вверх по платформам.<br>Пружины подбрасывают высоко, берегись ломких! Не упади.",
+"<b>Trascina</b> (o ← →): rimbalza verso l'alto sulle piattaforme.<br>Le molle ti lanciano in alto, attenzione a quelle fragili! Non cadere."
+],
+"Platformlardan zıplayarak yukarı tırman. Yaylara bin, kırılganlara dikkat.": [
+"Bounce up the platforms. Ride the springs, beware of breakable ones.",
+"Hüpfe die Plattformen hinauf. Nutze Federn, Vorsicht vor zerbrechlichen.",
+"Rebota por las plataformas hacia arriba. Usa los muelles, cuidado con las frágiles.",
+"Rebondis vers le haut. Utilise les ressorts, méfie-toi des fragiles.",
+"Pule pelas plataformas para cima. Use as molas, cuidado com as quebradiças.",
+"Прыгай вверх по платформам. Используй пружины, берегись ломких.",
+"Rimbalza verso l'alto sulle piattaforme. Usa le molle, attento a quelle fragili."
+],
+"Aynalara <b>dokun</b> ve yönünü çevir: lazeri <b>hedefe</b> ulaştır.<br>Işık aynalardan sekerek ilerler.": [
+"<b>Tap</b> the mirrors to flip them: guide the laser to the <b>target</b>.<br>The beam bounces off the mirrors.",
+"<b>Tippe</b> auf die Spiegel, um sie zu drehen: Leite den Laser zum <b>Ziel</b>.<br>Der Strahl wird von den Spiegeln reflektiert.",
+"<b>Toca</b> los espejos para girarlos: lleva el láser al <b>objetivo</b>.<br>El rayo rebota en los espejos.",
+"<b>Touche</b> les miroirs pour les retourner : guide le laser jusqu'à la <b>cible</b>.<br>Le faisceau rebondit sur les miroirs.",
+"<b>Toque</b> nos espelhos para virá-los: leve o laser ao <b>alvo</b>.<br>O feixe reflete nos espelhos.",
+"<b>Нажимай</b> на зеркала, чтобы повернуть их: направь лазер в <b>цель</b>.<br>Луч отражается от зеркал.",
+"<b>Tocca</b> gli specchi per ruotarli: porta il laser al <b>bersaglio</b>.<br>Il raggio rimbalza sugli specchi."
+],
+"Aynaları çevir, lazeri hedefe ulaştır.": [
+"Flip the mirrors and guide the laser to the target.",
+"Dreh die Spiegel und leite den Laser zum Ziel.",
+"Gira los espejos y lleva el láser al objetivo.",
+"Retourne les miroirs et guide le laser jusqu'à la cible.",
+"Vire os espelhos e leve o laser ao alvo.",
+"Поворачивай зеркала и направь лазер в цель.",
+"Ruota gli specchi e porta il laser al bersaglio."
+],
+"<b>Dokun</b> ve bıçağı dönen tahtaya fırlat.<br>Başka bir bıçağa çarparsan biter! Her bölümde daha fazla bıçak.": [
+"<b>Tap</b> to throw the knife at the spinning board.<br>Hit another knife and it's over! More knives each level.",
+"<b>Tippe</b>, um das Messer auf das drehende Brett zu werfen.<br>Triffst du ein anderes Messer, ist es vorbei! Jedes Level mehr Messer.",
+"<b>Toca</b> para lanzar el cuchillo al tablero giratorio.<br>¡Si golpeas otro cuchillo, se acabó! Más cuchillos en cada nivel.",
+"<b>Touche</b> pour lancer le couteau sur la cible qui tourne.<br>Touche un autre couteau et c'est fini ! Plus de couteaux à chaque niveau.",
+"<b>Toque</b> para lançar a faca na tábua giratória.<br>Acertar outra faca encerra o jogo! Mais facas a cada fase.",
+"<b>Нажми</b>, чтобы метнуть нож во вращающийся круг.<br>Попадёшь в другой нож — конец! С каждым уровнем ножей больше.",
+"<b>Tocca</b> per lanciare il coltello sul disco che gira.<br>Se colpisci un altro coltello è finita! Più coltelli a ogni livello."
+],
+"Bıçağı dönen tahtaya sapla, diğer bıçaklara çarpma.": [
+"Stick the knife into the spinning board, don't hit other knives.",
+"Ramme das Messer ins drehende Brett, triff keine anderen Messer.",
+"Clava el cuchillo en el tablero giratorio sin golpear otros cuchillos.",
+"Plante le couteau dans la cible qui tourne sans toucher les autres couteaux.",
+"Cravar a faca na tábua giratória sem acertar outras facas.",
+"Вонзай нож во вращающийся круг, не задевая другие ножи.",
+"Pianta il coltello nel disco che gira senza colpire gli altri coltelli."
+],
+"<b>2 kişilik!</b> Telefonu ortaya koyun, herkes kendi yarısına dokunsun.<br>Yeşil yanınca ilk dokunan kazanır, erken basan kaybeder. 3 puana ilk ulaşan galip!": [
+"<b>2 players!</b> Put the phone between you, each taps their own half.<br>When it turns green the first to tap wins, tapping early loses. First to 3 points wins!",
+"<b>2 Spieler!</b> Legt das Handy zwischen euch, jeder tippt auf seine Hälfte.<br>Wird es grün, gewinnt, wer zuerst tippt; zu früh tippen verliert. Wer zuerst 3 Punkte hat, gewinnt!",
+"<b>¡2 jugadores!</b> Poned el móvil en medio, cada uno toca su mitad.<br>Cuando se ponga verde, gana quien toque primero; tocar antes pierde. ¡Gana quien llegue a 3 puntos!",
+"<b>2 joueurs !</b> Posez le téléphone entre vous, chacun touche sa moitié.<br>Quand ça passe au vert, le premier à toucher gagne ; toucher trop tôt fait perdre. Le premier à 3 points gagne !",
+"<b>2 jogadores!</b> Coloquem o celular no meio, cada um toca sua metade.<br>Quando ficar verde, quem tocar primeiro vence; tocar cedo perde. Quem chegar a 3 pontos primeiro ganha!",
+"<b>2 игрока!</b> Положите телефон между собой, каждый нажимает на свою половину.<br>Когда станет зелёным, выигрывает тот, кто нажал первым; ранний тап — проигрыш. До 3 очков!",
+"<b>2 giocatori!</b> Mettete il telefono in mezzo, ognuno tocca la sua metà.<br>Quando diventa verde vince chi tocca per primo; toccare troppo presto fa perdere. Vince chi arriva a 3 punti!"
+],
+"2 kişilik düello: yeşil yanınca ilk dokunan kazanır.": [
+"2-player duel: when it turns green, the first to tap wins.",
+"Duell für 2: Wird es grün, gewinnt, wer zuerst tippt.",
+"Duelo de 2: cuando se ponga verde, gana quien toque primero.",
+"Duel à 2 : quand ça passe au vert, le premier à toucher gagne.",
+"Duelo para 2: quando ficar verde, quem tocar primeiro vence.",
+"Дуэль для двоих: когда станет зелёным, выигрывает тот, кто нажал первым.",
+"Duello a 2: quando diventa verde vince chi tocca per primo."
+],
+"Renkleri <b>tüplere sırala</b>: bir tüpe dokun, sonra hedef tüpe.<br>Sadece aynı renk üstüne dökebilirsin. Hepsi tek renk olunca biter!": [
+"<b>Sort the colors into tubes</b>: tap a tube, then the target tube.<br>You can only pour onto the same color. Done when each tube is one color!",
+"<b>Sortiere die Farben in Röhrchen</b>: Tippe ein Röhrchen, dann das Zielröhrchen.<br>Du kannst nur auf dieselbe Farbe gießen. Fertig, wenn jedes Röhrchen einfarbig ist!",
+"<b>Ordena los colores en tubos</b>: toca un tubo y luego el tubo de destino.<br>Solo puedes verter sobre el mismo color. ¡Terminas cuando cada tubo es de un solo color!",
+"<b>Trie les couleurs dans les tubes</b> : touche un tube, puis le tube cible.<br>Tu ne peux verser que sur la même couleur. Fini quand chaque tube est d'une seule couleur !",
+"<b>Organize as cores nos tubos</b>: toque em um tubo e depois no tubo de destino.<br>Só dá para despejar sobre a mesma cor. Termina quando cada tubo tiver uma só cor!",
+"<b>Рассортируй цвета по пробиркам</b>: нажми на пробирку, затем на целевую.<br>Переливать можно только на тот же цвет. Готово, когда в каждой один цвет!",
+"<b>Ordina i colori nelle provette</b>: tocca una provetta, poi quella di destinazione.<br>Puoi versare solo sullo stesso colore. Finito quando ogni provetta ha un solo colore!"
+],
+"Renkleri tüplere sırala. Aynı renk üstüne dök.": [
+"Sort the colors into tubes. Pour onto the same color.",
+"Sortiere die Farben in Röhrchen. Gieß auf dieselbe Farbe.",
+"Ordena los colores en tubos. Vierte sobre el mismo color.",
+"Trie les couleurs dans les tubes. Verse sur la même couleur.",
+"Organize as cores nos tubos. Despeje sobre a mesma cor.",
+"Рассортируй цвета по пробиркам. Переливай на тот же цвет.",
+"Ordina i colori nelle provette. Versa sullo stesso colore."
+],
+"{0}<br>Hamle <b>{1}</b> · En az <b>{2}</b>": [
+"{0}<br>Moves <b>{1}</b> · Best possible <b>{2}</b>",
+"{0}<br>Züge <b>{1}</b> · Minimum <b>{2}</b>",
+"{0}<br>Movimientos <b>{1}</b> · Mínimo <b>{2}</b>",
+"{0}<br>Coups <b>{1}</b> · Minimum <b>{2}</b>",
+"{0}<br>Jogadas <b>{1}</b> · Mínimo <b>{2}</b>",
+"{0}<br>Ходы <b>{1}</b> · Минимум <b>{2}</b>",
+"{0}<br>Mosse <b>{1}</b> · Minimo <b>{2}</b>"
+],
+"Çıkış bulundu!": [
+"Exit found!",
+"Ausgang gefunden!",
+"¡Salida encontrada!",
+"Sortie trouvée !",
+"Saída encontrada!",
+"Выход найден!",
+"Uscita trovata!"
+],
+"Seviye <b>{0}</b> daha büyük": [
+"Level <b>{0}</b> is bigger",
+"Level <b>{0}</b> ist größer",
+"El nivel <b>{0}</b> es más grande",
+"Le niveau <b>{0}</b> est plus grand",
+"A fase <b>{0}</b> é maior",
+"Уровень <b>{0}</b> больше",
+"Il livello <b>{0}</b> è più grande"
+],
+"Devam": [
+"Continue",
+"Weiter",
+"Continuar",
+"Continuer",
+"Continuar",
+"Далее",
+"Continua"
+],
+"Süre bitti": [
+"Time's up",
+"Zeit abgelaufen",
+"Se acabó el tiempo",
+"Temps écoulé",
+"Tempo esgotado",
+"Время вышло",
+"Tempo scaduto"
+],
+"Bölüm tamam!": [
+"Stage clear!",
+"Stufe geschafft!",
+"¡Etapa superada!",
+"Étape réussie !",
+"Etapa concluída!",
+"Этап пройден!",
+"Fase superata!"
+],
+"<b>{0}</b> top patlattın": [
+"You popped <b>{0}</b> balls",
+"Du hast <b>{0}</b> Bälle gesprengt",
+"Hiciste explotar <b>{0}</b> bolas",
+"Tu as fait exploser <b>{0}</b> balles",
+"Você estourou <b>{0}</b> bolas",
+"Ты взорвал шаров: <b>{0}</b>",
+"Hai fatto esplodere <b>{0}</b> palline"
+],
+"Sonraki": [
+"Next",
+"Weiter",
+"Siguiente",
+"Suivant",
+"Próximo",
+"Дальше",
+"Avanti"
+],
+"Yetmedi": [
+"Not enough",
+"Nicht genug",
+"No fue suficiente",
+"Pas assez",
+"Não foi suficiente",
+"Не хватило",
+"Non basta"
+],
+"Yanlış nota": [
+"Wrong note",
+"Falsche Note",
+"Nota incorrecta",
+"Mauvaise note",
+"Nota errada",
+"Неверная нота",
+"Nota sbagliata"
+],
+"Tahta parçalandı!": [
+"The board shattered!",
+"Das Brett ist zersplittert!",
+"¡El tablero se hizo pedazos!",
+"La cible a volé en éclats !",
+"A tábua se despedaçou!",
+"Круг разбит!",
+"Il disco si è frantumato!"
+],
+"Bölüm <b>{0}</b> geliyor": [
+"Stage <b>{0}</b> is coming",
+"Stufe <b>{0}</b> kommt",
+"Llega la etapa <b>{0}</b>",
+"L'étape <b>{0}</b> arrive",
+"Vem aí a etapa <b>{0}</b>",
+"Скоро этап <b>{0}</b>",
+"Arriva la fase <b>{0}</b>"
+],
+"Oyuncu {0} kazandı!": [
+"Player {0} wins!",
+"Spieler {0} gewinnt!",
+"¡Gana el jugador {0}!",
+"Le joueur {0} gagne !",
+"Jogador {0} venceu!",
+"Игрок {0} победил!",
+"Vince il giocatore {0}!"
+],
+"Hedef vuruldu!": [
+"Target hit!",
+"Ziel getroffen!",
+"¡Objetivo alcanzado!",
+"Cible touchée !",
+"Alvo atingido!",
+"Цель поражена!",
+"Bersaglio colpito!"
+],
+"Hamle <b>{0}</b>": [
+"Moves <b>{0}</b>",
+"Züge <b>{0}</b>",
+"Movimientos <b>{0}</b>",
+"Coups <b>{0}</b>",
+"Jogadas <b>{0}</b>",
+"Ходы <b>{0}</b>",
+"Mosse <b>{0}</b>"
+],
+"Sonraki bulmaca": [
+"Next puzzle",
+"Nächstes Rätsel",
+"Siguiente puzzle",
+"Puzzle suivant",
+"Próximo quebra-cabeça",
+"Следующая головоломка",
+"Prossimo puzzle"
+],
+"Sıralandı!": [
+"Sorted!",
+"Sortiert!",
+"¡Ordenado!",
+"Trié !",
+"Organizado!",
+"Отсортировано!",
+"Ordinato!"
+],
+"Basılı tut": [
+"Hold",
+"Halten",
+"Mantén pulsado",
+"Maintiens",
+"Segure",
+"Удерживай",
+"Tieni premuto"
+],
+"Bir kez dokun!": [
+"Tap once!",
+"Tippe einmal!",
+"¡Toca una vez!",
+"Touche une fois !",
+"Toque uma vez!",
+"Нажми один раз!",
+"Tocca una volta!"
+],
+"Bölüm {0}": [
+"Stage {0}",
+"Stufe {0}",
+"Etapa {0}",
+"Étape {0}",
+"Etapa {0}",
+"Этап {0}",
+"Fase {0}"
+],
+"Dinle…": [
+"Listen…",
+"Hör zu…",
+"Escucha…",
+"Écoute…",
+"Ouça…",
+"Слушай…",
+"Ascolta…"
+],
+"Sıra sende": [
+"Your turn",
+"Du bist dran",
+"Tu turno",
+"À toi",
+"Sua vez",
+"Твой ход",
+"Tocca a te"
+],
+"Tur {0}": [
+"Round {0}",
+"Runde {0}",
+"Ronda {0}",
+"Tour {0}",
+"Rodada {0}",
+"Раунд {0}",
+"Turno {0}"
+],
+"Dokun ve başlat": [
+"Tap to start",
+"Tippen zum Start",
+"Toca para empezar",
+"Touche pour démarrer",
+"Toque para começar",
+"Нажми, чтобы начать",
+"Tocca per iniziare"
+],
+"Geri çek ↓ ve bırak": [
+"Pull back ↓ and release",
+"Zurückziehen ↓ und loslassen",
+"Tira hacia atrás ↓ y suelta",
+"Tire en arrière ↓ et lâche",
+"Puxe para trás ↓ e solte",
+"Оттяни ↓ и отпусти",
+"Tira indietro ↓ e rilascia"
+],
+"Hamle {0} · En az {1}": [
+"Moves {0} · Best {1}",
+"Züge {0} · Minimum {1}",
+"Movimientos {0} · Mínimo {1}",
+"Coups {0} · Minimum {1}",
+"Jogadas {0} · Mínimo {1}",
+"Ходы {0} · Минимум {1}",
+"Mosse {0} · Minimo {1}"
+],
+"Hamle {0}": [
+"Moves {0}",
+"Züge {0}",
+"Movimientos {0}",
+"Coups {0}",
+"Jogadas {0}",
+"Ходы {0}",
+"Mosse {0}"
+],
+"Oyuncu {0}": [
+"Player {0}",
+"Spieler {0}",
+"Jugador {0}",
+"Joueur {0}",
+"Jogador {0}",
+"Игрок {0}",
+"Giocatore {0}"
+],
+"Parmağınla sürükle": [
+"Drag with your finger",
+"Mit dem Finger ziehen",
+"Arrastra con el dedo",
+"Glisse avec ton doigt",
+"Arraste com o dedo",
+"Води пальцем",
+"Trascina con il dito"
+],
+"Patlat: {0} / {1}": [
+"Pop: {0} / {1}",
+"Sprengen: {0} / {1}",
+"Explota: {0} / {1}",
+"Explose : {0} / {1}",
+"Estoure: {0} / {1}",
+"Взорви: {0} / {1}",
+"Fai esplodere: {0} / {1}"
+],
+"↺ yeniden (dokun)": [
+"↺ restart (tap)",
+"↺ neu starten (tippen)",
+"↺ reiniciar (toca)",
+"↺ recommencer (touche)",
+"↺ reiniciar (toque)",
+"↺ заново (нажми)",
+"↺ ricomincia (tocca)"
+],
+"{0} sn": [
+"{0} s",
+"{0} s",
+"{0} s",
+"{0} s",
+"{0} s",
+"{0} с",
+"{0} s"
+],
+"Seviye {0}": [
+"Level {0}",
+"Level {0}",
+"Nivel {0}",
+"Niveau {0}",
+"Fase {0}",
+"Уровень {0}",
+"Livello {0}"
+],
+"Seri x{0}!": [
+"Streak x{0}!",
+"Serie x{0}!",
+"¡Racha x{0}!",
+"Série x{0} !",
+"Sequência x{0}!",
+"Серия x{0}!",
+"Serie x{0}!"
+],
+"Sayı!": [
+"Score!",
+"Treffer!",
+"¡Canasta!",
+"Panier !",
+"Cesta!",
+"Попал!",
+"Canestro!"
+],
+"Yeşili bekle…": [
+"Wait for green…",
+"Warte auf Grün…",
+"Espera al verde…",
+"Attends le vert…",
+"Espere o verde…",
+"Жди зелёного…",
+"Aspetta il verde…"
+],
+"ŞİMDİ!": [
+"NOW!",
+"JETZT!",
+"¡YA!",
+"MAINTENANT !",
+"AGORA!",
+"СЕЙЧАС!",
+"ORA!"
+],
+"Hızlı dokunma yarışı…": [
+"Tap race…",
+"Tipp-Rennen…",
+"Carrera de toques…",
+"Course de touches…",
+"Corrida de toques…",
+"Гонка касаний…",
+"Gara di tocchi…"
+],
+"DOKUN DOKUN! {0}/15": [
+"TAP TAP! {0}/15",
+"TIPP TIPP! {0}/15",
+"¡TOCA TOCA! {0}/15",
+"TOUCHE TOUCHE ! {0}/15",
+"TOQUE TOQUE! {0}/15",
+"ЖМИ ЖМИ! {0}/15",
+"TOCCA TOCCA! {0}/15"
+],
+"KAZANDIN! {0}": [
+"YOU WIN! {0}",
+"GEWONNEN! {0}",
+"¡GANASTE! {0}",
+"GAGNÉ ! {0}",
+"VOCÊ VENCEU! {0}",
+"ПОБЕДА! {0}",
+"HAI VINTO! {0}"
+],
+"Kaybettin": [
+"You lose",
+"Verloren",
+"Perdiste",
+"Perdu",
+"Você perdeu",
+"Проигрыш",
+"Hai perso"
+],
+"Erken bastı!": [
+"Too early!",
+"Zu früh!",
+"¡Muy pronto!",
+"Trop tôt !",
+"Cedo demais!",
+"Слишком рано!",
+"Troppo presto!"
+],
+"Hızlı!": [
+"Fast!",
+"Schnell!",
+"¡Rápido!",
+"Rapide !",
+"Rápido!",
+"Быстро!",
+"Veloce!"
+],
+"Yarışı aldı": [
+"Won the race",
+"Rennen gewonnen",
+"Ganó la carrera",
+"A gagné la course",
+"Venceu a corrida",
+"Выиграл гонку",
+"Ha vinto la gara"
+],
+"↶ Geri": [
+"↶ Undo",
+"↶ Zurück",
+"↶ Deshacer",
+"↶ Annuler",
+"↶ Desfazer",
+"↶ Назад",
+"↶ Annulla"
+],
+"↺ Yeniden": [
+"↺ Restart",
+"↺ Neu",
+"↺ Reiniciar",
+"↺ Recommencer",
+"↺ Reiniciar",
+"↺ Заново",
+"↺ Ricomincia"
+],
+"＋ Tüp": [
+"＋ Tube",
+"＋ Röhrchen",
+"＋ Tubo",
+"＋ Tube",
+"＋ Tubo",
+"＋ Пробирка",
+"＋ Provetta"
 ]
 };

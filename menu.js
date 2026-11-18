@@ -53,7 +53,7 @@
 
   var pz=document.createElement('div');
   pz.id='ymz';pz.setAttribute('role','dialog');pz.setAttribute('aria-label','Duraklatıldı');
-  pz.innerHTML='<h2>Duraklatıldı</h2><button class="pr" id="ymr" type="button">Devam et</button><button id="ymrs" type="button">Baştan başla</button><button id="yms" type="button"></button><button id="yml" type="button">Tüm oyunlar</button><a href="../">← Ana sayfa</a>';
+  pz.innerHTML='<h2>Duraklatıldı</h2><button class="pr" id="ymr" type="button">Devam et</button><button id="ymrs" type="button">Baştan başla</button><button id="yms" type="button"></button><button id="ymm" type="button"></button><button id="yml" type="button">Tüm oyunlar</button><a href="../">← Ana sayfa</a>';
   var pbtn=document.createElement('button');pbtn.id='ymq';pbtn.type='button';pbtn.setAttribute('aria-label','Duraklat');pbtn.textContent='⏸';
   var origRAF=window.requestAnimationFrame.bind(window),queue=[],open=false;
   function pause(){window.YMENU=true;window.requestAnimationFrame=function(cb){queue.push(cb);return 0}}
@@ -63,7 +63,10 @@
   var zopen=false;
   var cd=document.createElement('div');cd.id='ymc';var cdt=0;
   var sb=pz.querySelector('#yms');
-  function snd(){sb.style.display=ymAudio.length?'':'none';var t=ymMuted?'🔇 Ses: kapalı':'🔊 Ses: açık';sb.textContent=window.YT?window.YT(t):t}
+  var mb=pz.querySelector('#ymm');
+  function mus(){mb.style.display=window.YMUSIC?'':'none';var t=window.YMUSIC&&YMUSIC.isOn()?'🎵 Müzik: açık':'🎵 Müzik: kapalı';mb.textContent=window.YT?window.YT(t):t}
+  mb.addEventListener('click',function(){if(window.YMUSIC){YMUSIC.toggle();mus()}});
+  function snd(){mus();sb.style.display=ymAudio.length?'':'none';var t=ymMuted?'🔇 Ses: kapalı':'🔊 Ses: açık';sb.textContent=window.YT?window.YT(t):t}
   function zshow(){if(zopen||open||cdt)return;zopen=true;pause();snd();pz.classList.add('on');document.getElementById('ymr').focus()}
   function zhide(){if(!zopen||cdt)return;pz.classList.remove('on');var n=3;cd.textContent=n;cd.classList.add('on');
     cdt=setInterval(function(){n--;if(n>0){cd.textContent=n;return}clearInterval(cdt);cdt=0;cd.classList.remove('on');zopen=false;resume()},550)}

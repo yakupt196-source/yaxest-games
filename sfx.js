@@ -41,7 +41,8 @@
     if(window.YMENU||document.hidden||!S[n])return;
     var now=performance.now();if(last[n]&&now-last[n]<(cd[n]||.05)*1000)return;last[n]=now;
     if(!init())return;try{S[n](AC.currentTime+.01)}catch(e){}}
-  window.YS={play:play,init:init};
+  function playNote(m,d,g){if(window.YMENU||document.hidden||!init())return;try{note(m,AC.currentTime+.01,g||.09,d||.6)}catch(e){}}
+  window.YS={play:play,init:init,note:playNote};
   // ilk dokunuşta ses motorunu hazırla (tarayıcılar kullanıcı hareketi ister)
   ['pointerdown','keydown','touchstart'].forEach(function(t){addEventListener(t,function(){init()},{once:false,passive:true,capture:true})});
 
@@ -54,6 +55,21 @@
     yol:{milestone:'big',ov:1,tap:'#c',tapName:'tap'},kule:{score:'big',ov:1,tap:'#c',tapName:'tap'},blok:{ov:1,tap:'#c',tapName:'tap',score:'sc'},kosu:{milestone:'sc',gem:'gm',ov:1,tap:'#c',tapName:'tap'},
     kostebek:{score:'s',scoreName:'pop',msg:'w'},yilan:{score:'s',msg:'',canvasOver:1},
     hafiza:{msg:'w',match:1,tap:'#g',tapName:'tap'},birlestir:{msg:'w',score:'s',tap:'#g',tapName:'tap'},isik:{msg:'msg',tap:'#grid',tapName:'tap'},
+    sallan:{ov:1},
+    kaydir:{ov:1},
+    damla:{ov:1},
+    kir:{ov:1},
+    radar:{ov:1},
+    labirent:{ov:1},
+    pota:{ov:1},
+    mermi:{ov:1},
+    nota:{ov:1},
+    zincir:{ov:1},
+    tirman:{ov:1},
+    lazer:{ov:1},
+    bicak:{ov:1},
+    duello:{ov:1},
+    tup:{ov:1},
     yorunge:{score:'big',ov:1,tap:'#c',tapName:'jump'},
     hole:{bar:'bi',menuTitle:'mt'}
   }[cur]||{};
@@ -64,7 +80,7 @@
     if(c.gem){var g=$(c.gem),pg=num(g);watch(g,function(){var n=num(g);if(n!=null&&pg!=null&&n>pg)play('gem');pg=n})}
     if(c.lives){var h=$(c.lives),pc=(h&&h.textContent.match(/❤/g)||[]).length;watch(h,function(){var n=(h.textContent.match(/❤/g)||[]).length;if(n<pc)play('bad');pc=n})}
     if(c.ov){var ov=$('ov'),was=ov&&ov.classList.contains('hid');watch(ov,function(){var hid=ov.classList.contains('hid');
-      if(was&&!hid){var t=($('ot')&&$('ot').textContent||'');play(/tamam|kazan|Tebrik|Mükemmel!/i.test(t)?'win':'over')}was=hid})}
+      if(was&&!hid){var t=($('ot')&&$('ot').textContent||'');play(/tamam|kazan|Tebrik|Mükemmel!|bulundu|parçalandı|Sıralandı|vuruldu/i.test(t)?'win':'over')}was=hid})}
     if(c.msg){var m=$(c.msg),pt='';watch(m,function(){var t=m.textContent||'';if(t&&t!==pt){if(/kazand|🎉|tamam|Bitti|Tebrik/i.test(t))play('win');else if(/bitti|doldu|Oyun/i.test(t))play('over')}pt=t})}
     if(c.match){var gg=$('g'),pm=0;watch(gg,function(){var n=gg.querySelectorAll('.m').length;if(n>pm)play('good');pm=n})}
     if(c.bar){var b=$(c.bar),pw=parseFloat(b.style.width)||0;watch(b,function(){var w=parseFloat(b.style.width)||0;if(w>pw)play('ok');pw=w})}

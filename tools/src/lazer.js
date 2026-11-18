@@ -1,0 +1,38 @@
+// Yaxest Lazer|Aynalara <b>dokun</b> ve yönünü çevir: lazeri <b>hedefe</b> ulaştır.<br>Işık aynalardan sekerek ilerler.
+const x=G.x;let N,cs,ox,oy,mir,src,tgt,lvl,beam,hit,moves;
+// mir[r][c]: 0 yok, 1 '/', 2 '\'
+function trace(){beam=[];let c=src.c,r=src.r,dc=src.dc,dr=src.dr;hit=false;beam.push([c+.5,r+.5]);
+ for(let i=0;i<200;i++){c+=dc;r+=dr;if(c<0||r<0||c>=N||r>=N){beam.push([c-dc*.5+.5,r-dr*.5+.5]);break}
+  if(c===tgt.c&&r===tgt.r){beam.push([c+.5,r+.5]);hit=true;break}
+  const m=mir[r][c];if(m){beam.push([c+.5,r+.5]);let t;if(m===1){t=dc;dc=-dr;dr=-t}else{t=dc;dc=dr;dr=t}}}
+ return hit}
+function load(){N=Math.min(4+Math.floor(lvl/2),8);cs=Math.min(G.W*.94/N,G.H*.66/N);ox=(G.W-cs*N)/2;oy=G.H*.2;moves=0;
+ for(let t=0;t<500;t++){mir=[];for(let r=0;r<N;r++)mir.push(new Array(N).fill(0));
+  src={c:0,r:G.ri(0,N-1),dc:1,dr:0};
+ 
+  let c=src.c,r=src.r,dc=1,dr=0,placed=0;const pts=[];
+  for(let k=0;k<60;k++){c+=dc;r+=dr;if(c<0||r<0||c>=N||r>=N)break;
+   if(Math.random()<.35&&!mir[r][c]&&placed<2+Math.floor(lvl/1.5)){const m=G.pick([1,2]);mir[r][c]=m;placed++;let tt;if(m===1){tt=dc;dc=-dr;dr=-tt}else{tt=dc;dc=dr;dr=tt}}}
+  const lc=Math.max(0,Math.min(N-1,c-dc)),lr=Math.max(0,Math.min(N-1,r-dr));
+  if(placed<Math.min(2+Math.floor(lvl/2),6)||(lc===src.c&&lr===src.r))continue;
+  if(mir[lr][lc])continue;tgt={c:lc,r:lr};
+  if(!trace())continue;
+  // décoy: miroirs inutiles
+  for(let i=0;i<Math.floor(lvl/2);i++){const a=G.ri(0,N-1),b=G.ri(0,N-1);if(!mir[b][a]&&!(a===tgt.c&&b===tgt.r)&&!(a===src.c&&b===src.r))mir[b][a]=G.pick([1,2])}
+  trace();
+  // mélange
+  let ok=false;for(let m=0;m<N*N;m++){const a=G.ri(0,N-1),b=G.ri(0,N-1);if(mir[b][a]){mir[b][a]=mir[b][a]===1?2:1}}
+  if(!trace()){ok=true}if(ok)return}
+ mir=[];for(let r=0;r<N;r++)mir.push(new Array(N).fill(0));src={c:0,r:0,dc:1,dr:0};tgt={c:N-1,r:0};trace()}
+G.run({key:'lazer',resize(){if(mir){cs=Math.min(G.W*.94/N,G.H*.66/N);ox=(G.W-cs*N)/2}},
+ init(){lvl=0;load()},
+ down(a,b){const c=Math.floor((a-ox)/cs),r=Math.floor((b-oy)/cs);if(c<0||r<0||c>=N||r>=N||!mir[r][c])return;mir[r][c]=mir[r][c]===1?2:1;moves++;G.sfx('tap');
+  if(trace()){lvl++;G.setScore(lvl);G.bump();G.pause('Hedef vuruldu!','Hamle <b>'+moves+'</b>','Sonraki bulmaca',()=>load())}},
+ draw(){G.bg('#0c0620','#1a0b3d');if(!mir)return;
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){G.rrect(ox+c*cs+2,oy+r*cs+2,cs-4,cs-4,cs*.1,'rgba(255,255,255,.06)')}
+  x.save();x.translate(ox,oy);x.strokeStyle='#ff3d6e';x.lineWidth=4;x.shadowColor='#ff3d6e';x.shadowBlur=16;x.lineCap='round';x.lineJoin='round';x.beginPath();beam.forEach((q,i)=>i?x.lineTo(q[0]*cs,q[1]*cs):x.moveTo(q[0]*cs,q[1]*cs));x.stroke();x.restore();
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){const m=mir[r][c];if(!m)continue;const cx=ox+(c+.5)*cs,cy=oy+(r+.5)*cs,h=cs*.36;x.strokeStyle='#bfe9ff';x.lineWidth=5;x.lineCap='round';x.beginPath();if(m===1){x.moveTo(cx-h,cy+h);x.lineTo(cx+h,cy-h)}else{x.moveTo(cx-h,cy-h);x.lineTo(cx+h,cy+h)}x.stroke()}
+  G.rrect(ox+src.c*cs+cs*.15,oy+src.r*cs+cs*.25,cs*.3,cs*.5,6,'#ff3d6e');
+  G.circle(ox+(tgt.c+.5)*cs,oy+(tgt.r+.5)*cs,cs*.28,hit?'#3ddbb0':'#6b6a9a',hit?20:0);G.text('🎯',ox+(tgt.c+.5)*cs,oy+(tgt.r+.5)*cs,cs*.34);
+  G.text('Hamle '+moves,G.W/2,G.H*.9,17,'#c9c4ee')}
+});

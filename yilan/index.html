@@ -44,4 +44,4 @@ document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[
 document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;Math.abs(dx)>Math.abs(dy)?turn(dx>0?1:-1,0):turn(0,dy>0?1:-1)});
 document.getElementById('r').onclick=start;
 sn=[{x:10,y:10}];d=nd={x:1,y:0};ap={x:5,y:5};draw();
-</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../menu.js"></script></body></html>
+</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>

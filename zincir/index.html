@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Yaxest Zincir | Yaxest Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+header{width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;font-weight:700;font-size:.95rem}
+header a{color:#a9a3cf;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.st{color:#ffd23f}
+#wrap{flex:1;min-height:0;width:100%;max-width:480px;position:relative}
+canvas{width:100%;height:100%;display:block;touch-action:none}
+#big{position:absolute;top:3%;left:0;right:0;text-align:center;font-size:3.2rem;font-weight:800;pointer-events:none;text-shadow:0 4px 0 rgba(0,0,0,.25);z-index:2}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;background:rgba(20,16,43,.86);z-index:5}
+#ov h2{font-size:2.3rem;font-weight:800;line-height:1}
+#ov p{color:#c9c4ee;line-height:1.5;max-width:30ch}
+#ov b{color:#ffd23f}
+button{font:inherit;font-weight:800;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:14px 34px;min-height:48px;cursor:pointer;font-size:1.1rem}
+button:focus-visible{outline:3px solid #fff}
+.hid{display:none!important}
+</style></head><body>
+<header><a href="../">← Yaxest Games</a><span class="st"> Rekor <span id="bs">0</span></span></header>
+<div id="wrap"><canvas id="c"></canvas><div id="big">0</div>
+<div id="ov"><h2 id="ot">Yaxest Zincir</h2><p id="op">Toplar uçuşuyor. <b>Tek bir dokunuş</b> ile zincirleme patlama başlat.<br>Hedef sayıya ulaşırsan bölüm geçilir. Tek hakkın var!</p><button id="go">Başla</button></div></div>
+<script src="../lib.js"></script>
+<script>
+const x=G.x;let balls,booms,lvl,need,used,popped,done,wait;
+const CL=['#ff5c8a','#ffd23f','#3ddbb0','#6aa8ff','#b388ff','#ff9f43'];
+function load(){const n=Math.min(10+lvl*4,50);need=Math.min(n-1,Math.ceil(n*(.3+Math.min(.35,lvl*.03))));balls=[];booms=[];used=false;popped=0;done=false;wait=0;
+ for(let i=0;i<n;i++){const a=G.rnd(0,6.28),s=G.rnd(40,90);balls.push({x:G.rnd(20,G.W-20),y:G.rnd(G.H*.18,G.H*.88),vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:9,c:G.pick(CL)})}}
+function boom(px,py,c){booms.push({x:px,y:py,r:5,max:Math.min(70,48+lvl*1.5),ph:0,c,t:0})}
+G.run({key:'zincir',init(){lvl=0;load()},
+ down(a,b){if(used||G.state!=='play')return;used=true;boom(a,b,'#fff');G.sfx('pop')},
+ key_(e,d){if(d&&e.key===' '&&!used){used=true;boom(G.W/2,G.H/2,'#fff');return true}},
+ update(dt){for(const b of balls){b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.x<b.r||b.x>G.W-b.r)b.vx*=-1;if(b.y<G.H*.15||b.y>G.H-b.r)b.vy*=-1;b.x=G.clamp(b.x,b.r,G.W-b.r);b.y=G.clamp(b.y,G.H*.15,G.H-b.r)}
+  for(const e of booms){e.t+=dt;if(e.ph===0){e.r+=(e.max-e.r)*Math.min(1,dt*9);if(e.r>e.max-1.5){e.ph=1;e.hold=.9}}else if(e.ph===1){e.hold-=dt;if(e.hold<=0)e.ph=2}else{e.r-=e.max*dt*2.2;if(e.r<=0)e.dead=true}
+   if(e.ph<2)for(const b of balls){if(!b.dead&&Math.hypot(b.x-e.x,b.y-e.y)<e.r+b.r){b.dead=true;popped++;boom(b.x,b.y,b.c);G.sfx('pop');try{YS.note(60+Math.min(24,popped*2),.3,.08)}catch(er){}}}}
+  balls=balls.filter(b=>!b.dead);booms=booms.filter(e=>!e.dead);
+  if(used&&!done&&!booms.length){done=true;if(popped>=need){lvl++;G.setScore(lvl);G.bump();G.pause('Bölüm tamam!','<b>'+popped+'</b> top patlattın','Sonraki',()=>load())}else{G.sfx('bad');G.over('Yetmedi')}}},
+ draw(){G.bg('#14062e','#2a0f4d');
+  for(const e of booms){x.globalAlpha=Math.min(1,e.r/e.max+.2)*.55;G.circle(e.x,e.y,e.r,e.c,20);x.globalAlpha=1}
+  for(const b of balls)G.circle(b.x,b.y,b.r,b.c,8);
+  G.text('Patlat: '+popped+' / '+need,G.W/2,G.H*.115,20,popped>=need?'#3ddbb0':'#c9c4ee');
+  if(!used&&G.state==='play')G.text('Bir kez dokun!',G.W/2,G.H*.95,16,'rgba(255,255,255,.5)')}
+});
+
+</script>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>

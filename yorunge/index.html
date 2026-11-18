@@ -112,4 +112,4 @@ c.addEventListener('pointerdown',e=>{e.preventDefault();release()});
 addEventListener('keydown',e=>{if(e.key===' '||e.key==='ArrowUp'||e.key==='w'){e.preventDefault();if(state==='play')release();else if(performance.now()>overAt)start()}else if(e.key==='Enter'&&state!=='play'&&performance.now()>overAt)start()});
 $('go').onclick=()=>{if(performance.now()>overAt)start()};
 rs();requestAnimationFrame(loop);
-</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../menu.js"></script></body></html>
+</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>
