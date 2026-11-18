@@ -1243,13 +1243,13 @@ window.YAXEST_DICT={
 "Corsia sbagliata!"
 ],
 "Çarptın!": [
-"Crash!",
-"Aufprall!",
-"¡Chocaste!",
-"Collision !",
-"Bateu!",
-"Столкновение!",
-"Schianto!"
+"Ouch!",
+"Aua!",
+"¡Ay!",
+"Aïe !",
+"Ai!",
+"Ой!",
+"Ahi!"
 ],
 "Yoldan çıktın!": [
 "You left the road!",
@@ -1484,5 +1484,77 @@ window.YAXEST_DICT={
 "Nível <b>{0}</b> · Recorde <b>{1}</b>",
 "Уровень <b>{0}</b> · Рекорд <b>{1}</b>",
 "Livello <b>{0}</b> · Record <b>{1}</b>"
+],
+"<b>Dokun</b> ve ritme göre zıpla (basılı tutarsan arka arkaya).<br>Dikenlerden, çukurlardan ve tavandan sarkan engellerden geç. Bloklara konabilirsin.<br>Bayrağa ulaş. Her seviye daha uzun ve hızlı.": [
+"<b>Tap</b> to jump to the beat (hold to keep jumping).<br>Clear spikes, pits and hanging obstacles. You can land on blocks.<br>Reach the flag. Every level is longer and faster.",
+"<b>Tippe</b>, um im Takt zu springen (gedrückt halten für Dauersprünge).<br>Überwinde Stacheln, Gruben und hängende Hindernisse. Auf Blöcken kannst du landen.<br>Erreiche die Flagge. Jedes Level ist länger und schneller.",
+"<b>Toca</b> para saltar al ritmo (mantén pulsado para saltar seguido).<br>Supera pinchos, fosos y obstáculos colgantes. Puedes aterrizar sobre bloques.<br>Llega a la bandera. Cada nivel es más largo y rápido.",
+"<b>Touche</b> pour sauter en rythme (maintiens pour enchaîner).<br>Franchis piques, trous et obstacles suspendus. Tu peux atterrir sur les blocs.<br>Atteins le drapeau. Chaque niveau est plus long et plus rapide.",
+"<b>Toque</b> para pular no ritmo (segure para pular em sequência).<br>Passe por espinhos, buracos e obstáculos pendurados. Você pode pousar em blocos.<br>Alcance a bandeira. Cada nível é mais longo e rápido.",
+"<b>Нажми</b>, чтобы прыгать в ритм (удерживай для серии прыжков).<br>Проходи шипы, ямы и подвесные препятствия. На блоки можно приземляться.<br>Добеги до флага. Каждый уровень длиннее и быстрее.",
+"<b>Tocca</b> per saltare a ritmo (tieni premuto per saltare di continuo).<br>Supera spuntoni, buche e ostacoli sospesi. Puoi atterrare sui blocchi.<br>Raggiungi la bandiera. Ogni livello è più lungo e veloce."
+],
+"Müzik": [
+"Music",
+"Musik",
+"Música",
+"Musique",
+"Música",
+"Музыка",
+"Musica"
+],
+"📁 Kendi müziğin": [
+"📁 Your own music",
+"📁 Eigene Musik",
+"📁 Tu propia música",
+"📁 Ta propre musique",
+"📁 Sua própria música",
+"📁 Своя музыка",
+"📁 La tua musica"
+],
+"Piyano": [
+"Piano",
+"Klavier",
+"Piano",
+"Piano",
+"Piano",
+"Пианино",
+"Pianoforte"
+],
+"Şarkı çözümleniyor…": [
+"Analysing song…",
+"Song wird analysiert…",
+"Analizando canción…",
+"Analyse du morceau…",
+"Analisando música…",
+"Анализ песни…",
+"Analisi del brano…"
+],
+"Şarkı çözülemedi, başka dosya dene.": [
+"Could not read the song, try another file.",
+"Song konnte nicht gelesen werden, versuche eine andere Datei.",
+"No se pudo leer la canción, prueba otro archivo.",
+"Impossible de lire le morceau, essaie un autre fichier.",
+"Não foi possível ler a música, tente outro arquivo.",
+"Не удалось прочитать песню, попробуй другой файл.",
+"Impossibile leggere il brano, prova un altro file."
+],
+"Tempo": [
+"Tempo",
+"Tempo",
+"Tempo",
+"Tempo",
+"Tempo",
+"Темп",
+"Tempo"
+],
+"Şarkı tamam!": [
+"Song complete!",
+"Song geschafft!",
+"¡Canción completada!",
+"Morceau terminé !",
+"Música concluída!",
+"Песня пройдена!",
+"Brano completato!"
 ]
 };

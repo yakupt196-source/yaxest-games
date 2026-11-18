@@ -11,4 +11,4 @@ Site 8 dilde: Türkçe, English, Deutsch, Español, Français, Português, Ру�
 Metinler `i18n-dict.js` içindeki sözlükten otomatik çevrilir (`i18n.js`). Yeni oyun/metin eklerken Türkçe cümleyi sözlüğe ekle; eksik çeviri Türkçe kalır. Dil eklemek için `i18n.js` içindeki `LANGS`/`NAMES` ve sözlükteki her dizi güncellenir.
 
 ## Yaxest Ritim
-Müzikle senkron, yandan görünümlü (2D) ritim koşusu: dikenler, çukurlar, tavandan sarkan engeller. Müzik tamamen kodla (WebAudio) üretilir, dış ses dosyası yok. Her seviye daha uzun ve hızlıdır (100→150 BPM), 5 farklı müzik teması döner. Konum, ses saatinden hesaplanır; menü açılınca ses ve oyun birlikte durur.
+Geometry Dash tarzı, yandan görünümlü ritim koşusu: dikenler, bloklar (üstüne konulur), sıçrama pedleri, geniş çukurlar, tavandan sarkan engeller. Dünya saniye tabanlıdır; her seviye daha uzun ve hızlıdır. Müzik tamamen kodla (WebAudio) üretilir ve yumuşaktır (yankı, düşük geçiş filtresi). Müzik seçimi: Lo-fi, Synthwave, House, Piyano. **Kendi müziğin**: cihazdan bir ses dosyası seç; tempo ve vuruşlar tarayıcıda analiz edilir, engeller şarkıya göre dizilir (dosya hiçbir yere yüklenmez).
