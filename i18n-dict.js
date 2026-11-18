@@ -1421,5 +1421,68 @@ window.YAXEST_DICT={
 "AMARELO",
 "ЖЁЛТЫЙ",
 "GIALLO"
+],
+"Müziğin ritmine göre zıpla, engellerden geç, bayrağa ulaş. Her seviye daha uzun ve hızlı.": [
+"Jump to the rhythm of the music, clear the obstacles and reach the flag. Every level is longer and faster.",
+"Spring im Takt der Musik, überwinde Hindernisse und erreiche die Flagge. Jedes Level ist länger und schneller.",
+"Salta al ritmo de la música, supera los obstáculos y llega a la bandera. Cada nivel es más largo y rápido.",
+"Saute en rythme avec la musique, franchis les obstacles et atteins le drapeau. Chaque niveau est plus long et plus rapide.",
+"Pule no ritmo da música, passe pelos obstáculos e alcance a bandeira. Cada nível é mais longo e rápido.",
+"Прыгай в ритм музыке, преодолевай препятствия и добегай до флага. Каждый уровень длиннее и быстрее.",
+"Salta a ritmo di musica, supera gli ostacoli e raggiungi la bandiera. Ogni livello è più lungo e veloce."
+],
+"<b>Dokun</b> ve ritme göre zıpla.<br><b>Kaydır</b> ← → şerit değiştir.<br>Bayrağa ulaş. Her seviye daha uzun ve hızlı.<br>🎧 Kulaklıkla daha güzel.": [
+"<b>Tap</b> to jump to the beat.<br><b>Swipe</b> ← → to change lane.<br>Reach the flag. Every level is longer and faster.<br>🎧 Sounds better with headphones.",
+"<b>Tippe</b>, um im Takt zu springen.<br><b>Wische</b> ← → zum Spurwechsel.<br>Erreiche die Flagge. Jedes Level ist länger und schneller.<br>🎧 Mit Kopfhörern klingt es besser.",
+"<b>Toca</b> para saltar al ritmo.<br><b>Desliza</b> ← → para cambiar de carril.<br>Llega a la bandera. Cada nivel es más largo y rápido.<br>🎧 Suena mejor con auriculares.",
+"<b>Touche</b> pour sauter en rythme.<br><b>Glisse</b> ← → pour changer de voie.<br>Atteins le drapeau. Chaque niveau est plus long et plus rapide.<br>🎧 C’est meilleur au casque.",
+"<b>Toque</b> para pular no ritmo.<br><b>Deslize</b> ← → para trocar de faixa.<br>Alcance a bandeira. Cada nível é mais longo e rápido.<br>🎧 Fica melhor com fones.",
+"<b>Нажми</b>, чтобы прыгать в ритм.<br><b>Свайп</b> ← → — смена дорожки.<br>Добеги до флага. Каждый уровень длиннее и быстрее.<br>🎧 В наушниках звучит лучше.",
+"<b>Tocca</b> per saltare a ritmo.<br><b>Scorri</b> ← → per cambiare corsia.<br>Raggiungi la bandiera. Ogni livello è più lungo e veloce.<br>🎧 Suona meglio con le cuffie."
+],
+"Ses": [
+"Sound",
+"Ton",
+"Sonido",
+"Son",
+"Som",
+"Звук",
+"Audio"
+],
+"Sonraki seviye": [
+"Next level",
+"Nächstes Level",
+"Siguiente nivel",
+"Niveau suivant",
+"Próximo nível",
+"Следующий уровень",
+"Livello successivo"
+],
+"Tekrar dene": [
+"Try again",
+"Nochmal versuchen",
+"Intentar de nuevo",
+"Réessayer",
+"Tentar de novo",
+"Ещё раз",
+"Riprova"
+],
+"Mükemmel zıplama <b>{0}</b><br>Kalan can <b>{1}</b>": [
+"Perfect jumps <b>{0}</b><br>Lives left <b>{1}</b>",
+"Perfekte Sprünge <b>{0}</b><br>Verbleibende Leben <b>{1}</b>",
+"Saltos perfectos <b>{0}</b><br>Vidas restantes <b>{1}</b>",
+"Sauts parfaits <b>{0}</b><br>Vies restantes <b>{1}</b>",
+"Pulos perfeitos <b>{0}</b><br>Vidas restantes <b>{1}</b>",
+"Идеальных прыжков <b>{0}</b><br>Осталось жизней <b>{1}</b>",
+"Salti perfetti <b>{0}</b><br>Vite rimaste <b>{1}</b>"
+],
+"Seviye <b>{0}</b> · Rekor <b>{1}</b>": [
+"Level <b>{0}</b> · Best <b>{1}</b>",
+"Level <b>{0}</b> · Rekord <b>{1}</b>",
+"Nivel <b>{0}</b> · Récord <b>{1}</b>",
+"Niveau <b>{0}</b> · Record <b>{1}</b>",
+"Nível <b>{0}</b> · Recorde <b>{1}</b>",
+"Уровень <b>{0}</b> · Рекорд <b>{1}</b>",
+"Livello <b>{0}</b> · Record <b>{1}</b>"
 ]
 };

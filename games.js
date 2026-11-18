@@ -1,9 +1,10 @@
 // Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
 window.YAXEST_GAMES=[
-{id:'hedef',n:'Yaxest Hedef',i:'🎯',c:'#3ddbb0',k:'Refleks',d:'Gezen çizgiyi yeşil bölgede durdur. Bölge daraldıkça zorlaşır.',new:1},
-{id:'sayi',n:'Yaxest Sayı',i:'🧮',c:'#ffd23f',k:'Bulmaca',d:'Hızlı hesap yap, doğru sonucu seç. Süre kısalır.',new:1},
-{id:'yol',n:'Yaxest Yol',i:'🛤️',c:'#ff5c8a',k:'Arcade',d:'Dokunarak yönünü değiştir, yoldan çıkma. Hız artar.',new:1},
-{id:'isik',n:'Yaxest Işık',i:'💡',c:'#b388ff',k:'Bulmaca',d:'Bir ışığa dokununca komşuları da değişir. Hepsini söndür.',new:1},
+{id:'ritim',n:'Yaxest Ritim',i:'🎵',c:'#b388ff',k:'Refleks',d:'Müziğin ritmine göre zıpla, engellerden geç, bayrağa ulaş. Her seviye daha uzun ve hızlı.',new:1},
+{id:'hedef',n:'Yaxest Hedef',i:'🎯',c:'#3ddbb0',k:'Refleks',d:'Gezen çizgiyi yeşil bölgede durdur. Bölge daraldıkça zorlaşır.'},
+{id:'sayi',n:'Yaxest Sayı',i:'🧮',c:'#ffd23f',k:'Bulmaca',d:'Hızlı hesap yap, doğru sonucu seç. Süre kısalır.'},
+{id:'yol',n:'Yaxest Yol',i:'🛤️',c:'#ff5c8a',k:'Arcade',d:'Dokunarak yönünü değiştir, yoldan çıkma. Hız artar.'},
+{id:'isik',n:'Yaxest Işık',i:'💡',c:'#b388ff',k:'Bulmaca',d:'Bir ışığa dokununca komşuları da değişir. Hepsini söndür.'},
 {id:'zipla',n:'Yaxest Zıpla',i:'🦘',c:'#3df0ff',k:'Refleks',d:'Tek dokunuşla zıpla, engellerden kaç. Giderek hızlanır.'},
 {id:'renk',n:'Yaxest Renk',i:'🎨',c:'#ffd23f',k:'Bulmaca',d:'Yazının rengini seç, yazıya aldanma. Süre her turda kısalır.'},
 {id:'balon',n:'Yaxest Balon',i:'🎈',c:'#ff5c8a',k:'Arcade',d:'Balonları patlat, bombalara dokunma. Altın balon 5 puan.'},
