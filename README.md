@@ -15,3 +15,6 @@ Geometry Dash tarzı, yandan görünümlü ritim koşusu: dikenler, bloklar (üs
 
 ## Ses (tüm oyunlar)
 `sfx.js`: dosyasız, tamamen kodla üretilen ortak ses motoru. Tüm sesler aynı pentatonik gamdadır (puan, hata, bitiş, kazanma, dokunma). Oyunlara otomatik bağlanır (skor, can, bitiş mesajı gözlemlenir). Ses, duraklatma menüsündeki "Ses" düğmesiyle kapatılır (`yx-mute`). Ritim kendi ses motorunu kullanır.
+
+## Arama motoru (SEO)
+`python3 tools/seo.py` her sayfaya başlık, açıklama, canonical, Open Graph/Twitter ve JSON-LD (VideoGame, WebSite, ItemList) ekler; `sitemap.xml` ve `robots.txt` üretir. Yeni oyun ekledikten sonra çalıştır. Ana adres: `YX_BASE` ortam değişkeniyle değişir (özel alan adı alınırsa).

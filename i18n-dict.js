@@ -1655,5 +1655,14 @@ window.YAXEST_DICT={
 "Lançado ao espaço!",
 "Улетел в космос!",
 "Scagliato nello spazio!"
+],
+"Örn: Yeni bir oyun ya da özellik önerisi": [
+"E.g. a new game or feature idea",
+"Z. B. ein Spiel- oder Funktionsvorschlag",
+"Ej.: una idea de juego o función",
+"Ex. : une idée de jeu ou de fonctionnalité",
+"Ex.: uma ideia de jogo ou recurso",
+"Напр.: идея новой игры или функции",
+"Es.: un'idea per un gioco o una funzione"
 ]
 };
