@@ -51,7 +51,7 @@
   function watch(el,fn){if(!el)return;new MutationObserver(fn).observe(el,{childList:true,characterData:true,subtree:true,attributes:true})}
   var CFG={
     balon:{score:'big',lives:'hp',ov:1},hedef:{score:'big',lives:'hp',ov:1},karo:{score:'big',ov:1,tap:'#c'},renk:{score:'big',ov:1},sayi:{score:'big',ov:1},
-    yol:{milestone:'big',ov:1,tap:'#c',tapName:'tap'},zipla:{milestone:'big',ov:1,tap:'#c',tapName:'jump'},kule:{score:'big',ov:1,tap:'#c',tapName:'tap'},blok:{ov:1,tap:'#c',tapName:'tap',score:'sc'},kosu:{milestone:'sc',gem:'gm',ov:1,tap:'#c',tapName:'tap'},
+    yol:{milestone:'big',ov:1,tap:'#c',tapName:'tap'},kule:{score:'big',ov:1,tap:'#c',tapName:'tap'},blok:{ov:1,tap:'#c',tapName:'tap',score:'sc'},kosu:{milestone:'sc',gem:'gm',ov:1,tap:'#c',tapName:'tap'},
     kostebek:{score:'s',scoreName:'pop',msg:'w'},yilan:{score:'s',msg:'',canvasOver:1},
     hafiza:{msg:'w',match:1,tap:'#g',tapName:'tap'},birlestir:{msg:'w',score:'s',tap:'#g',tapName:'tap'},isik:{msg:'msg',tap:'#grid',tapName:'tap'},
     yorunge:{score:'big',ov:1,tap:'#c',tapName:'jump'},

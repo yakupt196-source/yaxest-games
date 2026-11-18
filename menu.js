@@ -13,7 +13,7 @@
   if(parts.length&&/\.html?$/.test(parts[parts.length-1]))parts.pop();
   var cur=parts.pop()||'';
   var css=document.createElement('style');
-  css.textContent=
+  css.textContent='@media (min-width:600px){#wrap{background:#0f0b2b;box-shadow:0 0 0 2px rgba(61,240,255,.45),0 0 60px rgba(61,240,255,.16);border-radius:8px;overflow:hidden}}'+
    '#ymb{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:rgba(31,26,66,.82);color:#fff;font:700 20px/1 system-ui,sans-serif;display:grid;place-items:center;cursor:pointer;z-index:99998;padding:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}'+
    '#ymb,#ymx{padding:0;min-height:0;min-width:0;line-height:1;box-sizing:border-box;font-family:system-ui,sans-serif}'+
    '#ymp .ylw{max-width:560px;width:100%;margin:14px auto 0;display:flex;justify-content:center}'+

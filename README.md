@@ -1,5 +1,5 @@
 # Yaxest Games
-Oyunlar (18): yorunge, ritim, hedef, sayi, yol, isik, zipla, renk, balon, karo, kule, kosu, hole, blok, yilan, hafiza, birlestir, kostebek.
+Oyunlar (17): yorunge, ritim, hedef, sayi, yol, isik, renk, balon, karo, kule, kosu, hole, blok, yilan, hafiza, birlestir, kostebek.
 Yeni oyun eklemek: klasör aç (örn. `yeni/index.html`), sayfanın sonuna
 `<script src="../games.js"></script><script src="../menu.js"></script>` ekle ve `games.js` listesine bir satır yaz.
 Ana sayfa ve oyun içi menü listeyi `games.js` içinden okur.
