@@ -126,10 +126,12 @@ function nowT(){return AC?AC.currentTime-Math.min(.25,AC.outputLatency||AC.baseL
 function snd(kind){
   if(!AC||muted||!bus)return;const n=AC.currentTime;
   if(kind==='jump'){
-    if(custom&&custom.on)return;
-    const st=spb/4;let t=t0+Math.ceil((n-t0)/st-.001)*st;if(t<n+.004)t=n+.004;
-    const p=theme.pent,idx=jn++,m=theme.root+24+p[idx%5]+(Math.floor(idx/5)%2)*12;
-    osc('sine',mtof(m),t,.3,.2,{send:1});osc('triangle',mtof(m)*2,t,.12,.04,{lp:3000,send:1})}
+    const cu=custom&&custom.on,st=cu?spb/2:spb/4;let t=t0+Math.ceil((n-t0)/st-.001)*st;if(t<n+.004)t=n+.004;
+    const idx=jn++;let m;
+    if(cu){m=theme.root+12+theme.pent[idx%5]}
+    else{const i=Math.round((t-t0)/(spb/4)),ch=theme.prog[Math.floor(i/16)%4],cr=theme.root+ch[0]-(ch[0]>6?12:0),tn=[0,ch[1]==='m'?3:4,7,12];m=cr+12+tn[idx%4]+(idx%8>3?12:0)}
+    const f=mtof(m),g=cu?.05:.09; // yumuşak kalimba/marimba tınısı: kısa, tatlı, armoni içinde
+    osc('sine',f,t,.55,g,{send:1,a:.004});osc('sine',f*3,t,.1,g*.18,{send:1,a:.002});osc('triangle',f,t,.2,g*.45,{lp:1700,a:.004})}
   else if(kind==='perfect'){if(custom&&custom.on)return;const m=theme.root+36+theme.pent[2];osc('sine',mtof(m),n,.4,.16,{send:1});osc('sine',mtof(m+12),n+.06,.4,.12,{send:1})}
   else if(kind==='gem'){if(custom&&custom.on)return;osc('sine',mtof(theme.root+36+theme.pent[(jn++)%5]),n,.2,.12,{send:1})}
   else if(kind==='pad'){if(custom&&custom.on)return;osc('sine',420,n,.22,.2,{slide:900,a:.004});noise(n,.1,.06,2500,'bandpass')}
@@ -169,36 +171,59 @@ function rng(seed){let s=seed*9301+49297;return()=>{s=(s*1103515245+12345)&0x7ff
 const SPEC={spike:{hw:.35},spike2:{hw:.7},spike3:{hw:1.05},pit:{hw:1.1},pit2:{hw:2.2},hang:{hw:.6},block:{hw:1.2,h:1}};
 function build(l,cu){
   VS=cu?6.3:Math.min(7.2,5+.15*l);
-  const R=rng(cu?7+Math.floor(cu.a.bpm*10):l*7919+13),q=t=>Math.round(t/(spb/2))*(spb/2),first=Math.ceil(3.4/spb)*spb;
+  const R=rng(cu?7+Math.floor(cu.a.bpm*10):l*7919+13),h2=spb/2,q=t=>Math.round(t/h2)*h2,first=Math.ceil(3.4/spb)*spb,step=Math.ceil(.72/h2)*h2;
   endT=cu?Math.min(cu.a.dur-cu.a.phase-2,140):first+Math.min(70,22+5*l);obs=[];
-  const L=cu?5:l;
-  const pool=L===1?[2.4]:L===2?[2.4,2,2.4]:L===3?[2,1.8,2.4]:L===4?[1.8,1.5,2]:L<=8?[1.5,1.3,1.8]:[1.2,1.1,1.5];
-  const types=L===1?['spike']:L===2?['spike','spike','pit','block']:L===3?['spike','pit','spike2','block']:L===4?['spike','pit','spike2','hang','block']:L<=6?['spike','pit','spike2','hang','block','pit2','spike']:['spike','pit','spike2','spike3','hang','block','pit2','spike2'];
-  const core=[];let prev=null;
+  const L=cu?Math.max(2,Math.min(9,Math.round((cu.a.bpm-70)/9))):l;
+  const pool=L===1?[2.4]:L===2?[2.4,2]:L===3?[2.1,1.8]:L<=5?[1.7,1.4]:L<=8?[1.3,1.1,.9]:[1,.9,.8];
+  const rnd=a=>a[Math.floor(R()*a.length)],sp1=L>=4?['spike','spike','spike2']:['spike'],sp2=L>=7?['spike','spike2','spike3']:sp1;
+  const bn=Math.min(6,2+Math.floor((L-1)/2));
+  const pats=[['single',4]];
+  if(L>=2)pats.push(['pit',2],['block',2]);
+  if(L>=2)pats.push(['burst',L>=5?4:2]);
+  if(L>=3)pats.push(['zigzag',2],['platform',2]);
+  if(L>=4)pats.push(['hang',2],['blockspike',2],['spike2',2]);
+  if(L>=5)pats.push(['pit2',2]);
+  if(L>=7)pats.push(['burst',3],['zigzag',2],['spike3',2]);
+  const bag=[];for(const [n,w] of pats)for(let i=0;i<w;i++)bag.push(n);
+  const mk=(type,hw,h)=>({type,hw:hw!=null?hw:SPEC[type].hw,h:h||0});
+  const pieces=name=>{ // her desen: {dt: ilk parçadan itibaren saniye, ...}
+    switch(name){
+      case 'single':return[[0,mk(rnd(sp1))]];
+      case 'spike2':return[[0,mk('spike2')]];
+      case 'spike3':return[[0,mk('spike3')]];
+      case 'pit':return[[0,mk('pit')]];
+      case 'pit2':return[[0,mk('pit2')]];
+      case 'hang':return[[0,mk('hang')]];
+      case 'block':return[[0,mk('block',1+R()*.6,1)]];
+      case 'blockspike':return[[0,mk('block',1+R()*.4,1)],[1.9,mk('spike')]];
+      case 'platform':return[[0,mk('block',2+R()*1.2,1)]];
+      case 'burst':{const n=Math.max(2,Math.min(bn,2+Math.floor(R()*(bn-1)))),a=[];let t=0;
+        for(let i=0;i<n;i++){a.push([t,mk(rnd(sp2))]);t+=step+((L>=8&&R()<.35)?h2:0)}return a}
+      case 'zigzag':{const n=3+(L>=6?1:0)+(L>=9?1:0),a=[];for(let i=0;i<n;i++)a.push([i*step,mk(i%2?'pit':rnd(sp1))]);return a}
+    }};
+  let prev=null;const core=[];
   while(true){
-    let ty=types[Math.floor(R()*types.length)];
-    if(prev){
-      if(ty==='pit'&&prev.type==='pit')ty='spike';
-      if(ty==='hang'&&(prev.type==='block'||prev.type==='pit2'))ty='spike';
-      if(ty==='pit2'&&(prev.type==='pit2'||prev.type==='block'))ty='pit';
-    }
-    const sp=SPEC[ty],hw=ty==='block'?1+R()*.6:sp.hw;
-    let t;
+    let nm=rnd(bag);
+    if(prev){if(nm==='hang'&&(prev.type==='block'||prev.type==='pit2'||prev.type==='pit'))nm='single';
+      if((nm==='pit'||nm==='zigzag')&&prev.type==='pit')nm='single';
+      if(nm==='pit2'&&(prev.type==='pit2'||prev.type==='block'))nm='pit'}
+    const pc=pieces(nm),f0=pc[0][1];let t;
     if(!prev)t=first;
-    else{let edge=pool[Math.floor(R()*pool.length)];if(ty==='hang')edge=Math.max(edge,1.8);if(prev.type==='hang')edge=Math.max(edge,1.1);
-      t=prev.t+edge+(prev.hw+hw)/VS;if(ty==='pit2')t+=3.4/VS+.2;t=q(t)}
-    if(t>endT-3)break;
-    prev={type:ty,t,hw,h:sp.h||0};core.push(prev);
+    else{let edge=rnd(pool);if(nm==='hang'||prev.type==='hang')edge=Math.max(edge,nm==='hang'?1.8:1.1);if(prev.type==='block'||prev.type==='pit2')edge=Math.max(edge,1.2);
+      t=prev.t+edge+(prev.hw+f0.hw)/VS;if(nm==='pit2')t+=3.4/VS+.2;if(prev.type==='pit'&&f0.type==='pit2')t+=.3;t=q(t)}
+    const last=pc[pc.length-1];if(t+last[0]>endT-3.5)break;
+    for(const [dt,p] of pc){prev={type:p.type,t:q(t+dt),hw:p.hw,h:p.h};core.push(prev)}
   }
-  if(cu){ // her engeli en güçlü yakın vuruşa oturt
-    let lastT=-9,lastO=-9;
+  if(cu){ // her engeli en güçlü yakın (davul) vuruşa oturt
+    let lastT=-9;const out=[];
     for(const o of core){const cand=[-1,-.5,0,.5,1].map(k=>q(o.t+k*spb)),best=cand.reduce((a,b)=>cu.a.at(b+cu.a.phase)>cu.a.at(a+cu.a.phase)?b:a,o.t);
-      const need=lastO>-9?(o.t-lastO)*.85:0;let t=best;if(lastT>-9&&t<lastT+need)t=q(lastT+need);if(t>endT-3)continue;lastO=o.t;lastT=t;o.t=t}
-    for(const o of core)o.t+=T_AIR/2; // zıplama tuşu vuruşa denk gelsin, tepe noktası engelin üstünde olsun
+      let t=best;const need=o.type==='block'?1.1:.72;if(lastT>-9&&t<lastT+need)t=q(lastT+need+h2*.5);if(t>endT-3.5)continue;lastT=t;o.t=t;out.push(o)}
+    core.length=0;core.push(...out);
   }
+  for(const o of core)o.t+=T_AIR/2; // tuşa vuruşta bas: tepe noktası engelin üstüne gelir
   for(const o of core){obs.push(Object.assign({},o));
     if(o.type==='pit2')obs.push({type:'pad',t:o.t-(o.hw+.7)/VS,hw:.45});
-    else if(o.type==='block'){for(const k of[-.6,0,.6])obs.push({type:'g',t:o.t+k*o.hw/VS,hg:o.h+.65,hw:.4})}
+    else if(o.type==='block'){const n=Math.max(3,Math.round(o.hw*2/1.2));for(let k=0;k<n;k++)obs.push({type:'g',t:o.t+(k-(n-1)/2)*(o.hw*1.7/Math.max(1,n-1))/VS,hg:o.h+.65,hw:.4})}
     else if(o.type!=='hang'){for(const [k,hg] of[[-.26,1.5],[0,2.15],[.26,1.5]])obs.push({type:'g',t:o.t+k,hg,hw:.4})}}
   obs.sort((a,b)=>a.t-b.t);
 }
