@@ -3,8 +3,8 @@ Oyunlar (32): sallan, kaydir, damla, kir, radar, labirent, pota, mermi, nota, zi
 Yeni oyun eklemek: klasör aç (örn. `yeni/index.html`), sayfanın sonuna
 `<script src="../games.js"></script><script src="../menu.js"></script>` ekle ve `games.js` listesine bir satır yaz.
 Ana sayfa ve oyun içi menü listeyi `games.js` içinden okur.
-Netlify GitHub'a bağlı: `main` dalına yazılan her değişiklik kendiliğinden yayınlanır.
-Geri bildirim formu: Netlify Forms (ücretsiz kota).
+Yayın GitHub Pages ile: `main` dalına yazılan her değişiklik kendiliğinden yayınlanır (`.github/workflows/pages.yml`).
+Geri bildirim: ana sayfadaki Instagram ve LinkedIn bağlantıları (GitHub Pages'te form sunucusu yok).
 
 ## Diller
 Site 8 dilde: Türkçe, English, Deutsch, Español, Français, Português, Русский, Italiano. Tarayıcı diline göre açılır, ziyaretçi seçince hatırlanır.

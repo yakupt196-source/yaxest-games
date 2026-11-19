@@ -2573,5 +2573,23 @@ window.YAXEST_DICT={
 "Jogar →",
 "Играть →",
 "Gioca →"
+],
+"Oyun önerin ya da bir hata bildirimin mi var? Bana doğrudan yaz, hepsini okuyorum.": [
+"Got a game idea or a bug report? Message me directly, I read everything.",
+"Hast du eine Spielidee oder einen Fehler gefunden? Schreib mir direkt, ich lese alles.",
+"¿Tienes una idea de juego o un error que reportar? Escríbeme directamente, lo leo todo.",
+"Une idée de jeu ou un bug à signaler ? Écris-moi directement, je lis tout.",
+"Tem uma ideia de jogo ou um erro para avisar? Fale comigo direto, eu leio tudo.",
+"Есть идея игры или нашёл ошибку? Пиши мне напрямую, я читаю всё.",
+"Hai un'idea per un gioco o una segnalazione di bug? Scrivimi direttamente, leggo tutto."
+],
+"Instagram'dan yaz": [
+"Message on Instagram",
+"Auf Instagram schreiben",
+"Escribe en Instagram",
+"Écrire sur Instagram",
+"Escrever no Instagram",
+"Написать в Instagram",
+"Scrivi su Instagram"
 ]
 };
