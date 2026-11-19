@@ -2663,5 +2663,23 @@ window.YAXEST_DICT={
 "Você também pode falar com a gente no Instagram:",
 "Ещё нам можно написать в Instagram:",
 "Puoi contattarci anche su Instagram:"
+],
+"💡 Önerim var": [
+"💡 I have a suggestion",
+"💡 Ich habe einen Vorschlag",
+"💡 Tengo una sugerencia",
+"💡 J'ai une suggestion",
+"💡 Tenho uma sugestão",
+"💡 У меня есть предложение",
+"💡 Ho un suggerimento"
+],
+"🐞 Şikayetim var": [
+"🐞 I have a complaint",
+"🐞 Ich habe eine Beschwerde",
+"🐞 Tengo una queja",
+"🐞 J'ai une réclamation",
+"🐞 Tenho uma reclamação",
+"🐞 У меня жалоба",
+"🐞 Ho un reclamo"
 ]
 };
