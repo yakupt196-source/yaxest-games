@@ -245,9 +245,9 @@ document.addEventListener('visibilitychange',()=>document.hidden?stop():start())
 addEventListener('resize',size);size();if(!reduce)start()})();
 
 /* öneri formu */
-const FORM_ENDPOINT='';/* FormSubmit/Formspree adresi eklenirse mesajlar doğrudan e-postaya gelir */
+const FORM_ENDPOINT='https://formsubmit.co/ajax/yakupt196@gmail.com';/* FormSubmit/Formspree adresi eklenirse mesajlar doğrudan e-postaya gelir */
 $('fm').addEventListener('submit',async e=>{e.preventDefault();const tur=(document.querySelector('input[name=tur]:checked')||{}).value||'ÖNERİ';const m0=$('fmsg').value.trim();if(!m0)return;const m='['+tur+'] '+m0;const c=$('fcon').value.trim();let sent=false;
- if(FORM_ENDPOINT){try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({mesaj:m,iletisim:c,sayfa:location.href})});sent=r.ok}catch(er){}}
+ if(FORM_ENDPOINT){try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:'Yaxest Games '+m.split(']')[0]+']',_captcha:'false',_template:'table',tur:tur,mesaj:m0,iletisim:c||'-',sayfa:location.href})});const j=await r.json().catch(()=>({}));sent=r.ok&&j.success!=='false'&&j.success!==false}catch(er){}}
  const full=m+(c?'\n\nİletişim: '+c:'');if(!sent){try{navigator.clipboard.writeText(full).catch(()=>{})}catch(er){}}
  $('figl').href='https://ig.me/m/yaxeststudio?text='+encodeURIComponent((m+(c?' | İletişim: '+c:'')).slice(0,600));$('fok1').hidden=!sent;$('fok2').hidden=sent;$('figl').hidden=sent;$('fm').hidden=true;$('fok').hidden=false;try{localStorage.setItem('yx-msg',String(Date.now()))}catch(er){}
 });
