@@ -2681,5 +2681,14 @@ window.YAXEST_DICT={
 "🐞 Tenho uma reclamação",
 "🐞 У меня жалоба",
 "🐞 Ho un reclamo"
+],
+"Instagram açılıyor... Mesaj kutusu boş gelirse uzun basıp yapıştır, mesajın kopyalandı.": [
+"Opening Instagram... If the message box is empty, long-press and paste, your message is copied.",
+"Instagram öffnet sich... Ist das Feld leer, lange drücken und einfügen, deine Nachricht ist kopiert.",
+"Abriendo Instagram... Si el cuadro está vacío, mantén pulsado y pega, tu mensaje está copiado.",
+"Ouverture d'Instagram... Si le champ est vide, appuie longuement et colle, ton message est copié.",
+"Abrindo o Instagram... Se a caixa estiver vazia, mantenha pressionado e cole, sua mensagem foi copiada.",
+"Открываю Instagram... Если поле пустое, нажми и удерживай, затем вставь, сообщение скопировано.",
+"Apro Instagram... Se il campo è vuoto, tieni premuto e incolla, il messaggio è copiato."
 ]
 };

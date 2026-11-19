@@ -162,7 +162,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mute);fo
 <label>Sana dönebilmemiz için iletişim bilgin (isteğe bağlı)<input id="fcon" name="iletisim" maxlength="120" placeholder="Instagram kullanıcı adın ya da e-posta" autocomplete="off"></label>
 <button class="btn" type="submit">Gönder</button>
 </form>
-<div id="fok" class="ok" hidden><b>Teşekkürler!</b><p id="fok1">Mesajın bize ulaştı. En kısa sürede sana dönüş yapacağız.</p><p id="fok2" hidden>Mesajın hazır ve kopyalandı. Instagram'da bize göndermen yeterli, en kısa sürede sana dönüş yapacağız.</p><div class="row"><a class="btn" id="figl" href="https://ig.me/m/yaxeststudio" target="_blank" rel="noopener" hidden>Mesajı Instagram'da gönder</a><button class="btn alt" id="fnew" type="button">Yeni mesaj yaz</button></div></div>
+<div id="fok" class="ok" hidden><b>Teşekkürler!</b><p id="fok1">Mesajın bize ulaştı. En kısa sürede sana dönüş yapacağız.</p><p id="fok3" hidden>Instagram açılıyor... Mesaj kutusu boş gelirse uzun basıp yapıştır, mesajın kopyalandı.</p><p id="fok2" hidden>Mesajın hazır ve kopyalandı. Instagram'da bize göndermen yeterli, en kısa sürede sana dönüş yapacağız.</p><div class="row"><a class="btn" id="figl" href="https://ig.me/m/yaxeststudio" target="_blank" rel="noopener" hidden>Mesajı Instagram'da gönder</a><button class="btn alt" id="fnew" type="button">Yeni mesaj yaz</button></div></div>
 <p class="alt2">Bize Instagram'dan da ulaşabilirsin: <a href="https://www.instagram.com/yaxeststudio/" target="_blank" rel="noopener">@yaxeststudio</a></p>
 <div class="row"><button class="btn" id="inst" type="button" hidden>Telefona ekle</button></div>
 </section>
@@ -249,7 +249,8 @@ const FORM_ENDPOINT='';/* FormSubmit/Formspree adresi eklenirse mesajlar doğrud
 $('fm').addEventListener('submit',async e=>{e.preventDefault();const tur=(document.querySelector('input[name=tur]:checked')||{}).value||'ÖNERİ';const m0=$('fmsg').value.trim();if(!m0)return;const m='['+tur+'] '+m0;const c=$('fcon').value.trim();let sent=false;
  if(FORM_ENDPOINT){try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({mesaj:m,iletisim:c,sayfa:location.href})});sent=r.ok}catch(er){}}
  if(!sent){try{await navigator.clipboard.writeText(m+(c?'\n\nİletişim: '+c:''))}catch(er){}}
- $('figl').href='https://ig.me/m/yaxeststudio?text='+encodeURIComponent((m+(c?' | İletişim: '+c:'')).slice(0,600));$('fok1').hidden=!sent;$('fok2').hidden=sent;$('figl').hidden=sent;$('fm').hidden=true;$('fok').hidden=false;try{localStorage.setItem('yx-msg',String(Date.now()))}catch(er){}});
+ $('figl').href='https://ig.me/m/yaxeststudio?text='+encodeURIComponent((m+(c?' | İletişim: '+c:'')).slice(0,600));$('fok1').hidden=!sent;$('fok2').hidden=sent;$('figl').hidden=sent;$('fm').hidden=true;$('fok').hidden=false;try{localStorage.setItem('yx-msg',String(Date.now()))}catch(er){}
+ if(!sent&&matchMedia('(pointer:coarse)').matches){$('fok3').hidden=false;setTimeout(()=>{location.href=$('figl').href},700)}});
 $('fnew').onclick=()=>{$('fmsg').value='';$('fm').hidden=false;$('fok').hidden=true};
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
 $('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};
