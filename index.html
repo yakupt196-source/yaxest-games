@@ -118,8 +118,8 @@ h1 em{font-style:normal;display:inline-block;background:linear-gradient(100deg,v
 .tag span.ok{background:rgba(255,255,255,.14);color:var(--ink)}
 .empty{grid-column:1/-1;color:var(--mute);padding:20px 0}
 .about{border-radius:var(--r);padding:30px;margin:30px 0 56px;display:grid;gap:12px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
-.about h2{font-size:1.7rem;letter-spacing:-.03em}.about p{color:var(--mute);max-width:62ch}.about a{color:var(--yellow)}
-.fm{display:grid;gap:12px;max-width:62ch}.fm label{display:grid;gap:6px;color:var(--mute);font-size:.95rem}.fm textarea{background:rgba(255,255,255,.05);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:12px;font:inherit;resize:vertical;min-height:84px}.fm textarea:focus{outline:none;border-color:var(--yellow)}.fm .btn{width:max-content}
+.about h2{font-size:1.7rem;letter-spacing:-.03em}.about p{color:var(--mute);max-width:62ch}.about a{color:var(--yellow)}.about a.btn{color:var(--bg)}.about a.btn.alt{color:var(--ink)}.seo-links a{color:#8c86b6;text-decoration:none}.seo-links a:hover{color:var(--yellow)}.seo-links{padding:0!important;font-size:.82rem!important}
+.fm input{background:rgba(255,255,255,.05);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:12px;font:inherit;min-height:46px}.fm input:focus{outline:none;border-color:var(--yellow)}.ok{max-width:62ch;border:1.5px solid var(--mint);background:rgba(61,219,176,.1);border-radius:18px;padding:18px 20px;display:grid;gap:10px}.ok b{font-size:1.4rem;color:var(--mint)}.ok p{margin:0}.alt2{font-size:.95rem}.fm{display:grid;gap:12px;max-width:62ch}.fm label{display:grid;gap:6px;color:var(--mute);font-size:.95rem}.fm textarea{background:rgba(255,255,255,.05);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:12px;font:inherit;resize:vertical;min-height:84px}.fm textarea:focus{outline:none;border-color:var(--yellow)}.fm .btn{width:max-content}
 footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mute);font-size:.95rem}footer a{color:var(--yellow)}
 @media (max-width:900px){.bento{grid-template-columns:1fr 1fr}.day{grid-column:1/-1;min-height:200px}}
 @media (max-width:560px){.bento{grid-template-columns:1fr}.menu a{display:none}.hero{min-height:700px;align-items:flex-start}.hin{margin-left:0;padding-bottom:230px}.eyebrow{font-size:.66rem;letter-spacing:.08em;padding:8px 12px}.grid{grid-template-columns:1fr 1fr;gap:12px}.card{padding:16px;min-height:210px}.ico{width:54px;height:54px;font-size:1.8rem}.card p{font-size:.84rem}.card .wm{font-size:5.5rem}#q{width:100%;margin-left:0}.tile{padding:20px}.facts{gap:20px}.hin{padding-top:20px}}
@@ -155,8 +155,14 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mute);fo
 <section class="about" id="hakkinda">
 <h2>Yaxest Games kimin?</h2>
 <p>Yaxest Games, Diyarbakır'da Yakup Turhan tarafından geliştirilen bağımsız bir oyun markası. Hedef: tarayıcıda oynanan, kısa ve akılda kalan oyunlar yapmak, sonra bunları mobil oyunlara taşıyıp sağlam bir oyun stüdyosuna dönüşmek.</p>
-<p>Oyun önerin ya da bir hata bildirimin mi var? Bana doğrudan yaz, hepsini okuyorum.</p>
-<div class="row"><a class="btn" href="https://www.instagram.com/yaxeststudio/" target="_blank" rel="noopener">Instagram'dan yaz</a><a class="btn alt" href="https://www.linkedin.com/search/results/people/?keywords=Yakup%20Turhan" target="_blank" rel="noopener">LinkedIn</a></div>
+<p>Oyun önerin ya da bir hata bildirimin mi var? Aşağıya yaz, en kısa sürede sana dönüş yapacağız.</p>
+<form id="fm" class="fm">
+<label>Oyun önerin ya da hata bildirimin<textarea id="fmsg" name="mesaj" rows="3" required maxlength="800" placeholder="Örn: Yeni bir oyun ya da özellik önerisi"></textarea></label>
+<label>Sana dönebilmemiz için iletişim bilgin (isteğe bağlı)<input id="fcon" name="iletisim" maxlength="120" placeholder="Instagram kullanıcı adın ya da e-posta" autocomplete="off"></label>
+<button class="btn" type="submit">Gönder</button>
+</form>
+<div id="fok" class="ok" hidden><b>Teşekkürler!</b><p id="fok1">Mesajın bize ulaştı. En kısa sürede sana dönüş yapacağız.</p><p id="fok2" hidden>Mesajın hazır ve kopyalandı. Instagram'da bize göndermen yeterli, en kısa sürede sana dönüş yapacağız.</p><div class="row"><a class="btn" id="figl" href="https://ig.me/m/yaxeststudio" target="_blank" rel="noopener" hidden>Mesajı Instagram'da gönder</a><button class="btn alt" id="fnew" type="button">Yeni mesaj yaz</button></div></div>
+<p class="alt2">Bize Instagram'dan da ulaşabilirsin: <a href="https://www.instagram.com/yaxeststudio/" target="_blank" rel="noopener">@yaxeststudio</a></p>
 <div class="row"><button class="btn" id="inst" type="button" hidden>Telefona ekle</button></div>
 </section>
 <div class="seo-links" role="navigation" aria-label="Tüm oyunlar" style="display:block;max-width:1040px;margin:24px auto 0;padding:0 20px;color:#a9a3cf;font-size:.85rem;line-height:1.9"><a href="sallan/">Yaxest Sallan</a> · <a href="kaydir/">Yaxest Kaydır</a> · <a href="damla/">Yaxest Damla</a> · <a href="kir/">Yaxest Kır</a> · <a href="radar/">Yaxest Radar</a> · <a href="labirent/">Yaxest Labirent</a> · <a href="pota/">Yaxest Pota</a> · <a href="mermi/">Yaxest Mermi</a> · <a href="nota/">Yaxest Nota</a> · <a href="zincir/">Yaxest Zincir</a> · <a href="tirman/">Yaxest Tırman</a> · <a href="lazer/">Yaxest Lazer</a> · <a href="bicak/">Yaxest Bıçak</a> · <a href="duello/">Yaxest Düello</a> · <a href="tup/">Yaxest Tüp</a> · <a href="yorunge/">Yaxest Yörünge</a> · <a href="ritim/">Yaxest Ritim</a> · <a href="hedef/">Yaxest Hedef</a> · <a href="sayi/">Yaxest Sayı</a> · <a href="yol/">Yaxest Yol</a> · <a href="isik/">Yaxest Işık</a> · <a href="renk/">Yaxest Renk</a> · <a href="balon/">Yaxest Balon</a> · <a href="karo/">Yaxest Karo</a> · <a href="kule/">Yaxest Kule</a> · <a href="kosu/">Yaxest Koşu</a> · <a href="hole/">Yaxest Hole</a> · <a href="blok/">Yaxest Blok</a> · <a href="yilan/">Yaxest Yılan</a> · <a href="hafiza/">Yaxest Hafıza</a> · <a href="birlestir/">Yaxest Birleştir</a> · <a href="kostebek/">Yaxest Köstebek</a></div>
@@ -236,6 +242,14 @@ hero.addEventListener('click',e=>{if(e.target.closest('a,button'))return;pos(e);
 new IntersectionObserver(es=>{es[0].isIntersecting?start():stop()},{threshold:0}).observe(hero);
 document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
 addEventListener('resize',size);size();if(!reduce)start()})();
+
+/* öneri formu */
+const FORM_ENDPOINT='';/* FormSubmit/Formspree adresi eklenirse mesajlar doğrudan e-postaya gelir */
+$('fm').addEventListener('submit',async e=>{e.preventDefault();const m=$('fmsg').value.trim();if(!m)return;const c=$('fcon').value.trim();let sent=false;
+ if(FORM_ENDPOINT){try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({mesaj:m,iletisim:c,sayfa:location.href})});sent=r.ok}catch(er){}}
+ if(!sent){try{await navigator.clipboard.writeText(m+(c?'\n\nİletişim: '+c:''))}catch(er){}}
+ $('fok1').hidden=!sent;$('fok2').hidden=sent;$('figl').hidden=sent;$('fm').hidden=true;$('fok').hidden=false;try{localStorage.setItem('yx-msg',String(Date.now()))}catch(er){}});
+$('fnew').onclick=()=>{$('fmsg').value='';$('fm').hidden=false;$('fok').hidden=true};
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
 $('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};
 $('grid').addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const c=e.target.closest('.card');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*10+'deg');c.style.setProperty('--rx',(-(e.clientY-r.top)/r.height+.5)*10+'deg')});

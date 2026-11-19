@@ -2591,5 +2591,77 @@ window.YAXEST_DICT={
 "Escrever no Instagram",
 "Написать в Instagram",
 "Scrivi su Instagram"
+],
+"Oyun önerin ya da bir hata bildirimin mi var? Aşağıya yaz, en kısa sürede sana dönüş yapacağız.": [
+"Got a game idea or a bug report? Write it below and we'll get back to you soon.",
+"Hast du eine Spielidee oder einen Fehler gefunden? Schreib es unten auf, wir melden uns bald bei dir.",
+"¿Tienes una idea de juego o un error? Escríbelo abajo y te responderemos lo antes posible.",
+"Une idée de jeu ou un bug ? Écris-le ci-dessous, nous te répondrons rapidement.",
+"Tem uma ideia de jogo ou um erro? Escreva abaixo e responderemos o quanto antes.",
+"Есть идея игры или ошибка? Напиши ниже, мы скоро ответим.",
+"Hai un'idea per un gioco o un bug? Scrivilo qui sotto e ti risponderemo presto."
+],
+"Sana dönebilmemiz için iletişim bilgin (isteğe bağlı)": [
+"Your contact info so we can reply (optional)",
+"Deine Kontaktdaten für eine Antwort (optional)",
+"Tu contacto para poder responderte (opcional)",
+"Tes coordonnées pour te répondre (facultatif)",
+"Seu contato para podermos responder (opcional)",
+"Твои контакты для ответа (необязательно)",
+"I tuoi contatti per risponderti (facoltativo)"
+],
+"Instagram kullanıcı adın ya da e-posta": [
+"Your Instagram username or email",
+"Dein Instagram-Name oder E-Mail",
+"Tu usuario de Instagram o correo",
+"Ton pseudo Instagram ou e-mail",
+"Seu usuário do Instagram ou e-mail",
+"Твой ник в Instagram или e-mail",
+"Il tuo username Instagram o e-mail"
+],
+"Mesajın bize ulaştı. En kısa sürede sana dönüş yapacağız.": [
+"Your message reached us. We'll get back to you soon.",
+"Deine Nachricht ist bei uns angekommen. Wir melden uns bald.",
+"Tu mensaje nos llegó. Te responderemos pronto.",
+"Ton message nous est parvenu. Nous te répondrons rapidement.",
+"Sua mensagem chegou até nós. Responderemos em breve.",
+"Сообщение дошло до нас. Мы скоро ответим.",
+"Il tuo messaggio ci è arrivato. Ti risponderemo presto."
+],
+"Mesajın hazır ve kopyalandı. Instagram'da bize göndermen yeterli, en kısa sürede sana dönüş yapacağız.": [
+"Your message is ready and copied. Just send it to us on Instagram and we'll get back to you soon.",
+"Deine Nachricht ist bereit und kopiert. Schick sie uns einfach auf Instagram, wir melden uns bald.",
+"Tu mensaje está listo y copiado. Envíanoslo por Instagram y te responderemos pronto.",
+"Ton message est prêt et copié. Envoie-le-nous sur Instagram, nous te répondrons rapidement.",
+"Sua mensagem está pronta e copiada. Basta nos enviar pelo Instagram e responderemos em breve.",
+"Сообщение готово и скопировано. Просто отправь его нам в Instagram, мы скоро ответим.",
+"Il tuo messaggio è pronto e copiato. Inviacelo su Instagram e ti risponderemo presto."
+],
+"Mesajı Instagram'da gönder": [
+"Send the message on Instagram",
+"Nachricht auf Instagram senden",
+"Enviar el mensaje por Instagram",
+"Envoyer le message sur Instagram",
+"Enviar a mensagem no Instagram",
+"Отправить сообщение в Instagram",
+"Invia il messaggio su Instagram"
+],
+"Yeni mesaj yaz": [
+"Write a new message",
+"Neue Nachricht schreiben",
+"Escribir otro mensaje",
+"Écrire un nouveau message",
+"Escrever outra mensagem",
+"Написать новое сообщение",
+"Scrivi un altro messaggio"
+],
+"Bize Instagram'dan da ulaşabilirsin:": [
+"You can also reach us on Instagram:",
+"Du erreichst uns auch auf Instagram:",
+"También puedes escribirnos en Instagram:",
+"Tu peux aussi nous joindre sur Instagram :",
+"Você também pode falar com a gente no Instagram:",
+"Ещё нам можно написать в Instagram:",
+"Puoi contattarci anche su Instagram:"
 ]
 };
