@@ -4,7 +4,7 @@ function add(y){const lv=Math.min(1,maxH/4000),t=Math.random();const type=t<.12*
 G.run({key:'tirman',init(){p={x:G.W/2,y:G.H*.7,vy:-640,vx:0};cam=0;maxH=0;tx=p.x;plats=[{x:G.W/2-40,y:G.H*.8,w:80,type:'norm'}];topY=G.H*.8;while(topY>-G.H){topY-=G.rnd(55,95);add(topY)}},
  down(a){tx=a},move(a){tx=a},
  key_(e,d){if(!d)return;if(e.key==='ArrowLeft'){tx=p.x-120;return true}if(e.key==='ArrowRight'){tx=p.x+120;return true}},
- update(dt){const gap=Math.min(135,70+maxH/70);
+ update(dt){const gap=Math.min(118,70+maxH/70);
   p.vy+=1550*dt;p.y+=p.vy*dt;p.x+=(tx-p.x)*Math.min(1,dt*9);if(p.x<-10)p.x=G.W+10;if(p.x>G.W+10)p.x=-10;
   for(const q of plats){if(q.type==='move'){q.x+=q.dx*dt;if(q.x<0||q.x>G.W-q.w)q.dx*=-1}
    if(!q.gone&&p.vy>0&&p.y+14>q.y&&p.y+14<q.y+16+p.vy*dt&&p.x>q.x-8&&p.x<q.x+q.w+8){if(q.type==='break'){q.gone=true;G.sfx('bad')}else{p.vy=q.spring?-1100:-640;G.sfx(q.spring?'good':'jump')}}}
