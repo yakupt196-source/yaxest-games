@@ -5,7 +5,7 @@ window.YAXEST_GAMES=[
 {id:'damla',n:'Yaxest Damla',i:'💧',c:'#6aa8ff',k:'Bulmaca',d:'Aynı boydaki damlaları birleştir, büyüt. Kap taşmasın.',new:1},
 {id:'kir',n:'Yaxest Kır',i:'🧨',c:'#ffd23f',k:'Arcade',d:'Topu zıplat, tüm tuğlaları kır, hediyeleri yakala.',new:1},
 {id:'radar',n:'Yaxest Radar',i:'📡',c:'#3ddbb0',k:'Refleks',d:'Dönen çizgi hedefin üstündeyken dokun. Iskalama, sahte hedeflere kanma.',new:1},
-{id:'labirent',n:'Yaxest Labirent',i:'🌑',c:'#b388ff',k:'Arcade',d:'Karanlık labirentte çıkışı bul. Süreye karşı yarış.',new:1},
+{id:'labirent',n:'Yaxest Labirent',i:'🧭',c:'#b388ff',k:'Arcade',d:'Karanlık labirentte çıkışı bul. Süreye karşı yarış.',new:1},
 {id:'pota',n:'Yaxest Pota',i:'🏀',c:'#ff9f43',k:'Refleks',d:'Topu fırlat, potaya sok, seri yap.',new:1},
 {id:'mermi',n:'Yaxest Mermi',i:'💥',c:'#ff5c8a',k:'Refleks',d:'Kurşun yağmurundan kaç, ne kadar dayanabilirsin?',new:1},
 {id:'nota',n:'Yaxest Nota',i:'🎼',c:'#ffd23f',k:'Bulmaca',d:'Melodiyi dinle, tekrar çal. Her turda bir nota uzar.',new:1},

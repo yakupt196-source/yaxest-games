@@ -2393,5 +2393,185 @@ window.YAXEST_DICT={
 "Segure: agarre um gancho",
 "Удерживай: хватайся за крюк",
 "Tieni premuto: aggancia"
+],
+"Tarayıcıda · Ücretsiz · Kayıt yok": [
+"In your browser · Free · No sign-up",
+"Im Browser · Gratis · Ohne Anmeldung",
+"En el navegador · Gratis · Sin registro",
+"Dans le navigateur · Gratuit · Sans inscription",
+"No navegador · Grátis · Sem cadastro",
+"В браузере · Бесплатно · Без регистрации",
+"Nel browser · Gratis · Senza registrazione"
+],
+"Dakikalık oyunlar.": [
+"Minute-long games.",
+"Spiele für Minuten.",
+"Juegos de minutos.",
+"Des jeux d'une minute.",
+"Jogos de minutos.",
+"Игры на минуту.",
+"Giochi da un minuto."
+],
+"Sonsuz": [
+"Endless",
+"Endlose",
+"Infinitos",
+"Infinis",
+"Infinitos",
+"Бесконечные",
+"Infiniti"
+],
+"rekor.": [
+"records.",
+"Rekorde.",
+"récords.",
+"records.",
+"recordes.",
+"рекорды.",
+"record."
+],
+"Özgün mini oyunlar. Aç, oyna, rekorunu kır. İndirme yok, üyelik yok.": [
+"Original mini games. Open, play, beat your record. No download, no account.",
+"Originelle Minispiele. Öffnen, spielen, Rekord knacken. Kein Download, kein Konto.",
+"Minijuegos originales. Abre, juega, bate tu récord. Sin descargas ni cuentas.",
+"Des mini-jeux originaux. Ouvre, joue, bats ton record. Sans téléchargement ni compte.",
+"Minijogos originais. Abra, jogue, bata seu recorde. Sem download, sem conta.",
+"Оригинальные мини-игры. Открой, играй, побей рекорд. Без загрузок и аккаунтов.",
+"Minigiochi originali. Apri, gioca, batti il tuo record. Nessun download, nessun account."
+],
+"dil": [
+"languages",
+"Sprachen",
+"idiomas",
+"langues",
+"idiomas",
+"языков",
+"lingue"
+],
+"Bir simgeye dokun, oyuna ışınlan": [
+"Tap an icon to teleport into a game",
+"Tippe ein Symbol an und teleportiere dich ins Spiel",
+"Toca un icono y teletranspórtate al juego",
+"Touche une icône pour te téléporter dans le jeu",
+"Toque num ícone e teletransporte-se para o jogo",
+"Нажми на значок и телепортируйся в игру",
+"Tocca un'icona per teletrasportarti nel gioco"
+],
+"Pasaport": [
+"Passport",
+"Pass",
+"Pasaporte",
+"Passeport",
+"Passaporte",
+"Паспорт",
+"Passaporto"
+],
+"Yaxest Pasaportu": [
+"Yaxest Passport",
+"Yaxest-Pass",
+"Pasaporte Yaxest",
+"Passeport Yaxest",
+"Passaporte Yaxest",
+"Паспорт Yaxest",
+"Passaporto Yaxest"
+],
+"Rekorların": [
+"Your records",
+"Deine Rekorde",
+"Tus récords",
+"Tes records",
+"Seus recordes",
+"Твои рекорды",
+"I tuoi record"
+],
+"Henüz rekor yok. İlk oyununu oyna!": [
+"No records yet. Play your first game!",
+"Noch keine Rekorde. Spiel dein erstes Spiel!",
+"Aún no hay récords. ¡Juega tu primer juego!",
+"Pas encore de record. Joue ton premier jeu !",
+"Ainda sem recordes. Jogue seu primeiro jogo!",
+"Рекордов пока нет. Сыграй в первую игру!",
+"Ancora nessun record. Gioca il tuo primo gioco!"
+],
+"Yeni eklenenler": [
+"New arrivals",
+"Neu dabei",
+"Novedades",
+"Nouveautés",
+"Novidades",
+"Новинки",
+"Novità"
+],
+"Misafir": [
+"Guest",
+"Gast",
+"Invitado",
+"Invité",
+"Visitante",
+"Гость",
+"Ospite"
+],
+"Çaylak": [
+"Rookie",
+"Neuling",
+"Novato",
+"Débutant",
+"Novato",
+"Новичок",
+"Principiante"
+],
+"Kaşif": [
+"Explorer",
+"Entdecker",
+"Explorador",
+"Explorateur",
+"Explorador",
+"Исследователь",
+"Esploratore"
+],
+"Usta": [
+"Master",
+"Meister",
+"Maestro",
+"Maître",
+"Mestre",
+"Мастер",
+"Maestro"
+],
+"Efsane": [
+"Legend",
+"Legende",
+"Leyenda",
+"Légende",
+"Lenda",
+"Легенда",
+"Leggenda"
+],
+"{0} oyun daha, {1} olursun": [
+"{0} more games to become {1}",
+"Noch {0} Spiele bis {1}",
+"{0} juegos más para ser {1}",
+"Encore {0} jeux pour devenir {1}",
+"Mais {0} jogos para virar {1}",
+"Ещё {0} игр до звания «{1}»",
+"Ancora {0} giochi per diventare {1}"
+],
+"Hepsini keşfettin!": [
+"You discovered them all!",
+"Du hast alle entdeckt!",
+"¡Los descubriste todos!",
+"Tu les as tous découverts !",
+"Você descobriu todos!",
+"Ты открыл все!",
+"Li hai scoperti tutti!"
+],
+"Oyna →": [
+"Play →",
+"Spielen →",
+"Jugar →",
+"Jouer →",
+"Jogar →",
+"Играть →",
+"Gioca →"
 ]
 };
