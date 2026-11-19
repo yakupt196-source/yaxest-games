@@ -248,9 +248,9 @@ addEventListener('resize',size);size();if(!reduce)start()})();
 const FORM_ENDPOINT='';/* FormSubmit/Formspree adresi eklenirse mesajlar doğrudan e-postaya gelir */
 $('fm').addEventListener('submit',async e=>{e.preventDefault();const tur=(document.querySelector('input[name=tur]:checked')||{}).value||'ÖNERİ';const m0=$('fmsg').value.trim();if(!m0)return;const m='['+tur+'] '+m0;const c=$('fcon').value.trim();let sent=false;
  if(FORM_ENDPOINT){try{const r=await fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({mesaj:m,iletisim:c,sayfa:location.href})});sent=r.ok}catch(er){}}
- if(!sent){try{await navigator.clipboard.writeText(m+(c?'\n\nİletişim: '+c:''))}catch(er){}}
+ const full=m+(c?'\n\nİletişim: '+c:'');if(!sent){try{navigator.clipboard.writeText(full).catch(()=>{})}catch(er){}}
  $('figl').href='https://ig.me/m/yaxeststudio?text='+encodeURIComponent((m+(c?' | İletişim: '+c:'')).slice(0,600));$('fok1').hidden=!sent;$('fok2').hidden=sent;$('figl').hidden=sent;$('fm').hidden=true;$('fok').hidden=false;try{localStorage.setItem('yx-msg',String(Date.now()))}catch(er){}
- if(!sent&&matchMedia('(pointer:coarse)').matches){$('fok3').hidden=false;setTimeout(()=>{location.href=$('figl').href},700)}});
+ if(!sent&&matchMedia('(pointer:coarse)').matches){$('fok3').hidden=false;location.href=$('figl').href}});
 $('fnew').onclick=()=>{$('fmsg').value='';$('fm').hidden=false;$('fok').hidden=true};
 let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
 $('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};
