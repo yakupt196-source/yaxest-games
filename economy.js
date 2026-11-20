@@ -8,7 +8,7 @@ var cur=parts.pop()||'';
 var GL=window.YAXEST_GAMES||[];var isGame=GL.some(function(g){return g.id===cur});
 
 /* ---------- katalog ---------- */
-var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170],['yaxest','Yaxest',200],['cemile','Cemile',200],['almin','Almin',200]];
+var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170],['cemile','★ Cemile',600],['almin','★ Almin',800],['yaxestp','★ Yaxest (Palto)',1200],['yaxest','★ Yaxest',2000]];
 var COL=[['#ffd23f',0],['#ff5c8a',0],['#3ddbb0',0],['#6aa8ff',12],['#b388ff',12],['#ff9f43',12],['#3df0ff',20],['#f1f1f1',20],['#c3cde0',25]];
 var HAT=[['cap','Kep',20],['party','Parti Şapkası',30],['head','Kulaklık',40],['top','Silindir',50],['wiz','Büyücü Şapkası',70],['crown','Taç',120]];
 var FACE=[['glasses','Gözlük',20],['mustache','Bıyık',25],['mask','Maske',35],['shades','Güneş Gözlüğü',45],['star','Yıldız Gözlük',60]];
@@ -68,7 +68,7 @@ function rgb(h){h=h.replace('#','');return[parseInt(h.substr(0,2),16),parseInt(h
 function shade(h,p){var c=rgb(h),t=p<0?0:255,q=Math.abs(p);return'#'+c.map(function(v){return('0'+Math.round(v+(t-v)*q).toString(16)).slice(-2)}).join('')}
 
 /* ---------- karakter çizimi ---------- */
-var POS={blob:{T:30,E:52,N:77,dx:12},cat:{T:30,E:52,N:77,dx:13},robo:{T:32,E:53,N:84,dx:10},ghost:{T:24,E:48,N:72,dx:11},alien:{T:18,E:46,N:72,dx:12},dragon:{T:30,E:52,N:77,dx:12},elf:{T:18,E:46,N:69,dx:11},hana:{T:16,E:46,N:69,dx:11},mika:{T:16,E:46,N:69,dx:11},yuki:{T:16,E:46,N:69,dx:11},ren:{T:12,E:46,N:69,dx:11},sora:{T:16,E:46,N:69,dx:11},taro:{T:14,E:46,N:69,dx:11},vael:{T:16,E:46,N:69,dx:11},vaela:{T:16,E:46,N:69,dx:11},yaxest:{T:14,E:46,N:69,dx:11},cemile:{T:30,E:52,N:77,dx:12},almin:{T:14,E:46,N:69,dx:11}};
+var POS={blob:{T:30,E:52,N:77,dx:12},cat:{T:30,E:52,N:77,dx:13},robo:{T:32,E:53,N:84,dx:10},ghost:{T:24,E:48,N:72,dx:11},alien:{T:18,E:46,N:72,dx:12},dragon:{T:30,E:52,N:77,dx:12},elf:{T:18,E:46,N:69,dx:11},hana:{T:16,E:46,N:69,dx:11},mika:{T:16,E:46,N:69,dx:11},yuki:{T:16,E:46,N:69,dx:11},ren:{T:12,E:46,N:69,dx:11},sora:{T:16,E:46,N:69,dx:11},taro:{T:14,E:46,N:69,dx:11},vael:{T:16,E:46,N:69,dx:11},vaela:{T:16,E:46,N:69,dx:11},yaxest:{T:14,E:46,N:69,dx:11},cemile:{T:30,E:52,N:77,dx:12},almin:{T:14,E:46,N:69,dx:11},yaxestp:{T:14,E:46,N:69,dx:11}};
 function eyes(y,dx,r,m){var s='';[50-dx,50+dx].forEach(function(x){s+='<g class="yx-e"><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#fff"/><circle cx="'+(x+(m==='s'?0:1))+'" cy="'+(y+(m==='s'?1.6:.6))+'" r="'+(r*.55)+'" fill="#1b1535"/><circle cx="'+(x+1.6)+'" cy="'+(y-1.6)+'" r="'+(r*.2)+'" fill="#fff"/></g>'});
   if(m==='s')s+='<path d="M'+(50-dx-r)+' '+(y-r-1)+'L'+(50-dx+r)+' '+(y-r+2)+'M'+(50+dx-r)+' '+(y-r+2)+'L'+(50+dx+r)+' '+(y-r-1)+'" stroke="#1b1535" stroke-width="2.2" stroke-linecap="round"/>';return s}
 function mouth(y,m){if(m==='h')return'<path d="M43 '+y+'Q50 '+(y+13)+' 57 '+y+'Z" fill="#7a1f3d"/><path d="M46 '+(y+7)+'Q50 '+(y+4)+' 54 '+(y+7)+'" fill="#ff7a9a"/>';
@@ -137,6 +137,10 @@ BODY.yaxest=human({out:'#8e9aaf',iris:'#a8742c',skin:'#e9b17f',
  outx:function(){return'<path d="M36 71Q50 79 64 71L62 76Q50 83 38 76Z" fill="#6f7a8f"/><path d="M45 74L46 86M55 74L54 86" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><rect x="38" y="85" width="24" height="7" rx="3" fill="#6f7a8f"/>'},
  back:function(){return curls([[22,50],[78,50],[24,32],[76,32],[34,18],[66,18],[50,13]],'#2b1a10',9)},
  front:function(){return'<path d="M25 36Q25 9 50 9Q75 9 75 36Q50 29 25 36Z" fill="#3d4a63" stroke="#1b1530" stroke-width="1.2"/><rect x="23" y="30" width="54" height="9" rx="4.4" fill="#2f3a52" stroke="#1b1530" stroke-width="1.2"/><path d="M30 31V38M38 31V38M46 31V38M54 31V38M62 31V38M70 31V38" stroke="#4d5c7a" stroke-width="1"/><circle cx="50" cy="8" r="5" fill="#5a6a88" stroke="#1b1530" stroke-width="1.2"/>'+curls([[22,44],[78,44],[27,41],[73,41]],'#2b1a10',6.4)+'<path d="M44 57Q50 53 56 57Q50 55.4 44 57Z" fill="#2b1a10"/>'}});
+BODY.yaxestp=human({out:'#17171f',iris:'#a8742c',skin:'#e9b17f',
+ outx:function(){return'<rect x="42" y="68" width="16" height="9" rx="4" fill="#f4f4f6" stroke="#cfd2e0" stroke-width="1"/><path d="M42 77L50 92L58 77L56 92H44Z" fill="#f4f4f6"/><path d="M36 74L47 92M64 74L53 92" stroke="#3a3a48" stroke-width="1.6"/><circle cx="50" cy="84" r="1.2" fill="#ffd23f"/>'},
+ back:function(){return curls([[22,50],[78,50],[24,32],[76,32],[34,18],[66,18],[50,13]],'#2b1a10',9)},
+ front:function(){return curls([[30,22],[42,15],[54,13],[66,18],[72,28],[26,30],[22,44],[78,44]],'#2b1a10',9)+'<path d="M43 61Q50 69 57 61Q56 68 50 71Q44 68 43 61Z" fill="#2b1a10"/><path d="M44 57Q50 53 56 57Q50 55.4 44 57Z" fill="#2b1a10"/>'}});
 BODY.almin=human({out:'#1b1b24',iris:'#9b5cff',
  outx:function(){return'<path d="M50 70V92" stroke="#cfd2e0" stroke-width="1.4"/><path d="M33 80H44M56 86H67" stroke="#9b5cff" stroke-width="2.4"/><path d="M40 69L50 80L38 74Z M60 69L50 80L62 74Z" fill="#2b2b36"/><path d="M42 70Q50 76 58 70" stroke="#1b1b24" stroke-width="3" fill="none"/><circle cx="50" cy="74.6" r="1.6" fill="#ffd23f"/>'},
  back:function(){return'<path d="M22 44Q19 11 50 11Q81 11 78 44L84 92Q70 100 62 82L38 82Q30 100 16 92Z" fill="#7a3fd0"/>'},
