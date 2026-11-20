@@ -40,7 +40,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #hpb{background:#ff5b6e}#xpb{background:#5cb4ff}.top small{color:var(--mute);font-size:.72rem}
 .tr{position:absolute;right:max(8px,env(safe-area-inset-right));top:max(6px,env(safe-area-inset-top));display:flex;gap:6px;align-items:flex-start}
 .tr .ib{width:44px;height:44px;border-radius:12px;background:var(--pan);border:1px solid var(--line);color:#fff;font-size:1.25rem}
-#mm{width:96px;height:96px;border-radius:12px;border:1px solid var(--line);background:#000;pointer-events:none}
+#mm{width:128px;height:128px;border-radius:14px;border:2px solid rgba(255,255,255,.4);background:#000;cursor:pointer;image-rendering:pixelated}#mapc{display:block;margin:6px auto;height:min(58vh,480px);aspect-ratio:1;max-width:100%;border-radius:12px;border:1px solid var(--line);background:#000}
 #joy{position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:132px;height:132px;border-radius:50%;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);touch-action:none}
 #joy i{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,255,255,.28)}
 #acts{position:absolute;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));width:230px;height:200px}
@@ -59,7 +59,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #rot{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0b0820;text-align:center;padding:24px}
 #rot .ph{font-size:3rem;animation:rt 2s ease-in-out infinite}@keyframes rt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
 @media (hover:hover) and (pointer:fine){#joy{display:none}}
-@media (max-height:430px){#mm{width:78px;height:78px}.top{min-width:180px}#joy{width:112px;height:112px}}
+@media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:180px}#joy{width:112px;height:112px}}
 </style>
 </head>
 <body>
@@ -90,7 +90,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="hud">
  <div class="top"><div class="av" id="hav"></div><div style="min-width:130px"><b id="hn"></b> <small id="hl"></small><div class="bar"><i id="hpb"></i></div><div class="bar"><i id="xpb"></i></div></div></div>
- <div class="tr"><canvas id="mm" width="96" height="96"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="imenu" type="button" aria-label="Menü">☰</button></div>
+ <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="imenu" type="button" aria-label="Menü">☰</button></div>
  <div id="joy"><i id="jk"></i></div>
  <div id="log"></div>
  <div id="acts"><div class="ab" id="b0">⚔️</div><div class="ab" id="b1"></div><div class="ab" id="b2"></div><div class="ab" id="b3"></div><div class="ab" id="bi">✋<small>E</small></div></div>
@@ -101,6 +101,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div class="pan" id="p-chat"><div class="card"><h2>💬 Sohbet</h2>
  <div class="tabs" id="ctabs"></div><div id="cmsgs" style="min-height:120px;max-height:40vh;overflow:auto;font-size:.88rem;line-height:1.5"></div>
  <p class="sub" id="cnote" style="margin:8px 0 0"></p><div class="row"><button class="btn alt" data-close type="button">Kapat</button></div></div></div>
+<div class="pan" id="p-map"><div class="card" style="width:min(94vw,640px)"><h2>🗺️ Harita</h2><canvas id="mapc" width="480" height="480"></canvas><p class="sub" style="font-size:.78rem">🟡 Kasaba (güvenli) · 🔴 PvP bölgesi · 🟣 Zindan girişi · ⛏️ Maden Ocağı · Kapatmak için M</p><button class="btn" data-close type="button">Kapat</button></div></div>
 <div class="pan" id="p-menu"><div class="card"><h2>☰ Menü</h2><div class="row" style="flex-direction:column"><button class="btn" data-close type="button">Oyuna dön</button><button class="btn alt" id="mfs" type="button">Tam ekran aç/kapat</button><button class="btn alt" id="mchar" type="button">Karakter ekranına dön</button><a class="btn alt" href="../" style="display:grid;place-items:center;text-decoration:none">Yaxest Games ana sayfa</a></div></div></div>
 
 <div id="rot"><div class="ph">📱</div><h1>Cihazını yatay çevir</h1><p class="sub">Yaxest Diyarı yatay ekranda oynanır.</p></div>
