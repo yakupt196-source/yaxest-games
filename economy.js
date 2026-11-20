@@ -8,7 +8,7 @@ var cur=parts.pop()||'';
 var GL=window.YAXEST_GAMES||[];var isGame=GL.some(function(g){return g.id===cur});
 
 /* ---------- katalog ---------- */
-var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170],['cemile','★ Cemile',600],['almin','★ Almin',800],['ninja','★ Siber Ninja',1000],['cadi','★ Ateş Cadısı',1100],['samuray','★ Neon Samuray',1300],['prenses','★ Kozmik Prenses',1500],['buz','★ Buz Kraliçesi',1700],['sultan','★ Altın Sultan',1900],['zilan','★ Zilan-chan',1200],['atacan','★ Atacan',1400],['suayb','★ Şuayb',1400],['yaxestp','★ Yaxest (Palto)',2500],['yaxest','★ Yaxest',3000]];
+var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170],['cemile','★ Cemile',600],['almin','★ Almin',800],['ninja','★ Siber Ninja',1000],['cadi','★ Ateş Cadısı',1100],['samuray','★ Neon Samuray',1300],['prenses','★ Kozmik Prenses',1500],['buz','★ Buz Kraliçesi',1700],['sultan','★ Altın Sultan',1900],['zilan','★ Zilan-chan (Gözlüklü)',1200],['zilanng','★ Zilan-chan (Gözlüksüz)',1200],['atacan','★ Atacan',1400],['suayb','★ Şuayb',1400],['yaxestp','★ Yaxest (Palto)',2500],['yaxest','★ Yaxest',3000]];
 var COL=[['#ffd23f',0],['#ff5c8a',0],['#3ddbb0',0],['#6aa8ff',12],['#b388ff',12],['#ff9f43',12],['#3df0ff',20],['#f1f1f1',20],['#c3cde0',25]];
 var HAT=[['cap','Kep',20],['party','Parti Şapkası',30],['head','Kulaklık',40],['top','Silindir',50],['wiz','Büyücü Şapkası',70],['crown','Taç',120]];
 var FACE=[['glasses','Gözlük',20],['mustache','Bıyık',25],['mask','Maske',35],['shades','Güneş Gözlüğü',45],['star','Yıldız Gözlük',60]];
@@ -44,7 +44,8 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function emit(k,x){refresh();try{window.dispatchEvent(new CustomEvent('yx-eco',{detail:{k:k,x:x}}))}catch(e){}}
 addEventListener('storage',function(e){if(e.key===KEY){S=load();applyTheme(S.eq.th);emit('sync')}});
 
-function owns(id){var it=ITEMS[id];return !!it&&(it.price===0||!!S.own[id])}
+var ALI={'sp:zilan':'sp:zilanng','sp:zilanng':'sp:zilan'};
+function owns(id){var it=ITEMS[id];return !!it&&(it.price===0||!!S.own[id]||!!(ALI[id]&&S.own[ALI[id]]))}
 function price(p){return p<=0?0:Math.max(1,Math.round(p*(1-S.pk.tuccar*.05)))}
 function mult(){return(1+S.pk.sans*.1)*(S.boost>Date.now()?2:1)}
 function level(){return 1+Math.floor(Math.sqrt(S.t/12))}
