@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://formsubmit.co wss://broker.emqx.io:8084 wss://broker.hivemq.com:8884 wss://test.mosquitto.org:8081; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+<meta name="copyright" content="© 2026 Yakup Turhan (Yaxest). Tüm hakları saklıdır.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0820">
+<title>Yaxest Diyarı (Alfa): çok oyunculu açık dünya aksiyon RPG | Yaxest Games</title>
+<meta name="description" content="Yaxest Diyarı: sınıfını seç, canavar kes, maden çıkar, odun kes, zindanları fethet. Tarayıcıda, ücretsiz, yukarıdan görünümlü açık dünya aksiyon RPG (alfa).">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&display=swap">
+<style>
+:root{--bg:#0b0820;--ink:#f4f1ff;--mute:#a9a3cf;--yel:#ffd23f;--pan:rgba(20,16,43,.92);--line:rgba(255,255,255,.18)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Chakra Petch",system-ui,sans-serif;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+#cv{position:fixed;inset:0;width:100%;height:100%;display:none}
+.scr{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:max(12px,env(safe-area-inset-top)) 16px;background:radial-gradient(circle at 50% 30%,#2a1f66 0,#0b0820 70%);overflow:auto;touch-action:pan-y}
+.scr.on{display:flex}
+.card{width:min(94vw,720px);background:var(--pan);border:1.5px solid var(--line);border-radius:20px;padding:18px 20px;max-height:96vh;overflow:auto}
+h1{margin:0 0 4px;font-size:clamp(1.5rem,5vw,2.3rem);letter-spacing:.5px}h1 b{color:var(--yel)}
+.sub{color:var(--mute);font-size:.9rem;margin:0 0 12px}
+label{display:block;font-size:.8rem;color:var(--mute);margin:10px 0 4px}
+input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:#161232;color:#fff;font:600 1rem inherit;padding:0 12px;user-select:text;-webkit-user-select:text}
+.btn{min-height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--yel);color:#1a1530;font:700 1rem "Chakra Petch",sans-serif;cursor:pointer}
+.btn.alt{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid var(--line)}.btn:disabled{opacity:.45}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.err{color:#ff8f8f;font-size:.88rem;min-height:1.2em;margin-top:8px}
+.cls{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin-top:6px}
+.cls button{background:#161232;border:1.5px solid var(--line);border-radius:14px;padding:10px 6px;color:#fff;font:inherit;cursor:pointer;text-align:center}
+.cls button[aria-pressed=true]{border-color:var(--yel);background:#2a2150}
+.cls .ic{font-size:1.8rem}.cls b{display:block;font-size:.95rem}.cls small{color:var(--mute);font-size:.72rem;display:block;line-height:1.25}
+.det{margin-top:10px;background:#161232;border-radius:12px;padding:10px 12px;font-size:.85rem;line-height:1.45}
+.det .sk{display:flex;gap:8px;align-items:flex-start;margin-top:4px}.det .sk span{font-size:1.2rem}
+#hud{position:fixed;inset:0;pointer-events:none;display:none}
+#hud.on{display:block}#hud>*{pointer-events:auto}
+.top{position:absolute;left:max(8px,env(safe-area-inset-left));top:max(6px,env(safe-area-inset-top));display:flex;gap:8px;align-items:center;background:var(--pan);border:1px solid var(--line);border-radius:14px;padding:6px 10px;min-width:210px}
+.top .av{width:38px;height:38px}.top .av svg{width:100%;height:100%}
+.bar{height:9px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;width:50%}
+#hpb{background:#ff5b6e}#xpb{background:#5cb4ff}.top small{color:var(--mute);font-size:.72rem}
+.tr{position:absolute;right:max(8px,env(safe-area-inset-right));top:max(6px,env(safe-area-inset-top));display:flex;gap:6px;align-items:flex-start}
+.tr .ib{width:44px;height:44px;border-radius:12px;background:var(--pan);border:1px solid var(--line);color:#fff;font-size:1.25rem}
+#mm{width:96px;height:96px;border-radius:12px;border:1px solid var(--line);background:#000;pointer-events:none}
+#joy{position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));width:132px;height:132px;border-radius:50%;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);touch-action:none}
+#joy i{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,255,255,.28)}
+#acts{position:absolute;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));width:230px;height:200px}
+.ab{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:rgba(20,16,43,.82);color:#fff;font-size:1.4rem;display:grid;place-items:center;touch-action:none;overflow:hidden}
+.ab small{position:absolute;bottom:3px;font-size:.58rem;color:#cfc9f5}.ab .cd{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);height:0}
+#b0{right:0;bottom:0;width:84px;height:84px;font-size:2rem;border-color:var(--yel)}
+#b1{right:96px;bottom:6px;width:62px;height:62px}#b2{right:74px;bottom:76px;width:62px;height:62px}#b3{right:6px;bottom:100px;width:62px;height:62px}
+#bi{right:90px;bottom:140px;width:60px;height:60px;display:none;border-color:#5be39a;background:rgba(40,120,80,.85)}
+#log{position:absolute;left:max(160px,calc(env(safe-area-inset-left) + 160px));bottom:max(10px,env(safe-area-inset-bottom));width:min(34vw,330px);max-height:96px;overflow:hidden;font-size:.72rem;color:#d8d3ff;line-height:1.35;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;text-shadow:0 1px 2px #000}
+#log div{opacity:.95}
+.pan{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,3,15,.6);z-index:5;touch-action:pan-y}
+.pan.on{display:flex}.pan .card{width:min(92vw,560px)}
+.pan h2{margin:0 0 8px;font-size:1.2rem;color:var(--yel)}
+.it{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.9rem}.it .t{flex:1}.it small{color:var(--mute)}
+.tabs{display:flex;gap:6px;margin-bottom:8px}.tabs button{flex:1;min-height:38px;border-radius:10px;border:1.5px solid var(--line);background:#161232;color:#fff;font:inherit;font-size:.82rem}.tabs button[aria-pressed=true]{border-color:var(--yel)}
+#rot{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0b0820;text-align:center;padding:24px}
+#rot .ph{font-size:3rem;animation:rt 2s ease-in-out infinite}@keyframes rt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (max-height:430px){#mm{width:78px;height:78px}.top{min-width:180px}#joy{width:112px;height:112px}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<div class="scr on" id="s-load"><div class="card"><h1>Yaxest <b>Diyarı</b></h1><p class="sub">Yükleniyor…</p></div></div>
+
+<div class="scr" id="s-gate"><div class="card">
+ <h1>Yaxest <b>Diyarı</b> <small style="font-size:.5em;color:var(--mute)">ALFA</small></h1>
+ <p class="sub">Çok oyunculu açık dünya aksiyon RPG. Oynamak için Yaxest hesabı gerekir; ilerlemen hesabına bağlı kalır.</p>
+ <label for="em">E-posta</label><input id="em" type="email" autocomplete="email" inputmode="email">
+ <label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password">
+ <div class="err" id="gerr"></div>
+ <div class="row"><button class="btn" id="gin" type="button">Giriş yap</button><button class="btn alt" id="gup" type="button">Kayıt ol</button><a class="btn alt" href="../" style="display:inline-grid;place-items:center;text-decoration:none">← Yaxest Games</a></div>
+ <p class="sub" style="margin-top:12px">Google ile giriş yakında eklenecek.</p>
+</div></div>
+
+<div class="scr" id="s-char"><div class="card">
+ <h1>Karakterin</h1><p class="sub" id="who"></p>
+ <div id="cnew">
+  <label for="nick">Takma ad (3–16 harf/rakam)</label><input id="nick" maxlength="16" autocomplete="off">
+  <label>Sınıfını seç</label><div class="cls" id="cls"></div><div class="det" id="det"></div>
+  <div class="err" id="cerr"></div>
+  <div class="row"><button class="btn" id="cmk" type="button">Karakteri oluştur</button><button class="btn alt" id="cout" type="button">Çıkış yap</button></div>
+ </div>
+ <div id="cold" style="display:none"></div>
+</div></div>
+
+<div id="hud">
+ <div class="top"><div class="av" id="hav"></div><div style="min-width:130px"><b id="hn"></b> <small id="hl"></small><div class="bar"><i id="hpb"></i></div><div class="bar"><i id="xpb"></i></div></div></div>
+ <div class="tr"><canvas id="mm" width="96" height="96"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="imenu" type="button" aria-label="Menü">☰</button></div>
+ <div id="joy"><i id="jk"></i></div>
+ <div id="log"></div>
+ <div id="acts"><div class="ab" id="b0">⚔️</div><div class="ab" id="b1"></div><div class="ab" id="b2"></div><div class="ab" id="b3"></div><div class="ab" id="bi">✋<small>E</small></div></div>
+</div>
+
+<div class="pan" id="p-bag"><div class="card"><h2>🎒 Çanta ve Gelişim</h2><div id="bagc"></div><div class="row"><button class="btn alt" data-close type="button">Kapat</button></div></div></div>
+<div class="pan" id="p-npc"><div class="card"><h2 id="npt"></h2><div id="npc"></div><div class="row"><button class="btn alt" data-close type="button">Kapat</button></div></div></div>
+<div class="pan" id="p-chat"><div class="card"><h2>💬 Sohbet</h2>
+ <div class="tabs" id="ctabs"></div><div id="cmsgs" style="min-height:120px;max-height:40vh;overflow:auto;font-size:.88rem;line-height:1.5"></div>
+ <p class="sub" id="cnote" style="margin:8px 0 0"></p><div class="row"><button class="btn alt" data-close type="button">Kapat</button></div></div></div>
+<div class="pan" id="p-menu"><div class="card"><h2>☰ Menü</h2><div class="row" style="flex-direction:column"><button class="btn" data-close type="button">Oyuna dön</button><button class="btn alt" id="mfs" type="button">Tam ekran aç/kapat</button><button class="btn alt" id="mchar" type="button">Karakter ekranına dön</button><a class="btn alt" href="../" style="display:grid;place-items:center;text-decoration:none">Yaxest Games ana sayfa</a></div></div></div>
+
+<div id="rot"><div class="ph">📱</div><h1>Cihazını yatay çevir</h1><p class="sub">Yaxest Diyarı yatay ekranda oynanır.</p></div>
+
+<script src="../account-config.js"></script><script src="../account.js"></script><script src="../i18n-dict.js"></script><script src="../economy.js"></script>
+<script src="sim.js"></script><script src="game.js"></script>
+</body></html>
