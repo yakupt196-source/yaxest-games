@@ -5894,5 +5894,23 @@ window.YAXEST_DICT={
 "Não perca seu progresso: crie uma conta",
 "Не потеряй прогресс: создай аккаунт",
 "Non perdere i progressi: crea un account"
+],
+"Tarayıcıda · Ücretsiz · Kayıt zorunlu değil": [
+"In your browser · Free · No sign-up needed",
+"Im Browser · Gratis · Ohne Anmeldung nutzbar",
+"En el navegador · Gratis · Sin registro obligatorio",
+"Dans le navigateur · Gratuit · Sans inscription obligatoire",
+"No navegador · Grátis · Sem cadastro obrigatório",
+"В браузере · Бесплатно · Без обязательной регистрации",
+"Nel browser · Gratis · Senza registrazione obbligatoria"
+],
+"Özgün mini oyunlar. Aç, oyna, rekorunu kır. İndirme yok, hesap isteğe bağlı.": [
+"Original mini games. Open, play, beat your record. No download, account optional.",
+"Originelle Minispiele. Öffnen, spielen, Rekord knacken. Kein Download, Konto optional.",
+"Minijuegos originales. Abre, juega, bate tu récord. Sin descargas, cuenta opcional.",
+"Mini-jeux originaux. Ouvre, joue, bats ton record. Sans téléchargement, compte facultatif.",
+"Minijogos originais. Abra, jogue, bata seu recorde. Sem download, conta opcional.",
+"Оригинальные мини-игры. Открой, играй, побей рекорд. Без загрузок, аккаунт по желанию.",
+"Mini giochi originali. Apri, gioca, batti il record. Nessun download, account facoltativo."
 ]
 };
