@@ -58,6 +58,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 .tabs{display:flex;gap:6px;margin-bottom:8px}.tabs button{flex:1;min-height:38px;border-radius:10px;border:1.5px solid var(--line);background:#161232;color:#fff;font:inherit;font-size:.82rem}.tabs button[aria-pressed=true]{border-color:var(--yel)}
 #rot{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0b0820;text-align:center;padding:24px}
 #rot .ph{font-size:3rem;animation:rt 2s ease-in-out infinite}@keyframes rt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait){#mm{width:112px;height:112px;order:5}.top{min-width:0;max-width:calc(100vw - 160px)}.tr{gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:140px}.ib{width:40px;height:40px}.ib .yi{width:22px;height:22px}#zn{top:62px!important;left:10px!important;transform:none!important;font-size:.7rem}#log{bottom:186px!important;left:10px!important;right:auto!important;max-width:54vw;font-size:.7rem}#joy{width:112px;height:112px}}
 @media (hover:hover) and (pointer:fine){#joy{display:none}}
 @media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:180px}#joy{width:112px;height:112px}}
 </style>
@@ -104,7 +105,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div class="pan" id="p-map"><div class="card" style="width:min(94vw,640px)"><h2>🗺️ Harita</h2><canvas id="mapc" width="480" height="480"></canvas><p class="sub" style="font-size:.78rem">🟡 Kasaba (güvenli) · 🔴 PvP bölgesi · 🟣 Zindan girişi · ⛏️ Maden Ocağı · Kapatmak için M</p><button class="btn" data-close type="button">Kapat</button></div></div>
 <div class="pan" id="p-menu"><div class="card"><h2>☰ Menü</h2><div class="row" style="flex-direction:column"><button class="btn" data-close type="button">Oyuna dön</button><button class="btn alt" id="mfs" type="button">Tam ekran aç/kapat</button><button class="btn alt" id="mchar" type="button">Karakter ekranına dön</button><a class="btn alt" href="../" style="display:grid;place-items:center;text-decoration:none">Yaxest Games ana sayfa</a></div></div></div>
 
-<div id="rot"><div class="ph">📱</div><h1>Cihazını yatay çevir</h1><p class="sub">Yaxest Diyarı yatay ekranda oynanır.</p></div>
+<div id="rot"><div class="ph">📱</div><h1>Cihazını yatay çevir</h1><p class="sub">Yaxest Diyarı yatay ekranda daha rahat oynanır. Telefonun ekran döndürme kilidi açık olmalı.</p><button class="btn" id="rotgo" type="button" style="margin-top:8px">Dikey oynamaya devam et</button></div>
 
 <script src="../account-config.js"></script><script src="../account.js"></script><script src="../i18n-dict.js"></script><script src="../economy.js"></script>
 <script src="sim.js"></script><script src="art.js"></script><script src="game.js"></script>
