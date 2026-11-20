@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yakupt196-source.github.io/yaxest-games/sitemap.xml
+Sitemap: https://yaxestgames.com/sitemap.xml

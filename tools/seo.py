@@ -2,7 +2,7 @@
 """Arama motoru (SEO) etiketleri, sitemap.xml ve robots.txt üretir. Yeni oyun ekleyince: python3 tools/seo.py"""
 import re, json, os, html
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE = os.environ.get('YX_BASE', 'https://yakupt196-source.github.io/yaxest-games/')
+BASE = os.environ.get('YX_BASE', 'https://yaxestgames.com/')
 src = open(f'{ROOT}/games.js', encoding='utf-8').read()
 games = []
 for m in re.finditer(r"\{id:'([a-z]+)',n:'([^']+)',i:'([^']*)',c:'[^']*',k:'([^']+)',d:(?:'((?:[^'\\]|\\.)*)'|\"([^\"]*)\")", src):

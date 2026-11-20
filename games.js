@@ -1,6 +1,6 @@
 /* Yaxest koruma: yalnızca resmî adreslerde çalışır (kopya sitelere karşı caydırıcı). */
 (function(){try{var h=location.hostname;if(!h||location.protocol==='file:'||/^(localhost|127\.0\.0\.1)$/.test(h)||/(^|\.)yaxest(games)?\.(com|net|app|games)$/.test(h)||h==='yakupt196-source.github.io')return;
-document.documentElement.innerHTML='<body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#0b0820;color:#fff;font-family:system-ui;text-align:center;padding:24px"><div><div style="font-size:3rem">🎮</div><h1>Yaxest Games</h1><p>Bu kopya yetkili değil. Resmî site:</p><p><a style="color:#ffd23f;font-weight:800" href="https://yakupt196-source.github.io/yaxest-games/">yakupt196-source.github.io/yaxest-games</a></p></div></body>';throw 0}catch(e){if(e===0)throw e}})();
+document.documentElement.innerHTML='<body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#0b0820;color:#fff;font-family:system-ui;text-align:center;padding:24px"><div><div style="font-size:3rem">🎮</div><h1>Yaxest Games</h1><p>Bu kopya yetkili değil. Resmî site:</p><p><a style="color:#ffd23f;font-weight:800" href="https://yaxestgames.com/">yakupt196-source.github.io/yaxest-games</a></p></div></body>';throw 0}catch(e){if(e===0)throw e}})();
 // Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
 window.YAXEST_GAMES=[
 {id:'kafe',n:'Yaxest Kafe',i:'☕',c:'#ff9f43',k:'Tycoon',d:'Çay ocağından dünya zincirine: kafeni büyüt, çevrimdışıyken de kazan, yeniden doğ.',new:1},
