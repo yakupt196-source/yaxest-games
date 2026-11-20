@@ -25,17 +25,33 @@ function clsDet(){$('det').innerHTML=detHtml(selCls)}
 function buildCls(){$('cls').innerHTML=Object.keys(Y.CLASSES).map(function(k){var c=Y.CLASSES[k];return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===selCls)+'"><span class="ic">'+c.ic+'</span><b>'+esc(c.n)+'</b><small>'+esc(c.role)+'</small></button>'}).join('');
   $('cls').querySelectorAll('button').forEach(function(b){b.onclick=function(){selCls=b.dataset.k;buildCls();clsDet()}});clsDet()}
 function clsCards(){return Object.keys(Y.CLASSES).map(function(k){var c=Y.CLASSES[k],lv=k===P.cls?P.lv:(P.cl[k]?P.cl[k].lv:0);return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===P.cls)+'"><span class="ic">'+c.ic+'</span><b>'+esc(c.n)+'</b><small>'+(lv?'Seviye '+lv:'Yeni · henüz denenmedi')+'</small></button>'}).join('')}
-function drawCold(){var c=Y.CLASSES[P.cls];
+function drawCold(){drawCold0();drawNickFix()}
+function drawCold0(){var c=Y.CLASSES[P.cls];
   $('cold').innerHTML='<div class="it"><span style="font-size:2rem">'+c.ic+'</span><div class="t"><b>'+esc(P.nick)+'</b><br><small>'+esc(c.n)+' · Seviye '+P.lv+' · 🪙 '+P.gold+'</small></div></div><div style="margin:10px 0 2px;font-size:.84rem;color:var(--mute)">Sınıfını seç. Her sınıfın seviyesi, silah/zırhı ve rünü ayrı saklanır; altın ve malzemeler ortaktır.</div><div class="cls" id="cls2">'+clsCards()+'</div><div class="det" id="det2">'+detHtml(P.cls)+'</div><div class="row"><button class="btn" id="cgo" type="button">Oyuna gir</button><button class="btn alt" id="cdel" type="button">Karakteri sil</button><button class="btn alt" id="cout2" type="button">Çıkış yap</button></div><div class="err" id="cerr2"></div>';
   $('cls2').querySelectorAll('button').forEach(function(b){b.onclick=function(){switchCls(b.dataset.k);drawCold()}});
-  $('cgo').onclick=enter;$('cout2').onclick=function(){YXAcct.signOut();show('s-gate')};
-  var armed=0;$('cdel').onclick=function(){if(!armed){armed=1;$('cdel').textContent='Emin misin? Tekrar bas';setTimeout(function(){armed=0;if($('cdel'))$('cdel').textContent='Karakteri sil'},3500);return}try{localStorage.removeItem(KEY+acct().uid)}catch(e){}P=null;toChar()}}
+  $('cgo').onclick=function(){if(P&&P.nickBad){drawCold();return}enter()};$('cout2').onclick=function(){YXAcct.signOut();show('s-gate')};
+  var armed=0;$('cdel').onclick=function(){if(!armed){armed=1;$('cdel').textContent='Emin misin? Tekrar bas';setTimeout(function(){armed=0;if($('cdel'))$('cdel').textContent='Karakteri sil'},3500);return}try{localStorage.removeItem(KEY+acct().uid)}catch(e){}if(P&&P.nick)YXAcct.releaseNick(P.nick);P=null;toChar()}}
 function toChar(){var a=acct();if(!a){show('s-gate');return}$('who').textContent=a.email;P=loadSave();show('s-char');
-  if(P){fix(P);$('cnew').style.display='none';$('cold').style.display='';drawCold()}
+  if(P){fix(P);$('cnew').style.display='none';$('cold').style.display='';drawCold();checkNick()}
   else{$('cnew').style.display='';$('cold').style.display='none';buildCls()}}
-function mkChar(){var n=$('nick').value.trim();$('cerr').textContent='';
-  if(!/^[A-Za-z0-9_ğüşöçıİĞÜŞÖÇ]{3,16}$/.test(n)){$('cerr').textContent='Takma ad 3–16 harf/rakam olmalı (boşluk yok)';return}
-  P=fix({nick:n,cls:selCls,lv:1,xp:0,gold:20});saveNow();toChar()}
+var NKW={taken:'Bu takma ad alınmış. Örn: ekine rakam ekle (Ad1).',reserved:'Bu ad ayrılmış (yönetim/marka). Başka bir ad seç.',net:'Takma ad doğrulanamadı: bağlantını kontrol edip tekrar dene.'};
+function nickOk(n){return/^[A-Za-z0-9_ğüşöçıİĞÜŞÖÇ]{3,16}$/.test(n)}
+function mkChar(){var n=$('nick').value.trim(),er=$('cerr');er.textContent='';
+  if(!nickOk(n)){er.textContent='Takma ad 3–16 harf/rakam olmalı (boşluk yok)';return}
+  var bt=$('cmk');bt.disabled=true;er.textContent='Takma ad kontrol ediliyor…';
+  YXAcct.claimNick(n).then(function(r){bt.disabled=false;
+    if(!r.ok){er.textContent=NKW[r.why]||NKW.net;return}
+    er.textContent='';P=fix({nick:n,cls:selCls,lv:1,xp:0,gold:20});saveNow();toChar()})}
+/* mevcut karakterlerin adı da kilitlenir; çakışırsa yeni ad istenir */
+function checkNick(){if(!P||!window.YXAcct||P.nkOk===P.nick)return;var pn=P;
+  YXAcct.claimNick(P.nick).then(function(r){if(P!==pn)return;
+    if(r.ok){if(!r.soft)P.nkOk=P.nick;saveNow();return}
+    if(r.why==='net')return;
+    P.nickBad=r.why;drawCold()})}
+function drawNickFix(){var e=$('cold');if(!P||!P.nickBad||!e)return;
+  e.insertAdjacentHTML('afterbegin','<div class="it" style="border-color:#ff9d3d"><div class="t"><b>Takma adını değiştir</b><br><small>“'+esc(P.nick)+'” artık başka bir oyuncuya ait'+(P.nickBad==='reserved'?' / ayrılmış':'')+'. Yeni bir ad seç.</small><div class="row" style="margin-top:6px"><input id="nn" maxlength="16" placeholder="Yeni takma ad" style="flex:1;min-width:0"><button class="btn" id="nnb" type="button">Kaydet</button></div><div class="err" id="nne"></div></div></div>');
+  $('nnb').onclick=function(){var n=$('nn').value.trim(),er=$('nne');if(!nickOk(n)){er.textContent='3–16 harf/rakam olmalı';return}er.textContent='Kontrol ediliyor…';
+    YXAcct.claimNick(n).then(function(r){if(!r.ok){er.textContent=NKW[r.why]||NKW.net;return}var o=P.nick;P.nick=n;P.nkOk=n;delete P.nickBad;saveNow();YXAcct.releaseNick(o).catch(function(){});drawCold()})}}
 
 /* ---------- oyun başlangıcı ---------- */
 function toSvgImg(){try{var s=window.YX&&YX.av?YX.av(YX.S().eq,'n'):'';if(!s)return;if(s.indexOf('xmlns')<0)s=s.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
@@ -44,7 +60,7 @@ function findFree(tx,ty){for(var r=0;r<14;r++)for(var dy=-r;dy<=r;dy++)for(var d
 function ang(d,deg){var a=deg*Math.PI/180;return findFree(Math.round(Y.CX+Math.cos(a)*d),Math.round(Y.CY+Math.sin(a)*d))}
 function enter(){var st=Y.pstat(P);toSvgImg();
   var cx=Y.CX*TS,cy=Y.CY*TS;
-  G={t:0,mode:'world',px:P.x,py:P.y,fx:1,fy:0,hp:st.maxhp,cd:[0,0,0,0],atkCd:0,buff:0,guard:0,guardRed:0,evade:0,hot:0,hotT:0,dead:0,lastHurt:-99,mons:[],spawns:[],efx:[],txt:[],dep:{},gather:null,near:null,dg:null,keys:{},jx:0,jy:0,hold:false,log:[],sys:[],paused:false,
+  G={sta:100,stT:0,exh:0,jr:0,t:0,mode:'world',px:P.x,py:P.y,fx:1,fy:0,hp:st.maxhp,cd:[0,0,0,0],atkCd:0,buff:0,guard:0,guardRed:0,evade:0,hot:0,hotT:0,dead:0,lastHurt:-99,mons:[],spawns:[],efx:[],txt:[],dep:{},gather:null,near:null,dg:null,keys:{},jx:0,jy:0,hold:false,log:[],sys:[],paused:false,
     npcs:[{id:'smith',n:'Demirci',ic:'🔨',x:cx-130,y:cy-100},{id:'trader',n:'Tüccar',ic:'🧺',x:cx+130,y:cy-100},{id:'rune',n:'Rün Ustası',ic:'🔮',x:cx,y:cy-190},{id:'smelt',n:'Eritme Ocağı',ic:'🔥',x:cx+210,y:cy+300},{id:'guild',n:'Maceracı Evi',ic:'🏛',x:cx-300,y:cy+215},{id:'trade',n:'Kervan Takasçısı',ic:'⚖',x:cx+40,y:cy+190}],
     pit:{x:cx+330,y:cy+230},vill:VILL(cx,cy),houses:HOUSES(cx,cy),
     portals:[{id:'kurt',p:ang(30,15)},{id:'kristal',p:ang(50,150)},{id:'kale',p:ang(52,255)},{id:'golge',p:ang(58,330)}]};
@@ -80,7 +96,7 @@ function moveH(dx,dy){if(!blocked(G.px+dx,G.py))G.px+=dx;if(!blocked(G.px,G.py+d
 function moveE(e,dx,dy){if(!blocked(e.x+dx,e.y))e.x+=dx;if(!blocked(e.x,e.y+dy))e.y+=dy}
 function curMons(){return G.mode==='dungeon'?G.dg.mons:G.mons}
 function nearest(range,from){var best=null,bd=1e9,list=curMons();for(var i=0;i<list.length;i++){var m=list[i];if(m.dead)continue;var d=hyp(m.x-(from?from.x:G.px),m.y-(from?from.y:G.py))-m.sz;if(d<range&&d<bd){bd=d;best=m}}return best}
-function giveXp(n){P.xp+=n;var lv=false;while(P.lv<Y.MAXLV&&P.xp>=Y.xpNeed(P.lv)){P.xp-=Y.xpNeed(P.lv);P.lv++;lv=true}
+function giveXp(n){P.xp+=n;if(n>=3)floatTxt(G.px+14,G.py-64,'+'+n+' XP','#6ec4ff');var lv=false;while(P.lv<Y.MAXLV&&P.xp>=Y.xpNeed(P.lv)){P.xp-=Y.xpNeed(P.lv);P.lv++;lv=true}
   if(lv){G.hp=S().maxhp;floatTxt(G.px,G.py-50,'SEVİYE '+P.lv+'!','#ffd23f');say('Seviye atladın: '+P.lv+(Y.skillPts(P)?' · '+Y.skillPts(P)+' beceri puanın var (K)':''),'sys');refreshBar();addFx({k:'ring',x:G.px,y:G.py,r:110,c:'#ffd23f',l:.7})}}
 function giveProf(k,n){var p=P.pf[k];p.x+=n;while(p.x>=Y.profNeed(p.l)){p.x-=Y.profNeed(p.l);p.l++;say(Y.PROF[k]+' seviyen '+p.l+' oldu!','sys')}}
 
@@ -98,7 +114,7 @@ function respawn(mode){if(!G||G.dead<=0)return;$('p-dead').classList.remove('on'
   G.dead=0;G.buff=G.guard=G.evade=G.hot=0;G.comp&&G.comp.forEach(function(c){c.x=G.px;c.y=G.py});saveNow()}
 function dmgMon(m,d,dot,crit){if(m.dead)return;d=Math.max(1,Math.round(d));m.hp-=d;m.hit=5;floatTxt(m.x,m.y-m.sz-14,(crit?'✦':'')+d,dot?'#9be37a':crit?'#ffd23f':'#fff');if(m.hp<=0)killMon(m);else if(m.type==='metin')metinPh(m)}
 function metinPh(m){var ph=Math.floor((1-m.hp/m.max)*4);m.ph=m.ph||0;while(m.ph<ph){m.ph++;say('Metin Taşı canavarları çağırıyor!','sys');for(var i=0;i<2;i++){var a=Math.random()*6.28,x=m.x+Math.cos(a)*70,y=m.y+Math.sin(a)*70;if(blocked(x,y)){x=m.x;y=m.y+60}var w=mkMon(m.ph%2?'wolf':'golem',Math.max(1,m.lv-1),x,y,null);w.sx=x;w.sy=y;w.hit=9;G.mons.push(w)}}}
-function killMon(m){m.dead=1;qProg('kill',m.type,1);if(m.type==='guardian'||m.type==='lich')P.core++;else if(m.type==='metin'&&Math.random()<.25){P.core++;say('Efsane Çekirdeği düştü!','sys')}else if(m.type==='alpha'&&Math.random()<.15){P.core++;say('Efsane Çekirdeği düştü!','sys')};if(m.type==='metin'){P.crystal+=1+(Math.random()<.5?1:0);P.silver+=2;P.fang+=2;say('Metin Taşı yıkıldı! Kristal, gümüş ve kurt dişi düştü.','sys')}giveXp(m.xp);P.gold+=m.gold;floatTxt(m.x,m.y-m.sz-30,'+'+m.xp+' XP','#7ab8ff');
+function killMon(m){m.dead=1;qProg('kill',m.type,1);if(m.type==='guardian'||m.type==='lich')P.core++;else if(m.type==='metin'&&Math.random()<.25){P.core++;say('Efsane Çekirdeği düştü!','sys')}else if(m.type==='alpha'&&Math.random()<.15){P.core++;say('Efsane Çekirdeği düştü!','sys')};if(m.type==='metin'){P.crystal+=1+(Math.random()<.5?1:0);P.silver+=2;P.fang+=2;say('Metin Taşı yıkıldı! Kristal, gümüş ve kurt dişi düştü.','sys')}giveXp(Math.max(1,Math.round(m.xp*Math.max(.1,1-.18*Math.max(0,P.lv-m.lv)))));P.gold+=m.gold;floatTxt(m.x,m.y-m.sz-30,'+'+m.xp+' XP','#7ab8ff');
   if(G.mode==='world'){if(m.sp8){m.sp8.m=null;m.sp8.rt=m.type==='metin'?150:20+Math.random()*12}
     var r=Math.random();if(r<.28){P.wood++;say('+1 Odun','x')}else if(r<.5){P.stone++;say('+1 Taş','x')}
     var i=G.mons.indexOf(m);if(i>=0)G.mons.splice(i,1)}
@@ -179,7 +195,7 @@ function enterDg(id){var d=Y.DUNGEONS[id];var d=Y.DUNGEONS[id];
 function dgWave(){var dg=G.dg,d=Y.DUNGEONS[dg.id],w=d.waves[dg.wave];if(!w)return;var add=function(t,c){for(var i=0;i<c;i++){var m=mkMon(t,dg.lv,(3+Math.random()*(AW-6))*TS,(2+Math.random()*4)*TS);m.sx=m.x;m.sy=m.y;m.hit=9;var sc=1+.5*(dg.pn-1);m.hp=m.max=Math.round(m.max*sc);m.dmg=Math.round(m.dmg*(1+.2*(dg.pn-1)));dg.mons.push(m)}};
   add(w.t,w.c);if(w.extra)add(w.extra.t,w.extra.c);say('Dalga '+(dg.wave+1)+'/'+d.waves.length+(w.t==='alpha'||w.t==='guardian'?' — BOSS!':''),'sys')}
 function dgCheck(){var dg=G.dg;if(!dg||dg.done)return;if(dg.mons.every(function(m){return m.dead}))dg.wait=1.6}
-function dgDone(){var dg=G.dg,d=Y.DUNGEONS[dg.id],r=d.reward;dg.done=true;qProg('dg',dg.id,1);addMP(r.mp||0);if(r.core)P.core+=r.core;P.done[dg.id]=(P.done[dg.id]||0)+1;P.gold+=r.gold;giveXp(r.xp);if(r.fang)P.fang+=r.fang;if(r.crystal)P.crystal+=r.crystal;
+function dgDone(){var dg=G.dg,d=Y.DUNGEONS[dg.id],r=d.reward;dg.done=true;qProg('dg',dg.id,1);addMP(r.mp||0);if(r.core)P.core+=r.core;P.done[dg.id]=(P.done[dg.id]||0)+1;P.gold+=r.gold;giveXp(Math.round(r.xp*(1+P.lv*.12)));if(r.fang)P.fang+=r.fang;if(r.crystal)P.crystal+=r.crystal;
   say(d.n+' fethedildi! +🪙'+r.gold+' +'+r.xp+' XP'+(r.fang?' +'+r.fang+' 🦷':'')+(r.crystal?' +'+r.crystal+' 💎':''),'sys');saveNow()}
 function exitDg(){G.comp&&G.comp.forEach(function(c){c.x=G.saveW.x;c.y=G.saveW.y});G.mode='world';G.px=G.saveW.x;G.py=G.saveW.y;G.dg=null;G.hp=Math.min(S().maxhp,G.hp+Math.round(S().maxhp*.3))}
 
@@ -246,7 +262,7 @@ function drawGuild(){ensureQ();var rk=Y.rankOf(P.mp),R=Y.RANKS[rk],nx=Y.RANKS[rk
   $('npc').innerHTML=h;
   $('npc').querySelectorAll('[data-gt]').forEach(function(b){b.onclick=function(){gTab=+b.dataset.gt;drawGuild()}});
   $('npc').querySelectorAll('[data-qa]').forEach(function(b){b.onclick=function(){var q=P.q.list[+b.dataset.qa];q.st=1;q.have=0;saveNow();drawGuild()}});
-  $('npc').querySelectorAll('[data-qc]').forEach(function(b){b.onclick=function(){var q=P.q.list[+b.dataset.qc];if(q.have<q.n)return;q.st=2;P.gold+=q.gold;giveXp(q.xp);addMP(q.mp);say('Görev ödülü: 🪙'+q.gold+' · '+q.xp+' XP','sys');saveNow();drawGuild()}});
+  $('npc').querySelectorAll('[data-qc]').forEach(function(b){b.onclick=function(){var q=P.q.list[+b.dataset.qc];if(q.have<q.n)return;q.st=2;P.gold+=q.gold;giveXp(Math.round(q.xp*(1+P.lv*.2)));addMP(q.mp);say('Görev ödülü: 🪙'+q.gold+' · '+q.xp+' XP','sys');saveNow();drawGuild()}});
   $('npc').querySelectorAll('[data-ph]').forEach(function(b){b.onclick=function(){var fee=40*P.lv;if(P.gold<fee||P.party.length>=3)return;P.gold-=fee;P.party.push({cls:b.dataset.ph});mkComps();saveNow();drawGuild()}});
   $('npc').querySelectorAll('[data-pd]').forEach(function(b){b.onclick=function(){P.party.splice(+b.dataset.pd,1);mkComps();saveNow();drawGuild()}})}
 function openNpc(id){openPan('p-npc');if(id==='guild'){$('npt').innerHTML='🏛 Maceracı Evi';drawGuild();return}if(id==='trade'){$('npt').innerHTML='⚖ Kervan Takasçısı';trReset();drawTrade();return}if(id==='smelt'){$('npt').innerHTML='🔥 Eritme Ocağı';drawSmelt();return}if(id==='rune'){$('npt').innerHTML='🔮 Rün Ustası';drawRune();return}if(id==='smith'){$('npt').innerHTML='🔨 Demirci';drawSmith()}else{$('npt').innerHTML='🧺 Tüccar';drawTrader()}}
@@ -286,15 +302,15 @@ function drawChat(){var tabs=['Sistem','Dünya','Yerel','Klan','Parti'];$('ctabs
 /* ---------- girdi ---------- */
 var keyMap={w:'u',arrowup:'u',s:'d',arrowdown:'d',a:'l',arrowleft:'l',d:'r',arrowright:'r'};
 addEventListener('keydown',function(e){if(G&&e.key.toLowerCase()==='m'){if($('p-map').classList.contains('on'))closePan();else if(G.mode==='world'&&!G.paused){drawMap();openPan('p-map')}return}if(!G||G.paused&&e.key!=='Escape')return;var k=e.key.toLowerCase();
-  if(keyMap[k]){G.keys[keyMap[k]]=1;e.preventDefault()}else if(k===' '){G.hold=true;e.preventDefault()}else if(k==='1')cast(0);else if(k==='2')cast(1);else if(k==='3')cast(2);else if(k==='4')cast(3);else if(k==='k'){drawSkills();openPan('p-npc')}else if(k==='e'||k==='f')interact();
+  if(k==='shift'){G.keys.sh=1}else if(keyMap[k]){G.keys[keyMap[k]]=1;e.preventDefault()}else if(k===' '){G.hold=true;e.preventDefault()}else if(k==='1')cast(0);else if(k==='2')cast(1);else if(k==='3')cast(2);else if(k==='4')cast(3);else if(k==='k'){drawSkills();openPan('p-npc')}else if(k==='e'||k==='f')interact();
   else if(k==='i'){drawBag();openPan('p-bag')}else if(k==='enter'){drawChat();openPan('p-chat')}else if(k==='escape'){G.paused?closePan():openPan('p-menu')}});
-addEventListener('keyup',function(e){if(!G)return;var k=e.key.toLowerCase();if(keyMap[k])G.keys[keyMap[k]]=0;if(k===' ')G.hold=false});
+addEventListener('keyup',function(e){if(!G)return;var k=e.key.toLowerCase();if(k==='shift')G.keys.sh=0;if(keyMap[k])G.keys[keyMap[k]]=0;if(k===' ')G.hold=false});
 function refreshBar(){ensureSl();[1,2,3,4].forEach(function(n){var s=skAt(n-1),b=$('b'+n);b.innerHTML=(s?s.ic:'')+'<small>'+n+'</small><i class="cd"></i>';b.style.opacity=s?1:.35})}
 function setupHud(){var c=C();if(!$('zn')){var zn=document.createElement('div');zn.id='zn';zn.style.cssText='position:absolute;top:10px;left:50%;transform:translateX(-50%);padding:5px 14px;border-radius:999px;font-weight:800;font-size:.8rem;background:rgba(0,0,0,.55);border:1.5px solid;pointer-events:none;display:none;white-space:nowrap';$('hud').appendChild(zn)}$('b0').innerHTML=c.ic;
   refreshBar();
   $('hav').innerHTML=window.YX&&YX.av?YX.av(YX.S().eq,'n'):'';$('hn').textContent=P.nick;
   var jy=$('joy'),jk=$('jk'),pid=null;
-  function jm(e){var r=jy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=hyp(dx,dy),m=52;if(d>m){dx=dx/d*m;dy=dy/d*m}jk.style.transform='translate('+dx+'px,'+dy+'px)';var n=hyp(dx,dy)/m;G.jx=n>.15?dx/m:0;G.jy=n>.15?dy/m:0}
+  function jm(e){var r=jy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=hyp(dx,dy),m=52;if(d>m){dx=dx/d*m;dy=dy/d*m}jk.style.transform='translate('+dx+'px,'+dy+'px)';var n=hyp(dx,dy)/m;G.jx=n>.15?dx/m:0;G.jy=n>.15?dy/m:0;G.jr=n}
   jy.onpointerdown=function(e){pid=e.pointerId;try{jy.setPointerCapture(pid)}catch(x){}jm(e);e.preventDefault()};jy.onpointermove=function(e){if(e.pointerId===pid)jm(e)};
   var jend=function(e){if(e.pointerId!==pid)return;pid=null;jk.style.transform='';if(G){G.jx=0;G.jy=0}};jy.onpointerup=jend;jy.onpointercancel=jend;
   var b0=$('b0');b0.onpointerdown=function(e){G.hold=true;attack();e.preventDefault()};b0.onpointerup=b0.onpointercancel=b0.onpointerleave=function(){if(G)G.hold=false};
@@ -315,7 +331,8 @@ function update(dt){G.t+=dt;if(G.swT>0)G.swT-=dt;var st=S(),c=C();
   if(G.hp<st.maxhp&&(inTown||G.t-G.lastHurt>6))G.hp=Math.min(st.maxhp,G.hp+st.maxhp*(inTown?.04:.01)*dt);
   var mx=(G.keys.r?1:0)-(G.keys.l?1:0)+G.jx,my=(G.keys.d?1:0)-(G.keys.u?1:0)+G.jy,ml=hyp(mx,my);
   if(ml>1){mx/=ml;my/=ml}
-  if(ml>.1){G.fx=mx/(ml>1?1:ml)*(ml>1?1:1);var fl=hyp(mx,my)||1;G.fx=mx/fl;G.fy=my/fl;G.gather=null;var sp=st.spd*(G.evade>0?1.5:1)*(G.gather?0:1);moveH(mx*sp*dt,my*sp*dt)}
+  if(ml>.1){G.fx=mx/(ml>1?1:ml)*(ml>1?1:1);var fl=hyp(mx,my)||1;G.fx=mx/fl;G.fy=my/fl;G.gather=null;var wantS=(G.keys.sh||G.jr>.93)&&!G.exh&&G.sta>0,sp=st.spd*(G.evade>0?1.5:1)*(wantS?1.45:1);if(wantS){G.sta=Math.max(0,G.sta-22*dt);G.stT=.9;if(G.sta<=0)G.exh=1}moveH(mx*sp*dt,my*sp*dt)}
+  if(G.stT>0)G.stT-=dt;else if(G.sta<100){G.sta=Math.min(100,G.sta+(ml>.1?14:26)*dt);if(G.exh&&G.sta>=30)G.exh=0}
   if(G.hold)attack();
   if(G.gather){G.gather.t+=dt;if(G.gather.t>=G.gather.need)gatherDone()}
   compUpdate(dt);
@@ -412,7 +429,7 @@ function mapMarks(m,S,big){var u=S/Y.MW;Y.PVP.forEach(function(z){m.fillStyle='r
 function drawMini(){var m=$('mm').getContext('2d');m.imageSmoothingEnabled=false;m.clearRect(0,0,MS,MS);if(G.mode==='dungeon'){m.fillStyle='#2a2142';m.fillRect(0,0,MS,MS);m.fillStyle='#ffd23f';m.fillRect(G.px/(AW*TS)*MS-3,G.py/(AH*TS)*MS-3,6,6);return}
   m.drawImage(mmc,0,0,MS,MS);mapMarks(m,MS,false)}
 function drawMap(){var c=$('mapc'),m=c.getContext('2d'),S=c.width;m.imageSmoothingEnabled=false;m.clearRect(0,0,S,S);m.drawImage(mmc,0,0,S,S);m.strokeStyle='rgba(255,255,255,.12)';m.lineWidth=1;for(var i=1;i<6;i++){m.beginPath();m.moveTo(i*S/6,0);m.lineTo(i*S/6,S);m.moveTo(0,i*S/6);m.lineTo(S,i*S/6);m.stroke()}mapMarks(m,S,true)}
-function hud(){var st=S();$('hpb').style.width=Math.max(0,G.hp/st.maxhp*100)+'%';$('xpb').style.width=(P.lv>=Y.MAXLV?100:P.xp/Y.xpNeed(P.lv)*100)+'%';var hlt='Sv '+P.lv+' · '+Y.RANKS[Y.rankOf(P.mp)].n+' · 🪙 '+P.gold;if($('hl')._h!==hlt){$('hl')._h=hlt;$('hl').innerHTML=hlt}
+function hud(){var st=S(),hp=Math.max(0,G.hp/st.maxhp),sta=(G.sta==null?100:G.sta)/100,mx=P.lv>=Y.MAXLV,need=Y.xpNeed(P.lv),xp=mx?1:P.xp/need;var d=function(id,v){var e=$(id);if(e)e.setAttribute('stroke-dasharray',(Math.max(0,Math.min(1,v))*100).toFixed(1)+' 100')};d('rh',hp);d('rs',sta);d('rx',xp);var t1=Math.ceil(G.hp)+' / '+st.maxhp;if($('th')._h!==t1){$('th')._h=t1;$('th').textContent=t1}var t2=Math.round(sta*100)+'%';if($('ts')._h!==t2){$('ts')._h=t2;$('ts').textContent=t2}var t3=mx?'MAKS':P.xp+' / '+need+' · %'+Math.floor(xp*100);if($('tx')._h!==t3){$('tx')._h=t3;$('tx').textContent=t3}if($('rlv')._h!==P.lv){$('rlv')._h=P.lv;$('rlv').textContent=P.lv}$('rs').style.opacity=G.exh?.45:1;var hlt='Sv '+P.lv+' · '+Y.RANKS[Y.rankOf(P.mp)].n+' · 🪙 '+P.gold;if($('hl')._h!==hlt){$('hl')._h=hlt;$('hl').innerHTML=hlt}
   [1,2,3,4].forEach(function(n){var s=skAt(n-1),cd=$('b'+n).querySelector('.cd');if(cd)cd.style.height=(s&&G.cd[n-1]>0?Math.min(100,G.cd[n-1]/(s.cd*S().cdm)*100):0)+'%'});
   var bi=$('bi'),n=G.near;if(n){bi.style.display='grid';var bk=(n.t==='npc'||n.t==='vill')?'chat':(n.t==='portal'||n.t==='exit')?'door':(G.gather?'hourglass':'hand');if(bi.dataset.k!==bk){bi.dataset.k=bk;bi.innerHTML=YA.ico(bk)}}else bi.style.display='none';var zn2=$('zn'),pz2=G.mode==='world'?G.pz:null,tx='',col='';if(G.mode==='dungeon'){tx='🕳️ '+Y.DUNGEONS[G.dg.id].n;col='#b57bff'}else if(pz2){tx='⚔️ '+pz2.n+' · PvP';col='#ff5b6e'}else if(inTownF()){tx='Kasaba · Güvenli bölge';col='#5be39a'}if(zn2){zn2.style.display=tx?'block':'none';if(zn2._h!==tx){zn2._h=tx;zn2.innerHTML=tx}zn2.style.borderColor=col;zn2.style.color=col}
   drawMini()}

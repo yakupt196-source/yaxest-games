@@ -91,7 +91,7 @@ var MON={
 };
 function monFor(zone){return zone===0?(Math.random()<.75?'slime':'boar'):zone===1?(Math.random()<.6?'wolf':'boar'):'golem'}
 function zoneLv(zone,d){return zone===0?1+Math.floor(Math.max(0,d-8)/6):zone===1?5+Math.floor((d-27)/5):10+Math.floor((d-46)/3.5)}
-function xpNeed(l){return Math.round(55*Math.pow(l,1.55))}
+function xpNeed(l){return Math.round(70*l*l+40*l)}
 function mstat(type,lv){var m=MON[type];return{hp:Math.round((30+lv*20)*m.hm),dmg:Math.round((4+lv*2.3)*m.dm),xp:Math.round((10+lv*8)*m.xp),gold:Math.round((2+lv*2)*m.g)}}
 function pstat(p){var c=CLASSES[p.cls],l=p.lv,wl=p.wl||0,al=p.al||0;
   return{maxhp:Math.round((c.hp+l*13)*(1+.12*al)),dmg:Math.round((c.dmg*(1+.13*(l-1)))*(1+.18*wl)*WEAPONS[p.cls][Math.min(8,p.wt||0)].m),red:Math.min(.5,al*.035),spd:c.spd,rng:c.rng,aspd:c.aspd}}

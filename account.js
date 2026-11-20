@@ -39,6 +39,20 @@ function bg(){if(!conf()||!st())return;
   document.addEventListener('visibilitychange',function(){if(document.hidden&&sig()!==lastH)push(true).catch(function(){})});
   addEventListener('pagehide',function(){if(sig()!==lastH)push(true).catch(function(){})});
   setTimeout(function(){lastH=sig()},2000)}
-window.YXAcct={conf:conf,state:st,signUp:signUp,signIn:signIn,signOut:signOut,reset:reset,pull:pull,push:push,sync:sync,del:del};
+var NK='https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents/nicks';
+function nickKey(n){var m={'ı':'i','İ':'i','ğ':'g','Ğ':'g','ü':'u','Ü':'u','ş':'s','Ş':'s','ö':'o','Ö':'o','ç':'c','Ç':'c'};return String(n).replace(/[ıİğĞüÜşŞöÖçÇ]/g,function(c){return m[c]}).toLowerCase().replace(/_/g,'')}
+var RES=['yaxest','yaxestgames','yaxestdiyari','admin','administrator','moderator','mod','gm','sistem','system','destek','support','yonetici','yetkili','yakup','yakupturhan','owner','sahip'];
+var OWNER=['yakupt196@gmail.com'];
+/* Takma adı bu hesaba kilitler. Başarı: {ok:true}. Hata: {ok:false,why:'taken'|'reserved'|'net'} */
+function claimNick(nick){var k=nickKey(nick),s0=st();if(!s0)return Promise.resolve({ok:false,why:'net'});
+  if(RES.indexOf(k)>=0&&OWNER.indexOf((s0.email||'').toLowerCase())<0)return Promise.resolve({ok:false,why:'reserved'});
+  return token().then(function(s){var H={Authorization:'Bearer '+s.idToken,'Content-Type':'application/json'};
+    return fetch(NK+'/'+encodeURIComponent(k),{headers:H}).then(function(r){
+      if(r.status===200)return r.json().then(function(j){var u=j.fields&&j.fields.uid&&j.fields.uid.stringValue;return u===s.uid?{ok:true}:{ok:false,why:'taken'}});
+      if(r.status===403)return{ok:true,soft:1};if(r.status!==404)return{ok:false,why:'net'};
+      return fetch(NK+'?documentId='+encodeURIComponent(k),{method:'POST',headers:H,body:JSON.stringify({fields:{uid:{stringValue:s.uid},nick:{stringValue:nick},t:{integerValue:String(Date.now())}}})}).then(function(r2){
+        if(r2.ok)return{ok:true};if(r2.status===409)return{ok:false,why:'taken'};if(r2.status===403)return{ok:true,soft:1};return{ok:false,why:'net'}})})}).catch(function(){return{ok:false,why:'net'}})}
+function releaseNick(nick){return token().then(function(s){return fetch(NK+'/'+encodeURIComponent(nickKey(nick)),{method:'DELETE',headers:{Authorization:'Bearer '+s.idToken}}).then(function(){return 1})}).catch(function(){return 0})}
+window.YXAcct={claimNick:claimNick,releaseNick:releaseNick,nickKey:nickKey,conf:conf,state:st,signUp:signUp,signIn:signIn,signOut:signOut,reset:reset,pull:pull,push:push,sync:sync,del:del};
 if(window.YXBackup)bg();else{var s=document.createElement('script');s.src=(document.currentScript&&document.currentScript.src||'').replace('account.js','backup.js');if(s.src){s.onload=bg;document.head.appendChild(s)}}
 })();

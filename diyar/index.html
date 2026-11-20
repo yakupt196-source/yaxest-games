@@ -34,8 +34,8 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 .det .sk{display:flex;gap:8px;align-items:flex-start;margin-top:4px}.det .sk span{font-size:1.2rem}
 .yi{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.22em;flex:none}.ib .yi{width:26px;height:26px;vertical-align:middle}#acts .yi{width:58%;height:58%;vertical-align:middle}.cls .ic .yi{width:1.15em;height:1.15em}#hud{position:fixed;inset:0;pointer-events:none;display:none}
 #hud.on{display:block}#hud>*{pointer-events:auto}
-.top{position:absolute;left:max(8px,env(safe-area-inset-left));top:max(6px,env(safe-area-inset-top));display:flex;gap:8px;align-items:center;background:var(--pan);border:1px solid var(--line);border-radius:14px;padding:6px 10px;min-width:210px}
-.top .av{width:38px;height:38px}.top .av svg{width:100%;height:100%}
+.top{position:absolute;left:max(8px,env(safe-area-inset-left));top:max(6px,env(safe-area-inset-top));display:flex;gap:8px;align-items:center;background:var(--pan);border:1px solid var(--line);border-radius:14px;padding:6px 10px;min-width:0;padding:6px 12px 8px 6px}
+.rg{position:relative;width:92px;height:92px;flex:none}.rg svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}.rg .tk{stroke:rgba(255,255,255,.1)}.rg .fg{transition:stroke-dasharray .25s linear,opacity .2s}.rg .av{position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;background:#1a1536}.lvb{position:absolute;left:50%;bottom:-3px;transform:translateX(-50%);min-width:26px;text-align:center;padding:1px 7px;border-radius:10px;background:#ffd23f;color:#2a1d00;font-size:.74rem;box-shadow:0 2px 6px rgba(0,0,0,.5)}.hi{display:flex;flex-direction:column;gap:2px;min-width:112px}.hi b{font-size:.95rem}.gr{display:flex;align-items:center;gap:6px;font-size:.72rem;font-variant-numeric:tabular-nums}.gr i{width:8px;height:8px;border-radius:50%;flex:none}.top .av svg{width:100%;height:100%}
 .bar{height:9px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;width:50%}
 #hpb{background:#ff5b6e}#xpb{background:#5cb4ff}.top small{color:var(--mute);font-size:.72rem}
 .tr{position:absolute;right:max(8px,env(safe-area-inset-right));top:max(6px,env(safe-area-inset-top));display:flex;gap:6px;align-items:flex-start}
@@ -60,7 +60,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #rot .ph{font-size:1.8rem;animation:rt 2s ease-in-out infinite}@keyframes rt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
 @media (orientation:portrait){#mm{width:112px;height:112px;order:5}.top{min-width:0;max-width:calc(100vw - 160px)}.tr{gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:140px}.ib{width:40px;height:40px}.ib .yi{width:22px;height:22px}#zn{top:62px!important;left:10px!important;transform:none!important;font-size:.7rem}#log{bottom:186px!important;left:10px!important;right:auto!important;max-width:54vw;font-size:.7rem}#joy{width:112px;height:112px}}
 @media (hover:hover) and (pointer:fine){#joy{display:none}}
-@media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:180px}#joy{width:112px;height:112px}}
+@media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:0}.rg{width:76px;height:76px}.rg .av{width:36px;height:36px}#joy{width:112px;height:112px}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
@@ -92,7 +92,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 </div></div>
 
 <div id="hud">
- <div class="top"><div class="av" id="hav"></div><div style="min-width:130px"><b id="hn"></b> <small id="hl"></small><div class="bar"><i id="hpb"></i></div><div class="bar"><i id="xpb"></i></div></div></div>
+ <div class="top"><div class="rg"><svg viewBox="0 0 110 110"><g fill="none" stroke-linecap="round" transform="rotate(-90 55 55)"><circle class="tk" cx="55" cy="55" r="50" stroke-width="8"/><circle id="rh" class="fg" cx="55" cy="55" r="50" stroke-width="8" pathLength="100" stroke="#ff5b6e" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="40" stroke-width="7"/><circle id="rs" class="fg" cx="55" cy="55" r="40" stroke-width="7" pathLength="100" stroke="#ffc83d" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="31" stroke-width="6"/><circle id="rx" class="fg" cx="55" cy="55" r="31" stroke-width="6" pathLength="100" stroke="#4fb3ff" stroke-dasharray="0 100"/></g></svg><div class="av" id="hav"></div><b id="rlv" class="lvb">1</b></div><div class="hi"><b id="hn"></b><small id="hl"></small><div class="gr"><i style="background:#ff5b6e"></i><span id="th"></span></div><div class="gr"><i style="background:#ffc83d"></i><span id="ts"></span></div><div class="gr"><i style="background:#4fb3ff"></i><span id="tx"></span></div></div></div>
  <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="imenu" type="button" aria-label="Menü">☰</button></div>
  <div id="joy"><i id="jk"></i></div>
  <div id="log"></div>
