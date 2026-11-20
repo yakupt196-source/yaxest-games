@@ -250,8 +250,8 @@ function monAi(m,dt){if(m.dead)return;
 
 /* ---------- çizim ---------- */
 function resize(){dpr=Math.min(window.devicePixelRatio||1,2);VW=innerWidth;VH=innerHeight;cv.width=Math.round(VW*dpr);cv.height=Math.round(VH*dpr);
-  var port=VH>VW&&('ontouchstart' in window)&&!window.__portOk;$('rot').style.display=port&&G?'flex':'none';if(G)G.paused=port||G.paused&&!!document.querySelector('.pan.on')}
-var rb=document.getElementById('rotgo');if(rb)rb.onclick=function(){window.__portOk=true;resize()};
+  var port=VH>VW&&('ontouchstart' in window);if(!port)window.__rotSeen=0;var showR=port&&G&&!window.__rotSeen&&!window.__portOk;$('rot').style.display=showR?'flex':'none';if(showR){clearTimeout(window.__rotT);window.__rotT=setTimeout(function(){$('rot').style.display='none';window.__rotSeen=1},9000);try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}}
+var rb=document.getElementById('rotgo');if(rb)rb.onclick=function(){window.__rotSeen=1;$('rot').style.display='none'};
 addEventListener('resize',resize);addEventListener('orientationchange',resize);
 var ZC=['#3f7d48','#2f6a3c','#6b7083','#2b66a8','#b9a47d'];
 function tileCol(tx,ty,z){var h=Y.hash(tx,ty,5);if(G.mode==='dungeon'){return(tx<1||ty<1||tx>=AW-1||ty>=AH-1)?'#15112a':((tx+ty)%2?'#3a3052':'#352c4b')}
