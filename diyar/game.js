@@ -11,7 +11,7 @@ function acct(){try{return window.YXAcct&&YXAcct.state()}catch(e){return null}}
 function loadSave(){try{var a=acct();return a?JSON.parse(localStorage.getItem(KEY+a.uid)||'null'):null}catch(e){return null}}
 function saveNow(){var a=acct();if(!P||!a)return;try{if(G&&G.mode==='world'){P.x=G.px;P.y=G.py}localStorage.setItem(KEY+a.uid,JSON.stringify(P))}catch(e){}}
 var CKEYS=['lv','xp','wl','al','sw','sa','sr','sl','wt'];
-function fix(p){p.done=p.done||{};p.pf=p.pf||{};['wood','mine'].forEach(function(k){p.pf[k]=p.pf[k]||{l:1,x:0}});Object.keys(Y.MATS).concat(['gold','wl','al','xp']).forEach(function(k){p[k]=p[k]||0});p.lv=p.lv||1;p.cl=p.cl||{};p.rn=p.rn||{};p.sr=p.sr||{};p.wt=p.wt||0;p.ow=p.ow||{};p.mp=p.mp||0;p.party=p.party||[];if(p.x==null){p.x=Y.CX*TS;p.y=Y.CY*TS}return p}
+function fix(p){p.done=p.done||{};p.pf=p.pf||{};['wood','mine'].forEach(function(k){p.pf[k]=p.pf[k]||{l:1,x:0}});Object.keys(Y.MATS).concat(['gold','wl','al','xp']).forEach(function(k){p[k]=p[k]||0});p.lv=p.lv||1;p.cl=p.cl||{};p.rn=p.rn||{};p.sr=p.sr||{};p.wt=p.wt||0;p.ow=p.ow||{};p.mp=p.mp||0;p.tl=p.tl||{pk:0,ax:0};p.party=p.party||[];if(p.x==null){p.x=Y.CX*TS;p.y=Y.CY*TS}return p}
 function switchCls(k){if(k===P.cls)return;var o={};CKEYS.forEach(function(q){o[q]=P[q]});P.cl[P.cls]=o;var n=P.cl[k]||{lv:1,xp:0,wl:0,al:0,sw:null,sa:null,sr:{},sl:null,wt:0};CKEYS.forEach(function(q){P[q]=n[q]==null?(q==='lv'?1:(q==='sw'||q==='sa'||q==='sl'?null:q==='sr'?{}:0)):n[q]});P.cls=k;P.x=Y.CX*TS;P.y=Y.CY*TS+70;saveNow()}
 /* ---------- giriş / karakter ekranları ---------- */
 function gate(up){var e=$('em').value.trim(),p=$('pw').value;$('gerr').textContent='';
@@ -88,7 +88,10 @@ var RUNES={kurt:{n:'Kurt Rünü',ic:'🐺',slot:'w',d:'Kritik şansı +%15',c:{f
 /* ---------- yardımcılar ---------- */
 function S(){var s=Y.pstat(P);s.crit=0;s.cdm=1;s.regen=0;if(P.sw==='kurt')s.crit=.15;if(P.sw==='kristal')s.cdm=.8;if(P.sa==='orman')s.regen=.015;if(P.sa==='demir')s.red=Math.min(.6,s.red+.08);return s}function C(){return Y.CLASSES[P.cls]}
 function say(t,k){G.log.push(t);if(G.log.length>5)G.log.shift();if(k!=='x'){G.sys.push(t);if(G.sys.length>60)G.sys.shift()}renderLog()}
-function renderLog(){$('log').innerHTML=G.log.map(function(l){return'<div>'+esc(l)+'</div>'}).join('')}
+var LGC={'Odun':'#d9a066','Taş':'#aab4cc','Bakır':'#f0904a','Demir':'#c9cfdb','Gümüş':'#eef3ff','Altın':'#ffd23f','Mitril':'#7ad7ff','Titanyum':'#6ef0d0','Yıldız':'#ff7af0','Kadim':'#e8b45a','Kristal':'#6ee0ff','Efsane':'#ffb02e'};
+function logCol(l){if(/Seviye|seviye|beceri puan/.test(l))return'#ffd23f';if(/Yenildin|öldü|düştü|başarısız|yandı/.test(l))return'#ff8f8f';if(/gerekir|yetersiz|alınamaz|dolu/.test(l))return'#ffab5c';if(/Görev|ödül|Ödül|Rütbe|rütbe|Takas/.test(l))return'#ffd9a0';if(/^\+|toplandı|dövüldü|yapıldı|kuşanıldı|eritildi|Külçe/.test(l))return'#8df0b0';if(/PvP|Fetih|çağırıyor|Kasaba|bölge/.test(l))return'#c9a6ff';if(/hoş geldin|Harita|Yürü|Kristal Mağara|İni|Kale|Mezarlığı/.test(l))return'#9fdcff';return'#d8d3ff'}
+function logHtml(l){var h=esc(l);Object.keys(LGC).forEach(function(k){h=h.replace(new RegExp(k+'(?= |\\)|$|,|\\.|!)','g'),function(m){return'<span style="color:'+LGC[k]+';font-weight:700">'+m+'</span>'})});return h}
+function renderLog(){$('log').innerHTML=G.log.map(function(l){return'<div style="color:'+logCol(l)+'">'+logHtml(l)+'</div>'}).join('')}
 function floatTxt(x,y,s,c){G.txt.push({x:x,y:y,s:YA.plain(s),c:c||'#fff',t:0})}
 function addFx(o){o.t=0;G.efx.push(o)}
 function blocked(x,y){var tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(G.mode==='dungeon')return tx<1||ty<1||tx>=AW-1||ty>=AH-1;return Y.zoneAt(tx,ty)===3}
@@ -113,8 +116,8 @@ function respawn(mode){if(!G||G.dead<=0)return;$('p-dead').classList.remove('on'
   if(here&&P.gold<cost)here=false;if(here){P.gold-=cost;G.hp=Math.round(S().maxhp*.5)}else{if(G.mode==='dungeon'){G.mode='world';G.dg=null}G.px=Y.CX*TS;G.py=Y.CY*TS+70;G.hp=S().maxhp}
   G.dead=0;G.buff=G.guard=G.evade=G.hot=0;G.comp&&G.comp.forEach(function(c){c.x=G.px;c.y=G.py});saveNow()}
 function dmgMon(m,d,dot,crit){if(m.dead)return;d=Math.max(1,Math.round(d));m.hp-=d;m.hit=5;floatTxt(m.x,m.y-m.sz-14,(crit?'✦':'')+d,dot?'#9be37a':crit?'#ffd23f':'#fff');if(m.hp<=0)killMon(m);else if(m.type==='metin')metinPh(m)}
-function metinPh(m){var ph=Math.floor((1-m.hp/m.max)*4);m.ph=m.ph||0;while(m.ph<ph){m.ph++;say('Metin Taşı canavarları çağırıyor!','sys');for(var i=0;i<2;i++){var a=Math.random()*6.28,x=m.x+Math.cos(a)*70,y=m.y+Math.sin(a)*70;if(blocked(x,y)){x=m.x;y=m.y+60}var w=mkMon(m.ph%2?'wolf':'golem',Math.max(1,m.lv-1),x,y,null);w.sx=x;w.sy=y;w.hit=9;G.mons.push(w)}}}
-function killMon(m){m.dead=1;qProg('kill',m.type,1);if(m.type==='guardian'||m.type==='lich')P.core++;else if(m.type==='metin'&&Math.random()<.25){P.core++;say('Efsane Çekirdeği düştü!','sys')}else if(m.type==='alpha'&&Math.random()<.15){P.core++;say('Efsane Çekirdeği düştü!','sys')};if(m.type==='metin'){P.crystal+=1+(Math.random()<.5?1:0);P.silver+=2;P.fang+=2;say('Metin Taşı yıkıldı! Kristal, gümüş ve kurt dişi düştü.','sys')}giveXp(Math.max(1,Math.round(m.xp*Math.max(.1,1-.18*Math.max(0,P.lv-m.lv)))));P.gold+=m.gold;floatTxt(m.x,m.y-m.sz-30,'+'+m.xp+' XP','#7ab8ff');
+function metinPh(m){var ph=Math.floor((1-m.hp/m.max)*4);m.ph=m.ph||0;while(m.ph<ph){m.ph++;say('Fetih Kristali canavarları çağırıyor!','sys');for(var i=0;i<2;i++){var a=Math.random()*6.28,x=m.x+Math.cos(a)*70,y=m.y+Math.sin(a)*70;if(blocked(x,y)){x=m.x;y=m.y+60}var w=mkMon(m.ph%2?'wolf':'golem',Math.max(1,m.lv-1),x,y,null);w.sx=x;w.sy=y;w.hit=9;G.mons.push(w)}}}
+function killMon(m){m.dead=1;qProg('kill',m.type,1);if(m.type==='guardian'||m.type==='lich')P.core++;else if(m.type==='metin'&&Math.random()<.25){P.core++;say('Efsane Çekirdeği düştü!','sys')}else if(m.type==='alpha'&&Math.random()<.15){P.core++;say('Efsane Çekirdeği düştü!','sys')};if(m.type==='metin'){P.crystal+=1+(Math.random()<.5?1:0);P.silver+=2;P.fang+=2;say('Fetih Kristali yıkıldı! Kristal, gümüş ve kurt dişi düştü.','sys')}giveXp(Math.max(1,Math.round(m.xp*Math.max(.1,1-.18*Math.max(0,P.lv-m.lv)))));P.gold+=m.gold;floatTxt(m.x,m.y-m.sz-30,'+'+m.xp+' XP','#7ab8ff');
   if(G.mode==='world'){if(m.sp8){m.sp8.m=null;m.sp8.rt=m.type==='metin'?150:20+Math.random()*12}
     var r=Math.random();if(r<.28){P.wood++;say('+1 Odun','x')}else if(r<.5){P.stone++;say('+1 Taş','x')}
     var i=G.mons.indexOf(m);if(i>=0)G.mons.splice(i,1)}
@@ -163,10 +166,10 @@ function interact(){var n=findNear();if(!n)return;
   else if(n.t==='exit')exitDg();
   else if(n.t==='vill'){say(n.o.n+': '+n.o.l[Math.floor(Math.random()*n.o.l.length)],'sys')}
   else if(n.t==='pit'){if(G.gather&&G.gather.o.key==='pit'){G.gather=null;return}G.gather={o:{key:'pit',kind:'pit'},t:0,need:2.6}}
-  else if(n.t==='node'){if(G.gather&&G.gather.o.key===n.o.key){G.gather=null;return}var d=Y.NODE[n.o.kind];if(P.pf[d.prof].l<(d.req||1)){say(d.n+': '+Y.PROF[d.prof]+' seviye '+d.req+' gerekir.','sys');return}G.gather={o:n.o,t:0,need:d.t}}}
+  else if(n.t==='node'){if(G.gather&&G.gather.o.key===n.o.key){G.gather=null;return}var d=Y.NODE[n.o.kind];if(P.pf[d.prof].l<(d.req||1)){say(d.n+': '+Y.PROF[d.prof]+' seviye '+d.req+' gerekir.','sys');return}var tk=d.prof==='mine'?'pk':'ax',tt=P.tl[tk];if(tt<(d.tk||0)){say(d.n+': '+Y.TOOLS[tk].t[d.tk]+' veya daha iyisi gerekir (Demirci).','sys');return}G.gather={o:n.o,t:0,need:d.t*(1-.08*tt)}}}
 function gatherDone(){var o=G.gather.o;if(o.kind==='pit'){var pf0=P.pf.mine,a=1+Math.floor(pf0.l/2)+(Math.random()<.5?1:0),ex='';P.stone+=a;if(pf0.l>=2&&Math.random()<.5){P.copper++;ex+=' +1🟤'}if(pf0.l>=4&&Math.random()<.3){P.iron++;ex+=' +1⛓️'}if(pf0.l>=6&&Math.random()<.15){P.silver++;ex+=' +1⚪'}giveProf('mine',2);giveXp(3);floatTxt(G.px,G.py-40,'+'+a+'🪨'+ex,'#fff');say('Ocaktan +'+a+' Taş'+ex,'x');G.gather={o:o,t:0,need:2.6};return}
-  var d=Y.NODE[o.kind],pf=P.pf[d.prof],y=1+(pf.l>=3?1:0)+(pf.l>=6?1:0)+(Math.random()<.2?1:0);
-  P[d.mat]+=y;qProg('gather',d.mat,y);G.dep[o.key]=G.t+45;giveProf(d.prof,1);giveXp(2);floatTxt(G.px,G.py-40,'+'+y+' '+Y.MATS[d.mat].ic,'#fff');say('+'+y+' '+Y.MATS[d.mat].n,'x');G.gather=null}
+  var d=Y.NODE[o.kind],pf=P.pf[d.prof],tt=P.tl[d.prof==='mine'?'pk':'ax'],y=1+(pf.l>=3?1:0)+(pf.l>=6?1:0)+(Math.random()<.2+.06*tt?1:0)+(tt>=4&&Math.random()<.3?1:0);
+  P[d.mat]+=y;qProg('gather',d.mat,y);G.dep[o.key]=G.t+45+(d.tk||0)*8;giveProf(d.prof,1+Math.floor((d.req||1)/3));giveXp(2+(d.tk||0)*3);floatTxt(G.px,G.py-40,'+'+y+' '+Y.MATS[d.mat].ic,'#fff');say('+'+y+' '+Y.MATS[d.mat].n,'x');G.gather=null}
 
 /* ---------- zindan ---------- */
 function addMP(n){if(!n)return;var r0=Y.rankOf(P.mp);P.mp+=n;var r1=Y.rankOf(P.mp);say('+'+n+' Maceracı Puanı','x');if(r1>r0){say('RÜTBE ATLADIN: '+Y.RANKS[r1].n+'! Yeni zindanların kapısı açıldı.','sys');floatTxt(G.px,G.py-60,Y.RANKS[r1].n+' RÜTBE','#ffd23f')}}
@@ -211,6 +214,7 @@ function drawSkills(){ensureSl();$('npt').innerHTML='📖 Beceriler';var c=C(),p
   $('npc').querySelectorAll('[data-su]').forEach(function(b){b.onclick=function(){var id=b.dataset.su;if(Y.skillPts(P)<1)return;P.sr[id]=Math.min(5,Y.skRank(P,id)+1);saveNow();drawSkills();refreshBar()}});
   $('npc').querySelectorAll('[data-ss]').forEach(function(b){b.onclick=function(){var a=b.dataset.ss.split(':'),id=a[0],n=+a[1]-1,old=P.sl.indexOf(id);if(old>=0)P.sl[old]=P.sl[n];P.sl[n]=id;saveNow();drawSkills();refreshBar()}})}
 function drawBag(){var c=C(),st=S(),h='<div class="it"><span style="font-size:1.8rem">'+c.ic+'</span><div class="t"><b>'+esc(P.nick)+'</b> · '+esc(c.n)+' · Seviye '+P.lv+'<br><small>Can '+st.maxhp+' · Hasar '+st.dmg+' · Zırh %'+Math.round(st.red*100)+'</small></div></div>';
+  h+='<div class="it"><div class="t"><b>Aletler:</b> '+Y.TOOLS.pk.t[P.tl.pk]+' · '+Y.TOOLS.ax.t[P.tl.ax]+'</div></div>';
   h+='<div class="it"><div class="t">'+wLine(P.cls,P.wt||0)+' kuşanıldı · Beceri puanı: <b>'+Y.skillPts(P)+'</b></div><button class="btn" id="bsk" type="button">Beceriler (K)</button></div>';
   h+='<div class="it"><div class="t">⚔️ Silah <b>+'+P.wl+'</b> · 🛡️ Zırh <b>+'+P.al+'</b><br><small>Demirci kasabadadır.</small></div><div>🪙 '+P.gold+'</div></div>';
   h+=Object.keys(Y.MATS).filter(function(k){return P[k]>0||k==='wood'||k==='stone'}).map(function(k){var m=Y.MATS[k];return'<div class="it"><span style="font-size:1.3rem">'+m.ic+'</span><div class="t">'+m.n+'</div><b>'+P[k]+'</b></div>'}).join('');
@@ -275,7 +279,12 @@ function drawSmith(){var h='<div class="it"><div class="t"><b>Geliştirme</b><br
   Y.WEAPONS[P.cls].forEach(function(w,t){var own=t===0||P.ow[P.cls+':'+t],eq=(P.wt||0)===t,cost=w.c,ok=own||(cost&&P.lv>=w.lv&&Object.keys(cost).every(function(k){return(k==='gold'?P.gold:P[k])>=cost[k]})),tx='';
     if(cost)Object.keys(cost).forEach(function(k){tx+=(k==='gold'?'🪙':Y.MATS[k].ic)+cost[k]+' '});
     h+='<div class="it"><div class="t">'+wLine(P.cls,t)+' <small>('+Y.RARITY[w.rar].n+')</small><br><small>Hasar ×'+w.m+' · Seviye '+w.lv+(own?'':' · '+tx)+'</small></div><button class="btn'+(eq?' alt':'')+'" data-wp="'+t+'" '+((eq||!ok)?'disabled':'')+' type="button">'+(eq?'Kuşanıldı':own?'Kuşan':'Yap')+'</button></div>'});
+  h+='<div class="it"><div class="t"><b>Aletler</b><br><small>Kazma ve balta kademesi madeni ve ağacı açar, kazmayı hızlandırır. Her kademe üst düzey damarlar için gerekli.</small></div></div>';
+  ['pk','ax'].forEach(function(k){var T=Y.TOOLS[k],cur=P.tl[k],nx=cur+1,c=T.c[nx],tx='',ok=false;
+    if(c){Object.keys(c).forEach(function(m){tx+=(m==='gold'?'🪙':Y.MATS[m].ic)+c[m]+' '});ok=P[(k==='pk'?'mine':'wood')==='mine'?'pf':'pf'][k==='pk'?'mine':'wood'].l>=T.lv[nx]&&Object.keys(c).every(function(m){return(m==='gold'?P.gold:P[m])>=c[m]})}
+    h+='<div class="it"><div class="t"><b style="color:#ffd23f">'+T.t[cur]+'</b>'+(c?' → '+T.t[nx]+'<br><small>'+Y.PROF[k==='pk'?'mine':'wood']+' Sv '+T.lv[nx]+' · '+tx+'</small>':'<br><small>En üst kademe</small>')+'</div>'+(c?'<button class="btn" data-tl="'+k+'" '+(ok?'':'disabled')+' type="button">Yap</button>':'')+'</div>'});
   $('npc').innerHTML=h;
+  $('npc').querySelectorAll('[data-tl]').forEach(function(b){b.onclick=function(){var k=b.dataset.tl,T=Y.TOOLS[k],nx=P.tl[k]+1,c=T.c[nx];if(!c)return;for(var m in c)if((m==='gold'?P.gold:P[m])<c[m])return;if(P.pf[k==='pk'?'mine':'wood'].l<T.lv[nx])return;for(var m2 in c){if(m2==='gold')P.gold-=c[m2];else P[m2]-=c[m2]}P.tl[k]=nx;say(T.t[nx]+' yapıldı!','sys');addFx({k:'ring',x:G.px,y:G.py,r:90,c:'#ffd23f',l:.6});saveNow();drawSmith()}});
   $('npc').querySelectorAll('[data-up]').forEach(function(b){b.onclick=function(){var k=b.dataset.up,n=(k==='w'?P.wl:P.al)+1,c=Y.upCost(k,n),pr=!!b.dataset.pr;if(!can(c)||(pr&&P.crystal<1))return;P.wood-=c.wood;P.stone-=c.stone;if(c.ik)P[c.ik]-=c.ic;P.gold-=c.gold;if(pr)P.crystal--;
       if(Math.random()<(UCH[n]||1)){if(k==='w')P.wl++;else P.al++;say((k==='w'?'Silahın':'Zırhın')+' +'+n+' oldu!','sys');addFx({k:'ring',x:G.px,y:G.py,r:90,c:'#ffd23f',l:.6})}else{if(n>=9&&!pr){if(k==='w')P.wl--;else P.al--;say('Geliştirme başarısız! Seviye düştü.','sys')}else say('Geliştirme başarısız. Malzemeler yandı.','sys')}saveNow();drawSmith()}});
   $('npc').querySelectorAll('[data-wp]').forEach(function(b){b.onclick=function(){var t=+b.dataset.wp,w=Y.WEAPONS[P.cls][t];if(t===0||P.ow[P.cls+':'+t]){P.wt=t;say(w.n+' kuşanıldı.','sys')}else{var c=w.c;if(!c||P.lv<w.lv)return;for(var k in c)if((k==='gold'?P.gold:P[k])<c[k])return;for(var k2 in c){if(k2==='gold')P.gold-=c[k2];else P[k2]-=c[k2]}P.ow[P.cls+':'+t]=true;P.wt=t;say(w.n+' dövüldü ve kuşanıldı!','sys');qProg('smelt','any',0)}saveNow();drawSmith()}})}
@@ -338,7 +347,7 @@ function update(dt){G.t+=dt;if(G.swT>0)G.swT-=dt;var st=S(),c=C();
   compUpdate(dt);
   if(G.mode==='world'){worldMons(dt);G.vill.forEach(function(v){v.wt-=dt;if(v.wt<=0){v.wt=1+Math.random()*3;var a=Math.random()*6.28;v.wx=Math.random()<.4?0:Math.cos(a);v.wy=v.wx?Math.sin(a):0}var nx=v.x+v.wx*28*dt,ny=v.y+v.wy*28*dt;if(hyp(nx-v.hx,ny-v.hy)<130){v.x=nx;v.y=ny}})}else dgUpdate(dt);
   var list=curMons();for(var k=0;k<list.length;k++)monAi(list[k],dt);
-  if(G.mode==='world'){var pz=pvpAt(G.px,G.py);if(pz!==G.pz){G.pz=pz;say(pz?'⚔️ '+pz.n+': PvP bölgesi! Kural: yalnızca seviyen +1\'e kadar olan oyunculara saldırabilirsin (Sv 2 → en çok Sv 3). Metin Taşlarını kır!':'PvP bölgesinden çıktın.','sys')}}
+  if(G.mode==='world'){var pz=pvpAt(G.px,G.py);if(pz!==G.pz){G.pz=pz;say(pz?'⚔️ '+pz.n+': PvP bölgesi! Kural: yalnızca seviyen +1\'e kadar olan oyunculara saldırabilirsin (Sv 2 → en çok Sv 3). Fetih Kristallerini kır!':'PvP bölgesinden çıktın.','sys')}}
   G.near=findNear();
   for(var f=G.efx.length-1;f>=0;f--){var x=G.efx[f];x.t+=dt;if(x.t>=x.l)G.efx.splice(f,1)}
   for(var q=G.txt.length-1;q>=0;q--){var y=G.txt[q];y.t+=dt;y.y-=28*dt;if(y.t>1)G.txt.splice(q,1)}

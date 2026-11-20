@@ -36,7 +36,7 @@ var ICON={
  coin:C(16,16,13,'#e3a91c',K)+C(16,16,9.5,'#ffd23f','#b97c10',1.4)+P('M11.5 10.5 16 17 20.5 10.5M16 17V23','none','#9a6408',2.2),
  wood:R(3,15,25,11,3.4,'#9a6a3c',K)+R(5,6,23,10,3.4,'#b57a45',K)+P('M7 21H21M9 11H22','none','#7a4f2b',1.3)+'<ellipse cx="26.4" cy="20.5" rx="3.6" ry="5.5" fill="#e2b574" stroke="'+K+'" stroke-width="1.3"/><ellipse cx="26.4" cy="20.5" rx="1.7" ry="3" fill="none" stroke="#b57a45"/>',
  stone:P('M3.5 24 7 13 14 7.5 23 9 28.5 17 26 26Z','#8f97ad',K)+P('M7 13 14 7.5 23 9 16 14Z','#c4cadb')+P('M16 14 26 26 3.5 24Z','#6d748c'),
- copper:nug('#7a5a48','#e8924e'),iron:nug('#5a5660','#d6cfc8'),silver:nug('#6b7083','#eef3ff'),goldore:nug('#6d6150','#ffd23f'),mithril:nug('#3d4d72','#7ad7ff'),
+ copper:nug('#7a5a48','#e8924e'),iron:nug('#5a5660','#d6cfc8'),silver:nug('#6b7083','#eef3ff'),goldore:nug('#6d6150','#ffd23f'),mithril:nug('#3d4d72','#7ad7ff'),titan:nug('#2f4a50','#6ef0d0'),aster:nug('#3a2a58','#ff7af0'),hwood:R(3,15,25,11,3.4,'#5a3a1e',K)+R(5,6,23,10,3.4,'#7a4f2b',K)+P('M7 21H21M9 11H22','none','#3d2812',1.3),i_titan:ing('#2fb39a','#9ff7e3'),i_aster:ing('#9a4fd0','#ffa8f5'),
  i_copper:ing('#c8743a','#f0a870'),i_iron:ing('#8a909e','#c9cfdb'),i_silver:ing('#c8d2e8','#f4f8ff'),i_gold:ing('#e3a91c','#ffe27a'),i_mithril:ing('#3f9bdc','#9be0ff'),
  fang:P('M7 5C19 4 25 9 24 17 23 23 19 27 15 29 16.5 21.5 14 16 7 12Z','#f6f1de',K)+P('M10 7C17 7 21 10 21 15','none','#fff',1.6)+P('M15 29C16.5 21.5 14 16 7 12','none','#bfb89a',1.4),
  crystal:P('M16 2.5 25 11 23 25.5 16 30 9 25.5 7 11Z','#58c7f0',K)+P('M16 2.5 7 11 16 14Z','#b8f0ff')+P('M16 2.5 25 11 16 14Z','#7ddcff')+P('M7 11 16 14 9 25.5Z','#3a9fcc')+P('M16 14 25 11 23 25.5 16 30Z','#2d86b8'),
@@ -73,7 +73,7 @@ var ICON={
 YA.ICON=ICON;
 YA.ico=function(k,sz){var b=ICON[k];if(!b)return'';return'<svg class="yi" viewBox="0 0 32 32"'+(sz?' width="'+sz+'" height="'+sz+'"':'')+' aria-hidden="true">'+b+'</svg>'};
 /* emoji -> simge anahtarı (yalnız eski metinler için; oyun yeni metinlerde doğrudan anahtar kullanır) */
-var EM={'⚔':'sword','🛡':'shield','🔮':'orb','💚':'heal','✚':'cross','🗡':'dagger','🌀':'spin','💨':'charge','📣':'roar','📢':'taunt','💥':'slam','❄':'nova','⚡':'bolt','✨':'blink','🌿':'hot','🔥':'flame','🌑':'shadow','☠':'poison','🌫':'smoke','👊':'fist','🪙':'coin','🪵':'wood','🪨':'stone','🟤':'copper','⛓':'iron','⚪':'silver','🟡':'goldore','🔷':'mithril','🟧':'i_copper','⬛':'i_iron','⬜':'i_silver','🟨':'i_gold','🟦':'i_mithril','🦷':'fang','💎':'crystal','🎒':'bag','💬':'chat','☰':'menu','🗺':'map','🔨':'hammer','⛏':'pickaxe','🧺':'sack','✋':'hand','⏳':'hourglass','🚪':'door','🏘':'house','🕳':'cave','🐺':'wolf','🏰':'castle','📱':'phone','🔴':'dotred','🟣':'dotpur','🌲':'r_orman','☄':'meteor','🔗':'chain','💀':'skull','📖':'book','🔶':'core','🌟':'star','🏛':'guild','⚖':'scale'};
+var EM={'⚔':'sword','🛡':'shield','🔮':'orb','💚':'heal','✚':'cross','🗡':'dagger','🌀':'spin','💨':'charge','📣':'roar','📢':'taunt','💥':'slam','❄':'nova','⚡':'bolt','✨':'blink','🌿':'hot','🔥':'flame','🌑':'shadow','☠':'poison','🌫':'smoke','👊':'fist','🪙':'coin','🪵':'wood','🪨':'stone','🟤':'copper','⛓':'iron','⚪':'silver','🟡':'goldore','🔷':'mithril','🟧':'i_copper','⬛':'i_iron','⬜':'i_silver','🟨':'i_gold','🟦':'i_mithril','🔹':'titan','🌠':'aster','🌳':'hwood','🟩':'i_titan','🟪':'i_aster','🦷':'fang','💎':'crystal','🎒':'bag','💬':'chat','☰':'menu','🗺':'map','🔨':'hammer','⛏':'pickaxe','🧺':'sack','✋':'hand','⏳':'hourglass','🚪':'door','🏘':'house','🕳':'cave','🐺':'wolf','🏰':'castle','📱':'phone','🔴':'dotred','🟣':'dotpur','🌲':'r_orman','☄':'meteor','🔗':'chain','💀':'skull','📖':'book','🔶':'core','🌟':'star','🏛':'guild','⚖':'scale'};
 var EMRE=new RegExp('('+Object.keys(EM).join('|')+')\\uFE0F?','g');
 YA.em=function(s){return String(s).replace(EMRE,function(m,a){return YA.ico(EM[a])})};
 YA.plain=function(s){return String(s).replace(EMRE,function(m,a){return({'🪨':' Taş','🪵':' Odun','🟤':' Bakır','⛓':' Demir','⚪':' Gümüş','🟡':' Altın','🔷':' Mitril','🦷':' Diş','💎':' Kristal','🪙':' altın'})[a]||''})};
@@ -206,14 +206,14 @@ YA.portal=function(ctx,x,y,t,col,lab,key){var pu=1+Math.sin(t*3)*.07;ctx.save();
   ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=2;for(var i=0;i<3;i++){ctx.beginPath();ctx.ellipse(0,-8,(8+i*7)*pu,(18+i*10)*pu,t*(i%2?1:-1)*.5,0,4.2);ctx.stroke()}
   ctx.restore();YA.draw(ctx,key,x,y-80,26);YA.plate(ctx,x,y-100,lab,col)};
 YA.node=function(ctx,kind,x,y,NODE){
-  if(kind==='tree'){el(ctx,x,y+13,20,7,'rgba(0,0,0,.28)');ctx.fillStyle='#6b4a2b';ctx.fillRect(x-4.5,y-4,9,18);ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(x+1,y-4,3.5,18);
+  if(kind==='tree'||kind==='oldtree'){var OT=kind==='oldtree';if(OT){var gg0=ctx.createRadialGradient(x,y-14,6,x,y-14,40);gg0.addColorStop(0,'rgba(255,214,120,.45)');gg0.addColorStop(1,'rgba(255,214,120,0)');ctx.fillStyle=gg0;ctx.beginPath();ctx.arc(x,y-14,40,0,6.3);ctx.fill();ctx.save();ctx.translate(x,y+14);ctx.scale(1.35,1.35);ctx.translate(-x,-(y+14))}el(ctx,x,y+13,20,7,'rgba(0,0,0,.28)');ctx.fillStyle='#6b4a2b';ctx.fillRect(x-4.5,y-4,9,18);ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(x+1,y-4,3.5,18);
     [[0,-14,19,'#2a8f4f'],[-9,-8,13,'#2f9e57'],[9,-8,13,'#2f9e57'],[-3,-21,12,'#3fbf6c']].forEach(function(c){ctx.fillStyle=c[3];ctx.beginPath();ctx.arc(x+c[0],y+c[1],c[2],0,6.3);ctx.fill()});
-    ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.arc(x-6,y-24,6,0,6.3);ctx.fill();return}
+    ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.arc(x-6,y-24,6,0,6.3);ctx.fill();if(OT)ctx.restore();return}
   var d=NODE[kind];el(ctx,x+2,y+13,20,6,'rgba(0,0,0,.28)');
   ctx.fillStyle=d.col;ctx.beginPath();ctx.moveTo(x-17,y+11);ctx.lineTo(x-11,y-10);ctx.lineTo(x+6,y-15);ctx.lineTo(x+18,y+2);ctx.lineTo(x+13,y+12);ctx.closePath();ctx.fill();ol(ctx);
   ctx.fillStyle='rgba(255,255,255,.2)';ctx.beginPath();ctx.moveTo(x-11,y-10);ctx.lineTo(x+6,y-15);ctx.lineTo(x+2,y-4);ctx.lineTo(x-8,y-2);ctx.closePath();ctx.fill();
   if(kind==='rock')return;
-  if(kind==='silver'||kind==='goldore'||kind==='mithril'){var gg=ctx.createRadialGradient(x,y-2,4,x,y-2,26);gg.addColorStop(0,d.sp);gg.addColorStop(1,'rgba(255,255,255,0)');ctx.globalAlpha=.3+Math.sin(performance.now()/400+x)*.1;ctx.fillStyle=gg;ctx.beginPath();ctx.arc(x,y-2,26,0,6.3);ctx.fill();ctx.globalAlpha=1}
+  if(kind==='silver'||kind==='goldore'||kind==='mithril'||kind==='titan'||kind==='aster'){var gg=ctx.createRadialGradient(x,y-2,4,x,y-2,26);gg.addColorStop(0,d.sp);gg.addColorStop(1,'rgba(255,255,255,0)');ctx.globalAlpha=.3+Math.sin(performance.now()/400+x)*.1;ctx.fillStyle=gg;ctx.beginPath();ctx.arc(x,y-2,26,0,6.3);ctx.fill();ctx.globalAlpha=1}
   [[-6,-2,3],[4,-7,2.6],[8,4,2.8],[-2,6,2.2]].forEach(function(p){ctx.fillStyle=d.sp;ctx.beginPath();ctx.arc(x+p[0],y+p[1],p[2],0,6.3);ctx.fill();ctx.fillStyle='rgba(255,255,255,.55)';ctx.beginPath();ctx.arc(x+p[0]-.8,y+p[1]-.8,.9,0,6.3);ctx.fill()})};
 
 /* ---- yaratıklar ---- */

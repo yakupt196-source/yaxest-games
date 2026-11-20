@@ -20,17 +20,23 @@ function nodeAt(tx,ty){
   var dx=tx-CX,dy=ty-CY;if(dx*dx+dy*dy<169)return null;
   var r=hash(tx,ty,7);
   if(z===0){if(r<.05)return 'tree';if(r<.065)return 'rock'}
-  else if(z===1){if(r<.14)return 'tree';if(r<.165)return 'rock';if(r<.18)return 'copper'}
-  else{if(r<.06){var dd=Math.sqrt(dx*dx+dy*dy),rr=hash(tx,ty,9);return dd<54?(rr<.55?'copper':'iron'):dd<64?(rr<.5?'iron':'silver'):dd<72?(rr<.5?'silver':'goldore'):(rr<.55?'goldore':'mithril')}if(r<.1)return 'rock'}
+  else if(z===1){var d1=Math.sqrt(dx*dx+dy*dy);if(r<.14)return 'tree';if(r<.165)return 'rock';if(r<.18)return 'copper';if(d1>36&&r>.97)return 'oldtree'}
+  else{var dd=Math.sqrt(dx*dx+dy*dy);if(r<.06+Math.min(.05,Math.max(0,dd-50)*.004)){var rr=hash(tx,ty,9);
+    return dd<50?(rr<.6?'copper':'iron'):dd<55?(rr<.5?'iron':'silver'):dd<60?(rr<.5?'silver':'goldore'):dd<64?(rr<.5?'goldore':'mithril'):dd<68?(rr<.5?'mithril':'titan'):dd<72?(rr<.6?'titan':'aster'):(rr<.35?'titan':'aster')}if(r<.1)return 'rock'}
   return null}
 var NODE={tree:{n:'Ağaç',mat:'wood',t:1.4,prof:'wood',req:1,col:'#6b4a2b',sp:'#2f9e57'},rock:{n:'Kaya',mat:'stone',t:1.6,prof:'mine',req:1,col:'#8b93a8',sp:'#a8afc4'},
  copper:{n:'Bakır Damarı',mat:'copper',t:1.8,prof:'mine',req:2,col:'#6b5a50',sp:'#e08a4a'},iron:{n:'Demir Damarı',mat:'iron',t:2.2,prof:'mine',req:4,col:'#4f4a52',sp:'#b9a08a'},
- silver:{n:'Gümüş Damarı',mat:'silver',t:2.6,prof:'mine',req:6,col:'#5b6075',sp:'#e6ecff'},goldore:{n:'Altın Damarı',mat:'goldore',t:3,prof:'mine',req:8,col:'#6b6050',sp:'#ffd23f'},mithril:{n:'Mitril Damarı',mat:'mithril',t:3.6,prof:'mine',req:10,col:'#3b4a6b',sp:'#7ad7ff'}};
+ silver:{n:'Gümüş Damarı',mat:'silver',t:2.6,prof:'mine',req:6,col:'#5b6075',sp:'#e6ecff'},goldore:{n:'Altın Damarı',mat:'goldore',t:3,prof:'mine',req:8,col:'#6b6050',sp:'#ffd23f'},mithril:{n:'Mitril Damarı',mat:'mithril',t:3.6,prof:'mine',req:10,col:'#3b4a6b',sp:'#7ad7ff'},
+ titan:{n:'Titanyum Damarı',mat:'titan',t:4.2,prof:'mine',req:12,col:'#33444a',sp:'#6ef0d0'},aster:{n:'Yıldız Damarı',mat:'aster',t:5,prof:'mine',req:15,col:'#2a2440',sp:'#ff7af0'},oldtree:{n:'Kadim Ağaç',mat:'hwood',t:3.2,prof:'wood',req:5,col:'#4a3320',sp:'#2f9e57'}};
+var NODE_TK={tree:0,rock:0,copper:0,iron:1,silver:2,goldore:3,mithril:4,titan:5,aster:6,oldtree:2};Object.keys(NODE_TK).forEach(function(k){NODE[k].tk=NODE_TK[k]});
 var MATS={wood:{n:'Odun',ic:'🪵',v:2},stone:{n:'Taş',ic:'🪨',v:2},copper:{n:'Bakır Cevheri',ic:'🟤',v:4},iron:{n:'Demir Cevheri',ic:'⛓️',v:7},silver:{n:'Gümüş Cevheri',ic:'⚪',v:12},goldore:{n:'Altın Cevheri',ic:'🟡',v:20},mithril:{n:'Mitril Cevheri',ic:'🔷',v:36},
  i_copper:{n:'Bakır Külçe',ic:'🟧',v:12,ing:1},i_iron:{n:'Demir Külçe',ic:'⬛',v:22,ing:1},i_silver:{n:'Gümüş Külçe',ic:'⬜',v:40,ing:1},i_gold:{n:'Altın Külçe',ic:'🟨',v:66,ing:1},i_mithril:{n:'Mitril Külçe',ic:'🟦',v:120,ing:1},
+ titan:{n:'Titanyum Cevheri',ic:'🔹',v:34},aster:{n:'Yıldız Cevheri',ic:'🌠',v:60},hwood:{n:'Kadim Odun',ic:'🌳',v:26},i_titan:{n:'Titanyum Külçe',ic:'🟩',v:190,ing:1},i_aster:{n:'Yıldız Külçesi',ic:'🟪',v:340,ing:1},
  fang:{n:'Kurt Dişi',ic:'🦷',v:15},core:{n:'Efsane Çekirdeği',ic:'🔶',v:260},crystal:{n:'Kristal',ic:'💎',v:30}};
 /* eritme: 2 cevher + 1 odun -> 1 külçe */
-var SMELT={copper:'i_copper',iron:'i_iron',silver:'i_silver',goldore:'i_gold',mithril:'i_mithril'};
+var SMELT={copper:'i_copper',iron:'i_iron',silver:'i_silver',goldore:'i_gold',mithril:'i_mithril',titan:'i_titan',aster:'i_aster'};
+var TOOLS={pk:{n:'Kazma',t:['Taş Kazma','Bakır Kazma','Demir Kazma','Gümüş Kazma','Altın Kazma','Mitril Kazma','Titanyum Kazma'],c:[null,{wood:6,i_copper:3,gold:80},{wood:8,i_iron:4,gold:260},{wood:10,i_silver:5,gold:640},{wood:12,i_gold:5,gold:1500},{wood:14,i_mithril:5,gold:3400},{wood:16,i_titan:6,gold:7500}],lv:[1,2,4,6,8,10,13]},
+ ax:{n:'Balta',t:['Taş Balta','Bakır Balta','Demir Balta','Gümüş Balta','Altın Balta'],c:[null,{wood:4,i_copper:3,gold:70},{i_iron:4,gold:240},{i_silver:5,gold:600},{i_gold:5,gold:1450}],lv:[1,2,4,7,10]}};
 var PVP=[{id:'vadi',n:'Kızıl Vadi',tx:96,ty:77,r:9},{id:'gecit',n:'Kurt Geçidi',tx:22,ty:42,r:9}];
 var CLASSES={
  savasci:{n:'Savaşçı',ic:'⚔️',col:'#ff7a5c',hp:150,spd:150,rng:62,aspd:.55,dmg:16,melee:1,role:'Yakın dövüş, dengeli hasar',
@@ -84,7 +90,7 @@ var MON={
  boar:{n:'Yaban Domuzu',c:'#c28a5c',hm:1.8,dm:1,sp:95,sz:20,xp:1.5,g:1.3},
  golem:{n:'Taş Golem',c:'#8f9bb7',hm:2.6,dm:1.3,sp:70,sz:24,xp:2.2,g:1.8},
  alpha:{n:'Alfa Kurt',c:'#e86a5a',hm:9,dm:1.7,sp:120,sz:30,xp:8,g:8,boss:1},
- metin:{n:'Metin Taşı',c:'#b57bff',hm:10,dm:0,sp:0,sz:30,xp:5,g:6,boss:1},
+ metin:{n:'Fetih Kristali',c:'#b57bff',hm:10,dm:0,sp:0,sz:30,xp:5,g:6,boss:1},
  skel:{n:'İskelet Savaşçı',c:'#e8e4d4',hm:2.2,dm:1.5,sp:90,sz:20,xp:2.6,g:2.2},
  lich:{n:'Mezar Lordu',c:'#7a4fd0',hm:18,dm:2.3,sp:70,sz:30,xp:14,g:20,boss:1},
  guardian:{n:'Kristal Bekçi',c:'#7ad7ff',hm:14,dm:2,sp:80,sz:34,xp:10,g:14,boss:1}
@@ -98,7 +104,7 @@ function pstat(p){var c=CLASSES[p.cls],l=p.lv,wl=p.wl||0,al=p.al||0;
 var UPI=[0,0,0,0,['i_copper',2],['i_copper',3],['i_iron',2],['i_iron',3],['i_silver',2],['i_silver',3],['i_gold',2],['i_mithril',2],['i_mithril',3]];
 function upCost(kind,n){var c=kind==='w'?{wood:4+3*n,stone:2+2*n,gold:10+15*n}:{wood:3+2*n,stone:3+3*n,gold:8+12*n},u=UPI[n];c.iron=0;if(u){c.ik=u[0];c.ic=u[1]+(kind==='w'?1:0)}return c}
 var PROF={wood:'Odunculuk',mine:'Madencilik'};
-function profNeed(l){return 8+l*7}
-root.YD={TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,zoneLv:zoneLv,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:50};
+function profNeed(l){return 8+l*8+l*l}
+root.YD={TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,zoneLv:zoneLv,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:50};
 if(typeof module!=='undefined')module.exports=root.YD;
 })(typeof window!=='undefined'?window:globalThis);
