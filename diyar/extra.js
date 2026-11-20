@@ -97,6 +97,7 @@ function ghostPos(){return{x:Y.CX*TS-70,y:Y.CY*TS-40}}
 function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;
   P.x2=P.x2||{};X=P.x2;X.c=X.c||{k:0,b:0,g:0,d:0,w:0,n:0,r:0,h:0,p:0,ph:0,tr:0,co:0};X.pt=X.pt||{};X.eg=X.eg||[];X.pg=X.pg||[];X.ac=X.ac||{};X.tt=X.tt||'';X.act=X.act||'';X.xb=X.xb||0;X.lk=X.lk||0;X.fin=X.fin||0;
   if(X.act&&!X.pt[X.act])X.act='';
+  if(window.YX3)try{YX3.init({D:function(){return D},X:function(){return X},giveEgg:giveEgg,hourP:hourP,weatherNow:weatherNow,ACH:ACH,render:render,openPanel:openPanel})}catch(e){console.error(e)}
   coin=[];flies=[];rm={sp:0,act:false};lastTr=traderOn();lastRM=false;lastGR=false;lastNight=null;idle=0;lastPx=G.px;lastPy=G.py;
   petPos={x:G.px-40,y:G.py+10};buildPages();ensureChip();
   var b=$('ix');if(b)b.onclick=function(){if(G&&G.mode==='world'&&!G.paused)openPanel('pet')};
@@ -138,7 +139,7 @@ function tick(dt){if(!G||G.mode!=='world'){if(DAY_CHIP)DAY_CHIP.style.display='n
 function inTown(){return D.inTownF()}
 function chipUpdate(h){if(!DAY_CHIP)return;var w=weatherNow(),t=(h<8?'🌙':h<10?'🌅':h>=22?'🌆':'☀️')+' '+clockTxt()+' '+WI[w]+' '+WN[w];
   if(redMoonOn())t+=' · 🌑 Kızıl Ay '+(X.rm===dayIdx()?Math.min(25,rm.k):0)+'/25';else if(goldRainOn())t+=' · 💰 Altın Yağmuru';
-  if(traderOn())t+=' · 🧳';
+  if(traderOn())t+=' · 🧳';if(window.YX3){var c3=YX3.chip();if(c3)t+=' · '+c3}
   if(X.xb>Date.now())t+=' · ⚗️';if(X.lk>Date.now())t+=' · 🍀';
   var n=nearestPage();if(compass&&n&&X.pg.length<9){var d=n.d/TS;t+=' · '+(d<6?'🔥 Çok sıcak':d<16?'♨️ Sıcak':d<40?'🧭 Ilık':'❄️ Soğuk')}
   if(DAY_CHIP._t!==t){DAY_CHIP._t=t;DAY_CHIP.textContent=t}DAY_CHIP.style.display='block'}
@@ -152,12 +153,13 @@ function redMoonTick(dt){if(X.rm!==dayIdx())X.rm=dayIdx(),rm={k:0,done:false};
     var m=D.mkMon(ty2,lv,x,y,null);m.hp=m.max=Math.round(m.hp*1.6);m.dmg=Math.round(m.dmg*1.2);m.xp=Math.round(m.xp*2.5);m.gold=Math.round(m.gold*2.5);m.col='#ff3b4d';m.xm=1;G.mons.push(m)}
   for(var i=G.mons.length-1;i>=0;i--){var q=G.mons[i];if(q.xm&&hyp(q.x-G.px,q.y-G.py)>1100)G.mons.splice(i,1)}}
 function killRed(){for(var i=G.mons.length-1;i>=0;i--)if(G.mons[i].xm)G.mons.splice(i,1)}
-function kill(m){if(!G||!m)return;X.c.k++;if(m.boss)X.c.b++;
+function kill(m){if(!G||!m)return;if(m.xq&&window.YX3){YX3.grantChest(4);giveEgg(2)}if(m.type==='goldslime'){var gg=200+P.lv*40;P.gold+=gg;D.say('✨ Altın Balçık '+gg+' altın bıraktı!','sys')}X.c.k++;if(m.boss)X.c.b++;
   if(G.mode==='world'){var xb=petBonus('xp')+(X.xb>Date.now()?.5:0)+(hourP()<8?.25:0),gb=petBonus('gold')+(X.lk>Date.now()?.5:0);
     if(xb>0){var e=Math.round(m.xp*xb);if(e>0)D.giveXp(e)}if(gb>0){var g=Math.round(m.gold*gb);if(g>0)P.gold+=g}}
   if(X.act&&X.pt[X.act]){var p=X.pt[X.act];if(p.lv<10){p.xp=(p.xp||0)+1;if(p.xp>=30*p.lv){p.xp=0;p.lv++;D.say('🐾 '+PETS[X.act].n+' seviye atladı! (Sv '+p.lv+')','sys')}}}
   var ch=m.xm?.05:m.boss?.2:m.type==='metin'?.15:.012;if(X.eg.length<8&&Math.random()<ch)giveEgg(m.xm||m.boss?1:0);
-  if(m.xm&&!rm.done&&X.rm===dayIdx()){rm.k++;if(rm.k>=25){rm.done=true;X.c.r++;var g2=300+P.lv*60;P.gold+=g2;giveEgg(2);D.say('🌑 KIZIL AY TAMAM! +'+g2+' altın ve bir Efsanevi Yumurta kazandın!','sys');D.floatTxt(G.px,G.py-90,'🏆 Kızıl Ay Tamam!','#ffd23f')}}}
+  if(m.xm&&!rm.done&&X.rm===dayIdx()){rm.k++;if(rm.k>=25){rm.done=true;X.c.r++;var g2=300+P.lv*60;P.gold+=g2;giveEgg(2);spawnQueen();D.say('🌑 KIZIL AY TAMAM! +'+g2+' altın ve bir Efsanevi Yumurta kazandın!','sys');D.floatTxt(G.px,G.py-90,'🏆 Kızıl Ay Tamam!','#ffd23f')}}}
+function spawnQueen(){var a=Math.random()*6.28,x=G.px+Math.cos(a)*TS*5,y=G.py+Math.sin(a)*TS*5,q=D.mkMon('queen',Math.min(60,P.lv+6),x,y,null);if(q){q.xq=1;q.boss=1;G.mons.push(q);D.say('👑 Kızıl Ay Kraliçesi belirdi! Yen ve Efsanevi sandığı kap.','sys')}}
 function giveEgg(lk){X.eg.push({at:Date.now()+240000,lk:lk||0});D.say('🥚 Gizemli bir yumurta buldun! Yoldaş panelinden çatlatabilirsin (4 dk).','sys')}
 function gather(){if(X)X.c.g++}
 function died(){if(X)X.c.d++}
@@ -184,7 +186,7 @@ function drawPet(c,id,x,y,t,sleep){var p=PETS[id],b=Math.sin(t*5+x*.01)*(sleep?.
   c.restore()}
 
 /* ---------- çizim (dünya + ekran) ---------- */
-function draw(ctx,camX,camY,t,dg){if(!G||!P)return;if(dg){return}
+function draw(ctx,camX,camY,t,dg){if(!G||!P)return;if(dg){return}if(window.YX3)YX3.draw(ctx,camX,camY,t,D.VW,D.VH);
   var W=D.VW,H=D.VH,dpr=D.dpr,h=hourP(),dkn=darkness(h),w=weatherNow(),red=redMoonOn();
   /* sayfalar */
   PAGES.forEach(function(p){if(X.pg.indexOf(p.i)>=0)return;var sx=p.x-camX,sy=p.y-camY;if(sx<-60||sy<-60||sx>W+60||sy>H+60)return;
@@ -239,8 +241,9 @@ function near(){if(!G||G.mode!=='world')return null;
   if(best)return{t:'x',o:best.o};
   if(traderOn()){var tp=traderPos();if(hyp(tp.x-G.px,tp.y-G.py)<90)return{t:'x',o:{k:'trader'}}}
   if(ghostOn()){var gq=ghostPos();if(hyp(gq.x-G.px,gq.y-G.py)<100)return{t:'x',o:{k:'ghost'}}}
+  var n3=window.YX3&&YX3.near();if(n3)return n3;
   return null}
-function interact(o){if(o.k==='page')takePage(o.i);else if(o.k==='trader')openPanel('trader');else if(o.k==='ghost')talkGhost()}
+function interact(o){if(o.k==='dig'||o.k==='fish')YX3.interact(o);else if(o.k==='page')takePage(o.i);else if(o.k==='trader')openPanel('trader');else if(o.k==='ghost')talkGhost()}
 function talkGhost(){var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];
   if(X.gh===dayIdx()){D.say('👻 Yaxest: "'+q+'"','sys');return}
   X.gh=dayIdx();var first=!X.gf;
@@ -252,13 +255,13 @@ function takePage(i){if(X.pg.indexOf(i)>=0)return;X.pg.push(i);X.c.p++;D.saveNow
   openPanel('pages')}
 
 /* ---------- panel ---------- */
-var TABS=[['pet','🐾 Yoldaş'],['ach','🏆 Başarım'],['pages','📜 Günlük'],['world','🌍 Dünya'],['fun','📸 Eğlence'],['salon','🎮 Salon'],['trader','🧳 Tüccar']];
+var TABS=[['pet','🐾 Yoldaş'],['ach','🏆 Başarım'],['pages','📜 Günlük'],['world','🌍 Dünya'],['fun','📸 Eğlence'],['salon','🎮 Salon'],['fish','🎣 Balık'],['trader','🧳 Tüccar']];
 function openPanel(tb){tab=tb||tab;render();D.openPan('p-x')}
 function render(){var el=$('xb');if(!el)return;
   var h='<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px">'+TABS.filter(function(t){return t[0]!=='trader'||traderOn()||tab==='trader'}).map(function(t){return'<button type="button" class="btn '+(t[0]===tab?'':'alt')+'" data-xt="'+t[0]+'" style="padding:6px 10px;font-size:.8rem">'+t[1]+'</button>'}).join('')+'</div>';
   h+=body();el.innerHTML=h;
-  el.querySelectorAll('[data-xt]').forEach(function(b){b.onclick=function(){tab=b.dataset.xt;render()}});bind(el)}
-function body(){if(tab==='pet')return petHtml();if(tab==='ach')return achHtml();if(tab==='pages')return pagesHtml();if(tab==='world')return worldHtml();if(tab==='fun')return funHtml();if(tab==='salon')return salonHtml();return traderHtml()}
+  el.querySelectorAll('[data-xt]').forEach(function(b){b.onclick=function(){tab=b.dataset.xt;render()}});bind(el);if(window.YX3)YX3.bind(el,tab)}
+function body(){if(tab==='fish'&&window.YX3)return YX3.tabs.fish();if(tab==='pet')return petHtml();if(tab==='ach')return achHtml();if(tab==='pages')return pagesHtml();if(tab==='world')return worldHtml();if(tab==='fun')return funHtml();if(tab==='salon')return salonHtml();return traderHtml()}
 function petHtml(){var h='<p class="sub">Yoldaşlar seninle gezer, bonus verir ve konuşur. Yumurtalar canavarlardan, bosslardan ve olaylardan düşer.</p>';
   if(X.eg.length){h+='<h3 style="margin:6px 0">🥚 Yumurtalar</h3>';X.eg.forEach(function(e,i){var left=Math.max(0,Math.ceil((e.at-Date.now())/1000));h+='<div class="it"><span style="font-size:1.6rem">🥚</span><div class="t"><b>Gizemli yumurta'+(e.lk>=2?' ✨':'')+'</b><br><small>'+(left?'Çatlamasına '+Math.floor(left/60)+':'+('0'+left%60).slice(-2):'Hazır!')+'</small></div><button class="btn" data-hatch="'+i+'" '+(left?'disabled':'')+' type="button">Çatlat</button></div>'})}
   h+='<h3 style="margin:8px 0 4px">🐾 Yoldaşların</h3>';var ids=Object.keys(X.pt);

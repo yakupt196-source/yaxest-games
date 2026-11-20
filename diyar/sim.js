@@ -2,7 +2,7 @@
    Böylece hesaplar iki tarafta aynı olur; sunucu "yetkili", istemci yalnızca gösterir ve girdi yollar. */
 (function(root){
 'use strict';
-var TS=48,MW=120,MH=120,CX=MW/2,CY=MH/2;
+var TS=48,MW=200,MH=200,CX=MW/2,CY=MH/2;
 function hash(x,y,s){var h=(x*374761393+y*668265263+(s||0)*2147483647)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296}
 function vn(x,y,s){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=hash(xi,yi,s),b=hash(xi+1,yi,s),c=hash(xi,yi+1,s),d=hash(xi+1,yi+1,s);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
 /* kutu türleri: 0 çimen, 1 orman, 2 kayalık, 3 su, 4 kasaba, 6 duvar */
@@ -10,19 +10,27 @@ function zoneAt(tx,ty){
   if(tx<0||ty<0||tx>=MW||ty>=MH)return 3;
   var dx=tx-CX,dy=ty-CY,d=Math.sqrt(dx*dx+dy*dy)+(vn(tx/6,ty/6,3)-.5)*11;
   var edge=Math.min(tx,ty,MW-1-tx,MH-1-ty);
-  if(edge<3||(vn(tx/9,ty/9,11)>.78&&d>16&&d<54))return 3;
+  if(edge<3||(vn(tx/9,ty/9,11)>.74&&d>16&&d<120))return 3;
   if(d<11)return 4;
-  if(d<27)return 0;
-  if(d<46)return 1;
-  return 2}
+  if(d<34)return 0;
+  if(d<56)return 1;
+  return vn(tx/11,ty/11,21)>.6?1:2}
 function nodeAt(tx,ty){
   var z=zoneAt(tx,ty);if(z===3||z===4)return null;
-  var dx=tx-CX,dy=ty-CY;if(dx*dx+dy*dy<169)return null;
+  var dx=tx-CX,dy=ty-CY,dd=Math.sqrt(dx*dx+dy*dy);if(dd<13)return null;
   var r=hash(tx,ty,7);
-  if(z===0){if(r<.05)return 'tree';if(r<.065)return 'rock'}
-  else if(z===1){var d1=Math.sqrt(dx*dx+dy*dy);if(r<.14)return 'tree';if(r<.165)return 'rock';if(r<.18)return 'copper';if(d1>36&&r>.97)return 'oldtree'}
-  else{var dd=Math.sqrt(dx*dx+dy*dy);if(r<.06+Math.min(.05,Math.max(0,dd-50)*.004)){var rr=hash(tx,ty,9);
-    return dd<50?(rr<.6?'copper':'iron'):dd<55?(rr<.5?'iron':'silver'):dd<60?(rr<.5?'silver':'goldore'):dd<64?(rr<.5?'goldore':'mithril'):dd<68?(rr<.5?'mithril':'titan'):dd<72?(rr<.6?'titan':'aster'):(rr<.35?'titan':'aster')}if(r<.1)return 'rock'}
+  if(z===0){if(r<.05)return 'tree';if(r<.065)return 'rock';return null}
+  if(z===1){if(r<.14)return 'tree';if(r<.165)return 'rock';if(r<.18&&dd<80)return 'copper';if(r>=.18&&r<.192&&dd>40)return 'goldore';if(dd>36&&r>.97)return 'oldtree';return null}
+  /* kayalık: bakır yaygın; diğer cevherler damar (küme) olarak ve uzakta, çok nadir */
+  var q=vn(tx/6,ty/6,41),rr=hash(tx,ty,9);
+  if(dd>=120&&q>.8&&r<.2)return 'aster';
+  if(dd>=108&&q>.78&&r<.2)return 'titan';
+  if(dd>=90&&q>.81&&r<.15)return 'mithril';
+  if(dd>=72&&q>.77&&r<.18)return 'silver';
+  if(dd>=60&&q>.72&&r<.18)return 'iron';
+  if(dd>=40&&q>.66&&r<.22)return 'goldore';
+  if(r<.05)return 'copper';
+  if(r<.1)return 'rock';
   return null}
 var NODE={tree:{n:'Ağaç',mat:'wood',t:1.4,prof:'wood',req:1,col:'#6b4a2b',sp:'#2f9e57'},rock:{n:'Kaya',mat:'stone',t:1.6,prof:'mine',req:1,col:'#8b93a8',sp:'#a8afc4'},
  copper:{n:'Bakır Damarı',mat:'copper',t:1.8,prof:'mine',req:2,col:'#6b5a50',sp:'#e08a4a'},iron:{n:'Demir Damarı',mat:'iron',t:2.2,prof:'mine',req:4,col:'#4f4a52',sp:'#b9a08a'},
@@ -37,7 +45,7 @@ var MATS={wood:{n:'Odun',ic:'🪵',v:2},stone:{n:'Taş',ic:'🪨',v:2},copper:{n
 var SMELT={copper:'i_copper',iron:'i_iron',silver:'i_silver',goldore:'i_gold',mithril:'i_mithril',titan:'i_titan',aster:'i_aster'};
 var TOOLS={pk:{n:'Kazma',t:['Taş Kazma','Bakır Kazma','Demir Kazma','Gümüş Kazma','Altın Kazma','Mitril Kazma','Titanyum Kazma'],c:[null,{wood:6,i_copper:3,gold:80},{wood:8,i_iron:4,gold:260},{wood:10,i_silver:5,gold:640},{wood:12,i_gold:5,gold:1500},{wood:14,i_mithril:5,gold:3400},{wood:16,i_titan:6,gold:7500}],lv:[1,2,4,6,8,10,13]},
  ax:{n:'Balta',t:['Taş Balta','Bakır Balta','Demir Balta','Gümüş Balta','Altın Balta'],c:[null,{wood:4,i_copper:3,gold:70},{i_iron:4,gold:240},{i_silver:5,gold:600},{i_gold:5,gold:1450}],lv:[1,2,4,7,10]}};
-var PVP=[{id:'vadi',n:'Kızıl Vadi',tx:96,ty:77,r:9},{id:'gecit',n:'Kurt Geçidi',tx:22,ty:42,r:9}];
+var PVP=[{id:'vadi',n:'Kızıl Vadi',tx:156,ty:84,r:9},{id:'gecit',n:'Kurt Geçidi',tx:38,ty:62,r:9},{id:'zirve',n:'Zirve Arenası',tx:104,ty:28,r:9}];
 var CLASSES={
  savasci:{n:'Savaşçı',ic:'⚔️',col:'#ff7a5c',hp:150,spd:150,rng:62,aspd:.55,dmg:16,melee:1,role:'Yakın dövüş, dengeli hasar',
   sk:[{id:'spin',n:'Girdap',ic:'🌀',cd:5,kind:'aoe',r:88,m:1.7},{id:'charge',n:'Atılış',ic:'💨',cd:8,kind:'dash',d:180,m:2,r:70},{id:'roar',n:'Savaş Narası',ic:'📣',cd:14,kind:'buff',dur:6,dmgm:1.5}]},
@@ -93,18 +101,41 @@ var MON={
  metin:{n:'Fetih Kristali',c:'#b57bff',hm:10,dm:0,sp:0,sz:30,xp:5,g:6,boss:1},
  skel:{n:'İskelet Savaşçı',c:'#e8e4d4',hm:2.2,dm:1.5,sp:90,sz:20,xp:2.6,g:2.2},
  lich:{n:'Mezar Lordu',c:'#7a4fd0',hm:18,dm:2.3,sp:70,sz:30,xp:14,g:20,boss:1},
- guardian:{n:'Kristal Bekçi',c:'#7ad7ff',hm:14,dm:2,sp:80,sz:34,xp:10,g:14,boss:1}
+ guardian:{n:'Kristal Bekçi',c:'#7ad7ff',hm:14,dm:2,sp:80,sz:34,xp:10,g:14,boss:1},
+ rabbit:{n:'Çılgın Tavşan',c:'#e8e0d0',hm:.7,dm:.7,sp:140,sz:14,xp:1,g:1},
+ bee:{n:'Öfkeli Arı',c:'#ffd23f',hm:.6,dm:1.3,sp:135,sz:12,xp:1.2,g:1.2},
+ fox:{n:'Kızıl Tilki',c:'#ff8a3d',hm:1.2,dm:1.2,sp:125,sz:16,xp:1.4,g:1.4},
+ spider:{n:'Dev Örümcek',c:'#4a3a5a',hm:1.6,dm:1.5,sp:105,sz:18,xp:1.9,g:1.7},
+ treant:{n:'Ağaç Ent',c:'#5a8a3a',hm:3.4,dm:1.3,sp:60,sz:28,xp:2.7,g:2.1},
+ bat:{n:'Mağara Yarasası',c:'#6a4a8a',hm:.9,dm:1.3,sp:150,sz:14,xp:1.7,g:1.5},
+ scorpion:{n:'Çöl Akrebi',c:'#d4a04a',hm:1.9,dm:1.7,sp:100,sz:18,xp:2.3,g:2.1},
+ bear:{n:'Kaya Ayısı',c:'#7a5a3a',hm:3.1,dm:1.6,sp:90,sz:26,xp:2.9,g:2.5},
+ wraith:{n:'Sis Hayaleti',c:'#9ad0ff',hm:2.1,dm:2,sp:110,sz:20,xp:3.3,g:2.9},
+ drake:{n:'Dağ Ejderi',c:'#e0463d',hm:8,dm:2.4,sp:100,sz:30,xp:7,g:7,boss:1},
+ goldslime:{n:'Altın Balçık',c:'#ffd23f',hm:3,dm:.15,sp:150,sz:16,xp:6,g:40},
+ queen:{n:'Kızıl Ay Kraliçesi',c:'#ff3b6e',hm:14,dm:2.3,sp:95,sz:34,xp:14,g:16,boss:1},
+ leviathan:{n:'Göl Canavarı',c:'#2a8fbf',hm:16,dm:2.4,sp:80,sz:36,xp:16,g:20,boss:1}
 };
+/* bölgeye ve uzaklığa göre canavar seçimi (h: 0..1 rastgele) */
+function monPick(z,d,h,h2){
+  if(h2!=null&&h2<.012&&(z===0||z===1))return 'goldslime';
+  if(z===0)return h<.42?'slime':h<.6?'boar':h<.8?'rabbit':'bee';
+  if(z===1)return h<.3?'wolf':h<.45?'boar':h<.65?'fox':h<.85?'spider':(d>=34?'treant':'wolf');
+  if(d>=100&&h>.94)return 'drake';
+  return h<.28?'golem':h<.48?'bat':h<.66?'scorpion':h<.8?'bear':(d>=70?'wraith':'golem')}
+/* seviye farkı: kendinden yüksek canavara hasar azalır, aldığın hasar artar; düşüğe tersine */
+function lvMod(pl,ml){var d=ml-pl;return d>0?Math.max(.08,1-.24*d):Math.min(1.4,1+.03*(-d))}
+function lvIn(pl,ml){var d=ml-pl;return d>0?Math.min(4,1+.3*d):Math.max(.45,1+.06*d)}
 function monFor(zone){return zone===0?(Math.random()<.75?'slime':'boar'):zone===1?(Math.random()<.6?'wolf':'boar'):'golem'}
 function zoneLv(zone,d){return zone===0?1+Math.floor(Math.max(0,d-8)/6):zone===1?5+Math.floor((d-27)/5):10+Math.floor((d-46)/3.5)}
 function xpNeed(l){return Math.round(70*l*l+40*l)}
-function mstat(type,lv){var m=MON[type];return{hp:Math.round((30+lv*20)*m.hm),dmg:Math.round((4+lv*2.3)*m.dm),xp:Math.round((10+lv*8)*m.xp),gold:Math.round((2+lv*2)*m.g)}}
+function mstat(type,lv){var m=MON[type];return{hp:Math.round((30+lv*24+lv*lv*1.1)*m.hm),dmg:Math.round((4+lv*2.3)*m.dm),xp:Math.round((10+lv*8)*m.xp),gold:Math.round((2+lv*2)*m.g)}}
 function pstat(p){var c=CLASSES[p.cls],l=p.lv,wl=p.wl||0,al=p.al||0;
   return{maxhp:Math.round((c.hp+l*13)*(1+.12*al)),dmg:Math.round((c.dmg*(1+.13*(l-1)))*(1+.18*wl)*WEAPONS[p.cls][Math.min(8,p.wt||0)].m),red:Math.min(.5,al*.035),spd:c.spd,rng:c.rng,aspd:c.aspd}}
 var UPI=[0,0,0,0,['i_copper',2],['i_copper',3],['i_iron',2],['i_iron',3],['i_silver',2],['i_silver',3],['i_gold',2],['i_mithril',2],['i_mithril',3]];
 function upCost(kind,n){var c=kind==='w'?{wood:4+3*n,stone:2+2*n,gold:10+15*n}:{wood:3+2*n,stone:3+3*n,gold:8+12*n},u=UPI[n];c.iron=0;if(u){c.ik=u[0];c.ic=u[1]+(kind==='w'?1:0)}return c}
 var PROF={wood:'Odunculuk',mine:'Madencilik'};
 function profNeed(l){return 8+l*8+l*l}
-root.YD={TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,zoneLv:zoneLv,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:50};
+root.YD={TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:50};
 if(typeof module!=='undefined')module.exports=root.YD;
 })(typeof window!=='undefined'?window:globalThis);
