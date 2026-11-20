@@ -42,7 +42,7 @@ var CLASSES={
  sifaci:{n:'Şifacı',ic:'💚',col:'#5be39a',hp:110,spd:150,rng:240,aspd:.7,dmg:10,melee:0,role:'Takımı iyileştirir, destek verir',
   sk:[{id:'heal',n:'Şifa Işığı',ic:'✚',cd:5,kind:'heal',r:170,amt:.38},{id:'hot',n:'Yenilenme',ic:'🌿',cd:10,kind:'hot',dur:8,amt:.05},{id:'flame',n:'Kutsal Alev',ic:'🔥',cd:7,kind:'aoe',r:95,m:1.6}]},
  suikastci:{n:'Suikastçı',ic:'🗡️',col:'#ffd23f',hp:100,spd:175,rng:55,aspd:.32,dmg:13,melee:1,role:'Hızlı, tek hedefe ölümcül',
-  sk:[{id:'shadow',n:'Gölge Adımı',ic:'🌑',cd:7,kind:'strike',rng:270,m:2.8},{id:'poison',n:'Zehir',ic:'☠️',cd:9,kind:'dot',rng:220,m:.55,ticks:6},{id:'smoke',n:'Duman',ic:'💨',cd:12,kind:'evade',dur:2}]}
+  sk:[{id:'shadow',n:'Gölge Adımı',ic:'🌑',cd:7,kind:'strike',rng:270,m:2.8},{id:'poison',n:'Zehir',ic:'☠️',cd:9,kind:'dot',rng:220,m:.55,ticks:6},{id:'smoke',n:'Duman',ic:'🌫',cd:12,kind:'evade',dur:2}]}
 };
 var DUNGEONS={
  kurt:{n:'Kurt İni',ic:'🐺',lv:4,party:1,desc:'Alfa Kurt ve sürüsü. Tek başına girilebilir.',waves:[{t:'wolf',c:4},{t:'wolf',c:6},{t:'alpha',c:1,extra:{t:'wolf',c:2}}],reward:{gold:60,xp:140,fang:2}},
