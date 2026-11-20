@@ -53,6 +53,22 @@ function claimNick(nick){var k=nickKey(nick),s0=st();if(!s0)return Promise.resol
       return fetch(NK+'?documentId='+encodeURIComponent(k),{method:'POST',headers:H,body:JSON.stringify({fields:{uid:{stringValue:s.uid},nick:{stringValue:nick},t:{integerValue:String(Date.now())}}})}).then(function(r2){
         if(r2.ok)return{ok:true};if(r2.status===409)return{ok:false,why:'taken'};if(r2.status===403)return{ok:true,soft:1};return{ok:false,why:'net'}})})}).catch(function(){return{ok:false,why:'net'}})}
 function releaseNick(nick){return token().then(function(s){return fetch(NK+'/'+encodeURIComponent(nickKey(nick)),{method:'DELETE',headers:{Authorization:'Bearer '+s.idToken}}).then(function(){return 1})}).catch(function(){return 0})}
-window.YXAcct={claimNick:claimNick,releaseNick:releaseNick,nickKey:nickKey,conf:conf,state:st,signUp:signUp,signIn:signIn,signOut:signOut,reset:reset,pull:pull,push:push,sync:sync,del:del};
+
+/* ---- hediye sistemi (Firestore: gifts) ---- */
+var FS='https://firestore.googleapis.com/v1/projects/'+FB.projectId+'/databases/(default)/documents';
+function fv(v){if(typeof v==='number')return{integerValue:String(Math.round(v))};if(typeof v==='boolean')return{booleanValue:v};if(v&&typeof v==='object'){var f={};Object.keys(v).forEach(function(k){f[k]=fv(v[k])});return{mapValue:{fields:f}}}return{stringValue:String(v)}}
+function uv(x){if(!x)return null;if('stringValue' in x)return x.stringValue;if('integerValue' in x)return +x.integerValue;if('booleanValue' in x)return x.booleanValue;if(x.mapValue){var o={},f=x.mapValue.fields||{};Object.keys(f).forEach(function(k){o[k]=uv(f[k])});return o}return null}
+function giftRow(d){var f=d.fields||{},o={id:d.name.split('/').pop()};Object.keys(f).forEach(function(k){o[k]=uv(f[k])});return o}
+function gQuery(field,val){return token().then(function(s){return fetch(FS+':runQuery',{method:'POST',headers:{Authorization:'Bearer '+s.idToken,'Content-Type':'application/json'},body:JSON.stringify({structuredQuery:{from:[{collectionId:'gifts'}],where:{fieldFilter:{field:{fieldPath:field},op:'EQUAL',value:{stringValue:val}}},limit:50}})}).then(function(r){if(!r.ok)throw mkErr('GIFTQ');return r.json()}).then(function(j){return j.filter(function(x){return x.document}).map(function(x){return giftRow(x.document)})})})}
+/* oyuncu: bana ve herkese gelen hediyeler */
+function myGifts(){var s=st();if(!s)return Promise.resolve([]);return Promise.all([gQuery('uid',s.uid).catch(function(){return[]}),gQuery('uid','*').catch(function(){return[]})]).then(function(r){return r[0].concat(r[1])})}
+function claimGift(g){return token().then(function(s){if(g.uid==='*')return true;return fetch(FS+'/gifts/'+g.id+'?updateMask.fieldPaths=claimed',{method:'PATCH',headers:{Authorization:'Bearer '+s.idToken,'Content-Type':'application/json'},body:JSON.stringify({fields:{claimed:{booleanValue:true}}})}).then(function(r){return r.ok})})}
+/* yönetici: hediye gönder (kural: yalnızca yönetici e-postası) */
+function sendGift(o){return token().then(function(s){var p=o.nick&&o.nick!=='*'?fetch(NK+'/'+encodeURIComponent(nickKey(o.nick)),{headers:{Authorization:'Bearer '+s.idToken}}).then(function(r){if(r.status===404)throw mkErr('NONICK');return r.json()}).then(function(j){return j.fields.uid.stringValue}):Promise.resolve('*');
+  return p.then(function(uid){var body={fields:{uid:fv(uid),nick:fv(o.nick||'*'),items:fv(o.items),msg:fv(o.msg||'Yaxest\'ten hediye!'),claimed:fv(false),t:fv(Date.now())}};
+    return fetch(FS+'/gifts',{method:'POST',headers:{Authorization:'Bearer '+s.idToken,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw mkErr(r.status===403?'DENIED':'NETWORK');return r.json()})})})}
+function listGifts(){return token().then(function(s){return fetch(FS+'/gifts?pageSize=40&orderBy=t%20desc',{headers:{Authorization:'Bearer '+s.idToken}}).then(function(r){if(!r.ok)throw mkErr(r.status===403?'DENIED':'NETWORK');return r.json()}).then(function(j){return(j.documents||[]).map(giftRow)})})}
+function delGift(id){return token().then(function(s){return fetch(FS+'/gifts/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+s.idToken}}).then(function(r){return r.ok})})}
+window.YXAcct={myGifts:myGifts,claimGift:claimGift,sendGift:sendGift,listGifts:listGifts,delGift:delGift,claimNick:claimNick,releaseNick:releaseNick,nickKey:nickKey,conf:conf,state:st,signUp:signUp,signIn:signIn,signOut:signOut,reset:reset,pull:pull,push:push,sync:sync,del:del};
 if(window.YXBackup)bg();else{var s=document.createElement('script');s.src=(document.currentScript&&document.currentScript.src||'').replace('account.js','backup.js');if(s.src){s.onload=bg;document.head.appendChild(s)}}
 })();

@@ -65,13 +65,21 @@ function enter(){var st=Y.pstat(P);toSvgImg();
     pit:{x:cx+330,y:cy+230},vill:VILL(cx,cy),houses:HOUSES(cx,cy),
     portals:[{id:'kurt',p:ang(30,15)},{id:'kristal',p:ang(50,150)},{id:'kale',p:ang(52,255)},{id:'golge',p:ang(58,330)}]};
   var dx=G.px-cx,dy=G.py-cy;if(Y.zoneAt(Math.floor(G.px/TS),Math.floor(G.py/TS))===3){G.px=cx;G.py=cy+60}
-  mkComps();initSpawns();addMetins();ensureQ();buildMini();setupHud();show('hud');resize();
+  giftTick();clearInterval(giftT);giftT=setInterval(giftTick,90000);mkComps();initSpawns();addMetins();ensureQ();buildMini();setupHud();show('hud');resize();
   try{var el=document.documentElement;if(el.requestFullscreen&&!document.fullscreenElement)el.requestFullscreen().catch(function(){})}catch(e){}
   try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(function(){})}catch(e){}
   say('Yaxest Diyarı\'na hoş geldin, '+P.nick+'! Yürü, saldır (⚔️), topla (✋). Harita: M veya mini haritaya dokun.','sys');
   say('Bu bir tek kişilik Eğitim Diyarı. Çok oyunculu diyar sunucu kurulunca açılacak.','sys');
   cancelAnimationFrame(raf);lastT=performance.now();raf=requestAnimationFrame(loop);setTimeout(chkFs,1200)}
-function leaveGame(){cancelAnimationFrame(raf);raf=0;saveNow();G=null;toChar();try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}}
+/* ---- hediye kutusu: yönetici hediyeleri oyuna girince ve 90 sn'de bir alınır ---- */
+function giftTick(){if(!G||!P||!window.YXAcct||!YXAcct.myGifts)return;YXAcct.myGifts().then(function(l){if(!G||!P)return;P.gb=P.gb||[];var got=[];
+  l.forEach(function(g){if(g.uid==='*'){if(P.gb.indexOf(g.id)>=0)return}else if(g.claimed)return;
+    var it=g.items||{},tx=[];Object.keys(it).forEach(function(k){var n=Math.max(0,Math.min(1e6,Math.floor(+it[k]||0)));if(!n)return;
+      if(k==='gold'){P.gold+=n;tx.push('🪙 '+n)}else if(k==='jeton'){if(window.YX&&YX.earn)YX.earn(n,'gift',true);tx.push('🪙 '+n+' site jetonu')}else if(Y.MATS[k]){P[k]=(P[k]||0)+n;tx.push(Y.MATS[k].ic+' '+n+' '+Y.MATS[k].n)}});
+    if(!tx.length)return;if(g.uid==='*'){P.gb.push(g.id);if(P.gb.length>60)P.gb.shift()}else YXAcct.claimGift(g);got.push({m:g.msg,t:tx.join(' · ')})});
+  if(got.length){saveNow();var h='<h3 style="margin:0 0 8px;color:#ffd23f">🎁 Hediye geldi!</h3>';got.forEach(function(x){h+='<div class="it"><div class="t"><b>'+esc(x.m||'Hediye')+'</b><br><small>'+esc(x.t)+'</small></div></div>';say('Hediye: '+x.t,'sys')});h+='<div class="row"><button class="btn" data-close type="button">Teşekkürler</button></div>';$('npc').innerHTML=h;$('npc').querySelectorAll('[data-close]').forEach(function(b){b.onclick=closePan});openPan('p-npc')}}).catch(function(){})}
+var giftT=0;
+function leaveGame(){clearInterval(giftT);cancelAnimationFrame(raf);raf=0;saveNow();G=null;toChar();try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}}
 function initSpawns(){G.spawns=[];
   for(var ty=4;ty<Y.MH-4;ty+=6)for(var tx=4;tx<Y.MW-4;tx+=6){var jx=tx+Math.floor(Y.hash(tx,ty,21)*4),jy=ty+Math.floor(Y.hash(tx,ty,22)*4),z=Y.zoneAt(jx,jy);if(z===3||z===4)continue;
     var dx=jx-Y.CX,dy=jy-Y.CY,d=Math.sqrt(dx*dx+dy*dy);if(d<21||Y.hash(tx,ty,23)>.55)continue;
