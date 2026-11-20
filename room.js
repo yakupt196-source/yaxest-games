@@ -1,5 +1,5 @@
 /* Yaxest oda sistemi: sunucusuz çok oyunculu masa oyunları.
-   Oda sahibi (host) oyunun hakemidir; arkadaşlar oda koduyla bağlanır (PeerJS / WebRTC, eşler arası).
+   Oda sahibi (host) oyunun hakemidir; arkadaşlar oda koduyla bağlanır (halka açık MQTT aracıları üzerinden).
    Eksik oyuncuların yerini bot doldurur. Oyun mantığı (logic) ve arayüzü (ui) oyun dosyasından gelir.
    logic: {n, init(n,opts), apply(st,seat,act), view(st,seat), turn(st), over(st), bot(st,seat,level), hot?}
    ui:    {mount(root,ctx), view(v,meta), unmount?()} */
@@ -14,25 +14,41 @@ function clone(o){return JSON.parse(JSON.stringify(o))}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
 /* ---------- taşıma katmanları ---------- */
-function loadPeer(){return new Promise(function(res,rej){if(window.Peer)return res(window.Peer);
-  var urls=['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'],i=0;
-  (function next(){if(i>=urls.length)return rej(new Error('peerjs'));var s=document.createElement('script');s.src=urls[i++];s.onload=function(){window.Peer?res(window.Peer):next()};s.onerror=next;document.head.appendChild(s)})()})}
-var ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'},{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]};
-function pid(gid,code){return'yaxest-'+gid+'-'+code}
-function wrapPeer(c){var l={send:function(o){try{c.send(o)}catch(e){}},close:function(){try{c.close()}catch(e){}},onmessage:null,onclose:null};
-  c.on('data',function(d){l.onmessage&&l.onmessage(d)});c.on('close',function(){l.onclose&&l.onclose()});c.on('error',function(){l.onclose&&l.onclose()});return l}
+/* Çevrimiçi taşıma: halka açık MQTT (WebSocket) aracıları üzerinden aktarma. NAT/telefon verisi/okul ağı fark etmez; kayıt veya anahtar gerekmez.
+   Oda sahibi ve misafir aynı anda birkaç aracıya bağlanır, ilk cevap veren seçilir. Misafir ayrılırsa (Last Will) oda sahibi otomatik haberdar olur. */
+var BROKERS=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081'];
+function loadMqtt(){return new Promise(function(res,rej){if(window.mqtt)return res(window.mqtt);
+  var urls=['https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js','https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'],i=0;
+  (function next(){if(i>=urls.length)return rej(new Error('mqtt'));var s=document.createElement('script');s.src=urls[i++];s.onload=function(){window.mqtt?res(window.mqtt):next()};s.onerror=next;document.head.appendChild(s)})()})}
+function mbase(gid,code){return'yaxest7/'+gid+'/'+code+'/'}
+function mconn(M,url,will,onUp){var done=false,c;
+  try{c=M.connect(url,{clientId:'yx_'+tok(),clean:true,connectTimeout:7000,reconnectPeriod:2500,keepalive:25,resubscribe:true,will:will||undefined})}catch(e){return null}
+  c.on('error',function(){});c.on('connect',function(){if(!done){done=true;onUp(c)}});return c}
 var Online={
-  host:function(gid,code,onconn){return loadPeer().then(function(Peer){return new Promise(function(res,rej){
-    var p=new Peer(pid(gid,code),{config:ICE,debug:0});
-    p.on('open',function(){res({close:function(){try{p.destroy()}catch(e){}}})});
-    p.on('error',function(e){rej(e)});
-    p.on('connection',function(c){if(c.open)onconn(wrapPeer(c));else c.on('open',function(){onconn(wrapPeer(c))})})})})},
-  join:function(gid,code){return loadPeer().then(function(Peer){return new Promise(function(res,rej){
-    var p=new Peer(undefined,{config:ICE,debug:0}),done=false;
-    var to=setTimeout(function(){if(!done){done=true;try{p.destroy()}catch(e){}rej(new Error('timeout'))}},15000);
-    p.on('error',function(e){if(!done){done=true;clearTimeout(to);rej(e)}});
-    p.on('open',function(){var c=p.connect(pid(gid,code),{reliable:true});
-      c.on('open',function(){if(!done){done=true;clearTimeout(to);var l=wrapPeer(c);l.close=function(){try{c.close()}catch(e){}try{p.destroy()}catch(e){}};res(l)}})})})})}
+  host:function(gid,code,onconn){return loadMqtt().then(function(M){return new Promise(function(res,rej){
+    var base=mbase(gid,code),links={},clients=[],ok=false,fails=0;
+    function mk(c,id){return{send:function(o){try{c.publish(base+'g/'+id,JSON.stringify({t:'d',d:o}),{qos:1})}catch(e){}},close:function(){try{c.publish(base+'g/'+id,JSON.stringify({t:'bye'}))}catch(e){}},onmessage:null,onclose:null}}
+    BROKERS.forEach(function(u){var c=mconn(M,u,{topic:base+'hs',payload:JSON.stringify({t:'hostbye'}),qos:1},function(c){
+      c.subscribe(base+'h',{qos:1},function(err){if(err)return;if(!ok){ok=true;res({close:function(){clients.forEach(function(x){try{x.publish(base+'hs',JSON.stringify({t:'hostbye'}));setTimeout(function(){x.end(true)},200)}catch(e){}})}})}});
+      c.on('message',function(t,buf){if(t!==base+'h')return;var m;try{m=JSON.parse(buf.toString())}catch(e){return}if(!m||!m.f)return;var l=links[m.f];
+        if(m.t==='hi'){if(!l){l=links[m.f]=mk(c,m.f);onconn(l)}c.publish(base+'g/'+m.f,JSON.stringify({t:'ok'}),{qos:1});return}
+        if(!l)return;if(m.t==='bye'){var q=l;delete links[m.f];q.onclose&&q.onclose()}else if(m.t==='d')l.onmessage&&l.onmessage(m.d)})});
+      if(c)clients.push(c);else fails++});
+    setTimeout(function(){if(!ok){clients.forEach(function(x){try{x.end(true)}catch(e){}});rej(new Error('mqtt'))}},9000)})})},
+  join:function(gid,code){return loadMqtt().then(function(M){return new Promise(function(res,rej){
+    var base=mbase(gid,code),g=tok(),clients=[],chosen=null,done=false,hiT=[];
+    function finish(c){if(done)return;done=true;chosen=c;hiT.forEach(clearInterval);clients.forEach(function(x){if(x!==c)try{x.end(true)}catch(e){}});clearTimeout(to);
+      var l={send:function(o){try{c.publish(base+'h',JSON.stringify({f:g,t:'d',d:o}),{qos:1})}catch(e){}},
+        close:function(){try{c.publish(base+'h',JSON.stringify({f:g,t:'bye'}),{qos:1})}catch(e){}setTimeout(function(){try{c.end(true)}catch(e){}},250)},onmessage:null,onclose:null};
+      c.on('message',function(t,buf){var m;try{m=JSON.parse(buf.toString())}catch(e){return}if(!m)return;
+        if(t===base+'g/'+g&&m.t==='d')l.onmessage&&l.onmessage(m.d);else if((t===base+'g/'+g&&m.t==='bye')||(t===base+'hs'&&m.t==='hostbye'))l.onclose&&l.onclose()});
+      res(l)}
+    var to=setTimeout(function(){if(!done){done=true;hiT.forEach(clearInterval);clients.forEach(function(x){try{x.end(true)}catch(e){}});rej(new Error(clients.length?'timeout':'mqtt'))}},12000);
+    BROKERS.forEach(function(u){var c=mconn(M,u,{topic:base+'h',payload:JSON.stringify({f:g,t:'bye'}),qos:1},function(c){
+      c.subscribe([base+'g/'+g,base+'hs'],{qos:1},function(err){if(err||done)return;
+        c.on('message',function(t,buf){if(done)return;var m;try{m=JSON.parse(buf.toString())}catch(e){return}if(t===base+'g/'+g&&m&&m.t==='ok')finish(c)});
+        var send=function(){if(!done)try{c.publish(base+'h',JSON.stringify({f:g,t:'hi'}),{qos:1})}catch(e){}};send();hiT.push(setInterval(send,1500))})});
+      if(c)clients.push(c)})})})}
 };
 /* Aynı tarayıcıdaki sekmeler arası (test ve yerel oyun için) */
 var Local={
@@ -105,7 +121,7 @@ function start(cfg){
     return tryHost(0)}
   function tryHost(n){R.code=mkcode();return net().host(gid,R.code,onconn).then(function(sv){R.server=sv;setPhase('lobby')},function(e){
     if(n<4&&e&&e.type==='unavailable-id')return tryHost(n+1);
-    R.isHost=false;setPhase('menu');showErr(e&&e.message==='peerjs'?T('Bağlantı servisi yüklenemedi. İnternetini kontrol et.'):T('Oda kurulamadı. Tekrar dene.'))})}
+    R.isHost=false;setPhase('menu');showErr(e&&e.message==='mqtt'?T('Bağlantı servisi yüklenemedi. İnternetini kontrol et.'):T('Oda kurulamadı. Tekrar dene.'))})}
   function fillBots(){for(var i=0;i<N;i++)if(R.players[i].k==='open'){var b=botProfile(i);R.players[i]={k:'bot',name:b.name,ch:b.ch,link:null,tok:null}}}
   function onconn(link){
     link.onmessage=function(m){hostMsg(link,m)};
@@ -155,7 +171,7 @@ function start(cfg){
     net().join(gid,code).then(function(link){R.link=link;R.isHost=false;
       link.onclose=function(){if(R.phase!=='menu'){R.link=null;R.phase='menu';R.state=null;draw();showErr(T('Bağlantı koptu'))}};
       link.onmessage=guestMsg;link.send({t:'hello',name:me.name,ch:me.ch,tok:myTok,bal:coins()})},function(e){
-      showErr(e&&e.message==='peerjs'?T('Bağlantı servisi yüklenemedi. İnternetini kontrol et.'):T('Oda bulunamadı. Kodu kontrol et.'))})}
+      showErr(e&&e.message==='mqtt'?T('Bağlantı servisi yüklenemedi. İnternetini kontrol et.'):T('Oda bulunamadı. Kodu kontrol et.'))})}
   function guestMsg(m){if(!m||typeof m!=='object')return;
     if(m.t==='welcome'){R.seat=m.seat;R.code=m.code;R.phase=m.phase==='play'?'play':'lobby';draw()}
     else if(m.t==='lobby'){R.players=m.players;R.phase='lobby';R.stake=m.stake||0;try{R.link&&R.link.send({t:'bal',b:coins()})}catch(e){}draw()}
