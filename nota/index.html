@@ -64,4 +64,4 @@ G.run({key:'nota',resize(){layout()},
 function press(i){play(i,.25);if(seq[pos]!==i){G.sfx('bad');phase='dead';setTimeout(()=>G.over('Yanlış nota'),350);return}pos++;if(pos>=seq.length){G.setScore(seq.length);G.bump();phase='ok';timer=.7;G.sfx('good')}}
 
 </script>
-<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script><script src="../economy.js"></script></body></html>

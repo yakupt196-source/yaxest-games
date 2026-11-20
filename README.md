@@ -23,3 +23,8 @@ Geometry Dash tarzı, yandan görünümlü ritim koşusu: dikenler, bloklar (üs
 `lib.js`: yeni oyunlar için ortak çatı (`G.run`, `G.over`, `G.pause`, çizim yardımcıları). Her oyunun kaynağı `tools/src/<id>.js`; `python3 tools/mk.py` ile `<id>/index.html` üretilir (ilk satır: `// Ad|giriş metni`).
 `music.js`: kodla üretilen arka plan müziği (lofi, chill, synth, groove, arcade, piyano). Oyuna göre stil seçer, menüdeki "Müzik" düğmesiyle kapanır (`yx-music`).
 Duello iki kişiliktir (ekran ikiye bölünür).
+
+## Jeton, mağaza ve karakter
+- `economy.js`: tüm sayfalarda yüklenir. Jeton (oynadıkça, oyun/seviye bitirince, rekor, günlük hediye, yeni oyun keşfi), karakter çizimi (SVG, 6 tür + aksesuar), temalar, mağaza API'si (`window.YX`). Veri yalnızca cihazda (`localStorage['yx-eco']`).
+- `magaza/`: mağaza sayfası (karakter, özellik, tema, eşya, sürpriz kutu).
+- Tüp oyununda tüp ekleme ve ipucu jetonla.

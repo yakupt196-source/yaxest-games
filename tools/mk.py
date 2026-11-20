@@ -35,7 +35,7 @@ def make(id,name,intro,js):
 <script>
 {js}
 </script>
-<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script><script src="../economy.js"></script></body></html>
 '''
     os.makedirs(f'{ROOT}/{id}',exist_ok=True)
     open(f'{ROOT}/{id}/index.html','w',encoding='utf-8').write(html)

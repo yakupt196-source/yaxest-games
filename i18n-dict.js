@@ -2690,5 +2690,914 @@ window.YAXEST_DICT={
 "Abrindo o Instagram... Se a caixa estiver vazia, mantenha pressionado e cole, sua mensagem foi copiada.",
 "Открываю Instagram... Если поле пустое, нажми и удерживай, затем вставь, сообщение скопировано.",
 "Apro Instagram... Se il campo è vuoto, tieni premuto e incolla, il messaggio è copiato."
+],
+"Yeni rekor!": [
+"New record!",
+"Neuer Rekord!",
+"¡Nuevo récord!",
+"Nouveau record !",
+"Novo recorde!",
+"Новый рекорд!",
+"Nuovo record!"
+],
+"Harika! 🎉": [
+"Awesome! 🎉",
+"Super! 🎉",
+"¡Genial! 🎉",
+"Génial ! 🎉",
+"Demais! 🎉",
+"Отлично! 🎉",
+"Fantastico! 🎉"
+],
+"Olsun, bir daha! 💪": [
+"No worries, again! 💪",
+"Macht nichts, nochmal! 💪",
+"¡No pasa nada, otra vez! 💪",
+"Pas grave, encore ! 💪",
+"Sem problema, de novo! 💪",
+"Ничего, ещё раз! 💪",
+"Pazienza, ancora! 💪"
+],
+"Yeni oyun keşfi": [
+"New game discovered",
+"Neues Spiel entdeckt",
+"Nuevo juego descubierto",
+"Nouveau jeu découvert",
+"Novo jogo descoberto",
+"Новая игра открыта",
+"Nuovo gioco scoperto"
+],
+"Günlük hediye": [
+"Daily gift",
+"Tägliches Geschenk",
+"Regalo diario",
+"Cadeau du jour",
+"Presente diário",
+"Ежедневный подарок",
+"Regalo giornaliero"
+],
+"gün seri": [
+"day streak",
+"Tage in Folge",
+"días seguidos",
+"jours d'affilée",
+"dias seguidos",
+"дней подряд",
+"giorni di fila"
+],
+"Pıtık": [
+"Blobby",
+"Blubb",
+"Blobi",
+"Bouboule",
+"Bolinha",
+"Пухлик",
+"Pallino"
+],
+"Miyav": [
+"Meow",
+"Miau",
+"Miau",
+"Miaou",
+"Miau",
+"Мяу",
+"Miao"
+],
+"Robo": [
+"Robo",
+"Robo",
+"Robo",
+"Robo",
+"Robô",
+"Робо",
+"Robo"
+],
+"Hayalet": [
+"Ghost",
+"Geist",
+"Fantasma",
+"Fantôme",
+"Fantasma",
+"Призрак",
+"Fantasma"
+],
+"Uzaylı": [
+"Alien",
+"Alien",
+"Alienígena",
+"Alien",
+"Alienígena",
+"Пришелец",
+"Alieno"
+],
+"Ejder": [
+"Dragon",
+"Drache",
+"Dragón",
+"Dragon",
+"Dragão",
+"Дракон",
+"Drago"
+],
+"Kep": [
+"Cap",
+"Kappe",
+"Gorra",
+"Casquette",
+"Boné",
+"Кепка",
+"Berretto"
+],
+"Parti Şapkası": [
+"Party Hat",
+"Partyhut",
+"Gorro de fiesta",
+"Chapeau de fête",
+"Chapéu de festa",
+"Праздничный колпак",
+"Cappello da festa"
+],
+"Kulaklık": [
+"Headphones",
+"Kopfhörer",
+"Auriculares",
+"Casque",
+"Fones",
+"Наушники",
+"Cuffie"
+],
+"Silindir": [
+"Top Hat",
+"Zylinder",
+"Chistera",
+"Haut-de-forme",
+"Cartola",
+"Цилиндр",
+"Cilindro"
+],
+"Büyücü Şapkası": [
+"Wizard Hat",
+"Zaubererhut",
+"Sombrero de mago",
+"Chapeau de sorcier",
+"Chapéu de mago",
+"Шляпа волшебника",
+"Cappello da mago"
+],
+"Taç": [
+"Crown",
+"Krone",
+"Corona",
+"Couronne",
+"Coroa",
+"Корона",
+"Corona"
+],
+"Gözlük": [
+"Glasses",
+"Brille",
+"Gafas",
+"Lunettes",
+"Óculos",
+"Очки",
+"Occhiali"
+],
+"Bıyık": [
+"Mustache",
+"Schnurrbart",
+"Bigote",
+"Moustache",
+"Bigode",
+"Усы",
+"Baffi"
+],
+"Maske": [
+"Mask",
+"Maske",
+"Máscara",
+"Masque",
+"Máscara",
+"Маска",
+"Maschera"
+],
+"Güneş Gözlüğü": [
+"Sunglasses",
+"Sonnenbrille",
+"Gafas de sol",
+"Lunettes de soleil",
+"Óculos escuros",
+"Солнцезащитные очки",
+"Occhiali da sole"
+],
+"Yıldız Gözlük": [
+"Star Glasses",
+"Sternbrille",
+"Gafas de estrella",
+"Lunettes étoile",
+"Óculos estrela",
+"Звёздные очки",
+"Occhiali a stella"
+],
+"Papyon": [
+"Bow Tie",
+"Fliege",
+"Pajarita",
+"Nœud papillon",
+"Gravata-borboleta",
+"Бабочка",
+"Papillon"
+],
+"Atkı": [
+"Scarf",
+"Schal",
+"Bufanda",
+"Écharpe",
+"Cachecol",
+"Шарф",
+"Sciarpa"
+],
+"Madalya": [
+"Medal",
+"Medaille",
+"Medalla",
+"Médaille",
+"Medalha",
+"Медаль",
+"Medaglia"
+],
+"Pelerin": [
+"Cape",
+"Umhang",
+"Capa",
+"Cape",
+"Capa",
+"Плащ",
+"Mantello"
+],
+"Parıltı": [
+"Sparkle",
+"Glitzer",
+"Destellos",
+"Étincelles",
+"Brilho",
+"Блеск",
+"Scintille"
+],
+"Kalpler": [
+"Hearts",
+"Herzen",
+"Corazones",
+"Cœurs",
+"Corações",
+"Сердечки",
+"Cuori"
+],
+"Kar": [
+"Snow",
+"Schnee",
+"Nieve",
+"Neige",
+"Neve",
+"Снег",
+"Neve"
+],
+"Ateş": [
+"Fire",
+"Feuer",
+"Fuego",
+"Feu",
+"Fogo",
+"Огонь",
+"Fuoco"
+],
+"Neon Gece": [
+"Neon Night",
+"Neonnacht",
+"Noche neón",
+"Nuit néon",
+"Noite neon",
+"Неоновая ночь",
+"Notte neon"
+],
+"Gün Batımı": [
+"Sunset",
+"Sonnenuntergang",
+"Atardecer",
+"Coucher de soleil",
+"Pôr do sol",
+"Закат",
+"Tramonto"
+],
+"Şeker": [
+"Candy",
+"Zuckerwatte",
+"Caramelo",
+"Bonbon",
+"Doce",
+"Конфета",
+"Caramella"
+],
+"Lav": [
+"Lava",
+"Lava",
+"Lava",
+"Lave",
+"Lava",
+"Лава",
+"Lava"
+],
+"Retro Arcade": [
+"Retro Arcade",
+"Retro-Arcade",
+"Arcade retro",
+"Arcade rétro",
+"Arcade retrô",
+"Ретро-аркада",
+"Arcade retrò"
+],
+"Altın": [
+"Gold",
+"Gold",
+"Oro",
+"Or",
+"Ouro",
+"Золото",
+"Oro"
+],
+"Şans": [
+"Luck",
+"Glück",
+"Suerte",
+"Chance",
+"Sorte",
+"Удача",
+"Fortuna"
+],
+"Enerji": [
+"Energy",
+"Energie",
+"Energía",
+"Énergie",
+"Energia",
+"Энергия",
+"Energia"
+],
+"Tüccar": [
+"Merchant",
+"Händler",
+"Mercader",
+"Marchand",
+"Mercador",
+"Торговец",
+"Mercante"
+],
+"Seri": [
+"Streak",
+"Serie",
+"Racha",
+"Série",
+"Sequência",
+"Серия",
+"Serie"
+],
+"Kazandığın her jeton %{0} artar": [
+"Every token you earn increases by {0}%",
+"Jeder verdiente Jeton steigt um {0} %",
+"Cada ficha que ganas aumenta un {0} %",
+"Chaque jeton gagné augmente de {0} %",
+"Cada ficha que você ganha aumenta {0}%",
+"Каждый жетон увеличивается на {0}%",
+"Ogni gettone guadagnato aumenta del {0}%"
+],
+"Oynarken jeton daha sık gelir": [
+"Tokens arrive faster while you play",
+"Beim Spielen kommen Jetons schneller",
+"Las fichas llegan más rápido mientras juegas",
+"Les jetons arrivent plus vite en jouant",
+"As fichas chegam mais rápido enquanto você joga",
+"Жетоны приходят чаще во время игры",
+"I gettoni arrivano più spesso mentre giochi"
+],
+"Mağazada ve Tüp'te %{0} indirim": [
+"{0}% off in the shop and in Tube",
+"{0} % Rabatt im Shop und bei Tube",
+"{0} % de descuento en la tienda y en Tubo",
+"{0} % de réduction en boutique et dans Tube",
+"{0}% de desconto na loja e no Tubo",
+"Скидка {0}% в магазине и в Tube",
+"{0}% di sconto nel negozio e in Provetta"
+],
+"Günlük hediye büyür": [
+"The daily gift grows",
+"Das tägliche Geschenk wird größer",
+"El regalo diario crece",
+"Le cadeau du jour grandit",
+"O presente diário cresce",
+"Ежедневный подарок растёт",
+"Il regalo giornaliero cresce"
+],
+"Mağaza": [
+"Shop",
+"Shop",
+"Tienda",
+"Boutique",
+"Loja",
+"Магазин",
+"Negozio"
+],
+"← Oyunlar": [
+"← Games",
+"← Spiele",
+"← Juegos",
+"← Jeux",
+"← Jogos",
+"← Игры",
+"← Giochi"
+],
+"Karakter": [
+"Character",
+"Figur",
+"Personaje",
+"Personnage",
+"Personagem",
+"Персонаж",
+"Personaggio"
+],
+"Özellik": [
+"Perks",
+"Fähigkeiten",
+"Mejoras",
+"Atouts",
+"Vantagens",
+"Навыки",
+"Vantaggi"
+],
+"Tema": [
+"Theme",
+"Design",
+"Tema",
+"Thème",
+"Tema",
+"Тема",
+"Tema"
+],
+"Eşya": [
+"Items",
+"Items",
+"Objetos",
+"Objets",
+"Itens",
+"Предметы",
+"Oggetti"
+],
+"Karakterine isim ver": [
+"Name your character",
+"Gib deiner Figur einen Namen",
+"Ponle nombre a tu personaje",
+"Donne un nom à ton personnage",
+"Dê um nome ao seu personagem",
+"Дай имя персонажу",
+"Dai un nome al tuo personaggio"
+],
+"Çırak": [
+"Apprentice",
+"Lehrling",
+"Aprendiz",
+"Apprenti",
+"Aprendiz",
+"Ученик",
+"Apprendista"
+],
+"Oyuncu": [
+"Player",
+"Spieler",
+"Jugador",
+"Joueur",
+"Jogador",
+"Игрок",
+"Giocatore"
+],
+"Toplam kazanılan": [
+"Total earned",
+"Insgesamt verdient",
+"Total ganado",
+"Total gagné",
+"Total ganho",
+"Всего заработано",
+"Totale guadagnato"
+],
+"Önizleme": [
+"Preview",
+"Vorschau",
+"Vista previa",
+"Aperçu",
+"Prévia",
+"Предпросмотр",
+"Anteprima"
+],
+"Satın al": [
+"Buy",
+"Kaufen",
+"Comprar",
+"Acheter",
+"Comprar",
+"Купить",
+"Acquista"
+],
+"Vazgeç": [
+"Cancel",
+"Abbrechen",
+"Cancelar",
+"Annuler",
+"Cancelar",
+"Отмена",
+"Annulla"
+],
+"Tak": [
+"Equip",
+"Anlegen",
+"Equipar",
+"Équiper",
+"Equipar",
+"Надеть",
+"Indossa"
+],
+"Kapat": [
+"Close",
+"Schließen",
+"Cerrar",
+"Fermer",
+"Fechar",
+"Закрыть",
+"Chiudi"
+],
+"Yeni eşya!": [
+"New item!",
+"Neues Item!",
+"¡Objeto nuevo!",
+"Nouvel objet !",
+"Novo item!",
+"Новый предмет!",
+"Nuovo oggetto!"
+],
+"Yok": [
+"None",
+"Keine",
+"Ninguno",
+"Aucun",
+"Nenhum",
+"Нет",
+"Nessuno"
+],
+"Takılı": [
+"Equipped",
+"Angelegt",
+"Equipado",
+"Équipé",
+"Equipado",
+"Надето",
+"Indossato"
+],
+"Sahipsin": [
+"Owned",
+"Im Besitz",
+"Lo tienes",
+"Possédé",
+"Você tem",
+"Есть",
+"Posseduto"
+],
+"Tür": [
+"Type",
+"Typ",
+"Tipo",
+"Type",
+"Tipo",
+"Вид",
+"Tipo"
+],
+"Renk": [
+"Color",
+"Farbe",
+"Color",
+"Couleur",
+"Cor",
+"Цвет",
+"Colore"
+],
+"Şapka": [
+"Hat",
+"Hut",
+"Sombrero",
+"Chapeau",
+"Chapéu",
+"Шляпа",
+"Cappello"
+],
+"Yüz": [
+"Face",
+"Gesicht",
+"Cara",
+"Visage",
+"Rosto",
+"Лицо",
+"Viso"
+],
+"Boyun": [
+"Neck",
+"Hals",
+"Cuello",
+"Cou",
+"Pescoço",
+"Шея",
+"Collo"
+],
+"Efekt": [
+"Effect",
+"Effekt",
+"Efecto",
+"Effet",
+"Efeito",
+"Эффект",
+"Effetto"
+],
+"jeton eksik": [
+"tokens short",
+"Jetons fehlen",
+"fichas faltan",
+"jetons manquants",
+"fichas faltando",
+"жетонов не хватает",
+"gettoni mancanti"
+],
+"Önce dene, beğenirsen al": [
+"Try first, buy if you like it",
+"Erst testen, dann kaufen",
+"Pruébalo y compra si te gusta",
+"Essaie d'abord, achète si ça te plaît",
+"Experimente e compre se gostar",
+"Сначала примерь, потом купи",
+"Prova prima, compra se ti piace"
+],
+"Geliştir": [
+"Upgrade",
+"Verbessern",
+"Mejorar",
+"Améliorer",
+"Melhorar",
+"Улучшить",
+"Potenzia"
+],
+"Maks": [
+"Max",
+"Max",
+"Máx",
+"Max",
+"Máx",
+"Макс",
+"Max"
+],
+"Satın alındı!": [
+"Purchased!",
+"Gekauft!",
+"¡Comprado!",
+"Acheté !",
+"Comprado!",
+"Куплено!",
+"Acquistato!"
+],
+"dk": [
+"min",
+"Min.",
+"min",
+"min",
+"min",
+"мин",
+"min"
+],
+"Al": [
+"Get",
+"Holen",
+"Obtener",
+"Prendre",
+"Obter",
+"Взять",
+"Prendi"
+],
+"Aç": [
+"Open",
+"Öffnen",
+"Abrir",
+"Ouvrir",
+"Abrir",
+"Открыть",
+"Apri"
+],
+"2× Jeton": [
+"2× Tokens",
+"2× Jetons",
+"2× Fichas",
+"2× Jetons",
+"2× Fichas",
+"2× Жетоны",
+"2× Gettoni"
+],
+"15 dakika boyunca kazandığın her jeton iki katı.": [
+"For 15 minutes every token you earn is doubled.",
+"15 Minuten lang wird jeder verdiente Jeton verdoppelt.",
+"Durante 15 minutos cada ficha que ganes se duplica.",
+"Pendant 15 minutes, chaque jeton gagné est doublé.",
+"Por 15 minutos, cada ficha que você ganha vale o dobro.",
+"15 минут каждый жетон удваивается.",
+"Per 15 minuti ogni gettone guadagnato vale il doppio."
+],
+"Tüp Cebi": [
+"Tube Pocket",
+"Tube-Tasche",
+"Bolsillo de tubos",
+"Poche à tubes",
+"Bolso de tubos",
+"Карман для пробирок",
+"Tasca delle provette"
+],
+"Tüp oyununda her seviyede ücretsiz ek tüp:": [
+"Free extra tubes per level in Tube:",
+"Kostenlose Extra-Tubes pro Level in Tube:",
+"Tubos extra gratis por nivel en Tubo:",
+"Tubes supplémentaires gratuits par niveau dans Tube :",
+"Tubos extras grátis por nível no Tubo:",
+"Бесплатных пробирок за уровень в Tube:",
+"Provette extra gratis per livello in Provetta:"
+],
+"Sürpriz Kutu": [
+"Surprise Box",
+"Überraschungsbox",
+"Caja sorpresa",
+"Boîte surprise",
+"Caixa surpresa",
+"Коробка-сюрприз",
+"Scatola sorpresa"
+],
+"Sahip olmadığın rastgele bir karakter eşyası çıkar.": [
+"Gives a random character item you don't own yet.",
+"Liefert ein zufälliges Figuren-Item, das du noch nicht hast.",
+"Da un objeto aleatorio de personaje que aún no tienes.",
+"Donne un objet de personnage aléatoire que tu n'as pas encore.",
+"Dá um item aleatório de personagem que você ainda não tem.",
+"Выпадает случайный предмет персонажа, которого у тебя нет.",
+"Ti dà un oggetto casuale del personaggio che non hai ancora."
+],
+"Tüm eşyalara sahipsin!": [
+"You own every item!",
+"Du besitzt alle Items!",
+"¡Tienes todos los objetos!",
+"Tu possèdes tous les objets !",
+"Você tem todos os itens!",
+"У тебя есть все предметы!",
+"Possiedi tutti gli oggetti!"
+],
+"Jeton nasıl kazanılır?": [
+"How do I earn tokens?",
+"Wie verdiene ich Jetons?",
+"¿Cómo gano fichas?",
+"Comment gagner des jetons ?",
+"Como ganhar fichas?",
+"Как заработать жетоны?",
+"Come si guadagnano i gettoni?"
+],
+"Oyun oynarken zamanla": [
+"Over time while you play",
+"Mit der Zeit beim Spielen",
+"Con el tiempo mientras juegas",
+"Avec le temps en jouant",
+"Com o tempo enquanto joga",
+"Со временем во время игры",
+"Col tempo mentre giochi"
+],
+"Oyun ya da seviye bitirince; skor yükseldikçe artar": [
+"When you finish a game or level; more with a higher score",
+"Beim Beenden eines Spiels oder Levels; mehr bei höherem Score",
+"Al terminar un juego o nivel; más con mayor puntuación",
+"En terminant une partie ou un niveau ; plus avec un meilleur score",
+"Ao terminar um jogo ou nível; mais com pontuação maior",
+"За завершение игры или уровня; больше при высоком счёте",
+"Quando finisci una partita o un livello; di più con punteggio alto"
+],
+"Rekor kırınca bonus": [
+"Bonus for breaking a record",
+"Bonus für einen neuen Rekord",
+"Bonus por batir un récord",
+"Bonus pour un record battu",
+"Bônus por quebrar um recorde",
+"Бонус за рекорд",
+"Bonus per un nuovo record"
+],
+"Her gün girince günlük hediye, seri yaptıkça büyür": [
+"A daily gift each day, growing with your streak",
+"Jeden Tag ein Geschenk, das mit deiner Serie wächst",
+"Un regalo diario que crece con tu racha",
+"Un cadeau chaque jour, qui grandit avec ta série",
+"Um presente por dia, que cresce com sua sequência",
+"Подарок каждый день, растёт с серией",
+"Un regalo al giorno, che cresce con la serie"
+],
+"Bir oyunu ilk kez açınca keşif bonusu": [
+"Discovery bonus the first time you open a game",
+"Entdeckerbonus beim ersten Öffnen eines Spiels",
+"Bono de descubrimiento al abrir un juego por primera vez",
+"Bonus de découverte à la première ouverture d'un jeu",
+"Bônus de descoberta ao abrir um jogo pela primeira vez",
+"Бонус за первое открытие игры",
+"Bonus scoperta alla prima apertura di un gioco"
+],
+"Kaydın bu cihazda saklanır.": [
+"Your progress is saved on this device.",
+"Dein Fortschritt wird auf diesem Gerät gespeichert.",
+"Tu progreso se guarda en este dispositivo.",
+"Ta progression est enregistrée sur cet appareil.",
+"Seu progresso fica salvo neste dispositivo.",
+"Прогресс хранится на этом устройстве.",
+"I tuoi progressi sono salvati su questo dispositivo."
+],
+"Yaxest Games mağazası: oyun oynayarak jeton kazan, karakterini giydir, arayüz temasını değiştir.": [
+"Yaxest Games shop: earn tokens by playing, dress up your character, change the interface theme.",
+"Yaxest-Games-Shop: Jetons beim Spielen verdienen, Figur ankleiden, Design ändern.",
+"Tienda de Yaxest Games: gana fichas jugando, viste a tu personaje y cambia el tema.",
+"Boutique Yaxest Games : gagne des jetons en jouant, habille ton personnage, change le thème.",
+"Loja Yaxest Games: ganhe fichas jogando, vista seu personagem e mude o tema.",
+"Магазин Yaxest Games: зарабатывай жетоны, наряжай персонажа, меняй тему.",
+"Negozio Yaxest Games: guadagna gettoni giocando, vesti il personaggio, cambia tema."
+],
+"Karakterin": [
+"Your character",
+"Deine Figur",
+"Tu personaje",
+"Ton personnage",
+"Seu personagem",
+"Твой персонаж",
+"Il tuo personaggio"
+],
+"Mağazaya git": [
+"Go to the shop",
+"Zum Shop",
+"Ir a la tienda",
+"Aller à la boutique",
+"Ir para a loja",
+"В магазин",
+"Vai al negozio"
+],
+"Yetersiz jeton: 🪙 {0} gerekli": [
+"Not enough tokens: 🪙 {0} needed",
+"Nicht genug Jetons: 🪙 {0} nötig",
+"Fichas insuficientes: 🪙 {0} necesarias",
+"Pas assez de jetons : 🪙 {0} requis",
+"Fichas insuficientes: 🪙 {0} necessárias",
+"Не хватает жетонов: нужно 🪙 {0}",
+"Gettoni insufficienti: servono 🪙 {0}"
+],
+"En fazla 14 tüp": [
+"14 tubes at most",
+"Höchstens 14 Tubes",
+"Máximo 14 tubos",
+"14 tubes au maximum",
+"No máximo 14 tubos",
+"Максимум 14 пробирок",
+"Massimo 14 provette"
+],
+"Hamle kalmadı: geri al ya da tüp ekle": [
+"No moves left: undo or add a tube",
+"Keine Züge mehr: rückgängig oder Tube hinzufügen",
+"Sin movimientos: deshaz o añade un tubo",
+"Plus de coups : annule ou ajoute un tube",
+"Sem jogadas: desfaça ou adicione um tubo",
+"Ходов нет: отмени или добавь пробирку",
+"Nessuna mossa: annulla o aggiungi una provetta"
+],
+"💡 İpucu": [
+"💡 Hint",
+"💡 Tipp",
+"💡 Pista",
+"💡 Indice",
+"💡 Dica",
+"💡 Подсказка",
+"💡 Suggerimento"
+],
+"Bedava": [
+"Free",
+"Gratis",
+"Gratis",
+"Gratuit",
+"Grátis",
+"Бесплатно",
+"Gratis"
+],
+"Mağaza bölümleri": [
+"Shop sections",
+"Shop-Bereiche",
+"Secciones de la tienda",
+"Rubriques de la boutique",
+"Seções da loja",
+"Разделы магазина",
+"Sezioni del negozio"
 ]
 };

@@ -67,4 +67,4 @@ $('pad').onpointerdown=e=>{const b=e.target.closest('.o');if(!b||state!=='play')
 addEventListener('keydown',e=>{if(e.key==='Enter'&&state!=='play'&&performance.now()>overAt)start();const k=['1','2','3','4'].indexOf(e.key);if(k>=0&&state==='play'){if(k===ans){sc++;$('big').textContent=sc;nextQ()}else over('Yanlış renk!')}});
 $('go').onclick=()=>{if(performance.now()>overAt)start()};
 
-</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script></body></html>
+</script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script><script src="../economy.js"></script></body></html>
