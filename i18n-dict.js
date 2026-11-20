@@ -5282,5 +5282,59 @@ window.YAXEST_DICT={
 "Crie uma sala com um amigo, compartilhe o código e jogue xadrez com todas as regras. Também contra bot.",
 "Создай комнату с другом, поделись кодом и играй в шахматы по полным правилам. Можно и с ботом.",
 "Crea una stanza con un amico, condividi il codice e gioca a scacchi con tutte le regole. Anche contro il bot."
+],
+"Yeterli jetonu yok": [
+"Not enough tokens",
+"Nicht genug Jetons",
+"No tiene suficientes fichas",
+"N'a pas assez de jetons",
+"Não tem fichas suficientes",
+"Недостаточно жетонов",
+"Gettoni insufficienti"
+],
+"Kazanılan pot": [
+"Pot won",
+"Pot gewonnen",
+"Bote ganado",
+"Cagnotte gagnée",
+"Pote ganho",
+"Выигранный банк",
+"Piatto vinto"
+],
+"Bahis iade": [
+"Stake refunded",
+"Einsatz erstattet",
+"Apuesta devuelta",
+"Mise remboursée",
+"Aposta devolvida",
+"Ставка возвращена",
+"Puntata rimborsata"
+],
+"Bahis": [
+"Stake",
+"Einsatz",
+"Apuesta",
+"Mise",
+"Aposta",
+"Ставка",
+"Puntata"
+],
+"Bahis yok": [
+"No stake",
+"Kein Einsatz",
+"Sin apuesta",
+"Sans mise",
+"Sem aposta",
+"Без ставки",
+"Nessuna puntata"
+],
+"kazanan tüm potu alır": [
+"winner takes the whole pot",
+"Gewinner bekommt den ganzen Pot",
+"el ganador se lleva todo el bote",
+"le gagnant prend toute la cagnotte",
+"o vencedor leva o pote todo",
+"победитель забирает весь банк",
+"il vincitore prende tutto il piatto"
 ]
 };

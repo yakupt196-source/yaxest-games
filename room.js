@@ -91,7 +91,7 @@ function start(cfg){
   document.body.classList.add('yx-room');injectCss();
   var root=$('rm')||document.body.appendChild(Object.assign(document.createElement('div'),{id:'rm'}));
   var me=myProfile(),level=2;try{level=+localStorage.getItem('yx-lvl-'+gid)||2}catch(e){}
-  var R={phase:'menu',isHost:false,hot:false,seat:0,code:'',players:[],state:null,meta:null,link:null,server:null,ver:0,rewarded:false,lastView:null};
+  var R={phase:'menu',isHost:false,hot:false,seat:0,code:'',players:[],state:null,meta:null,link:null,server:null,ver:0,rewarded:false,lastView:null,stake:0,pot:0,stakeNow:0,rd:0};
 
   function setPhase(p){R.phase=p;draw()}
   function pub(){return R.players.map(function(p){return{k:p.k,name:p.name,ch:p.ch,here:p.k==='human'||p.k==='host'}})}
@@ -117,19 +117,27 @@ function start(cfg){
       var s2=-1;for(var j=1;j<N;j++){var p=R.players[j];if(p.was&&p.tok&&p.tok===m.tok){s2=j;break}}
       if(s2<0)for(var k=1;k<N;k++)if(R.players[k].k==='open'&&R.phase==='lobby'){s2=k;break}
       if(s2<0){link.send({t:'deny',r:R.phase==='play'?'started':'full'});return}
-      R.players[s2]={k:'human',name:String(m.name||T('Oyuncu')).slice(0,14),ch:m.ch||{sp:'blob',col:'#ffd23f'},link:link,tok:m.tok||tok()};
+      R.players[s2]={k:'human',name:String(m.name||T('Oyuncu')).slice(0,14),ch:m.ch||{sp:'blob',col:'#ffd23f'},link:link,tok:m.tok||tok(),bal:+m.bal||0};
       link.send({t:'welcome',seat:s2,code:R.code,phase:R.phase});
       if(R.phase==='play'){pushViews();schedBot()}else pushLobby();return}
     if(seat<0)return;
     if(m.t==='act'){onAct(seat,m.a)}
     else if(m.t==='emo'){bcast({t:'emo',seat:seat,e:String(m.e).slice(0,4)});showEmo(seat,String(m.e).slice(0,4))}
+    else if(m.t==='bal'){R.players[seat].bal=+m.b||0}
     else if(m.t==='bye'){dropSeat(seat)}}
   function bcast(o){R.players.forEach(function(p){if(p.link)p.link.send(o)})}
-  function pushLobby(){bcast({t:'lobby',code:R.code,players:pub(),phase:'lobby'});if(R.phase==='lobby')draw()}
-  function beginGame(){R.state=logic.init(N,{level:level});R.rewarded=false;R.ver++;R.phase='play';
+  function pushLobby(){bcast({t:'lobby',code:R.code,players:pub(),phase:'lobby',stake:R.stake});if(R.phase==='lobby')draw()}
+  function coins(){try{return window.YX?YX.coins():0}catch(e){return 0}}
+  function beginGame(){
+    R.stakeNow=0;R.pot=0;
+    if(R.isHost&&!R.hot&&R.stake>0&&R.code){var hum=R.players.filter(function(p){return p.k==='human'||p.k==='host'});
+      if(hum.length>=2){var poor=null;hum.forEach(function(p){var b=p.k==='host'?coins():p.bal;if(b<R.stake&&!poor)poor=p});
+        if(poor){toast(esc(poor.name)+': '+T('Yeterli jetonu yok'));return}
+        R.stakeNow=R.stake;R.pot=R.stake*hum.length;try{window.YX&&YX.spend(R.stake)}catch(e){}}}
+    R.rd++;R.state=logic.init(N,{level:level});R.rewarded=false;R.ver++;R.phase='play';
     for(var i=0;i<N;i++)if(R.players[i].k==='open'){var b=botProfile(i);R.players[i]={k:'bot',name:b.name,ch:b.ch,link:null,tok:null}}
     draw();pushViews();schedBot()}
-  function pushViews(){var meta={turn:logic.turn(R.state),over:logic.over(R.state)};R.meta=meta;
+  function pushViews(){var meta={turn:logic.turn(R.state),over:logic.over(R.state),stake:R.stakeNow,pot:R.pot,rd:R.rd};R.meta=meta;
     R.players.forEach(function(p,i){if(p.link)p.link.send({t:'v',seat:i,v:logic.view(R.state,i),meta:meta,players:pub()})});
     var vs=R.hot&&meta.turn!=null?meta.turn:0;onView(logic.view(R.state,vs),meta,pub())}
   function onAct(seat,a){if(!R.state)return;
@@ -146,11 +154,11 @@ function start(cfg){
     var myTok;try{myTok=sessionStorage.getItem('yx-tok-'+gid+code)||tok();sessionStorage.setItem('yx-tok-'+gid+code,myTok)}catch(e){myTok=tok()}
     net().join(gid,code).then(function(link){R.link=link;R.isHost=false;
       link.onclose=function(){if(R.phase!=='menu'){R.link=null;R.phase='menu';R.state=null;draw();showErr(T('Bağlantı koptu'))}};
-      link.onmessage=guestMsg;link.send({t:'hello',name:me.name,ch:me.ch,tok:myTok})},function(e){
+      link.onmessage=guestMsg;link.send({t:'hello',name:me.name,ch:me.ch,tok:myTok,bal:coins()})},function(e){
       showErr(e&&e.message==='peerjs'?T('Bağlantı servisi yüklenemedi. İnternetini kontrol et.'):T('Oda bulunamadı. Kodu kontrol et.'))})}
   function guestMsg(m){if(!m||typeof m!=='object')return;
     if(m.t==='welcome'){R.seat=m.seat;R.code=m.code;R.phase=m.phase==='play'?'play':'lobby';draw()}
-    else if(m.t==='lobby'){R.players=m.players;R.phase='lobby';draw()}
+    else if(m.t==='lobby'){R.players=m.players;R.phase='lobby';R.stake=m.stake||0;try{R.link&&R.link.send({t:'bal',b:coins()})}catch(e){}draw()}
     else if(m.t==='v'){R.seat=m.seat;R.players=m.players;if(R.phase!=='play'){R.phase='play';R.rewarded=false;draw()}onView(m.v,m.meta,m.players)}
     else if(m.t==='emo')showEmo(m.seat,m.e);
     else if(m.t==='err')toast(T(m.e));
@@ -161,7 +169,9 @@ function start(cfg){
   function ctx(){return{n:N,get seat(){return mySeat()},get players(){return R.players},get level(){return level},hot:R.hot,t:T,avatar:avatar,
     send:function(a){if(R.isHost)onAct(mySeat(),a);else if(R.link)R.link.send({t:'act',a:a})},
     sfx:function(n){try{window.YS&&YS.play(n)}catch(e){}}}}
-  function onView(v,meta,players){R.lastView=v;R.meta=meta;if(players&&!R.isHost)R.players=players;
+  function paySt(meta){if(R.isHost||!meta||!(meta.stake>0))return;var k='yx-paid-'+gid+R.code,p=null;try{p=sessionStorage.getItem(k)}catch(e){}
+    if(String(p)===String(meta.rd))return;try{sessionStorage.setItem(k,meta.rd)}catch(e){}try{window.YX&&YX.spend(meta.stake)}catch(e){}}
+  function onView(v,meta,players){paySt(meta);R.lastView=v;R.meta=meta;if(players&&!R.isHost)R.players=players;
     if(R.phase!=='play')return;
     if(!uiMounted){drawGame()}
     try{ui.view(v,meta)}catch(e){if(window.console)console.error(e)}
@@ -169,6 +179,9 @@ function start(cfg){
     if(meta&&meta.over&&!R.rewarded){R.rewarded=true;rewardMe(meta.over)}}
   function rewardMe(o){var win=o.winner===mySeat()||(o.winners&&o.winners.indexOf(mySeat())>=0);var hasHuman=R.players.some(function(p,i){return i!==mySeat()&&(p.k==='human'||p.k==='host'&&R.hot)});
     var n=win?(hasHuman?14:8):4;try{if(window.YX&&!R.hot){var a=YX.earn(n,'room',1);if(a)toast('+'+a+' 🪙 · '+T(win?'Kazandın! 🎉':'Güzel maç!'))}}catch(e){}
+    var mt=R.meta||{};if(mt.stake>0&&!R.hot){var draw=(o.winner==null||o.winner<0)&&!(o.winners&&o.winners.length);
+      try{if(win){var g=YX.earn(mt.pot,'pot',1);toast('+'+g+' 🪙 · '+T('Kazanılan pot'))}else if(draw){YX.earn(mt.stake,'refund',1);toast('+'+mt.stake+' 🪙 · '+T('Bahis iade'))}else toast('-'+mt.stake+' 🪙')}catch(e){}
+      if(!R.isHost&&R.link)setTimeout(function(){try{R.link.send({t:'bal',b:coins()})}catch(e){}},300)}
     try{window.YS&&YS.play(win?'win':'over')}catch(e){}}
   function showEmo(seat,e){var el=document.querySelector('#pb .pl[data-s="'+seat+'"] .emo');if(!el)return;el.textContent=e;el.classList.remove('on');void el.offsetWidth;el.classList.add('on')}
 
@@ -206,13 +219,16 @@ function start(cfg){
     else if(R.phase==='lobby'){uiMounted=false;var list=pubList();
       root.innerHTML=head('<span class="rcode">'+R.code+'</span>')+'<div class="rcard"><div style="text-align:center;color:var(--mute,#a9a3cf)">'+esc(T('Oda kodu'))+'</div><div class="rbig">'+R.code+'</div>'+
       (R.isHost?'<div class="rrow"><button class="rbtn" id="rsh">'+esc(T('Daveti paylaş'))+'</button><button class="rbtn alt" id="rcp">'+esc(T('Bağlantıyı kopyala'))+'</button></div>':'')+
-      '<div class="rseats" id="rst">'+seatsHtml(list,false)+'</div>'+
+      '<div class="rseats" id="rst">'+seatsHtml(list,false)+'</div>'+stakeHtml()+
       (R.isHost?'<button class="rbtn" id="rgo">'+esc(T('Başlat'))+'</button><small style="color:var(--mute,#a9a3cf);text-align:center">'+esc(T('Boş yerleri bot doldurur'))+'</small>':'<div class="rmsg" style="color:var(--mute,#a9a3cf)">'+esc(T('Oda sahibinin başlatması bekleniyor…'))+'</div>')+
       '<button class="rbtn alt" id="rlv2">'+esc(T('Odadan çık'))+'</button></div>';
-      var go=$('rgo');if(go)go.onclick=beginGame;$('rlv2').onclick=leave;
+      var go=$('rgo');if(go)go.onclick=beginGame;root.querySelectorAll('.rstk button').forEach(function(b){b.onclick=function(){R.stake=+b.dataset.s;pushLobby()}});$('rlv2').onclick=leave;
       var sh=$('rsh');if(sh)sh.onclick=function(){var u=shareUrl(),tx=T('Yaxest ile oyun oynayalım! Oda kodu')+': '+R.code;if(navigator.share)navigator.share({title:'Yaxest Games',text:tx,url:u}).catch(function(){});else copy(u)};
       var cp=$('rcp');if(cp)cp.onclick=function(){copy(shareUrl())}}
     else if(R.phase==='play'){drawGame()}}
+  function stakeHtml(){var o=[0,10,25,50,100];if(!R.code)return'';
+    if(!R.isHost)return'<div class="rmsg" style="color:var(--yellow,#ffd23f);font-weight:800">'+esc(T('Bahis'))+': '+(R.stake?'🪙 '+R.stake:esc(T('Bahis yok')))+'</div>';
+    return'<div style="text-align:center;color:var(--mute,#a9a3cf);font-size:.85rem">'+esc(T('Bahis'))+' ('+esc(T('kazanan tüm potu alır'))+')</div><div class="rseg rstk" role="group">'+o.map(function(v){return'<button data-s="'+v+'" aria-pressed="'+(R.stake===v)+'">'+(v?'🪙 '+v:esc(T('Bahis yok')))+'</button>'}).join('')+'</div>'}
   function copy(t){try{navigator.clipboard.writeText(t).then(function(){toast(T('Bağlantı kopyalandı'))},function(){toast(t)})}catch(e){toast(t)}}
   function drawGame(){
     root.innerHTML=head(R.code?'<span class="rcode">'+R.code+'</span>':'')+'<div id="pb"></div><div id="rov" class="rover" hidden></div><div id="gm"></div><div class="remo" id="remo"></div>';
