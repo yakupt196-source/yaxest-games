@@ -17,20 +17,21 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Yaxest Hafıza", "url": "https://yaxestgames.com/hafiza/", "description": "Kartları çevir, eşleri bul. En az hamleyle bitir.", "genre": "Bulmaca", "applicationCategory": "Game", "gamePlatform": "Web browser", "playMode": "SinglePlayer", "inLanguage": ["tr", "en", "de", "es", "fr", "pt", "ru", "it"], "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "TRY"}, "publisher": {"@type": "Organization", "name": "Yaxest Games", "url": "https://yaxestgames.com/"}}</script>
 <!--/seo-->
 <style>*{box-sizing:border-box;margin:0}body{background:#14102b;color:#f6f3ff;font-family:"Bricolage Grotesque",system-ui,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));gap:12px;touch-action:manipulation;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;overflow-x:hidden}header{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}header a{color:#a9a3cf;text-decoration:none}h1{font-size:1.4rem;font-weight:800}.stat{color:#ffd23f;font-weight:700}button{font:inherit;font-weight:700;background:#ffd23f;color:#14102b;border:0;border-radius:999px;padding:12px 26px;min-height:44px;cursor:pointer}button:focus-visible{outline:3px solid #fff}</style>
-<style>#g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:min(100%,calc(100dvh - 240px));min-width:240px;max-width:420px}.k{aspect-ratio:1;border:0;border-radius:16px;font-size:clamp(1.4rem,9vw,2.4rem);background:#ff5c8a;color:transparent;padding:0;cursor:pointer;transition:background .2s}.k.o{background:#1f1a42;color:inherit}.k.m{background:#3ddbb0;color:#14102b}#w{color:#3ddbb0;font-weight:800;min-height:1.5em}</style></head><body>
+<style>#g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:min(100%,calc(100dvh - 240px));min-width:240px;max-width:420px}.k{aspect-ratio:1;border:0;border-radius:16px;font-size:clamp(1.4rem,9vw,2.4rem);background:#ff5c8a;color:transparent;padding:0;cursor:pointer;transition:background .2s;overflow:hidden;line-height:1}.k:not(.o):not(.m){font-size:0}.k.o{background:#1f1a42;color:inherit}.k.m{background:#3ddbb0;color:#14102b}#w{color:#3ddbb0;font-weight:800;min-height:1.5em}</style></head><body>
 <header><a href="../">← Yaxest Games</a><h1>🃏 Hafıza</h1><span class="stat">Hamle <span id="m">0</span> · Rekor <span id="b">-</span></span></header>
 <div id="g"></div><div id="w"></div><button id="r">Yeni oyun</button>
 <script>
 const E=['🍎','🚀','🐱','🎈','⚡','🌵','🍕','👾'],g=document.getElementById('g'),W=document.getElementById('w'),M=document.getElementById('m'),B=document.getElementById('b');
-let a=null,lock=false,mv=0,found=0,best=null;
+let a=null,lock=false,mv=0,found=0,best=null,gen=0;
 try{best=+localStorage.getItem('yh-best')||null}catch(e){}
 if(best)B.textContent=best;
-function init(){g.innerHTML='';W.textContent='';mv=0;found=0;a=null;lock=false;M.textContent=0;
-[...E,...E].sort(()=>Math.random()-.5).forEach(e=>{const k=document.createElement('button');k.className='k';k.textContent=e;k.setAttribute('aria-label','Kart');k.onclick=()=>flip(k);g.appendChild(k)})}
+function init(){gen++;g.innerHTML='';W.textContent='';mv=0;found=0;a=null;lock=false;M.textContent=0;
+const D=[...E,...E];for(let i=D.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[D[i],D[j]]=[D[j],D[i]]}
+D.forEach(e=>{const k=document.createElement('button');k.className='k';k.textContent=e;k.setAttribute('aria-label','Kart');k.onclick=()=>flip(k);g.appendChild(k)})}
 function flip(k){if(lock||k.classList.contains('o')||k.classList.contains('m'))return;k.classList.add('o');
 if(!a){a=k;return}
 mv++;M.textContent=mv;
 if(a.textContent===k.textContent){a.classList.add('m');k.classList.add('m');a=null;if(++found==E.length){W.textContent='Bitti! '+mv+' hamle.';if(!best||mv<best){best=mv;B.textContent=mv;try{localStorage.setItem('yh-best',mv)}catch(e){}}}}
-else{lock=true;const p=a;a=null;setTimeout(()=>{p.classList.remove('o');k.classList.remove('o');lock=false},800)}}
+else{lock=true;const p=a,G0=gen;a=null;setTimeout(()=>{if(G0!==gen)return;p.classList.remove('o');k.classList.remove('o');lock=false},800)}}
 document.getElementById('r').onclick=init;init();
 </script><script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../sfx.js"></script><script src="../music.js"></script><script src="../menu.js"></script><script src="../economy.js"></script></body></html>

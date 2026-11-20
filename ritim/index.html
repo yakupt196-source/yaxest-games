@@ -153,7 +153,7 @@ function snd(kind){
     const cu=custom&&custom.on,st=cu?spb/2:spb/4;let t=t0+Math.ceil((n-t0)/st-.001)*st;if(t<n+.004)t=n+.004;
     const idx=jn++;let m;
     if(cu){m=theme.root+12+theme.pent[idx%5]}
-    else{const i=Math.round((t-t0)/(spb/4)),ch=theme.prog[Math.floor(i/16)%4],cr=theme.root+ch[0]-(ch[0]>6?12:0),tn=[0,ch[1]==='m'?3:4,7,12];m=cr+12+tn[idx%4]+(idx%8>3?12:0)}
+    else{const i=Math.round((t-t0)/(spb/4)),ch=theme.prog[((Math.floor(i/16)%4)+4)%4],cr=theme.root+ch[0]-(ch[0]>6?12:0),tn=[0,ch[1]==='m'?3:4,7,12];m=cr+12+tn[idx%4]+(idx%8>3?12:0)}
     const f=mtof(m),g=cu?.05:.09; // yumuşak kalimba/marimba tınısı: kısa, tatlı, armoni içinde
     osc('sine',f,t,.55,g,{send:1,a:.004});osc('sine',f*3,t,.1,g*.18,{send:1,a:.002});osc('triangle',f,t,.2,g*.45,{lp:1700,a:.004})}
   else if(kind==='perfect'){if(custom&&custom.on)return;const m=theme.root+36+theme.pent[2];osc('sine',mtof(m),n,.4,.16,{send:1});osc('sine',mtof(m+12),n+.06,.4,.12,{send:1})}
