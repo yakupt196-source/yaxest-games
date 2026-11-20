@@ -7,7 +7,7 @@ var cur=parts.pop()||'';
 var GL=window.YAXEST_GAMES||[];var isGame=GL.some(function(g){return g.id===cur});
 
 /* ---------- katalog ---------- */
-var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170]];
+var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170]];
 var COL=[['#ffd23f',0],['#ff5c8a',0],['#3ddbb0',0],['#6aa8ff',12],['#b388ff',12],['#ff9f43',12],['#3df0ff',20],['#f1f1f1',20]];
 var HAT=[['cap','Kep',20],['party','Parti Şapkası',30],['head','Kulaklık',40],['top','Silindir',50],['wiz','Büyücü Şapkası',70],['crown','Taç',120]];
 var FACE=[['glasses','Gözlük',20],['mustache','Bıyık',25],['mask','Maske',35],['shades','Güneş Gözlüğü',45],['star','Yıldız Gözlük',60]];
@@ -67,7 +67,7 @@ function rgb(h){h=h.replace('#','');return[parseInt(h.substr(0,2),16),parseInt(h
 function shade(h,p){var c=rgb(h),t=p<0?0:255,q=Math.abs(p);return'#'+c.map(function(v){return('0'+Math.round(v+(t-v)*q).toString(16)).slice(-2)}).join('')}
 
 /* ---------- karakter çizimi ---------- */
-var POS={blob:{T:30,E:52,N:77,dx:12},cat:{T:30,E:52,N:77,dx:13},robo:{T:32,E:53,N:84,dx:10},ghost:{T:24,E:48,N:72,dx:11},alien:{T:18,E:46,N:72,dx:12},dragon:{T:30,E:52,N:77,dx:12},elf:{T:18,E:46,N:69,dx:11},hana:{T:16,E:46,N:69,dx:11},mika:{T:16,E:46,N:69,dx:11},yuki:{T:16,E:46,N:69,dx:11},ren:{T:12,E:46,N:69,dx:11},sora:{T:16,E:46,N:69,dx:11},taro:{T:14,E:46,N:69,dx:11},vael:{T:16,E:46,N:69,dx:11}};
+var POS={blob:{T:30,E:52,N:77,dx:12},cat:{T:30,E:52,N:77,dx:13},robo:{T:32,E:53,N:84,dx:10},ghost:{T:24,E:48,N:72,dx:11},alien:{T:18,E:46,N:72,dx:12},dragon:{T:30,E:52,N:77,dx:12},elf:{T:18,E:46,N:69,dx:11},hana:{T:16,E:46,N:69,dx:11},mika:{T:16,E:46,N:69,dx:11},yuki:{T:16,E:46,N:69,dx:11},ren:{T:12,E:46,N:69,dx:11},sora:{T:16,E:46,N:69,dx:11},taro:{T:14,E:46,N:69,dx:11},vael:{T:16,E:46,N:69,dx:11},vaela:{T:16,E:46,N:69,dx:11}};
 function eyes(y,dx,r,m){var s='';[50-dx,50+dx].forEach(function(x){s+='<g class="yx-e"><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#fff"/><circle cx="'+(x+(m==='s'?0:1))+'" cy="'+(y+(m==='s'?1.6:.6))+'" r="'+(r*.55)+'" fill="#1b1535"/><circle cx="'+(x+1.6)+'" cy="'+(y-1.6)+'" r="'+(r*.2)+'" fill="#fff"/></g>'});
   if(m==='s')s+='<path d="M'+(50-dx-r)+' '+(y-r-1)+'L'+(50-dx+r)+' '+(y-r+2)+'M'+(50+dx-r)+' '+(y-r+2)+'L'+(50+dx+r)+' '+(y-r-1)+'" stroke="#1b1535" stroke-width="2.2" stroke-linecap="round"/>';return s}
 function mouth(y,m){if(m==='h')return'<path d="M43 '+y+'Q50 '+(y+13)+' 57 '+y+'Z" fill="#7a1f3d"/><path d="M46 '+(y+7)+'Q50 '+(y+4)+' 54 '+(y+7)+'" fill="#ff7a9a"/>';
@@ -125,6 +125,10 @@ BODY.vael=human({out:'#1f6f78',iris:'#d4a017',outx:function(){return'<path d="M4
  ears:'<path d="M26 44L8 30L27 55Z" fill="'+SKIN+'"/><path d="M74 44L92 30L73 55Z" fill="'+SKIN+'"/><path d="M24 44L13 34L25 51Z" fill="#ffb9a3" opacity=".55"/><path d="M76 44L87 34L75 51Z" fill="#ffb9a3" opacity=".55"/>',
  back:function(c,d){return'<path d="M24 44Q22 14 50 13Q78 14 76 42L72 54Q50 46 28 54Z" fill="'+d+'"/>'},
  front:function(c,d,l){return'<path d="M24 42Q21 12 52 11Q84 13 76 40Q72 24 56 22Q42 26 33 38L28 52Q24 48 24 42Z" fill="'+c+'"/><path d="M72 28Q86 40 82 66Q74 58 72 44Z" fill="'+c+'"/><path d="M34 20Q46 13 60 15" stroke="'+l+'" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>'}});
+BODY.vaela=human({out:'#7a2f6e',iris:'#2cc7b8',outx:function(){return'<path d="M40 70L50 80L60 70" fill="#e9d98b"/><circle cx="50" cy="83" r="2.4" fill="#2cc7b8"/>'},
+ ears:'<path d="M26 44L7 28L27 55Z" fill="'+SKIN+'"/><path d="M74 44L93 28L73 55Z" fill="'+SKIN+'"/><path d="M24 44L12 33L25 51Z" fill="#ffb9a3" opacity=".55"/><path d="M76 44L88 33L75 51Z" fill="#ffb9a3" opacity=".55"/>',
+ back:function(c,d){return'<path d="M23 44Q20 12 50 12Q80 12 77 44Q84 70 76 94Q64 88 62 70L38 70Q36 88 24 94Q16 70 23 44Z" fill="'+d+'"/>'},
+ front:function(c,d,l){return'<path d="M24 44Q21 14 50 13Q79 14 76 44Q71 30 56 24Q40 36 24 44Z" fill="'+c+'"/><path d="M22 46Q19 70 26 90L31 56Z" fill="'+c+'"/><path d="M78 46Q81 70 74 90L69 56Z" fill="'+c+'"/><path d="M30 33Q50 24 70 33" stroke="#e9d98b" stroke-width="2" fill="none"/><path d="M34 21Q44 15 56 16" stroke="'+l+'" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>'}});
 function star(cx,cy,r){var p=[];for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;p.push((cx+Math.cos(a)*rr).toFixed(1)+','+(cy+Math.sin(a)*rr).toFixed(1))}return p.join(' ')}
 var HATS={
  cap:function(T){return'<path d="M29 '+(T+5)+'Q50 '+(T-17)+' 71 '+(T+5)+'Z" fill="#ff5c8a"/><path d="M60 '+(T+3)+'H84Q84 '+(T+9)+' 74 '+(T+9)+'H60Z" fill="#d63d6c"/><circle cx="50" cy="'+(T-9)+'" r="2.6" fill="#fff"/>'},
