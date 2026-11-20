@@ -207,7 +207,7 @@ function say(txt,kind,ms){if(!ch)return;var b=ch.lastChild;b.textContent=txt;b.c
  if(kind){mood=kind==='sad'?'s':'h';render();ch.classList.remove('jump','sad');void ch.offsetWidth;ch.classList.add(kind==='sad'?'sad':'jump');clearTimeout(moodTo);moodTo=setTimeout(function(){mood='n';render();ch.classList.remove('jump','sad')},1800)}}
 function mountChar(){if(!isGame||ch)return;ch=document.createElement('div');ch.id='ych';ch.innerHTML='<div class="yxs"></div><div class="yxp"></div>';document.body.appendChild(ch);render()}
 function chip(){var h=document.querySelector('header');if(!isGame||!h||h.querySelector('[data-yx=coins]'))return;var s=document.createElement('span');s.className='yx-chip';s.innerHTML='🪙 <b data-yx="coins">0</b>';var st=h.querySelector('.st');h.insertBefore(s,st||null);refresh()}
-function menuLink(){var p=document.getElementById('ymp');if(!p||p.querySelector('.yx-shop'))return;var home=p.querySelector('.home');if(!home)return;var a=document.createElement('a');a.className='home yx-shop';a.href='../magaza/';a.style.cssText='background:#2b2559;color:#fff;margin-top:10px';a.innerHTML='🛍️ <span>Mağaza</span> · 🪙 <b data-yx="coins">0</b>';home.parentNode.insertBefore(a,home.nextSibling);refresh()}
+function menuLink(){var p=document.getElementById('ymp');if(!p||p.querySelector('.yx-shop'))return;var home=p.querySelector('.home');if(!home)return;var a=document.createElement('a');a.className='home yx-shop';a.href='../magaza/';a.style.cssText='background:#2b2559;color:#fff;margin-top:10px';a.innerHTML='🛍️ <span>Mağaza</span> · 🪙 <b data-yx="coins">0</b>';home.parentNode.insertBefore(a,home.nextSibling);var b=document.createElement('a');b.className='home yx-acc';b.href='../hesap/';b.style.cssText='background:#2b2559;color:#fff;margin-top:10px';b.innerHTML='👤 <span>Hesap</span>';a.parentNode.insertBefore(b,a.nextSibling);refresh()}
 function refresh(){var els=document.querySelectorAll('[data-yx=coins]');for(var i=0;i<els.length;i++)els[i].textContent=S.c;
  var b=S.boost>Date.now(),cs=document.querySelectorAll('.yx-chip');for(var j=0;j<cs.length;j++)cs[j].classList.toggle('bst',b);
  var lv=document.querySelectorAll('[data-yx=level]');for(var k=0;k<lv.length;k++)lv[k].textContent=level();
@@ -253,5 +253,8 @@ window.addEventListener('ylang',function(){render()});
 /* kalıcı depolama izni + yedek hatırlatma */
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 setTimeout(function(){try{var t=+localStorage.getItem('yx-bkt')||0,rm=+localStorage.getItem('yx-bkr')||0,now=Date.now();
- if(S.t>=150&&now-t>7*864e5&&now-rm>2*864e5&&window.YX){localStorage.setItem('yx-bkr',String(now));YX.toast('💾 '+(window.YT?YT('İlerlemeni yedeklemeyi unutma: Mağaza → Yedek'):'İlerlemeni yedeklemeyi unutma: Mağaza → Yedek'))}}catch(e){}},9000);
+ if(S.t>=150&&!localStorage.getItem('yx-acct')&&now-t>7*864e5&&now-rm>2*864e5&&window.YX){localStorage.setItem('yx-bkr',String(now));YX.toast('👤 '+(window.YT?YT('İlerlemeni kaybetme: hesap aç'):'İlerlemeni kaybetme: hesap aç'))}}catch(e){}},9000);
+
+/* hesap: giriş yapılmışsa bulut eşitleme betiğini yükle */
+try{if(localStorage.getItem('yx-acct')&&!window.YXAcct){var es=document.querySelector('script[src$="economy.js"]');if(es){var base=es.getAttribute('src').replace('economy.js','');['account-config.js','backup.js','account.js'].reduce(function(p,f){return p.then(function(){return new Promise(function(r){var s=document.createElement('script');s.src=base+f;s.onload=s.onerror=r;document.head.appendChild(s)})})},Promise.resolve())}}}catch(e){}
 })();

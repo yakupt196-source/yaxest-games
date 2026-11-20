@@ -31,3 +31,6 @@ Duello iki kişiliktir (ekran ikiye bölünür).
 
 ## Lisans
 © 2026 Yakup Turhan (Yaxest). Tüm hakları saklıdır; izinsiz kopyalanamaz, yeniden yayınlanamaz (bkz. LICENSE).
+
+## Hesap ve bulut yedeği
+`hesap/` sayfası (e-posta+şifre, Firebase Authentication + Firestore REST). Ayarlar `account-config.js` içinde (apiKey, projectId). Firestore kuralı: `match /users/{uid} { allow read, write: if request.auth != null && request.auth.uid == uid; }`. Ayar boşsa sayfa "çok yakında" gösterir. Yedek: `backup.js` (kod/dosya, birleştirmeli geri yükleme).

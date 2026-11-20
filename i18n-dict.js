@@ -5489,5 +5489,410 @@ window.YAXEST_DICT={
 "Não esqueça do backup: Loja → Backup",
 "Не забудь сделать резерв: Магазин → Резерв",
 "Non dimenticare il backup: Negozio → Backup"
+],
+"Hesap": [
+"Account",
+"Konto",
+"Cuenta",
+"Compte",
+"Conta",
+"Аккаунт",
+"Account"
+],
+"Her cihazda aynı sen": [
+"The same you on every device",
+"Auf jedem Gerät dasselbe Ich",
+"El mismo tú en cada dispositivo",
+"Le même toi sur chaque appareil",
+"O mesmo você em todo aparelho",
+"Ты один и тот же на любом устройстве",
+"Sempre te stesso su ogni dispositivo"
+],
+"İlerlemen bulutta": [
+"Your progress is in the cloud",
+"Dein Fortschritt liegt in der Cloud",
+"Tu progreso está en la nube",
+"Ta progression est dans le cloud",
+"Seu progresso está na nuvem",
+"Твой прогресс в облаке",
+"I tuoi progressi sono nel cloud"
+],
+": jeton, karakter, tycoon": [
+": tokens, character, tycoon",
+": Jetons, Charakter, Tycoon",
+": fichas, personaje, tycoon",
+": jetons, personnage, tycoon",
+": fichas, personagem, tycoon",
+": жетоны, персонаж, тайкуны",
+": gettoni, personaggio, tycoon"
+],
+"Telefonu değiştirsen de devam et": [
+"Keep playing even if you change phones",
+"Spiel weiter, auch wenn du das Handy wechselst",
+"Sigue jugando aunque cambies de móvil",
+"Continue même si tu changes de téléphone",
+"Continue jogando mesmo trocando de celular",
+"Продолжай играть, даже сменив телефон",
+"Continua a giocare anche se cambi telefono"
+],
+"Şifren bizde saklanmaz, Google'ın güvenli servisi tutar": [
+"We don't store your password; Google's secure service does",
+"Wir speichern dein Passwort nicht, das übernimmt Googles sicherer Dienst",
+"No guardamos tu contraseña; lo hace el servicio seguro de Google",
+"Nous ne stockons pas ton mot de passe ; le service sécurisé de Google s'en charge",
+"Não guardamos sua senha; o serviço seguro do Google cuida disso",
+"Мы не храним твой пароль, это делает защищённый сервис Google",
+"Non conserviamo la tua password; lo fa il servizio sicuro di Google"
+],
+"Giriş yap": [
+"Log in",
+"Anmelden",
+"Iniciar sesión",
+"Se connecter",
+"Entrar",
+"Войти",
+"Accedi"
+],
+"Kayıt ol": [
+"Sign up",
+"Registrieren",
+"Registrarse",
+"S'inscrire",
+"Cadastrar",
+"Регистрация",
+"Registrati"
+],
+"Hesap oluştur": [
+"Create account",
+"Konto erstellen",
+"Crear cuenta",
+"Créer un compte",
+"Criar conta",
+"Создать аккаунт",
+"Crea account"
+],
+"E-posta": [
+"Email",
+"E-Mail",
+"Correo electrónico",
+"E-mail",
+"E-mail",
+"Эл. почта",
+"Email"
+],
+"Şifre": [
+"Password",
+"Passwort",
+"Contraseña",
+"Mot de passe",
+"Senha",
+"Пароль",
+"Password"
+],
+"Şifreni tekrar yaz": [
+"Repeat your password",
+"Passwort wiederholen",
+"Repite tu contraseña",
+"Répète ton mot de passe",
+"Repita sua senha",
+"Повтори пароль",
+"Ripeti la password"
+],
+"Şifren": [
+"Your password",
+"Dein Passwort",
+"Tu contraseña",
+"Ton mot de passe",
+"Sua senha",
+"Твой пароль",
+"La tua password"
+],
+"Göster": [
+"Show",
+"Anzeigen",
+"Mostrar",
+"Afficher",
+"Mostrar",
+"Показать",
+"Mostra"
+],
+"Şifremi unuttum": [
+"Forgot my password",
+"Passwort vergessen",
+"Olvidé mi contraseña",
+"Mot de passe oublié",
+"Esqueci minha senha",
+"Забыл пароль",
+"Password dimenticata"
+],
+"Hesap açarak": [
+"By creating an account you accept the",
+"Mit dem Erstellen eines Kontos akzeptierst du die",
+"Al crear una cuenta aceptas la página de",
+"En créant un compte, tu acceptes la page",
+"Ao criar uma conta você aceita a página de",
+"Создавая аккаунт, ты принимаешь страницу",
+"Creando un account accetti la pagina"
+],
+"sayfasını kabul edersin. Mevcut ilerlemen hesabına taşınır.": [
+"page. Your current progress moves to your account.",
+"Seite. Dein aktueller Fortschritt wird in dein Konto übernommen.",
+". Tu progreso actual pasa a tu cuenta.",
+". Ta progression actuelle passe sur ton compte.",
+". Seu progresso atual vai para sua conta.",
+". Твой текущий прогресс перенесётся в аккаунт.",
+". I tuoi progressi attuali passano al tuo account."
+],
+"Giriş yapınca bu cihazdaki ve hesabındaki ilerleme birleştirilir.": [
+"When you log in, progress on this device and in your account is merged.",
+"Beim Anmelden wird der Fortschritt auf diesem Gerät und in deinem Konto zusammengeführt.",
+"Al iniciar sesión se combina el progreso de este dispositivo y de tu cuenta.",
+"À la connexion, la progression de cet appareil et celle de ton compte sont fusionnées.",
+"Ao entrar, o progresso deste aparelho e da sua conta é mesclado.",
+"При входе прогресс на этом устройстве и в аккаунте объединяется.",
+"Quando accedi, i progressi di questo dispositivo e dell'account vengono uniti."
+],
+"Giriş yapıldı": [
+"Logged in",
+"Angemeldet",
+"Sesión iniciada",
+"Connecté",
+"Conectado",
+"Вход выполнен",
+"Accesso effettuato"
+],
+"Son eşitleme": [
+"Last sync",
+"Letzte Synchronisierung",
+"Última sincronización",
+"Dernière synchro",
+"Última sincronização",
+"Последняя синхронизация",
+"Ultima sincronizzazione"
+],
+"henüz yok": [
+"not yet",
+"noch nicht",
+"todavía no",
+"pas encore",
+"ainda não",
+"ещё нет",
+"non ancora"
+],
+"Şimdi eşitle": [
+"Sync now",
+"Jetzt synchronisieren",
+"Sincronizar ahora",
+"Synchroniser maintenant",
+"Sincronizar agora",
+"Синхронизировать",
+"Sincronizza ora"
+],
+"Çıkış yap": [
+"Log out",
+"Abmelden",
+"Cerrar sesión",
+"Se déconnecter",
+"Sair",
+"Выйти",
+"Esci"
+],
+"Hesabı sil": [
+"Delete account",
+"Konto löschen",
+"Eliminar cuenta",
+"Supprimer le compte",
+"Excluir conta",
+"Удалить аккаунт",
+"Elimina account"
+],
+"Hesabın ve buluttaki ilerlemen kalıcı olarak silinir. Bu cihazdaki oyun verin kalır.": [
+"Your account and cloud progress are permanently deleted. Game data on this device stays.",
+"Dein Konto und der Cloud-Fortschritt werden dauerhaft gelöscht. Spieldaten auf diesem Gerät bleiben.",
+"Tu cuenta y tu progreso en la nube se eliminan para siempre. Los datos de este dispositivo se conservan.",
+"Ton compte et ta progression dans le cloud sont supprimés définitivement. Les données de cet appareil restent.",
+"Sua conta e o progresso na nuvem são excluídos permanentemente. Os dados deste aparelho permanecem.",
+"Аккаунт и облачный прогресс удаляются навсегда. Данные на этом устройстве остаются.",
+"Account e progressi nel cloud vengono eliminati definitivamente. I dati su questo dispositivo restano."
+],
+"Hesabımı sil": [
+"Delete my account",
+"Mein Konto löschen",
+"Eliminar mi cuenta",
+"Supprimer mon compte",
+"Excluir minha conta",
+"Удалить мой аккаунт",
+"Elimina il mio account"
+],
+"Hesabın kalıcı olarak silinecek. Emin misin?": [
+"Your account will be permanently deleted. Are you sure?",
+"Dein Konto wird dauerhaft gelöscht. Bist du sicher?",
+"Tu cuenta se eliminará para siempre. ¿Seguro?",
+"Ton compte sera supprimé définitivement. Tu es sûr ?",
+"Sua conta será excluída permanentemente. Tem certeza?",
+"Аккаунт будет удалён навсегда. Уверен?",
+"Il tuo account verrà eliminato definitivamente. Sicuro?"
+],
+"Eşitleniyor…": [
+"Syncing…",
+"Synchronisiere …",
+"Sincronizando…",
+"Synchronisation…",
+"Sincronizando…",
+"Синхронизация…",
+"Sincronizzazione…"
+],
+"Güncellendi, sayfa yenileniyor…": [
+"Updated, reloading…",
+"Aktualisiert, lade neu …",
+"Actualizado, recargando…",
+"Mis à jour, rechargement…",
+"Atualizado, recarregando…",
+"Обновлено, перезагрузка…",
+"Aggiornato, ricarico…"
+],
+"Her şey güncel": [
+"Everything is up to date",
+"Alles aktuell",
+"Todo está al día",
+"Tout est à jour",
+"Tudo atualizado",
+"Всё актуально",
+"Tutto aggiornato"
+],
+"Bekle…": [
+"Please wait…",
+"Bitte warten …",
+"Espera…",
+"Patiente…",
+"Aguarde…",
+"Подожди…",
+"Attendi…"
+],
+"Şifreler aynı değil": [
+"Passwords don't match",
+"Passwörter stimmen nicht überein",
+"Las contraseñas no coinciden",
+"Les mots de passe ne correspondent pas",
+"As senhas não coincidem",
+"Пароли не совпадают",
+"Le password non coincidono"
+],
+"Geçerli bir e-posta yaz": [
+"Enter a valid email",
+"Gib eine gültige E-Mail ein",
+"Escribe un correo válido",
+"Saisis un e-mail valide",
+"Digite um e-mail válido",
+"Введи корректный e-mail",
+"Inserisci un'email valida"
+],
+"Şifre en az 6 karakter olmalı": [
+"Password must be at least 6 characters",
+"Das Passwort muss mindestens 6 Zeichen haben",
+"La contraseña debe tener al menos 6 caracteres",
+"Le mot de passe doit faire au moins 6 caractères",
+"A senha deve ter pelo menos 6 caracteres",
+"Пароль — минимум 6 символов",
+"La password deve avere almeno 6 caratteri"
+],
+"Şifreni yaz": [
+"Enter your password",
+"Gib dein Passwort ein",
+"Escribe tu contraseña",
+"Saisis ton mot de passe",
+"Digite sua senha",
+"Введи пароль",
+"Inserisci la password"
+],
+"Şifre yenileme bağlantısı e-postana gönderildi": [
+"A password reset link was sent to your email",
+"Ein Link zum Zurücksetzen wurde an deine E-Mail gesendet",
+"Se envió un enlace para restablecer la contraseña a tu correo",
+"Un lien de réinitialisation a été envoyé à ton e-mail",
+"Um link de redefinição foi enviado ao seu e-mail",
+"Ссылка для сброса пароля отправлена на твою почту",
+"Un link per reimpostare la password è stato inviato alla tua email"
+],
+"Bu e-posta ile zaten hesap var": [
+"An account with this email already exists",
+"Mit dieser E-Mail existiert bereits ein Konto",
+"Ya existe una cuenta con este correo",
+"Un compte existe déjà avec cet e-mail",
+"Já existe uma conta com este e-mail",
+"Аккаунт с этим e-mail уже существует",
+"Esiste già un account con questa email"
+],
+"E-posta ya da şifre yanlış": [
+"Email or password is wrong",
+"E-Mail oder Passwort ist falsch",
+"Correo o contraseña incorrectos",
+"E-mail ou mot de passe incorrect",
+"E-mail ou senha incorretos",
+"Неверный e-mail или пароль",
+"Email o password errati"
+],
+"Çok fazla deneme. Biraz sonra tekrar dene": [
+"Too many attempts. Try again in a bit",
+"Zu viele Versuche. Versuche es gleich erneut",
+"Demasiados intentos. Inténtalo más tarde",
+"Trop de tentatives. Réessaie plus tard",
+"Muitas tentativas. Tente de novo em instantes",
+"Слишком много попыток. Попробуй позже",
+"Troppi tentativi. Riprova tra poco"
+],
+"Bu hesap devre dışı": [
+"This account is disabled",
+"Dieses Konto ist deaktiviert",
+"Esta cuenta está desactivada",
+"Ce compte est désactivé",
+"Esta conta está desativada",
+"Этот аккаунт отключён",
+"Questo account è disattivato"
+],
+"Bağlantı kurulamadı. İnterneti kontrol et": [
+"Couldn't connect. Check your internet",
+"Verbindung fehlgeschlagen. Prüfe dein Internet",
+"No se pudo conectar. Revisa tu internet",
+"Connexion impossible. Vérifie ta connexion",
+"Não foi possível conectar. Verifique sua internet",
+"Не удалось подключиться. Проверь интернет",
+"Impossibile connettersi. Controlla Internet"
+],
+"Bir sorun oluştu. Tekrar dene": [
+"Something went wrong. Try again",
+"Etwas ist schiefgelaufen. Versuche es erneut",
+"Algo salió mal. Inténtalo de nuevo",
+"Une erreur est survenue. Réessaie",
+"Algo deu errado. Tente de novo",
+"Что-то пошло не так. Попробуй ещё раз",
+"Qualcosa è andato storto. Riprova"
+],
+"Hesap sistemi çok yakında açılıyor. Bu arada ilerlemeni Mağaza → Yedek bölümünden kodla yedekleyebilirsin.": [
+"Accounts are opening very soon. Meanwhile you can back up your progress with a code in Shop → Backup.",
+"Konten öffnen in Kürze. Bis dahin kannst du deinen Fortschritt unter Shop → Sicherung per Code sichern.",
+"Las cuentas abrirán muy pronto. Mientras, puedes guardar tu progreso con un código en Tienda → Copia.",
+"Les comptes ouvrent très bientôt. En attendant, sauvegarde ta progression avec un code dans Boutique → Sauvegarde.",
+"As contas abrem em breve. Enquanto isso, faça backup do progresso com um código em Loja → Backup.",
+"Аккаунты скоро откроются. А пока сохрани прогресс кодом в Магазин → Резерв.",
+"Gli account apriranno a breve. Intanto puoi salvare i progressi con un codice in Negozio → Backup."
+],
+"Yedek al": [
+"Back up",
+"Sichern",
+"Hacer copia",
+"Sauvegarder",
+"Fazer backup",
+"Сделать резерв",
+"Fai backup"
+],
+"İlerlemeni kaybetme: hesap aç": [
+"Don't lose your progress: create an account",
+"Verliere deinen Fortschritt nicht: Konto erstellen",
+"No pierdas tu progreso: crea una cuenta",
+"Ne perds pas ta progression : crée un compte",
+"Não perca seu progresso: crie uma conta",
+"Не потеряй прогресс: создай аккаунт",
+"Non perdere i progressi: crea un account"
 ]
 };

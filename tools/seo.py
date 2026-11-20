@@ -70,7 +70,7 @@ s = s.replace("Örn: Zıpla'da çift zıplama olsun", "Örn: Yeni bir oyun ya da
 open(p, 'w', encoding='utf-8').write(s)
 
 # --- sitemap + robots
-urls = [BASE] + [f'{BASE}{g["id"]}/' for g in games if os.path.exists(f'{ROOT}/{g["id"]}/index.html')] + [BASE + 'magaza/', BASE + 'gizlilik.html']
+urls = [BASE] + [f'{BASE}{g["id"]}/' for g in games if os.path.exists(f'{ROOT}/{g["id"]}/index.html')] + [BASE + 'magaza/', BASE + 'hesap/', BASE + 'gizlilik.html']
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
     f'<url><loc>{u}</loc><changefreq>weekly</changefreq><priority>{"1.0" if u == BASE else "0.8"}</priority></url>\n' for u in urls) + '</urlset>\n'
 open(f'{ROOT}/sitemap.xml', 'w', encoding='utf-8').write(sm)
