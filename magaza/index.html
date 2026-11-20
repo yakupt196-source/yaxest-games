@@ -64,6 +64,19 @@ h2{font-size:1.05rem;font-weight:800;margin:6px 0 8px}
 #modal .pic{width:150px;height:150px}#modal .pic svg{width:100%;height:100%}#modal h3{font-size:1.5rem;color:var(--yellow)}
 @media (max-width:520px){.stage{grid-template-columns:1fr;justify-items:center;text-align:center}.info{width:100%}.lv,.tags{justify-content:center}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#vw{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:radial-gradient(circle at 50% 38%,var(--vwc,#3b2a8a) 0,#0b0820 70%);touch-action:pan-y;user-select:none}
+#vw.on{display:flex}#vw .stg{width:min(78vw,52vh);height:min(78vw,52vh);perspective:900px;display:grid;place-items:center}
+#vw .stg>div{width:100%;height:100%;transition:transform .12s ease-out;animation:vwf 3.2s ease-in-out infinite;filter:drop-shadow(0 24px 30px rgba(0,0,0,.55))}#vw .stg svg{width:100%;height:100%}
+@keyframes vwf{0%,100%{translate:0 0}50%{translate:0 -10px}}
+#vw .tt{font-size:1.5rem;font-weight:800;color:var(--yellow,#ffd23f)}#vw .ds{color:#cfc9f5;font-size:.95rem;min-height:1.3em;text-align:center;padding:0 24px}
+#vw .md{display:flex;gap:8px}#vw .md button,#vw .nv{min-width:48px;min-height:48px;border-radius:14px;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;cursor:pointer}
+#vw .md button[aria-pressed=true]{background:rgba(255,210,63,.25);border-color:#ffd23f}
+#vw .nv{position:absolute;top:44%;font-size:1.6rem}#vw .l{left:10px}#vw .r{right:10px}
+#vw .x{position:absolute;top:14px;right:14px}#vw .act{display:flex;gap:10px;margin-top:4px}
+#vw .hint{font-size:.78rem;color:#9b95c9}
+@media(prefers-reduced-motion:reduce){#vw .stg>div{animation:none}}
+.it{position:relative}.it .zm{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:9px;background:rgba(0,0,0,.45);display:grid;place-items:center;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -89,6 +102,7 @@ h2{font-size:1.05rem;font-weight:800;margin:6px 0 8px}
 <div id="panel" class="col"></div>
 </main>
 <div class="bar2" id="bar" hidden><div class="in"><div class="bav" id="bav"></div><div class="tx"><span id="bn"></span><small id="bs"></small></div><button class="btn alt" id="bx" type="button" aria-label="Vazgeç">✕</button><button class="btn" id="bb" type="button">Satın al</button></div></div>
+<div id="vw" role="dialog" aria-modal="true" aria-label="Karakter"><button class="nv x" id="vx" type="button" aria-label="Kapat">✕</button><button class="nv l" id="vl" type="button" aria-label="Önceki">‹</button><button class="nv r" id="vr" type="button" aria-label="Sonraki">›</button><div class="tt" id="vt"></div><div class="stg" id="vs"><div id="vp"></div></div><div class="md" id="vm"></div><div class="ds" id="vd"></div><div class="act"><button class="btn" id="va" type="button"></button></div><div class="hint">↔ sürükle: döndür · ‹ › karakter değiştir</div></div>
 <div id="modal" hidden role="dialog" aria-modal="true"><div class="bx"><h3>Yeni eşya!</h3><div class="pic" id="mpic"></div><b id="mnm"></b><button class="btn" id="mok" type="button">Tak</button><button class="btn alt" id="mcl" type="button">Kapat</button></div></div>
 <script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../economy.js"></script><script src="../backup.js"></script>
 <script>
@@ -124,6 +138,7 @@ function card(slot,val,name,isOpt){
   if(!val){pic='<div class="sw">🚫</div>'}
   const b=document.createElement('button');b.type='button';b.className='it'+(on?' on':'')+(pvOn?' pv':'')+(own?'':' lock');b.setAttribute('aria-pressed',on);
   b.innerHTML=pic+'<span class="nmx">'+(val?T(it.name||''):T('Yok'))+'</span>'+(!val?'':own?(on?'<span class="ow">'+T('Takılı')+'</span>':'<span class="ow">✓ '+T('Sahipsin')+'</span>'):'<span class="pr">🪙 '+price(id)+'</span>');
+  if(slot==='sp'&&val){const z=document.createElement('span');z.className='zm';z.textContent='🔍';z.setAttribute('role','button');z.setAttribute('aria-label','İncele');z.onclick=e=>{e.stopPropagation();window.YXView&&YXView.open(C.SP.findIndex(a=>a[0]===val))};b.appendChild(z)}
   if(slot==='col'&&!own)b.querySelector('.nmx').remove();if(slot==='col'&&own)b.querySelector('.nmx').remove();
   b.onclick=()=>{ if(own){YX.equip(slot,val);pv=null;sel=null;jump()}else{pv=Object.assign({},S().eq);pv[slot]=val;sel=id}draw()};return b}
 function sect(t){const h=document.createElement('h2');h.textContent=T(t);return h}
@@ -186,5 +201,32 @@ addEventListener('ylang',draw);
 setInterval(()=>{if(S().boost>Date.now())stage()},20000);
 try{$('langslot').appendChild(YI18N.select())}catch(e){}
 draw();
+
+/* ---- tam ekran karakter inceleme ---- */
+(function(){const vw=$('vw'),vp=$('vp');let idx=0,vm='n',ry=0,drag=null,auto=0;
+const MOODS=[['n','😐'],['h','😄'],['s','😢']];
+function cfg(){const c=Object.assign({},S().eq);c.sp=C.SP[idx][0];return c}
+function paint(){const sp=C.SP[idx],id='sp:'+sp[0],own=!sp[0]||YX.owns(id)||sp[2]===0;
+  vp.innerHTML=YX.av(cfg(),vm);$('vt').textContent=T(sp[1]);
+  $('vm').innerHTML=MOODS.map(m=>'<button type="button" data-m="'+m[0]+'" aria-pressed="'+(m[0]===vm)+'">'+m[1]+'</button>').join('');
+  $('vm').querySelectorAll('button').forEach(b=>b.onclick=()=>{vm=b.dataset.m;paint()});
+  const it=C.ITEMS[id],pr=it?price(id):0,eq=S().eq.sp===sp[0];
+  $('vd').textContent=own?(eq?T('Takılı'):T('Sahipsin')):'🪙 '+pr;
+  const a=$('va');a.hidden=false;a.disabled=false;
+  if(own){a.textContent=eq?T('Takılı'):T('Tak');a.disabled=eq;a.onclick=()=>{YX.equip('sp',sp[0]);jump();draw();paint()}}
+  else{a.textContent=T('Satın al')+' 🪙 '+pr;a.disabled=S().c<pr;a.onclick=()=>{const r=YX.buy(id);if(r&&r.ok){YX.equip('sp',sp[0]);jump();draw()}paint()}}
+  vp.style.transform='rotateY('+ry+'deg)'}
+function open(i){idx=Math.max(0,i);vm='n';ry=0;vw.classList.add('on');paint();clearInterval(auto)}
+function close(){vw.classList.remove('on');clearInterval(auto);draw()}
+function go(d){idx=(idx+d+C.SP.length)%C.SP.length;ry=0;paint()}
+$('vx').onclick=close;$('vl').onclick=()=>go(-1);$('vr').onclick=()=>go(1);
+document.addEventListener('keydown',e=>{if(!vw.classList.contains('on'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')go(-1);if(e.key==='ArrowRight')go(1)});
+vw.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;drag={x:e.clientX,r:ry}});
+addEventListener('pointermove',e=>{if(!drag)return;ry=drag.r+(e.clientX-drag.x)*.6;ry=Math.max(-70,Math.min(70,ry));vp.style.transform='rotateY('+ry+'deg)'});
+addEventListener('pointerup',()=>{if(!drag)return;drag=null;const t=setInterval(()=>{ry*=.82;vp.style.transform='rotateY('+ry+'deg)';if(Math.abs(ry)<1){ry=0;vp.style.transform='';clearInterval(t)}},16)});
+window.YXView={open:open,idx:()=>C.SP.findIndex(a=>a[0]===eqv().sp)};
+$('av').style.cursor='zoom-in';$('av').setAttribute('role','button');$('av').setAttribute('aria-label','İncele');
+$('av').addEventListener('click',()=>open(Math.max(0,C.SP.findIndex(a=>a[0]===eqv().sp))));
+})();
 </script>
 </body></html>

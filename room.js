@@ -86,6 +86,7 @@ var CSS='body.yx-room #ych{display:none!important}'+
 '.pl .emo{position:absolute;left:50%;top:-8px;transform:translate(-50%,0) scale(.4);font-size:1.7rem;opacity:0;pointer-events:none}.pl .emo.on{animation:remo 2s ease-out}@keyframes remo{0%{opacity:0;transform:translate(-50%,6px) scale(.4)}15%{opacity:1;transform:translate(-50%,-8px) scale(1.2)}80%{opacity:1;transform:translate(-50%,-14px) scale(1)}100%{opacity:0;transform:translate(-50%,-22px) scale(1)}}'+
 '#pb .pl .av{width:42px;height:42px}#pb .pl{padding:6px 4px}#pb{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-bottom:8px}'+
 '#gm{flex:1;min-height:0;position:relative}'+
+'.pl .emo.qc{font-size:.78rem;font-weight:800;white-space:nowrap;background:rgba(20,16,43,.96);border:1px solid rgba(255,255,255,.28);color:#ffd23f;padding:4px 9px;border-radius:12px;z-index:5}.rqp{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}.rqp[hidden]{display:none}.rqp button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;color:#fff;font:700 .82rem system-ui,sans-serif;min-height:40px;padding:0 12px}'+
 '.remo{display:flex;gap:6px;justify-content:center;margin-top:8px}.remo button{background:rgba(255,255,255,.08);border:0;border-radius:12px;font-size:1.3rem;min-width:44px;min-height:44px}'+
 '.rover{background:var(--card,#1a1440);border:2px solid var(--yellow,#ffd23f);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}.rover b{flex:1;font-size:1.05rem}'+
 '#rtoast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#1f1a42;color:#fff;border:1.5px solid #ffd23f;border-radius:999px;padding:9px 18px;font-weight:800;z-index:100000;opacity:0;transition:opacity .25s;pointer-events:none}#rtoast.on{opacity:1}'+
@@ -139,6 +140,7 @@ function start(cfg){
     if(seat<0)return;
     if(m.t==='act'){onAct(seat,m.a)}
     else if(m.t==='emo'){bcast({t:'emo',seat:seat,e:String(m.e).slice(0,4)});showEmo(seat,String(m.e).slice(0,4))}
+    else if(m.t==='qc'){var qi=m.i|0,qn=Date.now();if(qi>=0&&qi<QC.length&&qn-(qcLast[seat]||0)>1200){qcLast[seat]=qn;bcast({t:'qc',seat:seat,i:qi});showQc(seat,qi)}}
     else if(m.t==='bal'){R.players[seat].bal=+m.b||0}
     else if(m.t==='bye'){dropSeat(seat)}}
   function bcast(o){R.players.forEach(function(p){if(p.link)p.link.send(o)})}
@@ -174,9 +176,10 @@ function start(cfg){
       showErr(e&&e.message==='mqtt'?T('Bağlantı servisi yüklenemedi. İnternetini kontrol et.'):T('Oda bulunamadı. Kodu kontrol et.'))})}
   function guestMsg(m){if(!m||typeof m!=='object')return;
     if(m.t==='welcome'){R.seat=m.seat;R.code=m.code;R.phase=m.phase==='play'?'play':'lobby';draw()}
-    else if(m.t==='lobby'){R.players=m.players;R.phase='lobby';R.stake=m.stake||0;try{R.link&&R.link.send({t:'bal',b:coins()})}catch(e){}draw()}
+    else if(m.t==='lobby'){if(window.YX_APP&&m.stake>0){toast(T('Bu oda jeton ortaya koyuyor, uygulamada kullanılamaz'));setTimeout(leave,1200);return}R.players=m.players;R.phase='lobby';R.stake=m.stake||0;try{R.link&&R.link.send({t:'bal',b:coins()})}catch(e){}draw()}
     else if(m.t==='v'){R.seat=m.seat;R.players=m.players;if(R.phase!=='play'){R.phase='play';R.rewarded=false;draw()}onView(m.v,m.meta,m.players)}
     else if(m.t==='emo')showEmo(m.seat,m.e);
+    else if(m.t==='qc'){var qj=m.i|0;if(qj>=0&&qj<QC.length)showQc(m.seat,qj)}
     else if(m.t==='err')toast(T(m.e));
     else if(m.t==='deny'){var l=R.link;R.link=null;if(l)l.close();showErr(m.r==='full'?T('Oda dolu'):T('Oyun çoktan başladı'))}}
 
@@ -196,10 +199,12 @@ function start(cfg){
   function rewardMe(o){var win=o.winner===mySeat()||(o.winners&&o.winners.indexOf(mySeat())>=0);var hasHuman=R.players.some(function(p,i){return i!==mySeat()&&(p.k==='human'||p.k==='host'&&R.hot)});
     var n=win?(hasHuman?14:8):4;try{if(window.YX&&!R.hot){var a=YX.earn(n,'room',1);if(a)toast('+'+a+' 🪙 · '+T(win?'Kazandın! 🎉':'Güzel maç!'))}}catch(e){}
     var mt=R.meta||{};if(mt.stake>0&&!R.hot){var draw=(o.winner==null||o.winner<0)&&!(o.winners&&o.winners.length);
-      try{if(win){var g=YX.earn(mt.pot,'pot',1);toast('+'+g+' 🪙 · '+T('Kazanılan pot'))}else if(draw){YX.earn(mt.stake,'refund',1);toast('+'+mt.stake+' 🪙 · '+T('Bahis iade'))}else toast('-'+mt.stake+' 🪙')}catch(e){}
+      try{if(win){var g=YX.earn(mt.pot,'pot',1);toast('+'+g+' 🪙 · '+T('Kazanılan pot'))}else if(draw){YX.earn(mt.stake,'refund',1);toast('+'+mt.stake+' 🪙 · '+T('Jeton iade'))}else toast('-'+mt.stake+' 🪙')}catch(e){}
       if(!R.isHost&&R.link)setTimeout(function(){try{R.link.send({t:'bal',b:coins()})}catch(e){}},300)}
     try{window.YS&&YS.play(win?'win':'over')}catch(e){}}
-  function showEmo(seat,e){var el=document.querySelector('#pb .pl[data-s="'+seat+'"] .emo');if(!el)return;el.textContent=e;el.classList.remove('on');void el.offsetWidth;el.classList.add('on')}
+  var QC=["İyi oyun! 👋", "Güzel hamle!", "Hadi biraz hızlı! ⏳", "Bir saniye, düşünüyorum 🤔", "Şanssızlık! 😅", "Tebrikler! 🎉", "Bir tur daha?", "Teşekkürler 🙏", "Çok yakındı!", "Harika oyundu!", "Biraz sabır 🙂", "Hazırım ✅"],qcLast={};
+  function showQc(seat,i){var el=document.querySelector('#pb .pl[data-s="'+seat+'"] .emo');if(!el)return;el.textContent=T(QC[i]);el.classList.add('qc');el.classList.remove('on');void el.offsetWidth;el.classList.add('on')}
+  function showEmo(seat,e){var el=document.querySelector('#pb .pl[data-s="'+seat+'"] .emo');if(!el)return;el.textContent=e;el.classList.remove('on','qc');void el.offsetWidth;el.classList.add('on')}
 
   /* ----- çizim ----- */
   function showErr(m){var e=$('rerr');if(e)e.textContent=m;else toast(m)}
@@ -242,15 +247,17 @@ function start(cfg){
       var sh=$('rsh');if(sh)sh.onclick=function(){var u=shareUrl(),tx=T('Yaxest ile oyun oynayalım! Oda kodu')+': '+R.code;if(navigator.share)navigator.share({title:'Yaxest Games',text:tx,url:u}).catch(function(){});else copy(u)};
       var cp=$('rcp');if(cp)cp.onclick=function(){copy(shareUrl())}}
     else if(R.phase==='play'){drawGame()}}
-  function stakeHtml(){var o=[0,10,25,50,100];if(!R.code)return'';
-    if(!R.isHost)return'<div class="rmsg" style="color:var(--yellow,#ffd23f);font-weight:800">'+esc(T('Bahis'))+': '+(R.stake?'🪙 '+R.stake:esc(T('Bahis yok')))+'</div>';
-    return'<div style="text-align:center;color:var(--mute,#a9a3cf);font-size:.85rem">'+esc(T('Bahis'))+' ('+esc(T('kazanan tüm potu alır'))+')</div><div class="rseg rstk" role="group">'+o.map(function(v){return'<button data-s="'+v+'" aria-pressed="'+(R.stake===v)+'">'+(v?'🪙 '+v:esc(T('Bahis yok')))+'</button>'}).join('')+'</div>'}
+  function stakeHtml(){var o=[0,10,25,50,100];if(!R.code||window.YX_APP)return'';
+    if(!R.isHost)return'<div class="rmsg" style="color:var(--yellow,#ffd23f);font-weight:800">'+esc(T('Ortaya jeton'))+': '+(R.stake?'🪙 '+R.stake:esc(T('Jetonsuz')))+'</div>';
+    return'<div style="text-align:center;color:var(--mute,#a9a3cf);font-size:.85rem">'+esc(T('Ortaya jeton'))+' ('+esc(T('kazanan tüm potu alır'))+')</div><div class="rseg rstk" role="group">'+o.map(function(v){return'<button data-s="'+v+'" aria-pressed="'+(R.stake===v)+'">'+(v?'🪙 '+v:esc(T('Jetonsuz')))+'</button>'}).join('')+'</div>'}
   function copy(t){try{navigator.clipboard.writeText(t).then(function(){toast(T('Bağlantı kopyalandı'))},function(){toast(t)})}catch(e){toast(t)}}
   function drawGame(){
     root.innerHTML=head(R.code?'<span class="rcode">'+R.code+'</span>':'')+'<div id="pb"></div><div id="rov" class="rover" hidden></div><div id="gm"></div><div class="remo" id="remo"></div>';
-    var em=['👍','😂','😮','😢','🔥','🙌'];$('remo').innerHTML=em.map(function(e){return'<button type="button" aria-label="'+e+'">'+e+'</button>'}).join('');
+    var em=['👍','😂','😮','😢','🔥','🙌'];$('remo').innerHTML=em.map(function(e){return'<button type="button" aria-label="'+e+'">'+e+'</button>'}).join('')+'<button type="button" id="rqb" aria-label="'+esc(T('Hızlı sohbet'))+'">💬</button>';
+    var qp=document.createElement('div');qp.id='rqp';qp.hidden=true;qp.className='rqp';qp.innerHTML=QC.map(function(q,i){return'<button type="button" data-q="'+i+'">'+esc(T(q))+'</button>'}).join('');$('remo').parentNode.insertBefore(qp,$('remo').nextSibling);
     if(R.hot)$('remo').hidden=true;
-    root.querySelectorAll('#remo button').forEach(function(b){b.onclick=function(){var e=b.textContent;if(R.isHost){bcast({t:'emo',seat:R.seat,e:e});showEmo(R.seat,e)}else if(R.link)R.link.send({t:'emo',e:e})}});
+    $('rqb').onclick=function(){qp.hidden=!qp.hidden};qp.querySelectorAll('button').forEach(function(b){b.onclick=function(){var i=+b.dataset.q;qp.hidden=true;if(R.isHost){bcast({t:'qc',seat:R.seat,i:i});showQc(R.seat,i)}else if(R.link)R.link.send({t:'qc',i:i})}});
+    root.querySelectorAll('#remo button:not(#rqb)').forEach(function(b){b.onclick=function(){var e=b.textContent;if(R.isHost){bcast({t:'emo',seat:R.seat,e:e});showEmo(R.seat,e)}else if(R.link)R.link.send({t:'emo',e:e})}});
     barSig='';$('pb').style.gridTemplateColumns='repeat('+Math.min(N,4)+',1fr)';
     ui.mount($('gm'),ctx());uiMounted=true;updateBar();if(R.lastView)try{ui.view(R.lastView,R.meta)}catch(e){}}
   addEventListener('ylang',function(){if(R.phase==='menu'||R.phase==='lobby')draw()});

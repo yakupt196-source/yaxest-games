@@ -1,3 +1,4 @@
+try{if(/[?&]utm_source=app\b/.test(location.search)||/^android-app:/.test(document.referrer))localStorage.setItem('yx-app','1');window.YX_APP=localStorage.getItem('yx-app')==='1'}catch(e){}
 /* Yaxest ekonomi: jeton, mağaza, karakter, temalar. Tüm sayfalarda yüklenir. Veri yalnızca bu cihazda (localStorage 'yx-eco'). */
 (function(){
 'use strict';
@@ -203,7 +204,7 @@ var tTo=0;function toast(msg){var t=document.getElementById('yx-toast');if(!t){t
 
 var ch=null,mood='n',moodTo=0,bubTo=0;
 function render(){if(!ch)return;ch.firstChild.innerHTML=av(S.eq,mood)}
-function say(txt,kind,ms){if(!ch)return;var b=ch.lastChild;b.textContent=txt;b.classList.add('on');clearTimeout(bubTo);bubTo=setTimeout(function(){b.classList.remove('on')},ms||2200);
+function say(txt,kind,ms,wide){if(!ch)return;var b=ch.lastChild;b.textContent=txt;b.style.whiteSpace=wide?'normal':'';b.style.width=wide?'min(76vw,250px)':'';b.style.lineHeight=wide?'1.25':'';b.classList.add('on');clearTimeout(bubTo);bubTo=setTimeout(function(){b.classList.remove('on')},ms||2200);
  if(kind){mood=kind==='sad'?'s':'h';render();ch.classList.remove('jump','sad');void ch.offsetWidth;ch.classList.add(kind==='sad'?'sad':'jump');clearTimeout(moodTo);moodTo=setTimeout(function(){mood='n';render();ch.classList.remove('jump','sad')},1800)}}
 function mountChar(){if(!isGame||ch)return;ch=document.createElement('div');ch.id='ych';ch.innerHTML='<div class="yxs"></div><div class="yxp"></div>';document.body.appendChild(ch);render()}
 function chip(){var h=document.querySelector('header');if(!isGame||!h||h.querySelector('[data-yx=coins]'))return;var s=document.createElement('span');s.className='yx-chip';s.innerHTML='🪙 <b data-yx="coins">0</b>';var st=h.querySelector('.st');h.insertBefore(s,st||null);refresh()}
@@ -213,6 +214,19 @@ function refresh(){var els=document.querySelectorAll('[data-yx=coins]');for(var 
  var lv=document.querySelectorAll('[data-yx=level]');for(var k=0;k<lv.length;k++)lv[k].textContent=level();
  if(ch)render()}
 
+
+/* ---------- karakter koçu: üst üste hatada oyuncunun dilinde tavsiye ---------- */
+var COACH={Refleks:['Ekrana değil ritme bak: önce zamanlamayı yakala, sonra hızlan.','Üst üste hata mı? Bir nefes al, yavaşça tekrar dene.','Hız arttıkça panik yapma; tek hamleyi doğru yapmak yeter.'],
+ Bulmaca:['Acele etme: hamleden önce hedefi bir kez daha oku.','Önce köşeleri ve kısıtlı yerleri çöz, kalanı kendiliğinden açılır.','Takıldıysan baştan başla, ikinci denemede çözüm genelde belli olur.'],
+ Arcade:['Önce hayatta kal, puan sonra gelir.','Engellere erken tepki ver; gözünü hep biraz ilerde tut.','Bonusları ancak güvenliyse al, riske girme.']};
+var COACHG={yilan:'Kenarda değil ortada kal; kendine hep kaçacak yer bırak.',kule:'Bloğu tam ortaya hizala; küçük kaymalar kuleyi daraltır.',blok:'Uzun blok için yer ayır; büyük şekilleri sona bırakma.',birlestir:'En büyük sayıyı hep aynı köşede tut.',hafiza:'Kartları köşelerden başlayarak aklında tut.',damla:'Küçükleri önce birleştir, kabın yarısını boş tut.',radar:'Sahte hedeflere kanma: çizgi hedefin tam üstündeyken dokun.',tup:'Boş tüpü son çareye sakla.'};
+var coachSt={};try{coachSt=JSON.parse(localStorage.getItem('yx-coach')||'{}')}catch(e){}
+function coachSave(){try{localStorage.setItem('yx-coach',JSON.stringify(coachSt))}catch(e){}}
+function coachReset(){if(coachSt[cur]&&coachSt[cur].n){coachSt[cur].n=0;coachSave()}return ''}
+function coachTip(){var c=coachSt[cur]||(coachSt[cur]={n:0,i:0,t:0});c.n++;coachSave();if(c.n<3||Date.now()-c.t<90000)return '';
+ var k='',gs=window.YAXEST_GAMES||[];for(var i=0;i<gs.length;i++)if(gs[i].id===cur)k=gs[i].k;
+ var list=(COACH[k]||COACH.Arcade).slice();if(COACHG[cur])list.unshift(COACHG[cur]);
+ var tip=list[c.i%list.length];c.i++;c.n=0;c.t=Date.now();coachSave();return T(tip)}
 /* ---------- kazanma mantığı ---------- */
 var lastAct=Date.now(),acc=0,tStart=0,b0=0,ov=null;
 ['pointerdown','keydown','touchstart','pointermove'].forEach(function(e){addEventListener(e,function(){lastAct=Date.now()},{passive:true,capture:true})});
@@ -223,7 +237,7 @@ function onEnd(){if(!tStart)return;var dur=(Date.now()-tStart)/1000;tStart=0;if(
  var g=window.G,score=g&&typeof g.score==='number'?g.score:num(document.getElementById('big')),title=(document.getElementById('ot')||{}).textContent||'',win=WIN.test(title);
  var rec=!!(g&&score>0&&score>b0&&score>=g.best);
  var n=2+Math.floor(Math.sqrt(Math.max(0,score))*1.3)+(win?3:0)+Math.min(6,Math.floor(dur/20))+(rec?6:0);n=Math.min(30,n);
- var a=earn(n,'game'),ph=T(win||rec?(rec?'Yeni rekor!':'Harika! 🎉'):'Olsun, bir daha! 💪');say((a>0?'+'+a+' 🪙 · ':'')+ph,win||rec?'happy':'sad',2600)}
+ var a=earn(n,'game'),ph=T(win||rec?(rec?'Yeni rekor!':'Harika! 🎉'):'Olsun, bir daha! 💪');var tip=win||rec?coachReset():coachTip();if(tip){say((a>0?'+'+a+' 🪙 · ':'')+tip,'happy',6500,1)}else say((a>0?'+'+a+' 🪙 · ':'')+ph,win||rec?'happy':'sad',2600)}
 function bindOv(){ov=document.getElementById('ov');if(!ov||!isGame)return;var was=ov.classList.contains('hid');
  if(was){tStart=Date.now();b0=window.G?G.best:0}
  new MutationObserver(function(){var h=ov.classList.contains('hid');if(was&&!h)onEnd();if(!was&&h){tStart=Date.now();b0=window.G?G.best:0}was=h}).observe(ov,{attributes:true,attributeFilter:['class']})}

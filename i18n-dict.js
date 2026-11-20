@@ -5912,5 +5912,311 @@ window.YAXEST_DICT={
 "Minijogos originais. Abra, jogue, bata seu recorde. Sem download, conta opcional.",
 "Оригинальные мини-игры. Открой, играй, побей рекорд. Без загрузок, аккаунт по желанию.",
 "Mini giochi originali. Apri, gioca, batti il record. Nessun download, account facoltativo."
+],
+"Ortaya jeton": [
+"Tokens in the pot",
+"Jetons im Topf",
+"Fichas en el bote",
+"Jetons en jeu",
+"Fichas no pote",
+"Жетоны в банк",
+"Gettoni nel piatto"
+],
+"Jetonsuz": [
+"No tokens",
+"Ohne Jetons",
+"Sin fichas",
+"Sans jetons",
+"Sem fichas",
+"Без жетонов",
+"Senza gettoni"
+],
+"Jeton iade": [
+"Tokens refunded",
+"Jetons erstattet",
+"Fichas devueltas",
+"Jetons remboursés",
+"Fichas devolvidas",
+"Жетоны возвращены",
+"Gettoni rimborsati"
+],
+"Bu oda jeton ortaya koyuyor, uygulamada kullanılamaz": [
+"This room plays for tokens, which isn't available in the app",
+"Dieser Raum spielt um Jetons, in der App nicht verfügbar",
+"Esta sala juega con fichas, no disponible en la app",
+"Cette salle joue avec des jetons, indisponible dans l'appli",
+"Esta sala joga com fichas, indisponível no app",
+"Эта комната играет на жетоны, в приложении недоступно",
+"Questa stanza gioca con i gettoni, non disponibile nell'app"
+],
+"Ekrana değil ritme bak: önce zamanlamayı yakala, sonra hızlan.": [
+"Watch the rhythm, not the screen: catch the timing first, then speed up.",
+"Achte auf den Rhythmus, nicht auf den Bildschirm: erst das Timing, dann das Tempo.",
+"Fíjate en el ritmo, no en la pantalla: primero el tiempo, luego la velocidad.",
+"Suis le rythme, pas l'écran : trouve d'abord le bon timing, accélère ensuite.",
+"Olhe o ritmo, não a tela: pegue o tempo primeiro, depois acelere.",
+"Следи за ритмом, а не за экраном: сначала поймай тайминг, потом ускоряйся.",
+"Guarda il ritmo, non lo schermo: prima il tempismo, poi la velocità."
+],
+"Üst üste hata mı? Bir nefes al, yavaşça tekrar dene.": [
+"Failing in a row? Take a breath and try again, slowly.",
+"Mehrere Fehler hintereinander? Atme durch und versuch es langsam nochmal.",
+"¿Fallos seguidos? Respira e inténtalo de nuevo despacio.",
+"Plusieurs échecs de suite ? Respire et réessaie doucement.",
+"Erros seguidos? Respire fundo e tente de novo, devagar.",
+"Несколько ошибок подряд? Вдохни и попробуй снова, не торопясь.",
+"Più errori di fila? Respira e riprova con calma."
+],
+"Hız arttıkça panik yapma; tek hamleyi doğru yapmak yeter.": [
+"Don't panic as it speeds up; one good move is enough.",
+"Keine Panik, wenn es schneller wird: ein guter Zug reicht.",
+"No entres en pánico si acelera: un buen movimiento basta.",
+"Pas de panique quand ça accélère : un seul bon geste suffit.",
+"Não entre em pânico quando acelerar: um bom movimento basta.",
+"Не паникуй, когда становится быстрее: хватит одного верного хода.",
+"Niente panico quando accelera: basta una mossa giusta."
+],
+"Acele etme: hamleden önce hedefi bir kez daha oku.": [
+"Don't rush: reread the goal before you move.",
+"Keine Eile: lies das Ziel vor dem Zug noch einmal.",
+"Sin prisa: relee el objetivo antes de mover.",
+"Pas de précipitation : relis l'objectif avant de jouer.",
+"Sem pressa: releia o objetivo antes de jogar.",
+"Не спеши: перечитай цель перед ходом.",
+"Niente fretta: rileggi l'obiettivo prima di muovere."
+],
+"Önce köşeleri ve kısıtlı yerleri çöz, kalanı kendiliğinden açılır.": [
+"Solve the corners and tight spots first; the rest opens up on its own.",
+"Löse zuerst Ecken und enge Stellen, der Rest ergibt sich von selbst.",
+"Resuelve primero las esquinas y los huecos estrechos; el resto se abre solo.",
+"Résous d'abord les coins et les endroits serrés, le reste suivra.",
+"Resolva primeiro os cantos e os pontos apertados; o resto se abre sozinho.",
+"Сначала реши углы и тесные места, остальное решится само.",
+"Risolvi prima gli angoli e i punti stretti: il resto viene da sé."
+],
+"Takıldıysan baştan başla, ikinci denemede çözüm genelde belli olur.": [
+"Stuck? Start over; the solution is usually clear on the second try.",
+"Festgefahren? Fang neu an, beim zweiten Versuch wird die Lösung meist klar.",
+"¿Atascado? Empieza de nuevo; en el segundo intento la solución suele verse.",
+"Bloqué ? Recommence, la solution apparaît souvent au deuxième essai.",
+"Travou? Recomece; na segunda tentativa a solução costuma aparecer.",
+"Застрял? Начни заново: со второй попытки решение обычно видно.",
+"Bloccato? Ricomincia: al secondo tentativo la soluzione di solito si vede."
+],
+"Önce hayatta kal, puan sonra gelir.": [
+"Survive first, the points will follow.",
+"Überleben zuerst, die Punkte kommen danach.",
+"Sobrevive primero, los puntos vendrán después.",
+"Survis d'abord, les points suivront.",
+"Sobreviva primeiro, os pontos vêm depois.",
+"Сначала выживай, очки придут потом.",
+"Sopravvivi prima, i punti arrivano dopo."
+],
+"Engellere erken tepki ver; gözünü hep biraz ilerde tut.": [
+"React to obstacles early; keep your eyes a little ahead.",
+"Reagiere früh auf Hindernisse und schau immer etwas voraus.",
+"Reacciona pronto a los obstáculos; mira siempre un poco más adelante.",
+"Réagis tôt aux obstacles et garde les yeux un peu plus loin.",
+"Reaja cedo aos obstáculos; mantenha o olhar um pouco à frente.",
+"Реагируй на препятствия заранее и смотри чуть дальше вперёд.",
+"Reagisci presto agli ostacoli e tieni lo sguardo un po' più avanti."
+],
+"Bonusları ancak güvenliyse al, riske girme.": [
+"Grab bonuses only when it's safe; don't take risks.",
+"Nimm Boni nur mit, wenn es sicher ist; geh kein Risiko ein.",
+"Coge los bonus solo si es seguro; no te arriesgues.",
+"Prends les bonus seulement si c'est sûr, ne prends pas de risques.",
+"Pegue bônus só quando for seguro; não se arrisque.",
+"Бери бонусы только если безопасно, не рискуй.",
+"Prendi i bonus solo se è sicuro, non rischiare."
+],
+"Kenarda değil ortada kal; kendine hep kaçacak yer bırak.": [
+"Stay in the middle, not along the edge; always leave yourself an escape.",
+"Bleib in der Mitte statt am Rand und lass dir immer einen Fluchtweg.",
+"Quédate en el centro, no en el borde; deja siempre una salida.",
+"Reste au centre, pas sur le bord ; garde toujours une issue.",
+"Fique no meio, não na borda; deixe sempre uma saída.",
+"Держись центра, а не края; всегда оставляй себе путь к отступлению.",
+"Resta al centro, non sul bordo; lasciati sempre una via di fuga."
+],
+"Bloğu tam ortaya hizala; küçük kaymalar kuleyi daraltır.": [
+"Line the block up exactly; small slips narrow the tower.",
+"Richte den Block genau aus; kleine Abweichungen verengen den Turm.",
+"Alinea el bloque justo; los pequeños desvíos estrechan la torre.",
+"Aligne le bloc au millimètre ; les petits écarts rétrécissent la tour.",
+"Alinhe o bloco certinho; pequenos desvios estreitam a torre.",
+"Выравнивай блок точно: мелкие сдвиги сужают башню.",
+"Allinea bene il blocco: piccoli scarti restringono la torre."
+],
+"Uzun blok için yer ayır; büyük şekilleri sona bırakma.": [
+"Save room for the long block; don't leave big shapes for last.",
+"Halte Platz für den langen Block frei und spare große Formen nicht bis zum Schluss auf.",
+"Guarda sitio para la pieza larga; no dejes las formas grandes para el final.",
+"Garde de la place pour le long bloc ; ne laisse pas les grandes formes pour la fin.",
+"Reserve espaço para o bloco longo; não deixe as formas grandes para o fim.",
+"Оставляй место для длинного блока и не откладывай большие фигуры на потом.",
+"Tieni spazio per il blocco lungo: non lasciare le forme grandi per ultime."
+],
+"En büyük sayıyı hep aynı köşede tut.": [
+"Keep your biggest number in the same corner.",
+"Halte die größte Zahl immer in derselben Ecke.",
+"Mantén el número más grande siempre en la misma esquina.",
+"Garde toujours le plus grand nombre dans le même coin.",
+"Mantenha o maior número sempre no mesmo canto.",
+"Держи самое большое число всегда в одном углу.",
+"Tieni il numero più grande sempre nello stesso angolo."
+],
+"Kartları köşelerden başlayarak aklında tut.": [
+"Memorize the cards starting from the corners.",
+"Merke dir die Karten von den Ecken aus.",
+"Memoriza las cartas empezando por las esquinas.",
+"Mémorise les cartes en partant des coins.",
+"Memorize as cartas começando pelos cantos.",
+"Запоминай карты, начиная с углов.",
+"Memorizza le carte partendo dagli angoli."
+],
+"Küçükleri önce birleştir, kabın yarısını boş tut.": [
+"Merge the small ones first and keep half the container empty.",
+"Verbinde zuerst die kleinen und halte den Behälter halb leer.",
+"Une primero las pequeñas y deja medio recipiente libre.",
+"Fusionne d'abord les petites et garde la moitié du récipient vide.",
+"Junte as pequenas primeiro e mantenha metade do recipiente vazia.",
+"Сначала соединяй маленькие и держи половину сосуда пустой.",
+"Unisci prima le piccole e tieni mezzo contenitore libero."
+],
+"Sahte hedeflere kanma: çizgi hedefin tam üstündeyken dokun.": [
+"Don't fall for decoys: tap when the line is right on the target.",
+"Fall nicht auf Köder herein: tippe, wenn die Linie genau auf dem Ziel liegt.",
+"No caigas en los señuelos: toca cuando la línea esté justo sobre el objetivo.",
+"Ne tombe pas dans le piège des leurres : touche quand la ligne est pile sur la cible.",
+"Não caia em iscas: toque quando a linha estiver bem em cima do alvo.",
+"Не ведись на ложные цели: нажимай, когда линия точно над целью.",
+"Non cadere nelle esche: tocca quando la linea è proprio sul bersaglio."
+],
+"Boş tüpü son çareye sakla.": [
+"Save the empty tube as a last resort.",
+"Hebe die leere Röhre als letzten Ausweg auf.",
+"Guarda el tubo vacío como último recurso.",
+"Garde le tube vide pour le dernier recours.",
+"Guarde o tubo vazio como último recurso.",
+"Береги пустую пробирку на крайний случай.",
+"Tieni la provetta vuota come ultima risorsa."
+],
+"İyi oyun! 👋": [
+"Good game! 👋",
+"Gutes Spiel! 👋",
+"¡Buena partida! 👋",
+"Bonne partie ! 👋",
+"Bom jogo! 👋",
+"Хорошей игры! 👋",
+"Buona partita! 👋"
+],
+"Güzel hamle!": [
+"Nice move!",
+"Schöner Zug!",
+"¡Buena jugada!",
+"Beau coup !",
+"Boa jogada!",
+"Красивый ход!",
+"Bella mossa!"
+],
+"Hadi biraz hızlı! ⏳": [
+"Come on, hurry! ⏳",
+"Los, etwas schneller! ⏳",
+"¡Vamos, más rápido! ⏳",
+"Allez, un peu vite ! ⏳",
+"Vamos, mais rápido! ⏳",
+"Давай побыстрее! ⏳",
+"Dai, più veloce! ⏳"
+],
+"Bir saniye, düşünüyorum 🤔": [
+"One sec, I'm thinking 🤔",
+"Moment, ich denke nach 🤔",
+"Un segundo, estoy pensando 🤔",
+"Une seconde, je réfléchis 🤔",
+"Um segundo, estou pensando 🤔",
+"Секунду, думаю 🤔",
+"Un attimo, sto pensando 🤔"
+],
+"Şanssızlık! 😅": [
+"Unlucky! 😅",
+"Pech gehabt! 😅",
+"¡Mala suerte! 😅",
+"Pas de chance ! 😅",
+"Azar! 😅",
+"Не повезло! 😅",
+"Sfortuna! 😅"
+],
+"Tebrikler! 🎉": [
+"Congrats! 🎉",
+"Glückwunsch! 🎉",
+"¡Felicidades! 🎉",
+"Bravo ! 🎉",
+"Parabéns! 🎉",
+"Поздравляю! 🎉",
+"Complimenti! 🎉"
+],
+"Bir tur daha?": [
+"One more round?",
+"Noch eine Runde?",
+"¿Otra ronda?",
+"Une autre manche ?",
+"Mais uma rodada?",
+"Ещё раунд?",
+"Ancora un giro?"
+],
+"Teşekkürler 🙏": [
+"Thanks 🙏",
+"Danke 🙏",
+"Gracias 🙏",
+"Merci 🙏",
+"Obrigado 🙏",
+"Спасибо 🙏",
+"Grazie 🙏"
+],
+"Çok yakındı!": [
+"So close!",
+"Knapp daneben!",
+"¡Casi!",
+"Tout près !",
+"Foi por pouco!",
+"Почти получилось!",
+"Per un soffio!"
+],
+"Harika oyundu!": [
+"Great game!",
+"Tolles Spiel!",
+"¡Gran partida!",
+"Super partie !",
+"Ótimo jogo!",
+"Отличная игра!",
+"Ottima partita!"
+],
+"Biraz sabır 🙂": [
+"Be patient 🙂",
+"Etwas Geduld 🙂",
+"Un poco de paciencia 🙂",
+"Un peu de patience 🙂",
+"Um pouco de paciência 🙂",
+"Немного терпения 🙂",
+"Un po' di pazienza 🙂"
+],
+"Hazırım ✅": [
+"I'm ready ✅",
+"Ich bin bereit ✅",
+"Estoy listo ✅",
+"Je suis prêt ✅",
+"Estou pronto ✅",
+"Я готов ✅",
+"Sono pronto ✅"
+],
+"Hızlı sohbet": [
+"Quick chat",
+"Schnellchat",
+"Chat rápido",
+"Chat rapide",
+"Chat rápido",
+"Быстрый чат",
+"Chat rapida"
 ]
 };
