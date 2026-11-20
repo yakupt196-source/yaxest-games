@@ -64,13 +64,13 @@ put(p, idx_title, idx_desc, BASE, ld)
 s = open(p, encoding='utf-8').read()
 # taranabilir statik oyun bağlantıları (oyun kartları JavaScript ile çiziliyor)
 s = re.sub(r'<div class="seo-links".*?</div>\n?', '', s, flags=re.S)
-links = ' · '.join(f'<a href="{g["id"]}/">{E(g["n"])}</a>' for g in games)
+links = ' · '.join(f'<a href="{g["id"]}/">{E(g["n"])}</a>' for g in games) + ' · <a href="rehber/">Oyun rehberi</a>'
 s = s.replace('<footer>', f'<div class="seo-links" role="navigation" aria-label="Tüm oyunlar" style="display:block;max-width:1040px;margin:24px auto 0;padding:0 20px;color:#a9a3cf;font-size:.85rem;line-height:1.9">{links}</div>\n<footer>', 1)
 s = s.replace("Örn: Zıpla'da çift zıplama olsun", "Örn: Yeni bir oyun ya da özellik önerisi")
 open(p, 'w', encoding='utf-8').write(s)
 
 # --- sitemap + robots
-urls = [BASE] + [f'{BASE}{g["id"]}/' for g in games if os.path.exists(f'{ROOT}/{g["id"]}/index.html')] + [BASE + 'magaza/', BASE + 'hesap/', BASE + 'gizlilik.html']
+urls = [BASE] + [f'{BASE}{g["id"]}/' for g in games if os.path.exists(f'{ROOT}/{g["id"]}/index.html')] + [BASE + 'magaza/', BASE + 'hesap/', BASE + 'gizlilik.html'] + ([BASE + 'rehber/'] + [f'{BASE}rehber/{g["id"]}/' for g in games if os.path.exists(f'{ROOT}/rehber/{g["id"]}/index.html')] if os.path.exists(f'{ROOT}/rehber/index.html') else [])
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
     f'<url><loc>{u}</loc><changefreq>weekly</changefreq><priority>{"1.0" if u == BASE else "0.8"}</priority></url>\n' for u in urls) + '</urlset>\n'
 open(f'{ROOT}/sitemap.xml', 'w', encoding='utf-8').write(sm)
