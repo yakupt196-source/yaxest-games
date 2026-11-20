@@ -1,5 +1,13 @@
 // Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
 window.YAXEST_GAMES=[
+{id:'kafe',n:'Yaxest Kafe',i:'☕',c:'#ff9f43',k:'Tycoon',d:'Çay ocağından dünya zincirine: kafeni büyüt, çevrimdışıyken de kazan, yeniden doğ.',new:1},
+{id:'maden',n:'Yaxest Maden',i:'⛏️',c:'#8d6e63',k:'Tycoon',d:'Kürekle başla, yeraltı şehrine kadar kaz. Elmaslar seni bekliyor.',new:1},
+{id:'studyo',n:'Yaxest Stüdyo',i:'🎮',c:'#6aa8ff',k:'Tycoon',d:'Garajda oyun yap, e-spor ve metaverse’e uzan. Kendi oyun imparatorluğun.',new:1},
+{id:'koloni',n:'Yaxest Koloni',i:'🚀',c:'#ff7043',k:'Tycoon',d:'Mars’ta güneş panelinden yıldız gemisine: uzay kolonini kur ve terraform et.',new:1},
+{id:'sehir',n:'Yaxest Şehir',i:'🌆',c:'#3ddbb0',k:'Tycoon',d:'Küçük dükkândan uzay limanlı metropole: şehrini kur ve büyüt.',new:1},
+{id:'tavla',n:'Yaxest Tavla',i:'🎲',c:'#c9955b',k:'Masa',d:'Arkadaşınla oda kur, zar at, taşlarını eve topla. Tam kurallı tavla, bot ile de oynanır.',new:1},
+{id:'okey',n:'Yaxest Okey',i:'🀄',c:'#e0244f',k:'Masa',d:'4 kişilik Okey: oda kur, kodu paylaş, eksik yerleri bot doldursun.',new:1},
+{id:'pisti',n:'Yaxest Pişti',i:'🃏',c:'#1f9d63',k:'Masa',d:'2 kişilik klasik Pişti: masadaki kartı kap, pişti yap. Arkadaşınla ya da botla.',new:1},
 {id:'satranc',n:'Yaxest Satranç',i:'♟️',c:'#b388ff',k:'Masa',d:'Arkadaşınla oda kur, kodu paylaş, tam kurallı satranç oyna. Bot ile de oynayabilirsin.',new:1},
 {id:'sallan',n:'Yaxest Sallan',i:'🕸️',c:'#ff5c8a',k:'Arcade',d:'Kancadan kancaya sallan, olabildiğince uzağa git. Düşme!',new:1},
 {id:'kaydir',n:'Yaxest Kaydır',i:'🧊',c:'#3df0ff',k:'Bulmaca',d:'Buz üstünde kay, yıldıza ulaş. Az hamleyle bitir.',new:1},

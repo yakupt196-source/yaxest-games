@@ -3662,5 +3662,1625 @@ window.YAXEST_DICT={
 "Taro",
 "Таро",
 "Taro"
+],
+"5 dakika boyunca gelir ×2": [
+"Income ×2 for 5 minutes",
+"5 Minuten lang Einkommen ×2",
+"Ingresos ×2 durante 5 minutos",
+"Revenus ×2 pendant 5 minutes",
+"Renda ×2 por 5 minutos",
+"Доход ×2 на 5 минут",
+"Guadagni ×2 per 5 minuti"
+],
+"Altın fırsat!": [
+"Golden chance!",
+"Goldene Chance!",
+"¡Oportunidad dorada!",
+"Chance en or !",
+"Chance dourada!",
+"Золотой шанс!",
+"Occasione d'oro!"
+],
+"Altın fırsatlar daha sık": [
+"Golden chances appear more often",
+"Goldene Chancen erscheinen öfter",
+"Las oportunidades doradas aparecen más",
+"Les chances en or arrivent plus souvent",
+"Chances douradas aparecem mais",
+"Золотые шансы выпадают чаще",
+"Le occasioni d'oro appaiono più spesso"
+],
+"Alışveriş Merkezi": [
+"Shopping Mall",
+"Einkaufszentrum",
+"Centro comercial",
+"Centre commercial",
+"Shopping",
+"Торговый центр",
+"Centro commerciale"
+],
+"Apartman": [
+"Apartment Block",
+"Wohnblock",
+"Edificio de pisos",
+"Immeuble",
+"Prédio",
+"Многоэтажка",
+"Condominio"
+],
+"Asansör Kuyusu": [
+"Elevator Shaft",
+"Aufzugsschacht",
+"Pozo de ascensor",
+"Puits d'ascenseur",
+"Poço de elevador",
+"Шахта лифта",
+"Pozzo dell'ascensore"
+],
+"Atılacak taşı seç": [
+"Pick a tile to discard",
+"Wähle einen Stein zum Ablegen",
+"Elige una ficha para descartar",
+"Choisis une tuile à défausser",
+"Escolha uma peça para descartar",
+"Выбери фишку для сброса",
+"Scegli una tessera da scartare"
+],
+"Aynı cihazda iki kişi": [
+"Two players, same device",
+"Zwei Spieler, ein Gerät",
+"Dos jugadores, mismo dispositivo",
+"Deux joueurs, même appareil",
+"Dois jogadores, mesmo aparelho",
+"Двое на одном устройстве",
+"Due giocatori, stesso dispositivo"
+],
+"Bağlantı koptu": [
+"Connection lost",
+"Verbindung unterbrochen",
+"Conexión perdida",
+"Connexion perdue",
+"Conexão perdida",
+"Соединение потеряно",
+"Connessione persa"
+],
+"Bağlantı kopyalandı": [
+"Link copied",
+"Link kopiert",
+"Enlace copiado",
+"Lien copié",
+"Link copiado",
+"Ссылка скопирована",
+"Link copiato"
+],
+"Bağlantı servisi yüklenemedi. İnternetini kontrol et.": [
+"Connection service failed to load. Check your internet.",
+"Verbindungsdienst konnte nicht geladen werden. Prüfe dein Internet.",
+"No se pudo cargar el servicio de conexión. Revisa tu internet.",
+"Le service de connexion n'a pas pu se charger. Vérifie ta connexion.",
+"O serviço de conexão não carregou. Verifique sua internet.",
+"Не удалось загрузить сервис связи. Проверь интернет.",
+"Impossibile caricare il servizio di connessione. Controlla Internet."
+],
+"Bağlantıyı kopyala": [
+"Copy link",
+"Link kopieren",
+"Copiar enlace",
+"Copier le lien",
+"Copiar link",
+"Копировать ссылку",
+"Copia il link"
+],
+"Bağlanıyor…": [
+"Connecting…",
+"Verbinde …",
+"Conectando…",
+"Connexion…",
+"Conectando…",
+"Подключение…",
+"Connessione…"
+],
+"Başarımlar": [
+"Achievements",
+"Erfolge",
+"Logros",
+"Succès",
+"Conquistas",
+"Достижения",
+"Obiettivi"
+],
+"Berabere (anlaşma)": [
+"Draw (agreed)",
+"Remis (Einigung)",
+"Tablas (acuerdo)",
+"Nulle (accord)",
+"Empate (acordo)",
+"Ничья (по согласию)",
+"Patta (accordo)"
+],
+"Beraberlik öner": [
+"Offer a draw",
+"Remis anbieten",
+"Ofrecer tablas",
+"Proposer nulle",
+"Propor empate",
+"Предложить ничью",
+"Offri patta"
+],
+"Bina satın al": [
+"Buy buildings",
+"Gebäude kaufen",
+"Compra edificios",
+"Achète des bâtiments",
+"Compre prédios",
+"Купи здания",
+"Compra edifici"
+],
+"Binalar": [
+"Buildings",
+"Gebäude",
+"Edificios",
+"Bâtiments",
+"Prédios",
+"Здания",
+"Edifici"
+],
+"Bir oyuncu ayrıldı, yerine bot geçti": [
+"A player left, a bot took over",
+"Ein Spieler ging, ein Bot übernimmt",
+"Un jugador se fue, un bot toma su lugar",
+"Un joueur est parti, un bot le remplace",
+"Um jogador saiu, um bot assumiu",
+"Игрок вышел, его заменил бот",
+"Un giocatore è uscito, subentra un bot"
+],
+"Bot": [
+"Bot",
+"Bot",
+"Bot",
+"Bot",
+"Bot",
+"Бот",
+"Bot"
+],
+"Bot zorluğu": [
+"Bot difficulty",
+"Bot-Schwierigkeit",
+"Dificultad del bot",
+"Difficulté du bot",
+"Dificuldade do bot",
+"Сложность бота",
+"Difficoltà del bot"
+],
+"Botla oyna": [
+"Play vs bot",
+"Gegen Bot spielen",
+"Jugar contra bot",
+"Jouer contre un bot",
+"Jogar contra bot",
+"Играть с ботом",
+"Gioca contro il bot"
+],
+"Boş yerleri bot doldurur": [
+"Bots fill empty seats",
+"Bots füllen freie Plätze",
+"Los bots ocupan los huecos",
+"Les bots remplissent les places vides",
+"Bots preenchem as vagas",
+"Пустые места займут боты",
+"I bot riempiono i posti liberi"
+],
+"Daveti paylaş": [
+"Share invite",
+"Einladung teilen",
+"Compartir invitación",
+"Partager l'invitation",
+"Compartilhar convite",
+"Поделиться приглашением",
+"Condividi l'invito"
+],
+"Desteden ya da soldan taş çek": [
+"Draw from the deck or the left pile",
+"Zieh vom Stapel oder von links",
+"Roba del mazo o de la izquierda",
+"Pioche dans la pioche ou à gauche",
+"Compre do monte ou da esquerda",
+"Возьми из колоды или слева",
+"Pesca dal mazzo o da sinistra"
+],
+"Dinamit Ekibi": [
+"Dynamite Crew",
+"Sprengteam",
+"Equipo de dinamita",
+"Équipe de dynamite",
+"Equipe de dinamite",
+"Команда динамита",
+"Squadra dinamite"
+],
+"Dokunma geliri": [
+"Tap income",
+"Tipp-Einkommen",
+"Ingreso por toque",
+"Revenu par tap",
+"Renda por toque",
+"Доход от касаний",
+"Guadagno per tocco"
+],
+"Doğuş": [
+"Rebirth",
+"Wiedergeburt",
+"Renacer",
+"Renaissance",
+"Renascer",
+"Возрождение",
+"Rinascita"
+],
+"Dünya Zinciri": [
+"Global Chain",
+"Weltkette",
+"Cadena mundial",
+"Chaîne mondiale",
+"Rede mundial",
+"Мировая сеть",
+"Catena mondiale"
+],
+"E-Spor Turnuvası": [
+"Esports Tournament",
+"E-Sport-Turnier",
+"Torneo de esports",
+"Tournoi d'esport",
+"Torneio de eSports",
+"Турнир по киберспорту",
+"Torneo di esport"
+],
+"Emin misin?": [
+"Are you sure?",
+"Bist du sicher?",
+"¿Seguro?",
+"Tu es sûr ?",
+"Tem certeza?",
+"Уверен?",
+"Sicuro?"
+],
+"Enerji Santrali": [
+"Power Plant",
+"Kraftwerk",
+"Central eléctrica",
+"Centrale électrique",
+"Usina de energia",
+"Электростанция",
+"Centrale elettrica"
+],
+"Eritme Fırını": [
+"Smelting Furnace",
+"Schmelzofen",
+"Horno de fundición",
+"Four de fusion",
+"Forno de fundição",
+"Плавильная печь",
+"Forno fusorio"
+],
+"Espresso Makinesi": [
+"Espresso Machine",
+"Espressomaschine",
+"Máquina de espresso",
+"Machine à espresso",
+"Máquina de espresso",
+"Эспрессо-машина",
+"Macchina espresso"
+],
+"Fabrika": [
+"Factory",
+"Fabrik",
+"Fábrica",
+"Usine",
+"Fábrica",
+"Фабрика",
+"Fabbrica"
+],
+"Franchise": [
+"Franchise",
+"Franchise",
+"Franquicia",
+"Franchise",
+"Franquia",
+"Франшиза",
+"Franchising"
+],
+"Garaj Ekibi": [
+"Garage Crew",
+"Garagenteam",
+"Equipo de garaje",
+"Équipe de garage",
+"Equipe da garagem",
+"Команда из гаража",
+"Team del garage"
+],
+"Geçersiz hamle": [
+"Invalid move",
+"Ungültiger Zug",
+"Movimiento inválido",
+"Coup invalide",
+"Jogada inválida",
+"Недопустимый ход",
+"Mossa non valida"
+],
+"Grafik Sanatçı": [
+"Graphic Artist",
+"Grafiker",
+"Artista gráfico",
+"Graphiste",
+"Artista gráfico",
+"Художник-график",
+"Artista grafico"
+],
+"Gökdelen": [
+"Skyscraper",
+"Wolkenkratzer",
+"Rascacielos",
+"Gratte-ciel",
+"Arranha-céu",
+"Небоскрёб",
+"Grattacielo"
+],
+"Görevler": [
+"Quests",
+"Aufgaben",
+"Misiones",
+"Quêtes",
+"Missões",
+"Задания",
+"Missioni"
+],
+"Gösterge": [
+"Indicator",
+"Anzeiger",
+"Indicador",
+"Indicateur",
+"Indicador",
+"Указатель",
+"Indicatore"
+],
+"Güneş Paneli": [
+"Solar Panel",
+"Solarpanel",
+"Panel solar",
+"Panneau solaire",
+"Painel solar",
+"Солнечная панель",
+"Pannello solare"
+],
+"Hamle yok, sıra geçti": [
+"No moves, turn passed",
+"Kein Zug, Zug verfällt",
+"Sin movimientos, turno pasado",
+"Aucun coup, tour passé",
+"Sem jogadas, vez passada",
+"Нет ходов, ход пропущен",
+"Nessuna mossa, turno saltato"
+],
+"Hamleni yap": [
+"Make your move",
+"Mach deinen Zug",
+"Haz tu jugada",
+"Joue ton coup",
+"Faça sua jogada",
+"Делай ход",
+"Fai la tua mossa"
+],
+"Havalimanı": [
+"Airport",
+"Flughafen",
+"Aeropuerto",
+"Aéroport",
+"Aeroporto",
+"Аэропорт",
+"Aeroporto"
+],
+"Henüz yeterli değil": [
+"Not enough yet",
+"Noch nicht genug",
+"Aún no es suficiente",
+"Pas encore assez",
+"Ainda não é suficiente",
+"Пока недостаточно",
+"Non ancora abbastanza"
+],
+"Hepsi alındı!": [
+"All bought!",
+"Alles gekauft!",
+"¡Todo comprado!",
+"Tout acheté !",
+"Tudo comprado!",
+"Всё куплено!",
+"Tutto comprato!"
+],
+"Her şey sıfırlanacak, ✨ kalacak. Devam?": [
+"Everything resets, ✨ stays. Continue?",
+"Alles wird zurückgesetzt, ✨ bleibt. Weiter?",
+"Todo se reinicia, ✨ se queda. ¿Continuar?",
+"Tout est réinitialisé, ✨ reste. Continuer ?",
+"Tudo reinicia, ✨ permanece. Continuar?",
+"Всё сбросится, ✨ останется. Продолжить?",
+"Tutto si azzera, ✨ resta. Continuare?"
+],
+"Her şeyi sıfırla, kalıcı ✨ kazan. Her ✨ geliri %7 artırır.": [
+"Reset everything, earn permanent ✨. Each ✨ boosts income by 7%.",
+"Alles zurücksetzen, dauerhaftes ✨ verdienen. Jedes ✨ steigert das Einkommen um 7 %.",
+"Reinicia todo y gana ✨ permanente. Cada ✨ sube los ingresos un 7 %.",
+"Réinitialise tout et gagne des ✨ permanents. Chaque ✨ augmente les revenus de 7 %.",
+"Reinicie tudo e ganhe ✨ permanente. Cada ✨ aumenta a renda em 7%.",
+"Сбрось всё и получи постоянные ✨. Каждый ✨ даёт +7% к доходу.",
+"Azzera tutto e ottieni ✨ permanenti. Ogni ✨ aumenta i guadagni del 7%."
+],
+"Işınlanma Kapısı": [
+"Teleport Gate",
+"Teleporttor",
+"Puerta de teletransporte",
+"Portail de téléportation",
+"Portal de teletransporte",
+"Телепорт-врата",
+"Portale di teletrasporto"
+],
+"Jetonla hızlandır": [
+"Boost with tokens",
+"Mit Jetons beschleunigen",
+"Acelera con fichas",
+"Accélère avec des jetons",
+"Acelere com fichas",
+"Ускорить жетонами",
+"Accelera con i gettoni"
+],
+"Kabul": [
+"Accept",
+"Annehmen",
+"Aceptar",
+"Accepter",
+"Aceitar",
+"Принять",
+"Accetta"
+],
+"Kahve Plantasyonu": [
+"Coffee Plantation",
+"Kaffeeplantage",
+"Plantación de café",
+"Plantation de café",
+"Plantação de café",
+"Кофейная плантация",
+"Piantagione di caffè"
+],
+"Karakterini değiştir": [
+"Change your character",
+"Charakter ändern",
+"Cambia tu personaje",
+"Change ton personnage",
+"Troque seu personagem",
+"Сменить персонажа",
+"Cambia personaggio"
+],
+"Kavurma Atölyesi": [
+"Roastery",
+"Rösterei",
+"Tostadero",
+"Torréfaction",
+"Torrefação",
+"Обжарочная",
+"Torrefazione"
+],
+"Kazanan": [
+"Winner",
+"Gewinner",
+"Ganador",
+"Gagnant",
+"Vencedor",
+"Победитель",
+"Vincitore"
+],
+"Kazıcı Robot": [
+"Digger Robot",
+"Grabroboter",
+"Robot excavador",
+"Robot foreur",
+"Robô escavador",
+"Робот-копатель",
+"Robot scavatore"
+],
+"Kolay": [
+"Easy",
+"Leicht",
+"Fácil",
+"Facile",
+"Fácil",
+"Легко",
+"Facile"
+],
+"Konsol Oyunu": [
+"Console Game",
+"Konsolenspiel",
+"Juego de consola",
+"Jeu console",
+"Jogo de console",
+"Консольная игра",
+"Gioco per console"
+],
+"Kürek": [
+"Shovel",
+"Schaufel",
+"Pala",
+"Pelle",
+"Pá",
+"Лопата",
+"Pala"
+],
+"Küçük Dükkân": [
+"Small Shop",
+"Kleiner Laden",
+"Tiendita",
+"Petite boutique",
+"Lojinha",
+"Маленький магазин",
+"Piccolo negozio"
+],
+"Lazer Kazıcı": [
+"Laser Digger",
+"Laserbohrer",
+"Excavador láser",
+"Foreuse laser",
+"Escavador a laser",
+"Лазерный бур",
+"Scavatore laser"
+],
+"Madenci Dron": [
+"Mining Drone",
+"Bergbau-Drohne",
+"Dron minero",
+"Drone mineur",
+"Drone minerador",
+"Дрон-шахтёр",
+"Drone minatore"
+],
+"Market": [
+"Market",
+"Supermarkt",
+"Mercado",
+"Supermarché",
+"Mercado",
+"Магазин",
+"Mercato"
+],
+"Masa boş": [
+"Table is empty",
+"Tisch ist leer",
+"La mesa está vacía",
+"La table est vide",
+"Mesa vazia",
+"Стол пуст",
+"Tavolo vuoto"
+],
+"Matkap": [
+"Drill",
+"Bohrer",
+"Taladro",
+"Perceuse",
+"Furadeira",
+"Бур",
+"Trapano"
+],
+"Metaverse": [
+"Metaverse",
+"Metaverse",
+"Metaverso",
+"Métavers",
+"Metaverso",
+"Метавселенная",
+"Metaverso"
+],
+"Mevcut bonus": [
+"Current bonus",
+"Aktueller Bonus",
+"Bonificación actual",
+"Bonus actuel",
+"Bônus atual",
+"Текущий бонус",
+"Bonus attuale"
+],
+"Mobil Oyun": [
+"Mobile Game",
+"Handyspiel",
+"Juego móvil",
+"Jeu mobile",
+"Jogo mobile",
+"Мобильная игра",
+"Gioco mobile"
+],
+"Oda bulunamadı. Kodu kontrol et.": [
+"Room not found. Check the code.",
+"Raum nicht gefunden. Prüfe den Code.",
+"Sala no encontrada. Revisa el código.",
+"Salon introuvable. Vérifie le code.",
+"Sala não encontrada. Confira o código.",
+"Комната не найдена. Проверь код.",
+"Stanza non trovata. Controlla il codice."
+],
+"Oda dolu": [
+"Room is full",
+"Raum ist voll",
+"La sala está llena",
+"Le salon est plein",
+"Sala cheia",
+"Комната заполнена",
+"Stanza piena"
+],
+"Oda kodu": [
+"Room code",
+"Raumcode",
+"Código de sala",
+"Code du salon",
+"Código da sala",
+"Код комнаты",
+"Codice stanza"
+],
+"Oda kodunu yaz": [
+"Enter room code",
+"Raumcode eingeben",
+"Escribe el código de sala",
+"Saisis le code du salon",
+"Digite o código da sala",
+"Введи код комнаты",
+"Inserisci il codice stanza"
+],
+"Oda kur, arkadaşını çağır": [
+"Create a room, invite a friend",
+"Raum erstellen, Freund einladen",
+"Crea una sala, invita a un amigo",
+"Crée un salon, invite un ami",
+"Crie uma sala, chame um amigo",
+"Создай комнату, позови друга",
+"Crea una stanza, invita un amico"
+],
+"Oda kurulamadı. Tekrar dene.": [
+"Couldn't create the room. Try again.",
+"Raum konnte nicht erstellt werden. Versuche es erneut.",
+"No se pudo crear la sala. Inténtalo de nuevo.",
+"Impossible de créer le salon. Réessaie.",
+"Não foi possível criar a sala. Tente de novo.",
+"Не удалось создать комнату. Попробуй ещё раз.",
+"Impossibile creare la stanza. Riprova."
+],
+"Oda sahibi": [
+"Room host",
+"Raum-Host",
+"Anfitrión",
+"Hôte du salon",
+"Dono da sala",
+"Хозяин комнаты",
+"Host della stanza"
+],
+"Oda sahibi yeniden başlatabilir": [
+"The host can restart",
+"Der Host kann neu starten",
+"El anfitrión puede reiniciar",
+"L'hôte peut relancer",
+"O dono pode reiniciar",
+"Хозяин может начать заново",
+"L'host può ricominciare"
+],
+"Oda sahibinin başlatması bekleniyor…": [
+"Waiting for the host to start…",
+"Warte auf den Start durch den Host …",
+"Esperando a que el anfitrión inicie…",
+"En attente du démarrage par l'hôte…",
+"Aguardando o dono iniciar…",
+"Ждём, пока хозяин начнёт…",
+"In attesa dell'avvio da parte dell'host…"
+],
+"Odadan çık": [
+"Leave room",
+"Raum verlassen",
+"Salir de la sala",
+"Quitter le salon",
+"Sair da sala",
+"Выйти из комнаты",
+"Esci dalla stanza"
+],
+"Odaya katıl": [
+"Join a room",
+"Raum beitreten",
+"Unirse a una sala",
+"Rejoindre un salon",
+"Entrar em uma sala",
+"Войти в комнату",
+"Entra in una stanza"
+],
+"Okey": [
+"Okey",
+"Okey",
+"Okey",
+"Okey",
+"Okey",
+"Окей",
+"Okey"
+],
+"Okey! Bitirdi": [
+"Okey! Went out",
+"Okey! Hat beendet",
+"¡Okey! Terminó",
+"Okey ! A terminé",
+"Okey! Terminou",
+"Окей! Закончил",
+"Okey! Ha chiuso"
+],
+"Orta": [
+"Medium",
+"Mittel",
+"Medio",
+"Moyen",
+"Médio",
+"Средне",
+"Medio"
+],
+"Otel": [
+"Hotel",
+"Hotel",
+"Hotel",
+"Hôtel",
+"Hotel",
+"Отель",
+"Hotel"
+],
+"Oyun çoktan başladı": [
+"The game already started",
+"Das Spiel hat bereits begonnen",
+"La partida ya comenzó",
+"La partie a déjà commencé",
+"O jogo já começou",
+"Игра уже началась",
+"La partita è già iniziata"
+],
+"Oyuncu adın": [
+"Your player name",
+"Dein Spielername",
+"Tu nombre de jugador",
+"Ton nom de joueur",
+"Seu nome de jogador",
+"Твоё имя игрока",
+"Il tuo nome giocatore"
+],
+"Pasta Vitrini": [
+"Pastry Display",
+"Tortenvitrine",
+"Vitrina de pasteles",
+"Vitrine de pâtisseries",
+"Vitrine de bolos",
+"Витрина с тортами",
+"Vetrina dei dolci"
+],
+"Pat (berabere)": [
+"Stalemate (draw)",
+"Patt (Remis)",
+"Ahogado (tablas)",
+"Pat (nulle)",
+"Afogamento (empate)",
+"Пат (ничья)",
+"Stallo (patta)"
+],
+"Pazarlama": [
+"Marketing",
+"Marketing",
+"Marketing",
+"Marketing",
+"Marketing",
+"Маркетинг",
+"Marketing"
+],
+"Pişti": [
+"Pişti",
+"Pişti",
+"Pişti",
+"Pişti",
+"Pişti",
+"Пишти",
+"Pişti"
+],
+"Program Yazılımcı": [
+"Programmer",
+"Programmierer",
+"Programador",
+"Programmeur",
+"Programador",
+"Программист",
+"Programmatore"
+],
+"Rakibin sırası": [
+"Opponent's turn",
+"Gegner ist dran",
+"Turno del rival",
+"Tour de l'adversaire",
+"Vez do adversário",
+"Ход соперника",
+"Turno dell'avversario"
+],
+"Rakip": [
+"Opponent",
+"Gegner",
+"Rival",
+"Adversaire",
+"Adversário",
+"Соперник",
+"Avversario"
+],
+"Rakip beraberlik teklif ediyor": [
+"Opponent offers a draw",
+"Gegner bietet Remis an",
+"El rival ofrece tablas",
+"L'adversaire propose nulle",
+"O adversário oferece empate",
+"Соперник предлагает ничью",
+"L'avversario offre patta"
+],
+"Reddet": [
+"Decline",
+"Ablehnen",
+"Rechazar",
+"Refuser",
+"Recusar",
+"Отклонить",
+"Rifiuta"
+],
+"Renge diz": [
+"Sort by color",
+"Nach Farbe sortieren",
+"Ordenar por color",
+"Trier par couleur",
+"Ordenar por cor",
+"По цвету",
+"Ordina per colore"
+],
+"Sayıya diz": [
+"Sort by number",
+"Nach Zahl sortieren",
+"Ordenar por número",
+"Trier par numéro",
+"Ordenar por número",
+"По числу",
+"Ordina per numero"
+],
+"Sen yokken kazandığın": [
+"What you earned while away",
+"Das hast du verdient, während du weg warst",
+"Lo que ganaste mientras no estabas",
+"Ce que tu as gagné pendant ton absence",
+"O que você ganhou enquanto estava fora",
+"Что ты заработал в своё отсутствие",
+"Cosa hai guadagnato mentre eri via"
+],
+"Sera Kubbesi": [
+"Greenhouse Dome",
+"Gewächshauskuppel",
+"Cúpula invernadero",
+"Dôme de serre",
+"Cúpula de estufa",
+"Купол-теплица",
+"Cupola serra"
+],
+"Ses Tasarımcı": [
+"Sound Designer",
+"Sounddesigner",
+"Diseñador de sonido",
+"Sound designer",
+"Designer de som",
+"Звукорежиссёр",
+"Sound designer"
+],
+"Simit Tezgâhı": [
+"Simit Stand",
+"Simit-Stand",
+"Puesto de simit",
+"Stand de simit",
+"Barraca de simit",
+"Лоток с симитом",
+"Bancarella di simit"
+],
+"Soldan al": [
+"Take from left",
+"Von links nehmen",
+"Tomar de la izquierda",
+"Prendre à gauche",
+"Pegar da esquerda",
+"Взять слева",
+"Prendi da sinistra"
+],
+"Sonraki ×2": [
+"Next ×2",
+"Nächster ×2",
+"Siguiente ×2",
+"Prochain ×2",
+"Próximo ×2",
+"Следующий ×2",
+"Prossimo ×2"
+],
+"Stadyum": [
+"Stadium",
+"Stadion",
+"Estadio",
+"Stade",
+"Estádio",
+"Стадион",
+"Stadio"
+],
+"Su Çıkarıcı": [
+"Water Extractor",
+"Wasserförderer",
+"Extractor de agua",
+"Extracteur d'eau",
+"Extrator de água",
+"Вододобытчик",
+"Estrattore d'acqua"
+],
+"Sıra sende değil": [
+"It's not your turn",
+"Du bist nicht dran",
+"No es tu turno",
+"Ce n'est pas ton tour",
+"Não é a sua vez",
+"Сейчас не твой ход",
+"Non è il tuo turno"
+],
+"Taşlar bitti, berabere": [
+"Out of tiles, draw",
+"Keine Steine mehr, Remis",
+"Sin fichas, empate",
+"Plus de tuiles, nulle",
+"Acabaram as peças, empate",
+"Фишки кончились, ничья",
+"Tessere finite, pareggio"
+],
+"Taşı çıkar": [
+"Bear off",
+"Stein auswerfen",
+"Sacar ficha",
+"Sortir le pion",
+"Retirar a peça",
+"Снять шашку",
+"Porta fuori"
+],
+"Teklif gönderildi": [
+"Offer sent",
+"Angebot gesendet",
+"Oferta enviada",
+"Offre envoyée",
+"Oferta enviada",
+"Предложение отправлено",
+"Offerta inviata"
+],
+"Teknoloji Parkı": [
+"Tech Park",
+"Technologiepark",
+"Parque tecnológico",
+"Parc technologique",
+"Parque tecnológico",
+"Технопарк",
+"Parco tecnologico"
+],
+"Tekrar hoş geldin!": [
+"Welcome back!",
+"Willkommen zurück!",
+"¡Bienvenido de nuevo!",
+"Bon retour !",
+"Bem-vindo de volta!",
+"С возвращением!",
+"Bentornato!"
+],
+"Teras": [
+"Terrace",
+"Terrasse",
+"Terraza",
+"Terrasse",
+"Terraço",
+"Терраса",
+"Terrazza"
+],
+"Terraform Motoru": [
+"Terraform Engine",
+"Terraforming-Motor",
+"Motor de terraformación",
+"Moteur de terraformation",
+"Motor de terraformação",
+"Двигатель терраформинга",
+"Motore di terraformazione"
+],
+"Teslim ol": [
+"Resign",
+"Aufgeben",
+"Rendirse",
+"Abandonner",
+"Desistir",
+"Сдаться",
+"Abbandona"
+],
+"Teslim oldu": [
+"Resigned",
+"Hat aufgegeben",
+"Se rindió",
+"A abandonné",
+"Desistiu",
+"Сдался",
+"Si è arreso"
+],
+"Test Takımı": [
+"Test Team",
+"Testteam",
+"Equipo de pruebas",
+"Équipe de test",
+"Equipe de testes",
+"Тестировщики",
+"Team di test"
+],
+"Tüm gelir": [
+"All income",
+"Gesamteinkommen",
+"Todos los ingresos",
+"Tous les revenus",
+"Toda a renda",
+"Весь доход",
+"Tutti i guadagni"
+],
+"Tüm taşlar çıktı": [
+"All checkers borne off",
+"Alle Steine sind draußen",
+"Todas las fichas fuera",
+"Tous les pions sortis",
+"Todas as peças fora",
+"Все шашки сняты",
+"Tutte le pedine fuori"
+],
+"Uzay Limanı": [
+"Spaceport",
+"Raumhafen",
+"Puerto espacial",
+"Spatioport",
+"Espaçoporto",
+"Космопорт",
+"Spazioporto"
+],
+"Vagon": [
+"Mine Cart",
+"Lore",
+"Vagoneta",
+"Wagonnet",
+"Vagonete",
+"Вагонетка",
+"Carrello"
+],
+"Yaxest ile oyun oynayalım! Oda kodu": [
+"Let's play on Yaxest! Room code",
+"Lass uns auf Yaxest spielen! Raumcode",
+"¡Juguemos en Yaxest! Código de sala",
+"Jouons sur Yaxest ! Code du salon",
+"Vamos jogar no Yaxest! Código da sala",
+"Давай играть в Yaxest! Код комнаты",
+"Giochiamo su Yaxest! Codice stanza"
+],
+"Yeniden Doğuş": [
+"Rebirth",
+"Wiedergeburt",
+"Renacimiento",
+"Renaissance",
+"Renascimento",
+"Перерождение",
+"Rinascita"
+],
+"Yeniden doğ": [
+"Be reborn",
+"Wiedergeboren werden",
+"Renacer",
+"Renaître",
+"Renascer",
+"Переродиться",
+"Rinasci"
+],
+"Yeniden oyna": [
+"Play again",
+"Nochmal spielen",
+"Jugar de nuevo",
+"Rejouer",
+"Jogar de novo",
+"Играть снова",
+"Gioca ancora"
+],
+"Yeraltı Şehri": [
+"Underground City",
+"Unterirdische Stadt",
+"Ciudad subterránea",
+"Cité souterraine",
+"Cidade subterrânea",
+"Подземный город",
+"Città sotterranea"
+],
+"Yeşil taşı atarak bitirebilirsin!": [
+"Discard the green tile to win!",
+"Leg den grünen Stein ab und gewinne!",
+"¡Descarta la ficha verde y gana!",
+"Défausse la tuile verte pour gagner !",
+"Descarte a peça verde e vença!",
+"Сбрось зелёную фишку и победи!",
+"Scarta la tessera verde e vinci!"
+],
+"Yörünge İstasyonu": [
+"Orbital Station",
+"Orbitalstation",
+"Estación orbital",
+"Station orbitale",
+"Estação orbital",
+"Орбитальная станция",
+"Stazione orbitale"
+],
+"Yıldız Gemisi Filosu": [
+"Starship Fleet",
+"Sternenschiff-Flotte",
+"Flota de naves estelares",
+"Flotte de vaisseaux",
+"Frota de naves",
+"Флот звездолётов",
+"Flotta di astronavi"
+],
+"Zar at": [
+"Roll dice",
+"Würfeln",
+"Tirar dados",
+"Lancer les dés",
+"Jogar dados",
+"Бросить кости",
+"Tira i dadi"
+],
+"Zor": [
+"Hard",
+"Schwer",
+"Difícil",
+"Difficile",
+"Difícil",
+"Сложно",
+"Difficile"
+],
+"her biri": [
+"each",
+"je",
+"cada uno",
+"chacun",
+"cada",
+"каждый",
+"ciascuno"
+],
+"kart": [
+"cards",
+"Karten",
+"cartas",
+"cartes",
+"cartas",
+"карт",
+"carte"
+],
+"Çay Ocağı": [
+"Tea Stand",
+"Teestube",
+"Puesto de té",
+"Stand de thé",
+"Barraca de chá",
+"Чайная точка",
+"Chiosco del tè"
+],
+"Çekirdek Reaktörü": [
+"Core Reactor",
+"Kernreaktor",
+"Reactor del núcleo",
+"Réacteur du noyau",
+"Reator do núcleo",
+"Реактор ядра",
+"Reattore centrale"
+],
+"Çevrimdışı depo": [
+"Offline storage",
+"Offline-Speicher",
+"Almacén sin conexión",
+"Stock hors ligne",
+"Depósito offline",
+"Офлайн-хранилище",
+"Deposito offline"
+],
+"Çıkan": [
+"Off",
+"Draußen",
+"Fuera",
+"Sortis",
+"Fora",
+"Снято",
+"Fuori"
+],
+"Ödül": [
+"Reward",
+"Belohnung",
+"Recompensa",
+"Récompense",
+"Recompensa",
+"Награда",
+"Premio"
+],
+"Önceki binayı geliştir": [
+"Upgrade the previous building",
+"Verbessere das vorige Gebäude",
+"Mejora el edificio anterior",
+"Améliore le bâtiment précédent",
+"Melhore o prédio anterior",
+"Улучши предыдущее здание",
+"Potenzia l'edificio precedente"
+],
+"İkinci Şube": [
+"Second Branch",
+"Zweite Filiale",
+"Segunda sucursal",
+"Deuxième succursale",
+"Segunda filial",
+"Второй филиал",
+"Seconda filiale"
+],
+"Şah mat": [
+"Checkmate",
+"Schachmatt",
+"Jaque mate",
+"Échec et mat",
+"Xeque-mate",
+"Шах и мат",
+"Scacco matto"
+],
+"Şah!": [
+"Check!",
+"Schach!",
+"¡Jaque!",
+"Échec !",
+"Xeque!",
+"Шах!",
+"Scacco!"
+],
+"Arkadaşınla oda kur, kodu paylaş. Tam kurallı satranç: rok, en passant, terfi. Bot ile de oynayabilirsin.": [
+"Create a room with a friend and share the code. Full chess rules: castling, en passant, promotion. You can also play a bot.",
+"Erstelle einen Raum und teile den Code. Volle Schachregeln: Rochade, en passant, Umwandlung. Auch gegen Bot spielbar.",
+"Crea una sala con un amigo y comparte el código. Reglas completas: enroque, al paso, coronación. También contra bot.",
+"Crée un salon et partage le code. Règles complètes : roque, prise en passant, promotion. Contre un bot aussi.",
+"Crie uma sala com um amigo e compartilhe o código. Regras completas: roque, en passant, promoção. Também contra bot.",
+"Создай комнату и поделись кодом. Полные правила: рокировка, взятие на проходе, превращение. Можно и с ботом.",
+"Crea una stanza con un amico e condividi il codice. Regole complete: arrocco, en passant, promozione. Anche contro il bot."
+],
+"Arkadaşınla oda kur, kodu paylaş. Zar at, taşlarını eve topla ve önce hepsini çıkar. Bot ile de oynayabilirsin.": [
+"Create a room with a friend and share the code. Roll the dice, bring your checkers home and bear them all off first. Bots welcome too.",
+"Erstelle einen Raum und teile den Code. Würfle, bringe deine Steine nach Hause und wirf sie zuerst alle aus. Auch gegen Bot.",
+"Crea una sala con un amigo y comparte el código. Tira los dados, lleva tus fichas a casa y sácalas todas primero. También contra bot.",
+"Crée un salon et partage le code. Lance les dés, ramène tes pions à la maison et sors-les tous en premier. Aussi contre un bot.",
+"Crie uma sala com um amigo e compartilhe o código. Jogue os dados, leve suas peças para casa e retire todas primeiro. Também contra bot.",
+"Создай комнату и поделись кодом. Бросай кости, веди шашки домой и первым сними их все. Можно и с ботом.",
+"Crea una stanza con un amico e condividi il codice. Tira i dadi, porta le pedine a casa e portale fuori per prime. Anche contro il bot."
+],
+"4 kişilik Okey. Serileri (aynı renk ardışık) ve grupları (aynı sayı farklı renk) tamamla, 14 taşın hepsini diz. Boş yerleri bot doldurur.": [
+"Okey for 4 players. Complete runs (same color, consecutive) and groups (same number, different colors) with all 14 tiles. Bots fill empty seats.",
+"Okey für 4 Spieler. Bilde Reihen (gleiche Farbe, aufeinanderfolgend) und Gruppen (gleiche Zahl, verschiedene Farben) mit allen 14 Steinen. Bots füllen freie Plätze.",
+"Okey para 4 jugadores. Forma escaleras (mismo color, consecutivas) y grupos (mismo número, distinto color) con las 14 fichas. Los bots ocupan los huecos.",
+"Okey à 4 joueurs. Forme des suites (même couleur, consécutives) et des groupes (même numéro, couleurs différentes) avec les 14 tuiles. Les bots remplissent les places vides.",
+"Okey para 4 jogadores. Forme sequências (mesma cor, consecutivas) e grupos (mesmo número, cores diferentes) com as 14 peças. Bots preenchem as vagas.",
+"Окей на 4 игроков. Составь ряды (один цвет, подряд) и группы (одно число, разные цвета) из всех 14 фишек. Пустые места займут боты.",
+"Okey per 4 giocatori. Forma scale (stesso colore, consecutive) e gruppi (stesso numero, colori diversi) con tutte le 14 tessere. I bot riempiono i posti liberi."
+],
+"Masadaki üstteki kartla aynı sayıyı ya da Vale (J) at, tüm kartları topla. Tek kartı kapatırsan Pişti! Arkadaşınla oda kur ya da bota karşı oyna.": [
+"Play a card matching the top card on the table, or a Jack (J), to take the pile. Capture a lone card and it's a Pişti! Create a room with a friend or play a bot.",
+"Spiele eine Karte mit dem gleichen Wert wie die oberste oder einen Buben (J), um den Stapel zu nehmen. Eine einzelne Karte zu schlagen ist ein Pişti! Raum mit Freund oder gegen Bot.",
+"Juega una carta igual a la de arriba o una J para llevarte el montón. ¡Si capturas una carta sola es Pişti! Crea una sala con un amigo o juega contra un bot.",
+"Joue une carte identique à celle du dessus ou un Valet (J) pour ramasser le tas. Prendre une carte seule, c'est un Pişti ! Crée un salon avec un ami ou joue contre un bot.",
+"Jogue uma carta igual à de cima ou um Valete (J) para levar a pilha. Capturar uma carta sozinha é Pişti! Crie uma sala com um amigo ou jogue contra um bot.",
+"Сыграй карту того же достоинства, что верхняя, или валета (J), чтобы забрать стопку. Забрать одну карту — это Пишти! Создай комнату с другом или играй с ботом.",
+"Gioca una carta uguale a quella in cima o un Jack (J) per prendere il mazzo. Catturare una carta sola è un Pişti! Crea una stanza con un amico o gioca contro il bot."
+],
+"Beyaz oynuyor": [
+"White to move",
+"Weiß ist am Zug",
+"Juegan blancas",
+"Les blancs jouent",
+"Brancas jogam",
+"Ход белых",
+"Muove il bianco"
+],
+"Siyah oynuyor": [
+"Black to move",
+"Schwarz ist am Zug",
+"Juegan negras",
+"Les noirs jouent",
+"Pretas jogam",
+"Ход чёрных",
+"Muove il nero"
+],
+"Pembe oynuyor": [
+"Pink to move",
+"Pink ist am Zug",
+"Juega rosa",
+"Rose joue",
+"Rosa joga",
+"Ход розовых",
+"Muove il rosa"
+],
+"Beyazsın": [
+"You are White",
+"Du bist Weiß",
+"Eres blancas",
+"Tu es les blancs",
+"Você é as brancas",
+"Ты играешь белыми",
+"Sei il bianco"
+],
+"Siyahsın": [
+"You are Black",
+"Du bist Schwarz",
+"Eres negras",
+"Tu es les noirs",
+"Você é as pretas",
+"Ты играешь чёрными",
+"Sei il nero"
+],
+"Güzel maç!": [
+"Good game!",
+"Gutes Spiel!",
+"¡Buen juego!",
+"Bien joué !",
+"Boa partida!",
+"Хорошая игра!",
+"Bella partita!"
+],
+"Satranç": [
+"Chess",
+"Schach",
+"Ajedrez",
+"Échecs",
+"Xadrez",
+"Шахматы",
+"Scacchi"
+],
+"Tavla": [
+"Backgammon",
+"Backgammon",
+"Backgammon",
+"Backgammon",
+"Gamão",
+"Нарды",
+"Backgammon"
+],
+"Yaxest Satranç": [
+"Yaxest Chess",
+"Yaxest Schach",
+"Yaxest Ajedrez",
+"Yaxest Échecs",
+"Yaxest Xadrez",
+"Yaxest Шахматы",
+"Yaxest Scacchi"
+],
+"Yaxest Tavla": [
+"Yaxest Backgammon",
+"Yaxest Backgammon",
+"Yaxest Backgammon",
+"Yaxest Backgammon",
+"Yaxest Gamão",
+"Yaxest Нарды",
+"Yaxest Backgammon"
+],
+"Yaxest Okey": [
+"Yaxest Okey",
+"Yaxest Okey",
+"Yaxest Okey",
+"Yaxest Okey",
+"Yaxest Okey",
+"Yaxest Окей",
+"Yaxest Okey"
+],
+"Yaxest Pişti": [
+"Yaxest Pişti",
+"Yaxest Pişti",
+"Yaxest Pişti",
+"Yaxest Pişti",
+"Yaxest Pişti",
+"Yaxest Пишти",
+"Yaxest Pişti"
+],
+"Yaxest Kafe": [
+"Yaxest Café",
+"Yaxest Café",
+"Yaxest Cafetería",
+"Yaxest Café",
+"Yaxest Café",
+"Yaxest Кафе",
+"Yaxest Caffè"
+],
+"Yaxest Maden": [
+"Yaxest Mine",
+"Yaxest Mine",
+"Yaxest Mina",
+"Yaxest Mine",
+"Yaxest Mina",
+"Yaxest Шахта",
+"Yaxest Miniera"
+],
+"Yaxest Stüdyo": [
+"Yaxest Studio",
+"Yaxest Studio",
+"Yaxest Estudio",
+"Yaxest Studio",
+"Yaxest Estúdio",
+"Yaxest Студия",
+"Yaxest Studio"
+],
+"Yaxest Koloni": [
+"Yaxest Colony",
+"Yaxest Kolonie",
+"Yaxest Colonia",
+"Yaxest Colonie",
+"Yaxest Colônia",
+"Yaxest Колония",
+"Yaxest Colonia"
+],
+"Yaxest Şehir": [
+"Yaxest City",
+"Yaxest Stadt",
+"Yaxest Ciudad",
+"Yaxest Ville",
+"Yaxest Cidade",
+"Yaxest Город",
+"Yaxest Città"
+],
+"Kafeye dokun": [
+"Tap the café",
+"Tippe aufs Café",
+"Toca la cafetería",
+"Touche le café",
+"Toque no café",
+"Коснись кафе",
+"Tocca il caffè"
+],
+"Kazmaya dokun": [
+"Tap to dig",
+"Tippe zum Graben",
+"Toca para cavar",
+"Touche pour creuser",
+"Toque para cavar",
+"Коснись, чтобы копать",
+"Tocca per scavare"
+],
+"Kod yaz": [
+"Write code",
+"Code schreiben",
+"Escribe código",
+"Écris du code",
+"Escreva código",
+"Пиши код",
+"Scrivi codice"
+],
+"Enerji topla": [
+"Collect energy",
+"Energie sammeln",
+"Recoge energía",
+"Collecte de l'énergie",
+"Colete energia",
+"Собирай энергию",
+"Raccogli energia"
+],
+"Şehri geliştir": [
+"Grow the city",
+"Stadt ausbauen",
+"Haz crecer la ciudad",
+"Développe la ville",
+"Faça a cidade crescer",
+"Развивай город",
+"Fai crescere la città"
+],
+"Berabere (50 hamle)": [
+"Draw (50-move rule)",
+"Remis (50-Züge-Regel)",
+"Tablas (50 jugadas)",
+"Nulle (50 coups)",
+"Empate (50 lances)",
+"Ничья (50 ходов)",
+"Patta (50 mosse)"
+],
+"Berabere (tekrar)": [
+"Draw (repetition)",
+"Remis (Wiederholung)",
+"Tablas (repetición)",
+"Nulle (répétition)",
+"Empate (repetição)",
+"Ничья (повторение)",
+"Patta (ripetizione)"
+],
+"Berabere (yetersiz taş)": [
+"Draw (insufficient material)",
+"Remis (zu wenig Material)",
+"Tablas (material insuficiente)",
+"Nulle (matériel insuffisant)",
+"Empate (material insuficiente)",
+"Ничья (недостаточно фигур)",
+"Patta (materiale insufficiente)"
+],
+"Çay ocağından dünya zincirine: kafeni büyüt, çevrimdışıyken de kazan, yeniden doğ.": [
+"From a tea stand to a global chain: grow your café, earn even while offline, be reborn.",
+"Vom Teestand zur Weltkette: Baue dein Café aus, verdiene auch offline, werde wiedergeboren.",
+"De un puesto de té a una cadena mundial: haz crecer tu cafetería, gana incluso sin conexión y renace.",
+"D'un stand de thé à une chaîne mondiale : développe ton café, gagne même hors ligne, renais.",
+"De uma barraca de chá a uma rede mundial: expanda seu café, ganhe mesmo offline e renasça.",
+"От чайной точки до мировой сети: развивай кафе, зарабатывай даже офлайн и перерождайся.",
+"Da un chiosco del tè a una catena mondiale: fai crescere il tuo caffè, guadagna anche offline e rinasci."
+],
+"Kürekle başla, yeraltı şehrine kadar kaz. Elmaslar seni bekliyor.": [
+"Start with a shovel and dig all the way to an underground city. Diamonds await.",
+"Starte mit einer Schaufel und grabe bis zur unterirdischen Stadt. Diamanten warten.",
+"Empieza con una pala y cava hasta una ciudad subterránea. Te esperan diamantes.",
+"Commence avec une pelle et creuse jusqu'à une cité souterraine. Des diamants t'attendent.",
+"Comece com uma pá e cave até uma cidade subterrânea. Diamantes esperam por você.",
+"Начни с лопаты и докопайся до подземного города. Тебя ждут алмазы.",
+"Parti con una pala e scava fino a una città sotterranea. I diamanti ti aspettano."
+],
+"Garajda oyun yap, e-spor ve metaverse’e uzan. Kendi oyun imparatorluğun.": [
+"Make games in a garage and reach esports and the metaverse. Your own game empire.",
+"Mach Spiele in der Garage und erreiche E-Sport und Metaverse. Dein eigenes Spielimperium.",
+"Crea juegos en un garaje y llega a los esports y al metaverso. Tu propio imperio de juegos.",
+"Crée des jeux dans un garage et vise l'esport et le métavers. Ton propre empire du jeu.",
+"Faça jogos na garagem e chegue aos eSports e ao metaverso. Seu próprio império de games.",
+"Делай игры в гараже и дойди до киберспорта и метавселенной. Твоя игровая империя.",
+"Crea giochi in un garage e arriva agli esport e al metaverso. Il tuo impero di giochi."
+],
+"Mars’ta güneş panelinden yıldız gemisine: uzay kolonini kur ve terraform et.": [
+"From a solar panel on Mars to a starship: build your space colony and terraform a planet.",
+"Vom Solarpanel auf dem Mars zum Sternenschiff: Baue deine Weltraumkolonie und terraforme einen Planeten.",
+"De un panel solar en Marte a una nave estelar: construye tu colonia espacial y terraforma un planeta.",
+"D'un panneau solaire sur Mars à un vaisseau stellaire : bâtis ta colonie spatiale et terraforme une planète.",
+"De um painel solar em Marte a uma nave estelar: construa sua colônia espacial e terraforme um planeta.",
+"От солнечной панели на Марсе до звездолёта: построй космическую колонию и терраформируй планету.",
+"Da un pannello solare su Marte a un'astronave: costruisci la tua colonia spaziale e terraforma un pianeta."
+],
+"Küçük dükkândan uzay limanlı metropole: şehrini kur ve büyüt.": [
+"From a small shop to a spaceport metropolis: build and grow your city.",
+"Vom kleinen Laden zur Metropole mit Raumhafen: Baue und vergrößere deine Stadt.",
+"De una tiendita a una metrópolis con puerto espacial: construye y haz crecer tu ciudad.",
+"D'une petite boutique à une métropole avec spatioport : bâtis et développe ta ville.",
+"De uma lojinha a uma metrópole com espaçoporto: construa e expanda sua cidade.",
+"От маленького магазина до мегаполиса с космопортом: строй и развивай свой город.",
+"Da un piccolo negozio a una metropoli con spazioporto: costruisci e fai crescere la tua città."
+],
+"Arkadaşınla oda kur, zar at, taşlarını eve topla. Tam kurallı tavla, bot ile de oynanır.": [
+"Create a room with a friend, roll the dice, bring your checkers home. Full-rules backgammon, bots too.",
+"Raum mit Freund, würfle, bringe deine Steine nach Hause. Backgammon mit allen Regeln, auch gegen Bot.",
+"Crea una sala con un amigo, tira los dados y lleva tus fichas a casa. Backgammon con todas las reglas, también contra bot.",
+"Crée un salon avec un ami, lance les dés, ramène tes pions. Backgammon aux règles complètes, aussi contre un bot.",
+"Crie uma sala com um amigo, jogue os dados e leve suas peças para casa. Gamão com todas as regras, também contra bot.",
+"Создай комнату с другом, бросай кости, веди шашки домой. Нарды по полным правилам, можно и с ботом.",
+"Crea una stanza con un amico, tira i dadi e porta le pedine a casa. Backgammon con tutte le regole, anche contro il bot."
+],
+"4 kişilik Okey: oda kur, kodu paylaş, eksik yerleri bot doldursun.": [
+"Okey for 4: create a room, share the code, let bots fill empty seats.",
+"Okey für 4: Raum erstellen, Code teilen, Bots füllen freie Plätze.",
+"Okey para 4: crea una sala, comparte el código y deja que los bots ocupen los huecos.",
+"Okey à 4 : crée un salon, partage le code, les bots remplissent les places vides.",
+"Okey para 4: crie uma sala, compartilhe o código e deixe os bots preencherem as vagas.",
+"Окей на 4: создай комнату, поделись кодом, пустые места займут боты.",
+"Okey per 4: crea una stanza, condividi il codice, i bot riempiono i posti liberi."
+],
+"2 kişilik klasik Pişti: masadaki kartı kap, pişti yap. Arkadaşınla ya da botla.": [
+"Classic 2-player Pişti: capture the table pile and score a pişti. With a friend or a bot.",
+"Klassisches Pişti für 2: Nimm den Tischstapel und mach ein Pişti. Mit Freund oder Bot.",
+"Pişti clásico para 2: captura el montón y consigue un pişti. Con un amigo o un bot.",
+"Pişti classique à 2 : ramasse le tas et fais un pişti. Avec un ami ou un bot.",
+"Pişti clássico para 2: capture a pilha da mesa e faça um pişti. Com um amigo ou um bot.",
+"Классическая Пишти на двоих: забирай стопку и делай пишти. С другом или ботом.",
+"Pişti classico per 2: cattura il mazzo e fai un pişti. Con un amico o un bot."
+],
+"Arkadaşınla oda kur, kodu paylaş, tam kurallı satranç oyna. Bot ile de oynayabilirsin.": [
+"Create a room with a friend, share the code and play full-rules chess. You can also play a bot.",
+"Erstelle einen Raum mit einem Freund, teile den Code und spiele Schach mit allen Regeln. Auch gegen Bot.",
+"Crea una sala con un amigo, comparte el código y juega ajedrez con todas las reglas. También contra bot.",
+"Crée un salon avec un ami, partage le code et joue aux échecs avec toutes les règles. Aussi contre un bot.",
+"Crie uma sala com um amigo, compartilhe o código e jogue xadrez com todas as regras. Também contra bot.",
+"Создай комнату с другом, поделись кодом и играй в шахматы по полным правилам. Можно и с ботом.",
+"Crea una stanza con un amico, condividi il codice e gioca a scacchi con tutte le regole. Anche contro il bot."
 ]
 };
