@@ -44,9 +44,12 @@ var selAp=null,selCs={},selGold=20;
 function ensureSel(){if(!selAp)selAp=YL.def()}
 function drawPrev(id,ap,w,h,sc){var cv=$(id);if(!cv)return;var c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);YL.hero(c,cv.width/2,cv.height-14,ap,0,false,sc)}
 function setAv(){try{var im=new Image();im.src=YL.portrait(P.ap,96);im.style.cssText='width:100%;height:100%;border-radius:50%';$('hav').innerHTML='';$('hav').appendChild(im)}catch(e){}}
-function presetChips(cur){return Object.keys(YL.PRESETS).map(function(k){return'<button type="button" class="pch" data-pre="'+k+'"><b>'+YL.PRESETS[k].n+'</b></button>'}).join('')}
+function preOwn(k){var p=YL.PRESETS[k];if(!p||!p.shop)return true;try{var st=window.YXAcct&&YXAcct.state&&YXAcct.state();var em=((st&&st.email)||'').toLowerCase();if(em==='yakupt196@gmail.com')return true}catch(e){}try{return !!(window.YX&&YX.owns('sp:'+p.shop))}catch(e){return false}}
+function prePrice(k){try{var p=YL.PRESETS[k],a=YX.cat.SP.filter(function(x){return x[0]===p.shop})[0];return a?a[2]:0}catch(e){return 0}}
+function preLock(b,k){var o=b.querySelector('small')||b.querySelector('b');var old=o.textContent;o.textContent='🔒 Mağaza\'dan '+prePrice(k)+' jetona al';setTimeout(function(){o.textContent=old},2200)}
+function presetChips(cur){return Object.keys(YL.PRESETS).map(function(k){return'<button type="button" class="pch" data-pre="'+k+'"><b>'+(preOwn(k)?'':'🔒 ')+YL.PRESETS[k].n+'</b></button>'}).join('')}
 function drawNewPrev(){ensureSel();drawPrev('cpv',selAp,150,200,2.7)}
-function bindNew(){ensureSel();drawNewPrev();$('cnew').querySelectorAll('[data-pre]').forEach(function(b){b.onclick=function(){var p=YL.PRESETS[b.dataset.pre].ap;selAp=YL.valid(p);Object.keys(YL.SLOTKEY).forEach(function(sl){var id=selAp[YL.SLOTKEY[sl]];if(!YL.isFree(sl,id))selCs[sl+':'+id]=1});drawNewPrev()}});
+function bindNew(){ensureSel();drawNewPrev();var pc=$('pchs');if(pc)pc.innerHTML=presetChips();$('cnew').querySelectorAll('[data-pre]').forEach(function(b){b.onclick=function(){if(!preOwn(b.dataset.pre)){preLock(b,b.dataset.pre);return}var p=YL.PRESETS[b.dataset.pre].ap;selAp=YL.valid(p);Object.keys(YL.SLOTKEY).forEach(function(sl){var id=selAp[YL.SLOTKEY[sl]];if(!YL.isFree(sl,id))selCs[sl+':'+id]=1});drawNewPrev()}});
   $('cwd').onclick=function(){openWardrobe(false)}}
 /* ---- soyunma odası ---- */
 var W=null,wdT=0;
@@ -61,7 +64,7 @@ function drawWd(){var ap=W.ap,hm=ap.body==='hamster',tabs=WTABS.filter(function(
   var g='',col='',tb=W.tab;
   function items(sl,mk){var f=YL.SLOTKEY[sl];return YL.CAT[sl].map(function(x){var own=wOwn(sl,x.id),on=ap[f]===x.id;return'<button type="button" class="wi'+(on?' on':'')+(own?'':' lock')+'" data-s="'+sl+'" data-i="'+x.id+'"><span>'+x.n+'</span><small>'+(own?(x.p?'✓':'Ücretsiz'):'🪙 '+x.p)+'</small></button>'}).join('')}
   function sw(key,pal,names){return pal.map(function(c,i){var cc=names?c[0]:c;return'<button type="button" class="sw'+(ap[key]===cc?' on':'')+'" data-c="'+key+'|'+cc+'" style="background:'+cc+'" title="'+(names?c[1]:'')+'"></button>'}).join('')}
-  if(tb==='pre'){g=Object.keys(YL.PRESETS).map(function(k){var p=YL.PRESETS[k];return'<button type="button" class="wp" data-pre="'+k+'"><canvas width="90" height="120" data-pc="'+k+'"></canvas><b>'+p.n+'</b><small>'+p.d+'</small></button>'}).join('')}
+  if(tb==='pre'){g=Object.keys(YL.PRESETS).map(function(k){var p=YL.PRESETS[k];return'<button type="button" class="wp" data-pre="'+k+'"><canvas width="90" height="120" data-pc="'+k+'"></canvas><b>'+(preOwn(k)?'':'🔒 ')+p.n+'</b><small>'+p.d+'</small></button>'}).join('')}
   else if(tb==='body'){g='<button type="button" class="wi'+(hm?'':' on')+'" data-body="human"><span>İnsan</span></button><button type="button" class="wi'+(hm?' on':'')+'" data-body="hamster"><span>Hamster</span></button>';col='<p class="wl">'+(hm?'Tüy rengi':'Ten rengi')+'</p>'+sw('sk',hm?YL.PAL.fur:YL.PAL.skin)+'<p class="wl">Göz rengi</p>'+sw('ey',YL.PAL.eyes,1)}
   else if(tb==='fc'){g='<p class="wl" style="grid-column:1/-1">Yüz aksesuarı</p>'+items('face')+'<p class="wl" style="grid-column:1/-1">Yüz detayı</p>'+items('mark')}
   else{var sl=TSLOT[tb];g=items(sl);var ck=YL.SLOTCOL[sl];if(ck&&!(tb==='hat'&&ap.hat==='none')&&!(tb==='bk'&&ap.bk==='none')&&!(tb==='nk'&&ap.nk==='none'))col='<p class="wl">Renk</p>'+sw(ck,tb==='h'?YL.PAL.hair:YL.PAL.cloth)}
@@ -72,7 +75,7 @@ function drawWd(){var ap=W.ap,hm=ap.body==='hamster',tabs=WTABS.filter(function(
   $('wdg').querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){ap[YL.SLOTKEY[b.dataset.s]]=b.dataset.i;drawWd()}});
   $('wdg').querySelectorAll('[data-body]').forEach(function(b){b.onclick=function(){ap.body=b.dataset.body;if(ap.body==='hamster'&&YL.PAL.fur.indexOf(ap.sk)<0)ap.sk=YL.PAL.fur[0];if(ap.body==='human'&&YL.PAL.skin.indexOf(ap.sk)<0)ap.sk=YL.PAL.skin[2];drawWd()}});
   $('wdcol').querySelectorAll('[data-c]').forEach(function(b){b.onclick=function(){var a=b.dataset.c.split('|');ap[a[0]]=a[1];drawWd()}});
-  $('wdg').querySelectorAll('[data-pre]').forEach(function(b){b.onclick=function(){var p=YL.valid(YL.PRESETS[b.dataset.pre].ap);Object.keys(YL.SLOTKEY).forEach(function(s2){var id=p[YL.SLOTKEY[s2]];if(!YL.isFree(s2,id))W.owned[s2+':'+id]=1});W.ap=p;drawWd()}});
+  $('wdg').querySelectorAll('[data-pre]').forEach(function(b){b.onclick=function(){if(!preOwn(b.dataset.pre)){preLock(b,b.dataset.pre);return}var p=YL.valid(YL.PRESETS[b.dataset.pre].ap);Object.keys(YL.SLOTKEY).forEach(function(s2){var id=p[YL.SLOTKEY[s2]];if(!YL.isFree(s2,id))W.owned[s2+':'+id]=1});W.ap=p;drawWd()}});
   $('wdg').querySelectorAll('[data-pc]').forEach(function(cv){var c=cv.getContext('2d');YL.hero(c,45,112,YL.PRESETS[cv.dataset.pc].ap,0,false,1.9)});
   if($('wbuy'))$('wbuy').onclick=function(){var q=lockedList()[0];if(!q||W.gold<q.p)return;W.gold-=q.p;W.owned[q.sl+':'+q.id]=1;drawWd()}}
 function wdClose(save){clearInterval(wdT);$('s-wd').classList.remove('on');if(!W)return;var w=W;W=null;

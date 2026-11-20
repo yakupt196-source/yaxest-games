@@ -33,11 +33,12 @@ var SLOTKEY={hair:'h',top:'t',bottom:'b',shoes:'sh',hat:'hat',face:'fc',neck:'nk
 
 /* özel kahramanlar */
 var PRESETS={
- yaxest:{n:'Yaxest',d:'Kıvırcık saçlı, ela gözlü; sweatshirt, eşofman ve bere.',ap:{body:'human',sk:'#e9b17f',h:'curly',hc:'#2b1a10',ey:'#a8742c',t:'hoodie',tc:'#8e9aaf',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'beanie',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
- cemile:{n:'Cemile',d:'Tombul yanaklı sevimli hamster.',ap:{body:'hamster',sk:'#f0b872',h:'short',hc:'#8a5a2a',ey:'#3b2616',t:'tee',tc:'#e8718d',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#e8718d',fc:'none',nk:'bowtie',nkc:'#e8718d',mk:'none',bk:'none',bkc:'#c0392b'}},
- yaxest2:{n:'Yaxest (Palto)',d:'Siyah palto, beyaz boğazlı kazak, keçi sakal.',ap:{body:'human',sk:'#e6b48c',h:'curly',hc:'#241711',ey:'#a8742c',t:'coat',tc:'#1b1b24',b:'trousers',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'goatee',bk:'none',bkc:'#c0392b'}},
- almin:{n:'Almin',d:'Mor saçlı, havalı, deri ceketli.',ap:{body:'human',sk:'#f6cba0',h:'wavy',hc:'#9b5cff',ey:'#9b5cff',t:'leather',tc:'#1b1b24',b:'jeans',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'headphones',htc:'#2b2b33',fc:'none',nk:'choker',nkc:'#1b1b24',mk:'none',bk:'none',bkc:'#c0392b'}}};
-function def(){var o={};var p=PRESETS.yaxest.ap;for(var k in p)o[k]=p[k];return o}
+ basic:{n:'Standart',d:'Sade, herkesin başlangıç görünümü.',ap:{body:'human',sk:'#f0c39a',h:'short',hc:'#5b3a1e',ey:'#4a3020',t:'tee',tc:'#4a90d9',b:'jeans',bc:'#262636',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
+ yaxest:{shop:'yaxest',n:'Yaxest',d:'Kıvırcık saçlı, ela gözlü; sweatshirt, eşofman ve bere.',ap:{body:'human',sk:'#e9b17f',h:'curly',hc:'#2b1a10',ey:'#a8742c',t:'hoodie',tc:'#8e9aaf',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'beanie',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
+ cemile:{shop:'cemile',n:'Cemile',d:'Tombul yanaklı sevimli hamster.',ap:{body:'hamster',sk:'#f0b872',h:'short',hc:'#8a5a2a',ey:'#3b2616',t:'tee',tc:'#e8718d',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#e8718d',fc:'none',nk:'bowtie',nkc:'#e8718d',mk:'none',bk:'none',bkc:'#c0392b'}},
+ yaxest2:{shop:'yaxestp',n:'Yaxest (Palto)',d:'Siyah palto, beyaz boğazlı kazak, keçi sakal.',ap:{body:'human',sk:'#e6b48c',h:'curly',hc:'#241711',ey:'#a8742c',t:'coat',tc:'#1b1b24',b:'trousers',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'goatee',bk:'none',bkc:'#c0392b'}},
+ almin:{shop:'almin',n:'Almin',d:'Mor saçlı, havalı, deri ceketli.',ap:{body:'human',sk:'#f6cba0',h:'wavy',hc:'#9b5cff',ey:'#9b5cff',t:'leather',tc:'#1b1b24',b:'jeans',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'headphones',htc:'#2b2b33',fc:'none',nk:'choker',nkc:'#1b1b24',mk:'none',bk:'none',bkc:'#c0392b'}}};
+function def(){var o={};var p=PRESETS.basic.ap;for(var k in p)o[k]=p[k];return o}
 function isFree(slot,id){var l=CAT[slot];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i].p===0;return false}
 function price(slot,id){var l=CAT[slot];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i].p;return 0}
 function valid(ap){var d=def(),o={};for(var k in d)o[k]=ap&&ap[k]!=null?ap[k]:d[k];
