@@ -8,7 +8,7 @@ var GL=window.YAXEST_GAMES||[];var isGame=GL.some(function(g){return g.id===cur}
 
 /* ---------- katalog ---------- */
 var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170]];
-var COL=[['#ffd23f',0],['#ff5c8a',0],['#3ddbb0',0],['#6aa8ff',12],['#b388ff',12],['#ff9f43',12],['#3df0ff',20],['#f1f1f1',20]];
+var COL=[['#ffd23f',0],['#ff5c8a',0],['#3ddbb0',0],['#6aa8ff',12],['#b388ff',12],['#ff9f43',12],['#3df0ff',20],['#f1f1f1',20],['#c3cde0',25]];
 var HAT=[['cap','Kep',20],['party','Parti Şapkası',30],['head','Kulaklık',40],['top','Silindir',50],['wiz','Büyücü Şapkası',70],['crown','Taç',120]];
 var FACE=[['glasses','Gözlük',20],['mustache','Bıyık',25],['mask','Maske',35],['shades','Güneş Gözlüğü',45],['star','Yıldız Gözlük',60]];
 var NECK=[['bow','Papyon',20],['scarf','Atkı',30],['medal','Madalya',60],['cape','Pelerin',80]];
