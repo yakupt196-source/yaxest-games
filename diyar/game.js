@@ -54,7 +54,7 @@ function enter(){var st=Y.pstat(P);toSvgImg();
   try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(function(){})}catch(e){}
   say('Yaxest Diyarı\'na hoş geldin, '+P.nick+'! Yürü, saldır (⚔️), topla (✋). Harita: M veya mini haritaya dokun.','sys');
   say('Bu bir tek kişilik Eğitim Diyarı. Çok oyunculu diyar sunucu kurulunca açılacak.','sys');
-  cancelAnimationFrame(raf);lastT=performance.now();raf=requestAnimationFrame(loop)}
+  cancelAnimationFrame(raf);lastT=performance.now();raf=requestAnimationFrame(loop);setTimeout(chkFs,1200)}
 function leaveGame(){cancelAnimationFrame(raf);raf=0;saveNow();G=null;toChar();try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}}
 function initSpawns(){G.spawns=[];
   for(var ty=4;ty<Y.MH-4;ty+=6)for(var tx=4;tx<Y.MW-4;tx+=6){var jx=tx+Math.floor(Y.hash(tx,ty,21)*4),jy=ty+Math.floor(Y.hash(tx,ty,22)*4),z=Y.zoneAt(jx,jy);if(z===3||z===4)continue;
@@ -253,6 +253,17 @@ function resize(){dpr=Math.min(window.devicePixelRatio||1,2);VW=innerWidth;VH=in
   var port=VH>VW&&('ontouchstart' in window);if(!port)window.__rotSeen=0;var showR=port&&G&&!window.__rotSeen&&!window.__portOk;$('rot').style.display=showR?'flex':'none';if(showR){clearTimeout(window.__rotT);window.__rotT=setTimeout(function(){$('rot').style.display='none';window.__rotSeen=1},9000);try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}}
 var rb=document.getElementById('rotgo');if(rb)rb.onclick=function(){window.__rotSeen=1;$('rot').style.display='none'};
 addEventListener('resize',resize);addEventListener('orientationchange',resize);
+/* tam ekran: tarayıcı çubukları ekranı yiyorsa bildirim + ilk dokunuşta otomatik dene */
+function goFs(){try{var el=document.documentElement;if(el.requestFullscreen&&!document.fullscreenElement){el.requestFullscreen({navigationUI:'hide'}).catch(function(){}).then(function(){try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(function(){})}catch(e){}})}}catch(e){}}
+function fsOk(){return !!document.documentElement.requestFullscreen}
+function chkFs(){var b=document.getElementById('fsb');if(!b){b=document.createElement('div');b.id='fsb';b.innerHTML='<div class="tx"><b>Ekranı genişlet</b><span>Tarayıcı çubukları yer kaplıyor. Tam ekrana geç; olmazsa tarayıcı menüsünden "Ana ekrana ekle" ile uygulama gibi aç.</span></div><button class="btn" type="button" id="fsgo">Tam ekran</button><button class="btn alt" type="button" id="fsx">×</button>';document.body.appendChild(b);document.getElementById('fsgo').onclick=function(){goFs();b.style.display='none'};document.getElementById('fsx').onclick=function(){b.style.display='none';window.__fsHide=1}}
+  var standalone=window.matchMedia&&matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  var show=!!G&&!window.__fsHide&&('ontouchstart' in window)&&innerWidth>innerHeight&&fsOk()&&!document.fullscreenElement&&!standalone;b.style.display=show?'flex':'none';
+  if(show){clearTimeout(window.__fsT);window.__fsT=setTimeout(function(){b.style.display='none'},12000)}}
+document.addEventListener('fullscreenchange',function(){setTimeout(chkFs,300)});
+addEventListener('resize',function(){setTimeout(chkFs,400)});
+document.addEventListener('pointerup',function(){if(G&&('ontouchstart' in window)&&!document.fullscreenElement&&fsOk()&&!window.__fsHide)goFs()},{passive:true});
+
 var ZC=['#3f7d48','#2f6a3c','#6b7083','#2b66a8','#b9a47d'];
 function tileCol(tx,ty,z){var h=Y.hash(tx,ty,5);if(G.mode==='dungeon'){return(tx<1||ty<1||tx>=AW-1||ty>=AH-1)?'#15112a':((tx+ty)%2?'#3a3052':'#352c4b')}
   var c=ZC[z];if(z===3){return h<.5?'#2b66a8':'#2f6fb2'}var k=Math.floor(h*3);var d=k===0?-6:k===1?0:6;return shade(c,d)}
