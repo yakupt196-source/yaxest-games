@@ -83,7 +83,7 @@
   addEventListener('keydown',function(e){var k=(e.key||'').toLowerCase();if(k==='escape'&&open){hide()}else if(k==='escape'&&zopen){zhide()}else if((k==='p'||k==='escape')&&!open&&!zopen&&cur!=='ritim'){zshow()}},true);
   document.body.appendChild(btn);document.body.appendChild(panel);document.body.appendChild(pz);document.body.appendChild(cd);
   document.addEventListener('visibilitychange',function(){if(document.hidden&&cur!=='ritim')zshow()});
-  if(cur!=='ritim')document.body.appendChild(pbtn);
+  if(!{ritim:1,satranc:1,tavla:1,okey:1,pisti:1,kafe:1,maden:1,studyo:1,koloni:1,sehir:1}[cur])document.body.appendChild(pbtn);
 })();
 
 ;(function(){try{var d=new Date(),k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),a=JSON.parse(localStorage.getItem('yx-days')||'[]');if(a.indexOf(k)<0){a.push(k);localStorage.setItem('yx-days',JSON.stringify(a.slice(-90)))}}catch(e){}})();

@@ -1,5 +1,6 @@
 // Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
 window.YAXEST_GAMES=[
+{id:'satranc',n:'Yaxest Satranç',i:'♟️',c:'#b388ff',k:'Masa',d:'Arkadaşınla oda kur, kodu paylaş, tam kurallı satranç oyna. Bot ile de oynayabilirsin.',new:1},
 {id:'sallan',n:'Yaxest Sallan',i:'🕸️',c:'#ff5c8a',k:'Arcade',d:'Kancadan kancaya sallan, olabildiğince uzağa git. Düşme!',new:1},
 {id:'kaydir',n:'Yaxest Kaydır',i:'🧊',c:'#3df0ff',k:'Bulmaca',d:'Buz üstünde kay, yıldıza ulaş. Az hamleyle bitir.',new:1},
 {id:'damla',n:'Yaxest Damla',i:'💧',c:'#6aa8ff',k:'Bulmaca',d:'Aynı boydaki damlaları birleştir, büyüt. Kap taşmasın.',new:1},
