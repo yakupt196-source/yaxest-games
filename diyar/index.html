@@ -63,6 +63,14 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 @media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:0}.rg{width:76px;height:76px}.rg .av{width:36px;height:36px}#joy{width:112px;height:112px}}
 .gtab{display:flex;gap:6px;background:rgba(255,255,255,.06);border-radius:12px;padding:4px;margin:6px 0 4px}.gtab button{flex:1;min-height:38px;border:0;border-radius:9px;background:transparent;color:var(--mute);font:inherit;font-weight:700;cursor:pointer}.gtab button.on{background:var(--y);color:#241a00}
 .gtab{display:flex;gap:6px;background:rgba(255,255,255,.06);border-radius:12px;padding:4px;margin:6px 0 4px}.gtab button{flex:1;min-height:38px;border:0;border-radius:9px;background:transparent;color:#a8a2d4;font:inherit;font-weight:700;cursor:pointer}.gtab button.on{background:#ffd23f;color:#241a00}
+.cprev{display:flex;gap:14px;align-items:center;margin:4px 0 10px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:10px}.cprev canvas{background:radial-gradient(circle at 50% 70%,#3a2d82,#161232);border-radius:14px;flex:none}.pchs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.pch{background:#2a2150;border:1.5px solid var(--line);color:#fff;border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer}.pch:hover{border-color:var(--yel)}
+#s-wd{z-index:30}.wd{width:min(96vw,900px);max-height:96vh;display:grid;grid-template-columns:260px 1fr;grid-template-rows:1fr auto;gap:12px;background:var(--pan);border:1.5px solid var(--line);border-radius:20px;padding:14px}.wdl{display:flex;flex-direction:column;align-items:center;gap:8px}.wdl canvas{width:240px;height:320px;max-width:100%;background:radial-gradient(circle at 50% 75%,#3a2d82,#161232);border-radius:16px}.wdinfo{font-size:.84rem;text-align:center;min-height:2.4em}.wdinfo .btn{margin-top:6px;min-height:34px;padding:4px 14px}
+.wdr{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:hidden}.wdt{display:flex;gap:5px;flex-wrap:wrap}.wt{background:#161232;border:1.5px solid var(--line);color:var(--mute);border-radius:999px;padding:6px 13px;font:inherit;font-weight:700;cursor:pointer;font-size:.84rem}.wt.on{background:var(--yel);color:#241a00;border-color:var(--yel)}
+.wdg{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:7px;overflow:auto;flex:1;min-height:80px;align-content:start;padding-right:4px}.wl{margin:4px 0 2px;color:var(--mute);font-size:.8rem}.wi{background:#161232;border:1.5px solid var(--line);border-radius:12px;color:#fff;padding:8px 6px;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center;font-size:.84rem}.wi small{color:var(--mute);font-size:.72rem}.wi.on{border-color:var(--yel);background:#2a2150}.wi.lock{opacity:.8}.wi.lock small{color:#ffd23f}
+.wp{grid-column:1/-1;display:flex;gap:12px;align-items:center;text-align:left;background:#161232;border:1.5px solid var(--line);border-radius:14px;padding:8px;color:#fff;font:inherit;cursor:pointer}.wp:hover{border-color:var(--yel)}.wp small{display:block;color:var(--mute)}.wp canvas{background:#241c52;border-radius:10px;flex:none}
+.wdcol{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.wdcol .wl{flex-basis:100%;margin:2px 0 0}.sw{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.3);cursor:pointer;padding:0}.sw.on{border-color:#fff;box-shadow:0 0 0 2px var(--yel)}
+.wdb{grid-column:1/-1;display:flex;gap:8px;align-items:center;justify-content:flex-end}.wdgold{margin-right:auto;font-weight:700;color:var(--yel)}
+@media (max-width:640px),(max-height:520px){.wd{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;overflow:auto}.wdl{flex-direction:row;gap:12px;align-items:flex-start;justify-content:center}.wdl canvas{width:150px;height:200px}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
@@ -89,6 +97,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div class="scr" id="s-char"><div class="card">
  <h1>Karakterin</h1><p class="sub" id="who"></p>
  <div id="cnew">
+  <div class="cprev"><canvas id="cpv" width="150" height="200"></canvas><div><b>Görünümün</b><br><small>Üç özel kahramandan birini seç ya da kendin tasarla.</small><div class="pchs"><button type="button" class="pch" data-pre="yaxest"><b>Yaxest</b></button><button type="button" class="pch" data-pre="cemile"><b>Cemile</b></button><button type="button" class="pch" data-pre="almin"><b>Almin</b></button></div><button class="btn alt" id="cwd" type="button" style="margin-top:8px">Kostümü özelleştir</button></div></div>
   <label for="nick">Takma ad (3–16 harf/rakam)</label><input id="nick" maxlength="16" autocomplete="off">
   <label>Sınıfını seç</label><div class="cls" id="cls"></div><div class="det" id="det"></div>
   <div class="err" id="cerr"></div>
@@ -97,6 +106,11 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
  <div id="cold" style="display:none"></div>
 </div></div>
 
+<div class="scr" id="s-wd"><div class="wd">
+ <div class="wdl"><canvas id="wdc" width="240" height="320"></canvas><div id="wdinfo" class="wdinfo"></div></div>
+ <div class="wdr"><div class="wdt" id="wdt"></div><div class="wdg" id="wdg"></div><div class="wdcol" id="wdcol"></div></div>
+ <div class="wdb"><span id="wdgold" class="wdgold"></span><button class="btn alt" id="wdx" type="button">İptal</button><button class="btn" id="wdok" type="button">Kaydet</button></div>
+</div></div>
 <div id="hud">
  <div class="top"><div class="rg"><svg viewBox="0 0 110 110"><g fill="none" stroke-linecap="round" transform="rotate(-90 55 55)"><circle class="tk" cx="55" cy="55" r="50" stroke-width="8"/><circle id="rh" class="fg" cx="55" cy="55" r="50" stroke-width="8" pathLength="100" stroke="#ff5b6e" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="40" stroke-width="7"/><circle id="rs" class="fg" cx="55" cy="55" r="40" stroke-width="7" pathLength="100" stroke="#ffc83d" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="31" stroke-width="6"/><circle id="rx" class="fg" cx="55" cy="55" r="31" stroke-width="6" pathLength="100" stroke="#4fb3ff" stroke-dasharray="0 100"/></g></svg><div class="av" id="hav"></div><b id="rlv" class="lvb">1</b></div><div class="hi"><b id="hn"></b><small id="hl"></small><div class="gr"><i style="background:#ff5b6e"></i><span id="th"></span></div><div class="gr"><i style="background:#ffc83d"></i><span id="ts"></span></div><div class="gr"><i style="background:#4fb3ff"></i><span id="tx"></span></div></div></div>
  <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="imenu" type="button" aria-label="Menü">☰</button></div>
@@ -117,5 +131,5 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
 <script src="../account-config.js"></script><script src="../account.js"></script><script src="../i18n-dict.js"></script><script src="../economy.js"></script>
-<script src="sim.js"></script><script src="art.js"></script><script src="game.js"></script>
+<script src="look.js"></script><script src="sim.js"></script><script src="art.js"></script><script src="game.js"></script>
 </body></html>
