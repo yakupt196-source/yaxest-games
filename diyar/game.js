@@ -514,4 +514,5 @@ function boot(){try{YA.dom(document.body)}catch(e){}if(!window.YXAcct||!YXAcct.c
 window.addEventListener('yx-acct',function(){if(!G&&!acct())show('s-gate')});
 window.__yd={get G(){return G},get P(){return P},enter:enter,cast:cast,attack:attack,interact:interact,openNpc:openNpc,enterDg:enterDg,die:die,respawn:respawn,drawSkills:drawSkills,Y:Y};
 setTimeout(boot,60);
+window.addEventListener('yl-img',function(){try{if(typeof drawNewPrev==='function'&&$('cnew')&&$('cnew').style.display!=='none')drawNewPrev();if(P)setAv();if($('s-wd').classList.contains('on'))drawWd();var pn=$('p-npc');if(pn&&pn.classList.contains('on')&&/Kahraman/.test($('npt').textContent))drawHeroShop()}catch(e){}});
 })();
