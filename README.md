@@ -28,3 +28,6 @@ Duello iki kişiliktir (ekran ikiye bölünür).
 - `economy.js`: tüm sayfalarda yüklenir. Jeton (oynadıkça, oyun/seviye bitirince, rekor, günlük hediye, yeni oyun keşfi), karakter çizimi (SVG, 6 tür + aksesuar), temalar, mağaza API'si (`window.YX`). Veri yalnızca cihazda (`localStorage['yx-eco']`).
 - `magaza/`: mağaza sayfası (karakter, özellik, tema, eşya, sürpriz kutu).
 - Tüp oyununda tüp ekleme ve ipucu jetonla.
+
+## Lisans
+© 2026 Yakup Turhan (Yaxest). Tüm hakları saklıdır; izinsiz kopyalanamaz, yeniden yayınlanamaz (bkz. LICENSE).
