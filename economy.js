@@ -249,4 +249,9 @@ applyTheme(S.eq.th);
 function boot(){try{wrapBg();mountChar();chip();menuLink();bindOv();refresh();daily();setInterval(tick,1000)}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 window.addEventListener('ylang',function(){render()});
+
+/* kalıcı depolama izni + yedek hatırlatma */
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+setTimeout(function(){try{var t=+localStorage.getItem('yx-bkt')||0,rm=+localStorage.getItem('yx-bkr')||0,now=Date.now();
+ if(S.t>=150&&now-t>7*864e5&&now-rm>2*864e5&&window.YX){localStorage.setItem('yx-bkr',String(now));YX.toast('💾 '+(window.YT?YT('İlerlemeni yedeklemeyi unutma: Mağaza → Yedek'):'İlerlemeni yedeklemeyi unutma: Mağaza → Yedek'))}}catch(e){}},9000);
 })();

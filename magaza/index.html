@@ -84,12 +84,13 @@ h2{font-size:1.05rem;font-weight:800;margin:6px 0 8px}
  <button role="tab" id="t-perk" aria-selected="false">Özellik</button>
  <button role="tab" id="t-th" aria-selected="false">Tema</button>
  <button role="tab" id="t-misc" aria-selected="false">Eşya</button>
+ <button role="tab" id="t-bk" aria-selected="false">Yedek</button>
 </nav>
 <div id="panel" class="col"></div>
 </main>
 <div class="bar2" id="bar" hidden><div class="in"><div class="bav" id="bav"></div><div class="tx"><span id="bn"></span><small id="bs"></small></div><button class="btn alt" id="bx" type="button" aria-label="Vazgeç">✕</button><button class="btn" id="bb" type="button">Satın al</button></div></div>
 <div id="modal" hidden role="dialog" aria-modal="true"><div class="bx"><h3>Yeni eşya!</h3><div class="pic" id="mpic"></div><b id="mnm"></b><button class="btn" id="mok" type="button">Tak</button><button class="btn alt" id="mcl" type="button">Kapat</button></div></div>
-<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../economy.js"></script>
+<script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../economy.js"></script><script src="../backup.js"></script>
 <script>
 const $=id=>document.getElementById(id),C=YX.cat,T=s=>window.YT?YT(s):s;
 let tab='char',pv=null,sel=null,thPv=null,mood='n';
@@ -149,17 +150,34 @@ function drawMisc(p){const s=S(),bst=s.boost>Date.now();
   const bc=YX.price(35);
   p.appendChild(row('🎁','Sürpriz Kutu',T('Sahip olmadığın rastgele bir karakter eşyası çıkar.'),T('Aç')+' <b>🪙 '+bc+'</b>',s.c<bc,()=>{const r=YX.boxBuy();if(r.ok){reveal(r.id)}else if(r.r==='all')YX.toast(T('Tüm eşyalara sahipsin!'))}));
   const h=document.createElement('div');h.className='how';h.innerHTML='<b>'+T('Jeton nasıl kazanılır?')+'</b><ul><li>'+T('Oyun oynarken zamanla')+'</li><li>'+T('Oyun ya da seviye bitirince; skor yükseldikçe artar')+'</li><li>'+T('Rekor kırınca bonus')+'</li><li>'+T('Her gün girince günlük hediye, seri yaptıkça büyür')+'</li><li>'+T('Bir oyunu ilk kez açınca keşif bonusu')+'</li></ul><p style="margin-top:8px">'+T('Kaydın bu cihazda saklanır.')+'</p>';p.appendChild(h)}
+
+function drawBackup(p){
+  const d=document.createElement('div');d.className='how';
+  d.innerHTML='<b>'+T('İlerlemeni yedekle')+'</b><p>'+T('Jetonların, karakterin ve tycoon ilerlemen bu cihazda tutulur. Telefonu değiştirirsen veya tarayıcı verisini silersen kaybolmaması için yedek al.')+'</p>'
+   +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="btn" id="bk1" type="button">📋 '+T('Yedek kodunu kopyala')+'</button><button class="btn alt" id="bk2" type="button">⬇ '+T('Dosya olarak indir')+'</button><button class="btn alt" id="bk3" type="button">📤 '+T('Paylaş')+'</button></div>'
+   +'<b>'+T('Yedeği geri yükle')+'</b><textarea id="bkt" rows="4" placeholder="YX1-..." aria-label="YX1" style="width:100%;margin:8px 0;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:10px;font:inherit;font-size:.8rem"></textarea>'
+   +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="bk4" type="button">♻ '+T('Geri yükle')+'</button><label class="btn alt" style="cursor:pointer">📁 '+T('Dosyadan seç')+'<input id="bkf" type="file" accept=".txt,.yaxest,text/plain" hidden></label></div>'
+   +'<p style="color:var(--mute);font-size:.85rem;margin-top:10px">'+T('Geri yüklerken iki cihazdaki ilerleme birleştirilir: daha yüksek jeton, rekor ve tycoon ilerlemesi korunur.')+'</p>';
+  p.appendChild(d);
+  const get=async()=>{try{return await YXBackup.make()}catch(e){YX.toast(T('Yedek oluşturulamadı'));return null}};
+  $('bk1').onclick=async()=>{const c=await get();if(!c)return;try{await navigator.clipboard.writeText(c);YX.toast('✅ '+T('Yedek kodu kopyalandı'))}catch(e){$('bkt').value=c;$('bkt').select();YX.toast(T('Kodu elle kopyala'))}};
+  $('bk2').onclick=async()=>{const c=await get();if(!c)return;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/plain'}));a.download='yaxest-yedek-'+new Date().toISOString().slice(0,10)+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);YX.toast('✅ '+T('Yedek indirildi'))};
+  $('bk3').onclick=async()=>{const c=await get();if(!c)return;if(navigator.share){try{await navigator.share({title:'Yaxest yedek',text:c})}catch(e){}}else{try{await navigator.clipboard.writeText(c);YX.toast('✅ '+T('Yedek kodu kopyalandı'))}catch(e){}}};
+  const rs=async code=>{try{const r=await YXBackup.restore(code);YX.toast('✅ '+T('Geri yüklendi'));setTimeout(()=>location.reload(),900)}catch(e){YX.toast(T('Geçersiz yedek kodu'))}};
+  $('bk4').onclick=()=>rs($('bkt').value);
+  $('bkf').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>rs(r.result);r.readAsText(f)};
+}
 let rv=null;
 function reveal(id){const it=C.ITEMS[id];rv=it;const cfg=Object.assign({},S().eq);if(it.slot!=='th')cfg[it.slot]=it.val;$('mpic').innerHTML=YX.av(cfg,'h');$('mnm').textContent=T(it.name||'Renk');$('modal').hidden=false;draw()}
 $('mok').onclick=()=>{if(rv){YX.equip(rv.slot,rv.val);jump()}$('modal').hidden=true;tab='char';rv=null;draw()};
 $('mcl').onclick=()=>{$('modal').hidden=true;rv=null};
 function draw(){
   document.title=T('Mağaza')+' | Yaxest Games';
-  ['char','perk','th','misc'].forEach(k=>$('t-'+k).setAttribute('aria-selected',tab===k));
+  ['char','perk','th','misc','bk'].forEach(k=>$('t-'+k).setAttribute('aria-selected',tab===k));
   const p=$('panel');p.innerHTML='';
-  if(tab==='char')drawChar(p);else if(tab==='perk')drawPerk(p);else if(tab==='th')drawTheme(p);else drawMisc(p);
+  if(tab==='char')drawChar(p);else if(tab==='perk')drawPerk(p);else if(tab==='th')drawTheme(p);else if(tab==='bk')drawBackup(p);else drawMisc(p);
   stage();bar()}
-['char','perk','th','misc'].forEach(k=>$('t-'+k).onclick=()=>{if(tab!==k){tab=k;pv=null;sel=null;if(thPv){thPv=null;YX.applyTheme(S().eq.th)}draw()}});
+['char','perk','th','misc','bk'].forEach(k=>$('t-'+k).onclick=()=>{if(tab!==k){tab=k;pv=null;sel=null;if(thPv){thPv=null;YX.applyTheme(S().eq.th)}draw()}});
 $('bx').onclick=()=>{pv=null;sel=null;if(thPv){thPv=null;YX.applyTheme(S().eq.th)}draw()};
 $('bb').onclick=()=>{if(!sel)return;const it=C.ITEMS[sel],r=YX.buy(sel);if(r.ok){YX.equip(it.slot,it.val);pv=null;sel=null;thPv=null;YX.toast('🎉 '+T('Satın alındı!'));jump();draw()}};
 $('nm').oninput=e=>YX.setName(e.target.value);

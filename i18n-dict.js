@@ -5336,5 +5336,158 @@ window.YAXEST_DICT={
 "o vencedor leva o pote todo",
 "победитель забирает весь банк",
 "il vincitore prende tutto il piatto"
+],
+"Yedek": [
+"Backup",
+"Sicherung",
+"Copia",
+"Sauvegarde",
+"Backup",
+"Резерв",
+"Backup"
+],
+"İlerlemeni yedekle": [
+"Back up your progress",
+"Sichere deinen Fortschritt",
+"Haz copia de tu progreso",
+"Sauvegarde ta progression",
+"Faça backup do seu progresso",
+"Сохрани прогресс",
+"Fai il backup dei progressi"
+],
+"Jetonların, karakterin ve tycoon ilerlemen bu cihazda tutulur. Telefonu değiştirirsen veya tarayıcı verisini silersen kaybolmaması için yedek al.": [
+"Your tokens, character and tycoon progress are stored on this device. Back up so you don't lose them if you change phones or clear browser data.",
+"Deine Jetons, dein Charakter und dein Tycoon-Fortschritt liegen auf diesem Gerät. Sichere sie, damit sie beim Handywechsel oder Löschen der Browserdaten nicht verloren gehen.",
+"Tus fichas, personaje y progreso tycoon se guardan en este dispositivo. Haz copia para no perderlos si cambias de móvil o borras los datos del navegador.",
+"Tes jetons, ton personnage et ta progression tycoon sont stockés sur cet appareil. Sauvegarde-les pour ne rien perdre si tu changes de téléphone ou effaces les données du navigateur.",
+"Suas fichas, personagem e progresso tycoon ficam neste aparelho. Faça backup para não perder se trocar de celular ou limpar os dados do navegador.",
+"Жетоны, персонаж и прогресс в тайкунах хранятся на этом устройстве. Сделай резервную копию, чтобы не потерять их при смене телефона или очистке данных браузера.",
+"Gettoni, personaggio e progressi tycoon sono salvati su questo dispositivo. Fai un backup per non perderli se cambi telefono o cancelli i dati del browser."
+],
+"Yedek kodunu kopyala": [
+"Copy backup code",
+"Sicherungscode kopieren",
+"Copiar código de copia",
+"Copier le code de sauvegarde",
+"Copiar código de backup",
+"Скопировать код резерва",
+"Copia il codice di backup"
+],
+"Dosya olarak indir": [
+"Download as file",
+"Als Datei herunterladen",
+"Descargar como archivo",
+"Télécharger en fichier",
+"Baixar como arquivo",
+"Скачать файлом",
+"Scarica come file"
+],
+"Paylaş": [
+"Share",
+"Teilen",
+"Compartir",
+"Partager",
+"Compartilhar",
+"Поделиться",
+"Condividi"
+],
+"Yedeği geri yükle": [
+"Restore a backup",
+"Sicherung wiederherstellen",
+"Restaurar copia",
+"Restaurer une sauvegarde",
+"Restaurar backup",
+"Восстановить резерв",
+"Ripristina un backup"
+],
+"Geri yükle": [
+"Restore",
+"Wiederherstellen",
+"Restaurar",
+"Restaurer",
+"Restaurar",
+"Восстановить",
+"Ripristina"
+],
+"Dosyadan seç": [
+"Choose file",
+"Datei wählen",
+"Elegir archivo",
+"Choisir un fichier",
+"Escolher arquivo",
+"Выбрать файл",
+"Scegli file"
+],
+"Geri yüklerken iki cihazdaki ilerleme birleştirilir: daha yüksek jeton, rekor ve tycoon ilerlemesi korunur.": [
+"When restoring, progress from both devices is merged: the higher tokens, records and tycoon progress are kept.",
+"Beim Wiederherstellen wird der Fortschritt beider Geräte zusammengeführt: höhere Jetons, Rekorde und Tycoon-Fortschritte bleiben erhalten.",
+"Al restaurar se combina el progreso de ambos dispositivos: se conservan las fichas, récords y progreso tycoon más altos.",
+"À la restauration, la progression des deux appareils est fusionnée : les jetons, records et progrès tycoon les plus élevés sont conservés.",
+"Ao restaurar, o progresso dos dois aparelhos é mesclado: mantêm-se as maiores fichas, recordes e progresso tycoon.",
+"При восстановлении прогресс с двух устройств объединяется: сохраняются лучшие жетоны, рекорды и прогресс в тайкунах.",
+"Al ripristino i progressi dei due dispositivi vengono uniti: restano i gettoni, i record e i progressi tycoon più alti."
+],
+"Yedek oluşturulamadı": [
+"Couldn't create the backup",
+"Sicherung konnte nicht erstellt werden",
+"No se pudo crear la copia",
+"Impossible de créer la sauvegarde",
+"Não foi possível criar o backup",
+"Не удалось создать резерв",
+"Impossibile creare il backup"
+],
+"Yedek kodu kopyalandı": [
+"Backup code copied",
+"Sicherungscode kopiert",
+"Código de copia copiado",
+"Code de sauvegarde copié",
+"Código de backup copiado",
+"Код резерва скопирован",
+"Codice di backup copiato"
+],
+"Kodu elle kopyala": [
+"Copy the code manually",
+"Code manuell kopieren",
+"Copia el código manualmente",
+"Copie le code manuellement",
+"Copie o código manualmente",
+"Скопируй код вручную",
+"Copia il codice manualmente"
+],
+"Yedek indirildi": [
+"Backup downloaded",
+"Sicherung heruntergeladen",
+"Copia descargada",
+"Sauvegarde téléchargée",
+"Backup baixado",
+"Резерв скачан",
+"Backup scaricato"
+],
+"Geri yüklendi": [
+"Restored",
+"Wiederhergestellt",
+"Restaurado",
+"Restauré",
+"Restaurado",
+"Восстановлено",
+"Ripristinato"
+],
+"Geçersiz yedek kodu": [
+"Invalid backup code",
+"Ungültiger Sicherungscode",
+"Código de copia no válido",
+"Code de sauvegarde invalide",
+"Código de backup inválido",
+"Неверный код резерва",
+"Codice di backup non valido"
+],
+"İlerlemeni yedeklemeyi unutma: Mağaza → Yedek": [
+"Don't forget to back up your progress: Shop → Backup",
+"Vergiss die Sicherung nicht: Shop → Sicherung",
+"No olvides hacer copia: Tienda → Copia",
+"N'oublie pas de sauvegarder : Boutique → Sauvegarde",
+"Não esqueça do backup: Loja → Backup",
+"Не забудь сделать резерв: Магазин → Резерв",
+"Non dimenticare il backup: Negozio → Backup"
 ]
 };
