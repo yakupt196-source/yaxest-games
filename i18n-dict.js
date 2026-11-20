@@ -3599,5 +3599,68 @@ window.YAXEST_DICT={
 "Seções da loja",
 "Разделы магазина",
 "Sezioni del negozio"
+],
+"Elf": [
+"Elf",
+"Elf",
+"Elfo",
+"Elfe",
+"Elfo",
+"Эльф",
+"Elfo"
+],
+"Hana": [
+"Hana",
+"Hana",
+"Hana",
+"Hana",
+"Hana",
+"Хана",
+"Hana"
+],
+"Mika": [
+"Mika",
+"Mika",
+"Mika",
+"Mika",
+"Mika",
+"Мика",
+"Mika"
+],
+"Yuki": [
+"Yuki",
+"Yuki",
+"Yuki",
+"Yuki",
+"Yuki",
+"Юки",
+"Yuki"
+],
+"Ren": [
+"Ren",
+"Ren",
+"Ren",
+"Ren",
+"Ren",
+"Рен",
+"Ren"
+],
+"Sora": [
+"Sora",
+"Sora",
+"Sora",
+"Sora",
+"Sora",
+"Сора",
+"Sora"
+],
+"Taro": [
+"Taro",
+"Taro",
+"Taro",
+"Taro",
+"Taro",
+"Таро",
+"Taro"
 ]
 };
