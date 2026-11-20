@@ -14,11 +14,16 @@ var CKEYS=['lv','xp','wl','al','sw','sa','sr','sl','wt'];
 function fix(p){p.done=p.done||{};p.pf=p.pf||{};['wood','mine'].forEach(function(k){p.pf[k]=p.pf[k]||{l:1,x:0}});Object.keys(Y.MATS).concat(['gold','wl','al','xp']).forEach(function(k){p[k]=p[k]||0});p.lv=p.lv||1;p.cl=p.cl||{};p.rn=p.rn||{};p.sr=p.sr||{};p.wt=p.wt||0;p.ow=p.ow||{};p.mp=p.mp||0;p.tl=p.tl||{pk:0,ax:0};p.party=p.party||[];if(p.x==null){p.x=Y.CX*TS;p.y=Y.CY*TS}return p}
 function switchCls(k){if(k===P.cls)return;var o={};CKEYS.forEach(function(q){o[q]=P[q]});P.cl[P.cls]=o;var n=P.cl[k]||{lv:1,xp:0,wl:0,al:0,sw:null,sa:null,sr:{},sl:null,wt:0};CKEYS.forEach(function(q){P[q]=n[q]==null?(q==='lv'?1:(q==='sw'||q==='sa'||q==='sl'?null:q==='sr'?{}:0)):n[q]});P.cls=k;P.x=Y.CX*TS;P.y=Y.CY*TS+70;saveNow()}
 /* ---------- giriş / karakter ekranları ---------- */
-function gate(up){var e=$('em').value.trim(),p=$('pw').value;$('gerr').textContent='';
+var gUp=0;
+function gMode(up){gUp=up;$('gt1').classList.toggle('on',!up);$('gt2').classList.toggle('on',!!up);$('g2').hidden=!up;$('gin').textContent=up?'Hesap oluştur':'Giriş yap';$('pw').autocomplete=up?'new-password':'current-password';$('gerr').textContent=''}
+function gate(){var up=gUp,e=$('em').value.trim(),p=$('pw').value;$('gerr').textContent='';
   if(!e||!p){$('gerr').textContent='E-posta ve şifre gerekli';return}
+  if(!/^\S+@\S+\.\S+$/.test(e)){$('gerr').textContent='Geçerli bir e-posta yaz';return}
+  if(up&&p.length<6){$('gerr').textContent='Şifre en az 6 karakter olmalı';return}
+  if(up&&$('pw2').value!==p){$('gerr').textContent='Şifreler aynı değil';return}
   if(!window.YXAcct||!YXAcct.conf()){$('gerr').textContent='Hesap sistemi şu an hazır değil';return}
-  $('gin').disabled=$('gup').disabled=true;
-  (up?YXAcct.signUp(e,p):YXAcct.signIn(e,p)).then(function(){toChar()}).catch(function(er){$('gerr').textContent=(er&&er.msg)||'Bir sorun oluştu'}).then(function(){$('gin').disabled=$('gup').disabled=false})}
+  $('gin').disabled=true;
+  (up?YXAcct.signUp(e,p):YXAcct.signIn(e,p)).then(function(){toChar()}).catch(function(er){$('gerr').textContent=(er&&er.msg)||'Bir sorun oluştu'}).then(function(){$('gin').disabled=false})}
 var selCls='savasci';
 function detHtml(k){var c=Y.CLASSES[k];return'<b>'+c.ic+' '+esc(c.n)+'</b> · '+esc(c.role)+'<div class="sk"><span>👊</span><div>Temel saldırı: '+(c.melee?'yakın':'uzak')+' menzil</div></div>'+c.sk.map(function(s){return'<div class="sk"><span>'+s.ic+'</span><div><b>'+esc(s.n)+'</b> · '+s.cd+' sn</div></div>'}).join('')}
 function clsDet(){$('det').innerHTML=detHtml(selCls)}
@@ -336,7 +341,7 @@ $('mm').onclick=function(){if(G&&G.mode==='world'&&!G.paused){drawMap();openPan(
 document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closePan});
 $('mfs').onclick=function(){if(!fsOk()){showIos(true);closePan();return}try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen()}catch(e){}};
 $('mchar').onclick=function(){closePan();leaveGame()};
-$('dtown').onclick=function(){respawn('town')};$('dhere').onclick=function(){respawn('here')};$('gin').onclick=function(){gate(0)};$('gup').onclick=function(){gate(1)};$('cmk').onclick=mkChar;$('cout').onclick=function(){YXAcct.signOut();show('s-gate')};
+$('dtown').onclick=function(){respawn('town')};$('dhere').onclick=function(){respawn('here')};$('gf').onsubmit=function(ev){ev.preventDefault();gate()};$('gt1').onclick=function(){gMode(0)};$('gt2').onclick=function(){gMode(1)};$('cmk').onclick=mkChar;$('cout').onclick=function(){YXAcct.signOut();show('s-gate')};
 
 /* ---------- güncelleme ---------- */
 function update(dt){G.t+=dt;if(G.swT>0)G.swT-=dt;var st=S(),c=C();

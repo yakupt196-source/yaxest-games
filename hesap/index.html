@@ -55,7 +55,7 @@ input{background:rgba(255,255,255,.06);border:1.5px solid var(--line);border-rad
 <script src="../games.js"></script><script src="../i18n-dict.js"></script><script src="../i18n.js"></script><script src="../economy.js"></script><script src="../backup.js"></script><script src="../account-config.js"></script><script src="../account.js"></script>
 <script>
 const $=id=>document.getElementById(id),T=s=>window.YT?YT(s):s,esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let mode='in',busy=false;
+let mode='in',busy=false,keepE='',keepP='';
 function av(){try{$('av').innerHTML=YX.av(YX.S().eq,'h')}catch(e){}}
 function say(t,ok){const m=$('msg');if(m){m.textContent=t||'';m.className='msg'+(t?(ok?' ok':' err'):'')}}
 function fail(e){say(T((e&&e.msg)||'Bir sorun oluştu. Tekrar dene'))}
@@ -79,7 +79,7 @@ function draw(){
    +'<div class="msg" id="msg" role="status" aria-live="polite"></div><button class="btn" id="go" type="submit">'+esc(mode==='in'?T('Giriş yap'):T('Hesap oluştur'))+'</button>'
    +(mode==='in'?'<button class="lnk" id="fg" type="button">'+esc(T('Şifremi unuttum'))+'</button>':'')
    +'<p class="fine">'+(mode==='up'?esc(T('Hesap açarak'))+' <a href="../gizlilik.html">'+esc(T('Gizlilik'))+'</a> '+esc(T('sayfasını kabul edersin. Mevcut ilerlemen hesabına taşınır.')):esc(T('Giriş yapınca bu cihazdaki ve hesabındaki ilerleme birleştirilir.')))+'</p></div></form></section>';
-  $('mi').onclick=()=>{mode='in';draw()};$('mu').onclick=()=>{mode='up';draw()};
+  const keep=()=>{keepE=$('em').value;keepP=$('pw').value};$('mi').onclick=()=>{keep();mode='in';draw()};$('mu').onclick=()=>{keep();mode='up';draw()};if(keepE)$('em').value=keepE;if(keepP)$('pw').value=keepP;
   $('eye').onclick=()=>{const p=$('pw');p.type=p.type==='password'?'text':'password'};
   if($('fg'))$('fg').onclick=async()=>{const e=$('em').value.trim();if(!e){say(T('Geçerli bir e-posta yaz'));return}try{await A.reset(e);say('✅ '+T('Şifre yenileme bağlantısı e-postana gönderildi'),true)}catch(x){fail(x)}};
   $('f').onsubmit=async ev=>{ev.preventDefault();if(busy)return;const e=$('em').value.trim(),p=$('pw').value;

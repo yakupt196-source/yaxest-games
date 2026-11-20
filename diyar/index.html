@@ -61,6 +61,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 @media (orientation:portrait){#mm{width:112px;height:112px;order:5}.top{min-width:0;max-width:calc(100vw - 160px)}.tr{gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:140px}.ib{width:40px;height:40px}.ib .yi{width:22px;height:22px}#zn{top:62px!important;left:10px!important;transform:none!important;font-size:.7rem}#log{bottom:186px!important;left:10px!important;right:auto!important;max-width:54vw;font-size:.7rem}#joy{width:112px;height:112px}}
 @media (hover:hover) and (pointer:fine){#joy{display:none}}
 @media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:0}.rg{width:76px;height:76px}.rg .av{width:36px;height:36px}#joy{width:112px;height:112px}}
+.gtab{display:flex;gap:6px;background:rgba(255,255,255,.06);border-radius:12px;padding:4px;margin:6px 0 4px}.gtab button{flex:1;min-height:38px;border:0;border-radius:9px;background:transparent;color:var(--mute);font:inherit;font-weight:700;cursor:pointer}.gtab button.on{background:var(--y);color:#241a00}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
@@ -73,10 +74,14 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div class="scr" id="s-gate"><div class="card">
  <h1>Yaxest <b>Diyarı</b> <small style="font-size:.5em;color:var(--mute)">ALFA</small></h1>
  <p class="sub">Çok oyunculu açık dünya aksiyon RPG. Oynamak için Yaxest hesabı gerekir; ilerlemen hesabına bağlı kalır.</p>
- <label for="em">E-posta</label><input id="em" type="email" autocomplete="email" inputmode="email">
+ <div class="gtab" role="tablist"><button type="button" id="gt1" class="on" role="tab">Giriş yap</button><button type="button" id="gt2" role="tab">Kayıt ol</button></div>
+ <form id="gf" novalidate>
+ <label for="em">E-posta</label><input id="em" type="email" autocomplete="email" inputmode="email" autocapitalize="none">
  <label for="pw">Şifre</label><input id="pw" type="password" autocomplete="current-password">
+ <div id="g2" hidden><label for="pw2">Şifreni tekrar yaz</label><input id="pw2" type="password" autocomplete="new-password"><p class="sub" style="margin:6px 0 0">Şifre en az 6 karakter. Hesap açarak <a href="../gizlilik.html" target="_blank" style="color:var(--y)">Gizlilik</a> sayfasını kabul edersin.</p></div>
  <div class="err" id="gerr"></div>
- <div class="row"><button class="btn" id="gin" type="button">Giriş yap</button><button class="btn alt" id="gup" type="button">Kayıt ol</button><a class="btn alt" href="../" style="display:inline-grid;place-items:center;text-decoration:none">← Yaxest Games</a></div>
+ <div class="row"><button class="btn" id="gin" type="submit">Giriş yap</button><a class="btn alt" href="../" style="display:inline-grid;place-items:center;text-decoration:none">← Yaxest Games</a></div>
+ </form>
  <p class="sub" style="margin-top:12px">Google ile giriş yakında eklenecek.</p>
 </div></div>
 
