@@ -209,7 +209,7 @@ function setupHud(){var c=C();if(!$('zn')){var zn=document.createElement('div');
   [1,2,3].forEach(function(n){$('b'+n).onpointerdown=function(e){cast(n-1);e.preventDefault()}});$('bi').onpointerdown=function(e){interact();e.preventDefault()}}
 $('mm').onclick=function(){if(G&&G.mode==='world'&&!G.paused){drawMap();openPan('p-map')}};$('ibag').onclick=function(){if(!G)return;drawBag();openPan('p-bag')};$('ichat').onclick=function(){if(!G)return;drawChat();openPan('p-chat')};$('imenu').onclick=function(){if(G)openPan('p-menu')};
 document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closePan});
-$('mfs').onclick=function(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen()}catch(e){}};
+$('mfs').onclick=function(){if(!fsOk()){showIos(true);closePan();return}try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen()}catch(e){}};
 $('mchar').onclick=function(){closePan();leaveGame()};
 $('gin').onclick=function(){gate(0)};$('gup').onclick=function(){gate(1)};$('cmk').onclick=mkChar;$('cout').onclick=function(){YXAcct.signOut();show('s-gate')};
 
@@ -256,8 +256,11 @@ addEventListener('resize',resize);addEventListener('orientationchange',resize);
 /* tam ekran: tarayıcı çubukları ekranı yiyorsa bildirim + ilk dokunuşta otomatik dene */
 function goFs(){try{var el=document.documentElement;if(el.requestFullscreen&&!document.fullscreenElement){el.requestFullscreen({navigationUI:'hide'}).catch(function(){}).then(function(){try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(function(){})}catch(e){}})}}catch(e){}}
 function fsOk(){return !!document.documentElement.requestFullscreen}
+function isStd(){return window.matchMedia&&matchMedia('(display-mode: standalone)').matches||navigator.standalone||window.matchMedia&&matchMedia('(display-mode: fullscreen)').matches}
+function showIos(force){var b=document.getElementById('fsb');if(!b){chkFs();b=document.getElementById('fsb')}if(isStd()&&!force)return;b.querySelector('.tx').innerHTML='<b>Tam ekran için uygulama gibi ekle</b><span>Bu tarayıcı tam ekrana izin vermiyor. Paylaş düğmesine bas → "Ana Ekrana Ekle" de. Sonra ana ekrandaki Diyar simgesinden aç: çubuksuz, tam ekran olur.</span>';document.getElementById('fsgo').style.display='none';b.style.display='flex';clearTimeout(window.__fsT);window.__fsT=setTimeout(function(){b.style.display='none'},16000)}
 function chkFs(){var b=document.getElementById('fsb');if(!b){b=document.createElement('div');b.id='fsb';b.innerHTML='<div class="tx"><b>Ekranı genişlet</b><span>Tarayıcı çubukları yer kaplıyor. Tam ekrana geç; olmazsa tarayıcı menüsünden "Ana ekrana ekle" ile uygulama gibi aç.</span></div><button class="btn" type="button" id="fsgo">Tam ekran</button><button class="btn alt" type="button" id="fsx">×</button>';document.body.appendChild(b);document.getElementById('fsgo').onclick=function(){goFs();b.style.display='none'};document.getElementById('fsx').onclick=function(){b.style.display='none';window.__fsHide=1}}
-  var standalone=window.matchMedia&&matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  var standalone=isStd();
+  if(!fsOk()&&!!G&&!window.__fsHide&&!window.__iosShown&&('ontouchstart' in window)&&!isStd()){window.__iosShown=1;showIos(false);return}
   var show=!!G&&!window.__fsHide&&('ontouchstart' in window)&&innerWidth>innerHeight&&fsOk()&&!document.fullscreenElement&&!standalone;b.style.display=show?'flex':'none';
   if(show){clearTimeout(window.__fsT);window.__fsT=setTimeout(function(){b.style.display='none'},12000)}}
 document.addEventListener('fullscreenchange',function(){setTimeout(chkFs,300)});
