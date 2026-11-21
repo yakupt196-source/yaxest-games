@@ -36,8 +36,7 @@ var PETS={
  altin:{n:'Altın Kaplumbağa',r:4,col:'#ffd23f',b:'gold',q:['Yavaş ama zengin.','Kabuğumun içi altın dolu.','Acele işe şeytan karışır.']}
 };
 var PKEYS=Object.keys(PETS);
-function pickPet(luck){var r=Math.random()-(luck||0)*.1,rar=r<.01?4:r<.08?3:r<.22?2:r<.5?1:0;
-  if(luck>=2&&rar<3)rar=3;
+function pickPet(luck){var lk=luck||0,u=Math.random(),gz=.001*(1+lk),ef=.012*(1+lk*1.3),ep=.07*(1+lk*.8),na=.28,rar=u<gz?4:u<gz+ef?3:u<gz+ef+ep?2:u<gz+ef+ep+na?1:0;
   var l=PKEYS.filter(function(k){return PETS[k].r===rar});if(!l.length)l=PKEYS.filter(function(k){return PETS[k].r===0});return l[Math.floor(Math.random()*l.length)]}
 function petMax(id){return(PETS[id]&&PETS[id].mx)||10}
 function petLv(id){return(X.pt[id]&&X.pt[id].lv)||1}
@@ -158,15 +157,27 @@ function kill(m){if(!G||!m)return;if(m.xq&&window.YX3){YX3.grantChest(4);giveEgg
   if(G.mode==='world'){var xb=petBonus('xp')+(X.xb>Date.now()?.5:0)+(hourP()<8?.25:0),gb=petBonus('gold')+(X.lk>Date.now()?.5:0);
     if(xb>0){var e=Math.round(m.xp*xb);if(e>0)D.giveXp(e)}if(gb>0){var g=Math.round(m.gold*gb);if(g>0)P.gold+=g}}
   if(X.act&&X.pt[X.act]){var p=X.pt[X.act];if(p.lv<petMax(X.act)){p.xp=(p.xp||0)+1;if(p.xp>=30*p.lv){p.xp=0;p.lv++;D.say('🐾 '+PETS[X.act].n+' seviye atladı! (Sv '+p.lv+')','sys')}}}
-  var ch=m.xm?.03:m.boss?.1:m.type==='metin'?.1:.002;if(X.eg.length<8&&Math.random()<ch)giveEgg(m.xm||m.boss?1:0);
-  if(!rm.done&&X.rm===dayIdx()&&redMoonOn()&&G.mode==='world'){rm.k+=m.xm?2:1;if(m.xm||rm.k<25)D.floatTxt(G.px,G.py-70,'🌑 '+Math.min(25,rm.k)+'/25','#ff7a8a');if(rm.k>=25){rm.k=25;rm.done=true;X.c.r++;var g2=300+P.lv*60;P.gold+=g2;giveEgg(2);spawnQueen();D.say('🌑 KIZIL AY TAMAM! +'+g2+' altın ve bir Efsanevi Yumurta kazandın!','sys');D.floatTxt(G.px,G.py-90,'🏆 Kızıl Ay Tamam!','#ffd23f')}}}
+  var ch=m.xm?.02:m.boss?.05:m.type==='metin'?.1:.002;if(X.eg.length<8&&Math.random()<ch)giveEgg(m.xm||m.boss?1:0);
+  if(!rm.done&&X.rm===dayIdx()&&redMoonOn()&&G.mode==='world'){rm.k+=m.xm?2:1;if(m.xm||rm.k<25)D.floatTxt(G.px,G.py-70,'🌑 '+Math.min(25,rm.k)+'/25','#ff7a8a');if(rm.k>=25){rm.k=25;rm.done=true;X.c.r++;var g2=300+P.lv*60;P.gold+=g2;giveEgg(2);spawnQueen();D.say('🌑 KIZIL AY TAMAM! +'+g2+' altın ve özel bir yumurta kazandın!','sys');D.floatTxt(G.px,G.py-90,'🏆 Kızıl Ay Tamam!','#ffd23f')}}}
 function spawnQueen(){var a=Math.random()*6.28,x=G.px+Math.cos(a)*TS*5,y=G.py+Math.sin(a)*TS*5,q=D.mkMon('queen',Math.min(60,P.lv+6),x,y,null);if(q){q.xq=1;q.boss=1;G.mons.push(q);D.say('👑 Kızıl Ay Kraliçesi belirdi! Yen ve Efsanevi sandığı kap.','sys')}}
 function giveEgg(lk){X.eg.push({at:Date.now()+240000,lk:lk||0});D.say('🥚 Gizemli bir yumurta buldun! Yoldaş panelinden çatlatabilirsin (4 dk).','sys')}
 function gather(){if(X)X.c.g++}
 function died(){if(X)X.c.d++}
 
 /* ---------- yoldaş çizimi ve davranışı ---------- */
-function petTick(dt){if(!X.act||!PETS[X.act]){return}
+var pcd=1,pab=10,PRATE=[.07,.1,.14,.19,.24],PABN={regen:'Şifa Dalgası',xp:'Kıvılcım Patlaması',gold:'Altın Tuzağı'};
+function petAtk(id){var p=PETS[id],lv=petLv(id);return PRATE[Math.min(4,p.r)]*(1+.04*(lv-1))}
+function petInfo(id){var p=PETS[id];return' · saldırı %'+Math.round(petAtk(id)*100)+(p.r>=2?' · yetenek: '+(PABN[p.b]||'Destek'):'')}
+function petFight(dt){var id=X.act,p=PETS[id];if(!p||!X.pt[id]||!G||G.dead>0)return;if(p.ml&&P.lv<p.ml)return;if(D.inTownF&&D.inTownF())return;
+  pcd-=dt;pab-=dt;var dg=G.mode==='dungeon'&&G.dg,list=dg?G.dg.mons:G.mons;if(!list)return;
+  var best=null,bd=1e9;for(var i=0;i<list.length;i++){var m=list[i];if(m.dead)continue;var d=hyp(m.x-petPos.x,m.y-petPos.y);if(d<bd&&d<240){bd=d;best=m}}
+  var st=D.S(),k=dg?.6:1;
+  if(best&&pcd<=0){pcd=1.8-.12*p.r;D.addFx({k:'line',x1:petPos.x,y1:petPos.y-10,x2:best.x,y2:best.y,c:p.col,l:.14,w:3});D.dmgMon(best,st.dmg*petAtk(X.act)*k*(best.boss?.6:1))}
+  if(p.r>=2&&pab<=0){var cd=Math.max(9,24-3*p.r);
+    if(p.b==='regen'){if(G.hp<st.maxhp*.75){pab=cd;G.hp=Math.min(st.maxhp,G.hp+st.maxhp*(.1+.03*p.r));D.addFx({k:'ring',x:G.px,y:G.py,r:100,c:'#5be39a',l:.6});D.floatTxt(petPos.x,petPos.y-34,PABN.regen,'#5be39a')}}
+    else if(best){pab=cd;var rr=p.b==='xp'?140:230;D.addFx({k:'ring',x:petPos.x,y:petPos.y,r:rr,c:p.col,l:.5});D.floatTxt(petPos.x,petPos.y-34,PABN[p.b]||'Destek',p.col);
+      list.forEach(function(m){if(m.dead||hyp(m.x-petPos.x,m.y-petPos.y)>rr+m.sz)return;if(p.b==='gold')m.slow=3;D.dmgMon(m,st.dmg*(.6+.25*p.r)*k*(p.b==='gold'?.5:1)*(m.boss?.6:1))})}}}
+function petTick(dt){if(!X.act||!PETS[X.act]){return}try{petFight(dt)}catch(e){if(!window.__pfe){window.__pfe=1;console.error("petFight",e)}}
   var tx=G.px-(G.fx||1)*46+(G.fy||0)*14,ty=G.py-(G.fy||0)*46+10,k=Math.min(1,dt*3.2);petPos.x+=(tx-petPos.x)*k;petPos.y+=(ty-petPos.y)*k;
   if(hyp(petPos.x-G.px,petPos.y-G.py)>400){petPos.x=G.px-40;petPos.y=G.py+10}
   if(petQ){petQ.t-=dt;if(petQ.t<=0)petQ=null}else if(Math.random()<dt*.035){var q=PETS[X.act].q;petQ={s:idle>20?'Zzz...':q[Math.floor(Math.random()*q.length)],t:3.4}}}
@@ -249,7 +260,7 @@ function interact(o){if(o.k==='dig'||o.k==='fish')YX3.interact(o);else if(o.k===
 function talkGhost(){var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];
   if(X.gh===dayIdx()){D.say('👻 Yaxest: "'+q+'"','sys');return}
   X.gh=dayIdx();var first=!X.gf;
-  if(first){X.gf=1;giveEgg(2);D.say('👻 Yaxest: "Sonunda biri geldi. Bu diyar senin gibi oyuncular için." Efsanevi yumurta ve unvan kazandın!','sys')}
+  if(first){X.gf=1;giveEgg(2);D.say('👻 Yaxest: "Sonunda biri geldi. Bu diyar senin gibi oyuncular için." özel bir yumurta ve unvan kazandın!','sys')}
   else{var g=150+P.lv*10;P.gold+=g;D.say('👻 Yaxest: "'+q+'" (+'+g+' altın)','sys')}
   D.floatTxt(G.px,G.py-90,'👻 Yaxest','#ffd23f');D.saveNow()}
 function takePage(i){if(X.pg.indexOf(i)>=0)return;X.pg.push(i);X.c.p++;D.saveNow();
@@ -269,7 +280,7 @@ function petHtml(){var h='<p class="sub">Yoldaşlar seninle gezer, bonus verir v
   h+='<h3 style="margin:8px 0 4px">🐾 Yoldaşların</h3>';var ids=Object.keys(X.pt);
   if(!ids.length)h+='<p class="sub">Henüz yoldaşın yok. İlk yumurtanı bulmak için canavar avla!</p>';
   ids.forEach(function(id){var p=PETS[id],pt=X.pt[id],on=X.act===id,bn=p.b==='xp'?'+%'+(petBonus2(id,'xp'))+' XP':p.b==='gold'?'+%'+(petBonus2(id,'gold'))+' altın':'Can yenileme';
-    h+='<div class="it"><canvas width="52" height="52" data-pc="'+id+'" style="background:rgba(255,255,255,.05);border-radius:10px"></canvas><div class="t"><b>'+p.n+'</b> <small style="color:'+RCOL[p.r]+'">'+RAR[p.r]+'</small><br><small>Sv '+pt.lv+(pt.lv<petMax(id)?' · '+(pt.xp||0)+'/'+(30*pt.lv)+' · ':' (maks) · ')+bn+'</small></div>'+
+    h+='<div class="it"><canvas width="52" height="52" data-pc="'+id+'" style="background:rgba(255,255,255,.05);border-radius:10px"></canvas><div class="t"><b>'+p.n+'</b> <small style="color:'+RCOL[p.r]+'">'+RAR[p.r]+'</small><br><small>Sv '+pt.lv+(pt.lv<petMax(id)?' · '+(pt.xp||0)+'/'+(30*pt.lv)+' · ':' (maks) · ')+bn+petInfo(id)+'</small></div>'+
       '<button class="btn '+(on?'alt':'')+'" data-act="'+id+'" type="button">'+(on?'Aktif ✓':'Çağır')+'</button></div>'});
   if(X.act)h+='<div class="row"><button class="btn alt" data-pet type="button">❤ Yoldaşı sev</button><button class="btn alt" data-dis type="button">Yoldaşı gönder</button></div>';
   return h}

@@ -194,7 +194,7 @@ function quad(dx,dy){return dx>=0&&dy<0?0:dx>=0?1:dy>=0?2:3}
 var PETB=['xp','gold','regen'],PETD={},PETN=0;
 Object.keys(MON).forEach(function(k){if(k==='metin')return;var m=MON[k],r=m.boss?(m.ml<30?3:4):(m.ml<12?0:m.ml<30?1:m.ml<60?2:3);PETD[k]={id:'p_'+k,t:k,n:m.boss?m.n.split(',')[0]+' Yavrusu':'Yavru '+m.n,r:r,col:m.c,b:PETB[(PETN++)%3],ml:m.ml||1,boss:!!m.boss,ic:m.boss?'👑':'🥚'}});
 var EGGMIN=[3,8,15,30,60];
-function eggChance(type,lv,pl,elite,inDg){var p=PETD[type];if(!p)return 0;var c=p.boss?(inDg?.12:.07):[.0045,.0035,.0026,.0018,.0012][p.r]*(elite?6:1);if(pl-(lv||1)>10)c*=.3;return c}
+function eggChance(type,lv,pl,elite,inDg){var p=PETD[type];if(!p)return 0;var c=p.boss?(p.r>=4?(inDg?.0025:.0012):(inDg?.008:.004)):[.004,.0022,.0009,.00025,.00006][p.r]*(elite?3:1);if(pl-(lv||1)>10)c*=.3;return c}
 function eggPrice(type){var p=PETD[type];if(!p)return 0;return Math.round((800+60*p.ml)*[1,3,9,30,100][p.r]*lvF(p.ml)/10)*10}
 function monPick(z,d,h,h2,q){
   if(h2!=null&&h2<.012&&(z===0||z===1))return 'goldslime';

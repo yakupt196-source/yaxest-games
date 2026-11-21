@@ -64,7 +64,7 @@ function roll(ti){var T=TIERS[ti],out=[],n=2+ti;
     else if(r<.7){out.push({ic:'⚗️',t:'XP İksiri (10 dk +%50 XP)',r:2,f:function(){X.xb=Math.max(Date.now(),X.xb||0)+600000}})}
     else if(r<.85){var cs=cosmetic(ti);if(cs)out.push({ic:'👗',t:'Kostüm: '+cs.n,r:Math.min(5,2+Math.floor(ti*.6)),f:function(){P.cs[cs.slot+':'+cs.id]=1}});else{var g2=Math.round(T.p*.2);out.push({ic:'🪙',t:g2+' altın',r:ti>1?1:0,f:function(){P.gold+=g2}})}}
     else{var g3=Math.round(T.p*(.1+Math.random()*.3));out.push({ic:'🪙',t:g3+' altın',r:ti>1?1:0,f:function(){P.gold+=g3}})}}
-  if(Math.random()<.1+.06*ti){var lk=ti>=3?2:ti>=2?1:0;out.push({ic:'🥚',t:'Gizemli Yumurta'+(lk>=2?' ✨':''),r:Math.min(5,2+ti%4),f:function(){A.giveEgg(lk)}})}
+  if(Math.random()<.1+.06*ti){var lk=ti>=3?1:0;out.push({ic:'🥚',t:'Gizemli Yumurta',r:Math.min(5,2+ti%4),f:function(){A.giveEgg(lk)}})}
   if(ti>=2&&Math.random()<.12+.05*ti){out.push({ic:'🗺️',t:'Define Haritası',r:3,f:function(){giveMap(ti)}})}
   return out}
 function cosmetic(ti){var slots=['hair','top','bottom','shoes','hat','face','neck','back'],c=[],hi=[120,400,1200,4000,12000,60000][ti];

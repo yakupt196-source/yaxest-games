@@ -510,7 +510,7 @@ function dgUpdate(dt){var dg=G.dg,d=Y.DUNGEONS[dg.id];if(dg.done)return;dgPush(d
   if(dg.fountain&&!dg.fountain.used&&hyp(dg.fountain.x-G.px,dg.fountain.y-G.py)<70){dg.fountain.used=true;G.hp=S().maxhp;G.sta=100;G.hot=0;addFx({k:'ring',x:dg.fountain.x,y:dg.fountain.y,r:160,c:'#5be39a',l:.8});floatTxt(G.px,G.py-60,'Tam şifa','#5be39a');if(window.YF)YF.hit(G.px,G.py-20,'#5be39a',18,true);dgReward(.05,'Şifa kaynağı!');dg.wait=1.4;saveNow()}
   if(window.YN&&dg.stage>=0){YN.dgTickFx(dt);dg.mons.forEach(function(m){YN.bossTick(m,dt)})}
   var w=d.stages[dg.stage];if(dg.chest&&!dg.chest.open&&hyp(dg.chest.x-G.px,dg.chest.y-G.py)<60){dg.chest.open=true;dgReward(.16,'Hazine sandığı!');var rr=Math.random();if(rr<.5){var c2=1+Math.floor(d.lv/30);P.crystal+=c2;say('+'+c2+' 💎 Kristal','sys')}else if(window.YR&&P.lv>=10){var rn2=giveRune(d.lv>=60?3:d.lv>=25?2:1);if(rn2)say('+🔮 '+rn2,'sys')}
-    var sm=d.stages.filter(function(x){return x.k==='mob'||x.k==='trap'}).map(function(x){return x.t});if(sm.length&&Math.random()<.03){var et=sm[Math.floor(Math.random()*sm.length)],pd=Y.PETD[et];if(pd){YN.put(P,'e:'+et,1);say('🥚 Sandıktan '+pd.n+' yumurtası çıktı!','sys')}}
+    var sm=d.stages.filter(function(x){return x.k==='mob'||x.k==='trap'}).map(function(x){return x.t});if(sm.length&&Math.random()<.01){var et=sm[Math.floor(Math.random()*sm.length)],pd=Y.PETD[et];if(pd){YN.put(P,'e:'+et,1);say('🥚 Sandıktan '+pd.n+' yumurtası çıktı!','sys')}}
     addFx({k:'ring',x:dg.chest.x,y:dg.chest.y,r:100,c:'#ffd23f',l:.6});dg.wait=1.4;saveNow()}
   if(dg.door){var dr=dg.door;dr.t+=dt;var dd=hyp(dr.x-G.px,dr.y-G.py);
     if(dr.open&&dd<70&&G.dead<=0&&!dg.trans){dg.trans={t:0,ph:0};G.px=dr.x;return}
