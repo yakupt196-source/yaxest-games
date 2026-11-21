@@ -142,6 +142,13 @@ var DUNGEONS={
  bosluk:{n:'Boşluk Kapısı',ic:'🕳️',lv:130,party:5,rk:6,th:'void',desc:'9 aşama: boşluk koridorları, ejder yuvaları, hazine ve Boşluk Lordu. Efsane rütbe.',stages:[mob('Boşluk Koridoru','frostdrake',6),mob('Ejder Yuvası','swampdrake',6,{t:'lavadrake',c:3}),trap('Gerçeklik Çatlağı','lavadrake',7),chest('Boşluk Sandığı'),mob('Kayıp Salon','frostdrake',7,{t:'swampdrake',c:4}),mob('Ejder Mezarlığı','lavadrake',7,{t:'frostdrake',c:4}),mob('Karanlık Geçit','swampdrake',8),elite('Boşluk Şövalyesi','lavadrake',{t:'frostdrake',c:3}),bossS('Boşluğun Kalbi','voidlord',['slam','nova','charge','enrage'],{t:'lavadrake',c:3})],reward:dgRw(130,1.2)},
  ezeli:{n:'Ezeli Taht',ic:'👑',lv:150,party:5,rk:6,th:'void',desc:'10 aşama: Yaxest\'in son sınavı. Tüm ejderhalar, hazine ve Ezeli Muhafız Yaxest. Seviye 150 gerekir.',stages:[mob('Taht Yolu','lavadrake',8),mob('Buz Salonu','frostdrake',8),mob('Bataklık Salonu','swampdrake',8),trap('Ezeli Koridor','lavadrake',9),chest('Ezeli Hazine'),mob('Gök Salonu','mammoth',8,{t:'djinn',c:4}),mob('Ejder Kralları','frostdrake',8,{t:'lavadrake',c:4}),elite('Ezeli Şövalye','lavadrake',{t:'swampdrake',c:4}),elite('Taht Bekçisi','frostdrake',{t:'frostdrake',c:4}),bossS('Yaxest\'in Tahtı','yaxest',['summon','slam','nova','charge','enrage','heal'],{t:'lavadrake',c:3})],reward:dgRw(150,1.4)}
 };
+/* zindan çeşitliliği: her uzun zindana 'Hayatta Kal' ve boss öncesi 'Dinlenme' odası eklenir */
+Object.keys(DUNGEONS).forEach(function(k){var d=DUNGEONS[k],st=d.stages;if(!st||st.length<5||st.some(function(x){return x.k==='rest'}))return;
+  var mb=st.filter(function(x){return x.k==='mob'&&x.t})[0];
+  st.splice(st.length-1,0,{k:'rest',n:'Dinlenme Odası',t:'',c:0});
+  if(mb)st.splice(Math.min(2,st.length-2),0,{k:'surv',n:'Hayatta Kal',t:mb.t,c:0,sec:20+Math.min(20,Math.floor(d.lv/4))});
+  d.desc=d.desc.replace(/^\d+ aşama/,st.length+' aşama')});
+
 Object.keys(DUNGEONS).forEach(function(k){var d=DUNGEONS[k];d.waves=d.stages})
 var MON={
  slime:{n:'Balçık',c:'#6fe08a',hm:1,dm:.8,sp:70,sz:16,xp:1,g:1},
