@@ -48,6 +48,12 @@ function toChar(){var a=acct();if(!a){show('s-gate');return}$('who').textContent
 /* ---------- kostüm / görünüm ---------- */
 var crAuto=0,selAp=null,selCs={},selGold=20;
 function ensureSel(){if(!selAp)selAp=YL.def()}
+/* svg kahraman resimleri geç yüklenir: yüklenince sabit önizleme kutuları (kahraman dükkanı, hazır karakterler, önizleme) yeniden çizilir */
+var ylT=0;window.addEventListener('yl-img',function(){clearTimeout(ylT);ylT=setTimeout(function(){try{
+  document.querySelectorAll('canvas[data-hc]').forEach(function(cv){var c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);YL.hero(c,30,74,YL.PRESETS[cv.dataset.hc].ap,0,false,1.25)});
+  document.querySelectorAll('canvas[data-pc]').forEach(function(cv){var c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);YL.hero(c,45,112,YL.PRESETS[cv.dataset.pc].ap,0,false,1.9)});
+  if(typeof drawNewPrev==='function'&&document.getElementById('cpv'))drawNewPrev();
+  if(typeof wPrev==='function'&&document.getElementById('s-wd')&&document.getElementById('s-wd').classList.contains('on'))wPrev()}catch(e){}},60)});
 function drawPrev(id,ap,w,h,sc){var cv=$(id);if(!cv)return;var c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);YL.hero(c,cv.width/2,cv.height-14,ap,0,false,sc)}
 function setAv(){try{var im=new Image();im.src=YL.portrait(P.ap,96);im.style.cssText='width:100%;height:100%;border-radius:50%';$('hav').innerHTML='';$('hav').appendChild(im)}catch(e){}}
 function isFounder(){try{var st=window.YXAcct&&YXAcct.state&&YXAcct.state();return((st&&st.email)||'').toLowerCase()==='yakupt196@gmail.com'}catch(e){return false}}
