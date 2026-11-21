@@ -8,6 +8,7 @@ function hit(x,y,c,n,big){n=Math.min(n||8,big?22:12);if(P.length>260)return;
   for(var i=0;i<n;i++){var a=rnd(0,6.283),s=rnd(60,big?300:210);P.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-30,l:rnd(.22,.5),t:0,c:c||'#fff',r:rnd(1.6,big?4:3),k:Math.random()<.35?1:0})}
   if(big)P.push({x:x,y:y,vx:0,vy:0,l:.22,t:0,c:c||'#ffd23f',r:34,k:2});else P.push({x:x,y:y,vx:0,vy:0,l:.14,t:0,c:'#fff',r:16,k:2})}
 function burst(x,y,c,n){hit(x,y,c,n||18,true)}
+function flashW(){flash=.75;flashC='200,230,255'}
 function shake(a,d){if(a>shk){shk=a;shT=d||.25}}
 function hurtFx(){shake(5,.22);flash=.34;flashC='255,60,80'}
 function update(dt){for(var i=P.length-1;i>=0;i--){var p=P[i];p.t+=dt;if(p.t>=p.l){P.splice(i,1);continue}if(p.k!==2){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.9;p.vy=p.vy*.9+260*dt}}
@@ -45,5 +46,5 @@ function overlay(ctx,VW,VH,px,py,camX,camY,dg){var e=el();if(!e)return;var tn=dg
   if(css!==lastCss){lastCss=css;e.style.backgroundImage=css}
   if(e.style.display==='none')e.style.display=''}
 function hideOv(){if(EL)EL.style.display='none'}
-window.YF={hit:hit,burst:burst,shake:shake,hurt:hurtFx,update:update,offset:offset,parts:drawParts,grass:grass,shadow:shadow,overlay:overlay,hide:hideOv};
+window.YF={hit:hit,burst:burst,shake:shake,hurt:hurtFx,flashW:flashW,update:update,offset:offset,parts:drawParts,grass:grass,shadow:shadow,overlay:overlay,hide:hideOv};
 })();
