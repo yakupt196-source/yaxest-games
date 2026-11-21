@@ -57,21 +57,31 @@ var TIERS=[
  {n:'Mitik Sandık',p:250000,ic:'🌌',col:'#ff5b6e',mat:['titan','aster','i_titan','i_aster','core']}];
 var RC=['#c9ced9','#7be07b','#5cb0ff','#c07cff','#ffb02e','#ff5b6e'];
 function matName(k){var m=Y.MATS[k];return m?m.ic+' '+m.n:k}
+/* açık olasılıklar (Play politikası: şans kutusunda oranlar yazılmalı) */
+var EGGP=function(ti){return .1+.06*ti},MAPP=function(ti){return ti>=2?.12+.05*ti:0},RUNEN=[0,1,1,2,3,4],RUNE0=.3,
+  RUNEW=[[85,15,0,0],[65,30,5,0],[45,38,15,2],[25,40,28,7],[10,35,40,15],[0,25,45,30]],RNAME=['Sıradan','Ender','Nadir','Mistik'],RCOL=[0,1,2,4];
+function runeItem(ti,force){var YRr=window.YR&&YR.R;if(!YRr)return null;var w=RUNEW[ti],r=force==null?-1:force;if(r<0){var x=Math.random()*100,s=0;for(var i=0;i<4;i++){s+=w[i];if(x<s){r=i;break}}if(r<0)r=0}
+  var pool=Object.keys(YRr).filter(function(k){return YRr[k].r===r});if(!pool.length)return null;var id=pool[Math.floor(Math.random()*pool.length)],R0=YRr[id];
+  return{ic:String(R0.ic||'🔮').replace(/\uFE0F/g,''),t:R0.n+' ('+RNAME[r]+')',r:RCOL[r],f:function(){P.rn=P.rn||{};P.rn[id]=(P.rn[id]||0)+1}}}
 function roll(ti){var T=TIERS[ti],out=[],n=2+ti;
   var g=Math.round(T.p*(.2+Math.random()*.5)*(Math.random()<.04?3:1));out.push({ic:'🪙',t:g+' altın',r:Math.min(5,Math.max(0,Math.floor(ti*.6))),f:function(){P.gold+=g}});
   for(var i=1;i<n;i++){var r=Math.random();
     if(r<.55){var k=pick(T.mat),q=Y.MATS[k]&&Y.MATS[k].ing?1+Math.floor(Math.random()*(1+ti)):2+Math.floor(Math.random()*(3+ti*2));out.push({ic:Y.MATS[k].ic,t:q+' '+Y.MATS[k].n,r:Math.min(5,ti),f:(function(k,q){return function(){P[k]=(P[k]||0)+q}})(k,q)})}
     else if(r<.7){out.push({ic:'⚗️',t:'XP İksiri (10 dk +%50 XP)',r:2,f:function(){X.xb=Math.max(Date.now(),X.xb||0)+600000}})}
-    else if(r<.85){var cs=cosmetic(ti);if(cs)out.push({ic:'👗',t:'Kostüm: '+cs.n,r:Math.min(5,2+Math.floor(ti*.6)),f:function(){P.cs[cs.slot+':'+cs.id]=1}});else{var g2=Math.round(T.p*.2);out.push({ic:'🪙',t:g2+' altın',r:ti>1?1:0,f:function(){P.gold+=g2}})}}
+    else if(r<.85){var cs=cosmetic(ti);if(cs)out.push({ic:'✨',t:'Kostüm: '+cs.n,r:Math.min(5,2+Math.floor(ti*.6)),f:function(){P.cs[cs.slot+':'+cs.id]=1}});else{var g2=Math.round(T.p*.2);out.push({ic:'🪙',t:g2+' altın',r:ti>1?1:0,f:function(){P.gold+=g2}})}}
     else{var g3=Math.round(T.p*(.1+Math.random()*.3));out.push({ic:'🪙',t:g3+' altın',r:ti>1?1:0,f:function(){P.gold+=g3}})}}
-  if(Math.random()<.1+.06*ti){var lk=ti>=3?1:0;out.push({ic:'🥚',t:'Gizemli Yumurta',r:Math.min(5,2+ti%4),f:function(){A.giveEgg(lk)}})}
-  if(ti>=2&&Math.random()<.12+.05*ti){out.push({ic:'🗺️',t:'Define Haritası',r:3,f:function(){giveMap(ti)}})}
+  var rc=RUNEN[ti]+(ti===0&&Math.random()<RUNE0?1:0);for(var ri=0;ri<rc;ri++){var ru=runeItem(ti,ti===5&&ri===0?3:null);if(ru)out.push(ru)}
+  if(Math.random()<EGGP(ti)){var lk=ti>=3?1:0;out.push({ic:'🥚',t:'Gizemli Yumurta',r:Math.min(5,2+ti%4),f:function(){A.giveEgg(lk)}})}
+  if(ti>=2&&Math.random()<MAPP(ti)){out.push({ic:'🗺️',t:'Define Haritası',r:3,f:function(){giveMap(ti)}})}
   return out}
 function cosmetic(ti){var slots=['hair','top','bottom','shoes','hat','face','neck','back'],c=[],hi=[120,400,1200,4000,12000,60000][ti];
   slots.forEach(function(s){((window.YL&&YL.CAT[s])||[]).forEach(function(x){if(x.p>0&&x.p<=hi&&!P.cs[s+':'+x.id])c.push({slot:s,id:x.id,n:x.n,p:x.p})})});
   if(!c.length)return null;c.sort(function(a,b){return b.p-a.p});return c[Math.floor(Math.random()*Math.min(c.length,6))]}
 function chestHtml(){var h='<h3 style="margin:4px 0 6px">🎁 Sandıklar <small style="font-weight:400;opacity:.8">(altınla · sandık büyüdükçe ödül büyür)</small></h3>';
-  TIERS.forEach(function(T,i){h+='<div class="it"><span style="font-size:1.6rem">'+T.ic+'</span><div class="t"><b style="color:'+T.col+'">'+T.n+'</b><br><small>'+(2+i)+' ödül'+(i>=2?' · define haritası şansı':'')+(i>=3?' · yoldaş yumurtası şansı yüksek':'')+'</small></div><button class="btn" data-chest="'+i+'" type="button">🪙 '+T.p.toLocaleString('tr-TR')+'</button></div>'});
+  TIERS.forEach(function(T,i){h+='<div class="it"><span style="font-size:1.6rem">'+T.ic+'</span><div class="t"><b style="color:'+T.col+'">'+T.n+'</b><br><small>'+(2+i+RUNEN[i])+' ödül · <b style="color:#c9b6ff">'+(RUNEN[i]?RUNEN[i]+' rün garanti':'%'+Math.round(RUNE0*100)+' rün')+(i===5?' (1 Mistik)':'')+'</b> · yumurta %'+Math.round(EGGP(i)*100)+(MAPP(i)?' · define %'+Math.round(MAPP(i)*100):'')+'</small></div><button class="btn" data-chest="'+i+'" type="button">🪙 '+T.p.toLocaleString('tr-TR')+'</button></div>'});
+  h+='<details style="margin:6px 0;font-size:.82rem;opacity:.9"><summary style="cursor:pointer">Olasılıklar (tüm oranlar)</summary><p style="margin:6px 0">Her sandıkta 1 altın ödülü kesin. Diğer her ödül hakkı: malzeme/külçe %55 · XP İksiri %15 · kostüm %15 (yoksa altın) · ek altın %15.</p><table style="width:100%;border-collapse:collapse"><tr><th style="text-align:left">Sandık</th><th>Rün</th><th>Sıradan</th><th>Ender</th><th>Nadir</th><th>Mistik</th><th>Yumurta</th><th>Define</th></tr>';
+  TIERS.forEach(function(T,i){var w=RUNEW[i];h+='<tr style="border-top:1px solid rgba(255,255,255,.1)"><td style="color:'+T.col+'">'+T.n.replace(' Sandık','')+'</td><td style="text-align:center">'+(RUNEN[i]||'%'+Math.round(RUNE0*100))+'</td>'+w.map(function(v){return '<td style="text-align:center">%'+v+'</td>'}).join('')+'<td style="text-align:center">%'+Math.round(EGGP(i)*100)+'</td><td style="text-align:center">'+(MAPP(i)?'%'+Math.round(MAPP(i)*100):'-')+'</td></tr>'});
+  h+='</table><p style="margin:6px 0 0">Mitik Sandık\'ta ilk rün her zaman Mistik.</p></details>';
   return h+'<div id="xchres"></div><hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:10px 0">'}
 function openChest(i,el){var T=TIERS[i],box=el.querySelector('#xchres');if(P.gold<T.p){box.innerHTML='<p class="sub" style="color:#ff8a8a">Altının yetmiyor (🪙 '+P.gold+' / '+T.p+').</p>';return}
   P.gold-=T.p;inc('ch');var items=roll(i);items.forEach(function(it){it.f()});D.saveNow();

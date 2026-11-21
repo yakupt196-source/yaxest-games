@@ -45,7 +45,7 @@ function chips(P){ensure(P);var e=equipped(P);if(!e.length)return'Rünün yok ·
 /* ---------- ganimet: canavar rün düşürür ---------- */
 function drop(m,api){var P=api.P;if(!m||!P)return;ensure(P);
   var boss=m.boss||m.type==='guardian'||m.type==='lich'||m.type==='alpha',meta=m.type==='metin';
-  var ch=boss?.25:meta?.35:(m.lv>=P.lv-6?.012:.004);ch*=1+mods(P).luck;
+  var ch=boss?.6:meta?.6:(m.lv>=P.lv-6?.045:.015);ch*=1+mods(P).luck;
   if(Math.random()>=ch)return;
   var w=boss||meta?[0,40,45,15]:[60,28,11,1],x=Math.random()*100,r=0,s=0;for(var i=0;i<4;i++){s+=w[i];if(x<s){r=i;break}}
   var pool=Object.keys(R).filter(function(k){return R[k].r===r});if(!pool.length)pool=Object.keys(R);
@@ -73,7 +73,7 @@ function draw(el,env){var P=env.P,Y=env.Y;ensure(P);injectCss();
   var h='<details class="ry-g"'+(first?' open':'')+'><summary>❓ Rünler nasıl çalışır?</summary><div style="margin-top:6px">'
    +'<b>① Döv:</b> Malzemeyle rün üret.<br><b>② Tak:</b> Yuvaya yerleştir. Etkisi <b>hemen başlar ve sen çıkarana kadar sürekli çalışır</b>; savaşta harcanmaz, “kullanmak” diye ayrı bir adım yok. Yuva boşsa dövdüğün rün otomatik takılır.<br>'
    +'<b>③ Güçlendir:</b> Aynı ründen yedek bir kopya + altınla Seviye 2–5 yap, etkisi her seviyede %25 artar.<br>'
-   +'<b>Yuvalar:</b> Silah, Zırh ve Sv '+TALI_LV+'’de açılan Tılsım. <b>Set:</b> 3 yuva dolu +%5 XP, üçü de Sv 5 ise ayrıca +%5 hasar.<br><b>Nereden gelir?</b> Dövebilir ya da canavarlardan toplayabilirsin (boss ve Fetih Kristali daha çok düşürür).</div></details>';
+   +'<b>Yuvalar:</b> Silah, Zırh ve Sv '+TALI_LV+'’de açılan Tılsım. <b>Set:</b> 3 yuva dolu +%5 XP, üçü de Sv 5 ise ayrıca +%5 hasar.<br><b>Nereden gelir?</b> Dövebilir, canavarlardan toplayabilir (seviyene yakın canavar %4.5, boss ve Fetih Kristali %60) ya da sandıklardan alabilirsin (Ender ve üstü sandıkta rün garanti).</div></details>';
   h+='<div class="ry-s">';
   ['w','a','t'].forEach(function(s){var id=P[SK[s]],lock=!unlocked(P,s);
     if(lock)h+='<div class="ry-sl"><small>'+SL[s].toUpperCase()+' YUVASI</small><div style="font-size:1.6rem">🔒</div><small>Sv '+TALI_LV+'’de açılır</small></div>';
