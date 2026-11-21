@@ -146,7 +146,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
-<link rel="stylesheet" href="hud2.css?v=20261121y"></head>
+<link rel="stylesheet" href="hud2.css?v=20261121z"></head>
 <body>
 <canvas id="cv"></canvas>
 
@@ -169,7 +169,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div class="scr" id="s-char"><div class="card">
  <h1>Karakterin</h1><p class="sub" id="who"></p>
  <div id="cnew">
-  <div class="cprev"><canvas id="cpv" width="150" height="200"></canvas><div><b>Görünümün</b><br><small>Standart görünümle başla ya da Mağaza'dan aldığın özel kahramanı seç.</small><div class="pchs" id="pchs"></div><button class="btn alt" id="cwd" type="button" style="margin-top:8px">Kostümü özelleştir</button></div></div>
+  <div class="cprev"><canvas id="cpv" width="150" height="200"></canvas><div><b>Karakterin</b><br><small>Cinsiyet, yüz, saç, beden ve kıyafeti sen tasarla. Oyuna girmeden istediğin zaman değiştirebilirsin.</small><button class="btn" id="cwd" type="button" style="margin-top:10px">Karakterini tasarla</button><div class="pchs" id="pchs"></div></div></div>
   <label for="nick">Takma ad (3–16 harf/rakam)</label><input id="nick" maxlength="16" autocomplete="off">
   <label>Sınıfını seç</label><div class="cls" id="cls"></div><div class="det" id="det"></div>
   <div class="err" id="cerr"></div>
@@ -181,7 +181,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 <div class="scr" id="s-wd"><div class="wd">
  <div class="wdl"><canvas id="wdc" width="240" height="320"></canvas><div id="wdinfo" class="wdinfo"></div></div>
  <div class="wdr"><div class="wdt" id="wdt"></div><div class="wdg" id="wdg"></div><div class="wdcol" id="wdcol"></div></div>
- <div class="wdb"><span id="wdgold" class="wdgold"></span><button class="btn alt" id="wdx" type="button">İptal</button><button class="btn" id="wdok" type="button">Kaydet</button></div>
+ <div class="wdb"><span id="wdgold" class="wdgold"></span><button class="btn alt" id="wdrnd" type="button" style="display:none">Rastgele</button><button class="btn alt" id="wdx" type="button">İptal</button><button class="btn" id="wdok" type="button">Kaydet</button></div>
 </div></div>
 <div id="hud"><canvas id="atm"></canvas><div id="vig"></div><div id="grade"></div>
  <div class="top"><div class="rg"><svg viewBox="0 0 110 110"><g fill="none" stroke-linecap="round" transform="rotate(-90 55 55)"><circle class="tk" cx="55" cy="55" r="50" stroke-width="8"/><circle id="rh" class="fg" cx="55" cy="55" r="50" stroke-width="8" pathLength="100" stroke="#ff5b6e" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="40" stroke-width="7"/><circle id="rs" class="fg" cx="55" cy="55" r="40" stroke-width="7" pathLength="100" stroke="#ffc83d" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="31" stroke-width="6"/><circle id="rx" class="fg" cx="55" cy="55" r="31" stroke-width="6" pathLength="100" stroke="#4fb3ff" stroke-dasharray="0 100"/></g></svg><div class="av" id="hav"></div><b id="rlv" class="lvb">1</b></div><div class="hi"><b id="hn"></b><small id="hl"></small><div class="gr"><i style="background:#ff5b6e"></i><span id="th"></span></div><div class="gr"><i style="background:#ffc83d"></i><span id="ts"></span></div><div class="gr"><i style="background:#4fb3ff"></i><span id="tx"></span></div></div></div>
@@ -205,11 +205,11 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
-<script src="../account-config.js?v=20261121y"></script><script src="../account.js?v=20261121y"></script><script src="../i18n-dict.js?v=20261121y"></script><script src="../economy.js?v=20261121y"></script>
-<script src="look.js?v=20261121y"></script><script src="sim.js?v=20261121y"></script><script src="art.js?v=20261121y"></script><script src="runes.js?v=20261121y"></script><script src="ikon.js?v=20261121y"></script><script src="zemin.js?v=20261121y"></script><script src="game.js?v=20261121y"></script><script src="../games.js?v=20261121y"></script><script src="net-config.js?v=20261121y"></script><script src="net.js?v=20261121y"></script><script src="social.js?v=20261121y"></script>
-<script src="evler.js?v=20261121y"></script>
-<script src="hazine.js?v=20261121y"></script>
-<script src="rehber.js?v=20261121y"></script>
-<script src="atmos.js?v=20261121y"></script>
-<script src="ses.js?v=20261121y"></script><script src="dock.js?v=20261121y"></script><script src="extra2.js?v=20261121y"></script><script src="extra.js?v=20261121y"></script><script src="yeni.js?v=20261121y"></script>
+<script src="../account-config.js?v=20261121z"></script><script src="../account.js?v=20261121z"></script><script src="../i18n-dict.js?v=20261121z"></script><script src="../economy.js?v=20261121z"></script>
+<script src="look.js?v=20261121z"></script><script src="sim.js?v=20261121z"></script><script src="art.js?v=20261121z"></script><script src="runes.js?v=20261121z"></script><script src="ikon.js?v=20261121z"></script><script src="zemin.js?v=20261121z"></script><script src="game.js?v=20261121z"></script><script src="../games.js?v=20261121z"></script><script src="net-config.js?v=20261121z"></script><script src="net.js?v=20261121z"></script><script src="social.js?v=20261121z"></script>
+<script src="evler.js?v=20261121z"></script>
+<script src="hazine.js?v=20261121z"></script>
+<script src="rehber.js?v=20261121z"></script>
+<script src="atmos.js?v=20261121z"></script>
+<script src="ses.js?v=20261121z"></script><script src="dock.js?v=20261121z"></script><script src="extra2.js?v=20261121z"></script><script src="extra.js?v=20261121z"></script><script src="yeni.js?v=20261121z"></script>
 </body></html>
