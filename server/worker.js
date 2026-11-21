@@ -143,7 +143,7 @@ export class World {
     if (bad(txt)) return this.err(ws, 'Mesajın uygunsuz bulundu.');
     const ch = ['l', 'w', 'k', 'p'].includes(m.ch) ? m.ch : 'w';
     this.setA(ws, x => { x.ct = now; });
-    const o = { t: 'c', id: a.id, k: a.pk, n: a.nick, m: txt, ch };
+    const o = { t: 'c', id: a.id, k: a.pk, n: a.nick, m: txt, ch, cg: a.cg || '' };
     if (ch === 'k') {
       if (!a.cg) return this.err(ws, 'Bir klanda değilsin.');
       const C = await this.g('c:' + a.cg, null); if (C) { C.msgs.push({ n: a.nick, m: txt, t: now }); C.msgs = C.msgs.slice(-40); await this.s('c:' + a.cg, C); }
