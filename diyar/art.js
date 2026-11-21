@@ -2,11 +2,14 @@
 (function(){'use strict';
 var YA={};
 /* ================= SVG SİMGELER (32x32) ================= */
-function P(d,f,s,w){return'<path d="'+d+'" fill="'+(f||'none')+'"'+(s?' stroke="'+s+'" stroke-width="'+(w||1.4)+'" stroke-linejoin="round" stroke-linecap="round"':'')+'/>'}
-function C(x,y,r,f,s,w){return'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+(f||'none')+'"'+(s?' stroke="'+s+'" stroke-width="'+(w||1.4)+'"':'')+'/>'}
-function R(x,y,w,h,r,f,s){return'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(r||0)+'" fill="'+f+'"'+(s?' stroke="'+s+'" stroke-width="1.3"':'')+'/>'}
+function GF(f){return f&&/^#[0-9a-f]{6}$/i.test(f)?'url(#yg-'+f.slice(1).toLowerCase()+')':(f||'none')}
+function mixc(h,t,a){var n=parseInt(h,16),r=n>>16,g=n>>8&255,b=n&255,tr=t>>16,tg=t>>8&255,tb=t&255;return'#'+((1<<24)+(Math.round(r+(tr-r)*a)<<16)+(Math.round(g+(tg-g)*a)<<8)+Math.round(b+(tb-b)*a)).toString(16).slice(1)}
+function gdefs(b){var ids={},m,re=/yg-([0-9a-f]{6})/g,o='';while(m=re.exec(b))ids[m[1]]=1;Object.keys(ids).forEach(function(c){o+='<linearGradient id="yg-'+c+'" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="'+mixc(c,0xffffff,.34)+'"/><stop offset=".55" stop-color="#'+c+'"/><stop offset="1" stop-color="'+mixc(c,0,.2)+'"/></linearGradient>'});return o?'<defs>'+o+'</defs>':''}
+function P(d,f,s,w){return'<path d="'+d+'" fill="'+GF(f)+'"'+(s?' stroke="'+s+'" stroke-width="'+(w||1.15)+'" stroke-linejoin="round" stroke-linecap="round"':'')+'/>'}
+function C(x,y,r,f,s,w){return'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+GF(f)+'"'+(s?' stroke="'+s+'" stroke-width="'+(w||1.4)+'"':'')+'/>'}
+function R(x,y,w,h,r,f,s){return'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(r||0)+'" fill="'+GF(f)+'"'+(s?' stroke="'+s+'" stroke-width="1.3"':'')+'/>'}
 function G(t,i){return'<g transform="'+t+'">'+i+'</g>'}
-var K='#1b1530';
+var K='rgba(22,12,48,.55)';
 function sword(c){c=c||'#dfe6f5';return G('rotate(45 16 16)',P('M16 2.5 19.5 7V20H12.5V7Z',c,K)+'<path d="M16 4V20" stroke="#9aa8c8" stroke-width="1.2"/>'+R(8.5,20,15,3.4,1.5,'#d9a232',K)+R(14.2,23.4,3.6,5,1,'#7a4f2b',K)+C(16,29.6,2.1,'#d9a232',K,1))}
 function nug(r,n){return P('M4.5 24 7.5 12.5 15 7 24 9 28.5 18 25 26Z',r,K)+P('M7.5 12.5 15 7 24 9 17 13Z','#ffffff44')+C(12,18.5,3.2,n,K,1)+C(19.5,16,2.7,n,K,1)+C(21,22.2,2.3,n,K,1)+C(14.2,23.4,1.9,n,K,1)+C(11,17.2,1,'#fff9')+C(18.8,15.1,.9,'#fff9')}
 function bar(x,y,w,c,h){return P('M'+x+' '+(y+7)+'L'+(x+3)+' '+y+'H'+(x+w-3)+'L'+(x+w)+' '+(y+7)+'Z',c,K,1.2)+P('M'+(x+3)+' '+y+'H'+(x+w-3)+'L'+(x+w-5)+' '+(y+2.6)+'H'+(x+5)+'Z',h)}
@@ -80,15 +83,62 @@ var ICON={
 };
 YA.ICON=ICON;
 ICON.armor=P('M9 4 4 8 6 15 9 14V28H23V14L26 15 28 8 23 4C22 7 19 8.5 16 8.5S10 7 9 4Z','#7a8bb8',K)+P('M9 14V28H23V14','none','#4a5a88',1.4)+R(14.2,10,3.6,16,1.4,'#c9d4ee')+C(16,18,2.4,'#ffd23f');
-YA.ico=function(k,sz){var b=ICON[k];if(!b)return'';return'<svg class="yi" viewBox="0 0 32 32"'+(sz?' width="'+sz+'" height="'+sz+'"':'')+' aria-hidden="true">'+b+'</svg>'};
+
+/* --- yeni arayüz simgeleri (emoji yerine) --- */
+ICON.gift=R(4,13,24,15,2.4,'#e8453c',K)+R(3,9,26,6,2.4,'#ff6a5a',K)+R(14,9,4,19,0,'#ffd23f')+P('M16 9C12 2 6 4 8 8 10 11 16 9 16 9ZM16 9C20 2 26 4 24 8 22 11 16 9 16 9Z','#ffd23f',K);
+ICON.lock=P('M10 14V10A6 6 0 0 1 22 10V14','none','#cfd8ee',3)+R(5,14,22,15,3.4,'#f0b429',K)+C(16,21,2.6,'#5a3a08')+R(15,22,2,4.4,1,'#5a3a08');
+ICON.unlock=P('M10 14V10A6 6 0 0 1 21.5 7','none','#cfd8ee',3)+R(5,14,22,15,3.4,'#7a8bb8',K)+C(16,21,2.6,'#2b3558')+R(15,22,2,4.4,1,'#2b3558');
+ICON.check=C(16,16,13.5,'#33c27a',K)+P('M9.5 16.5 14 21 22.5 11.5','none','#fff',3.4);
+ICON.xmark=C(16,16,13.5,'#e5484d',K)+P('M11 11 21 21M21 11 11 21','none','#fff',3.4);
+ICON.warn=P('M16 3 30 27H2Z','#ffc233',K)+R(14.6,11,2.8,9,1.4,'#5a3a08')+C(16,23.4,1.8,'#5a3a08');
+ICON.compass=C(16,16,13.5,'#2e3a66',K)+C(16,16,10.6,'#e9eefc')+P('M22 10 18 18 10 22 14 14Z','#e5484d')+P('M10 22 14 14 18 18Z','#ffffff')+C(16,16,1.7,'#2e3a66');
+ICON.egg=P('M16 2.5C10 2.5 5.5 12.5 5.5 19A10.5 10.5 0 0 0 26.5 19C26.5 12.5 22 2.5 16 2.5Z','#fff1d6',K)+C(12,18,2.2,'#f0a050')+C(19.5,13.5,1.9,'#7ac0a0')+C(20.5,21,2.4,'#e87a8a')+C(14,11.5,1.4,'#7aa0e0');
+ICON.trophy=P('M9 4H23V13A7 7 0 0 1 9 13Z','#ffd23f',K)+P('M9 6H4C4 12 7 14 9.4 14','none','#e0a02c',2.4)+P('M23 6H28C28 12 25 14 22.6 14','none','#e0a02c',2.4)+R(14,19,4,5,1,'#e0a02c')+R(9.5,24,13,4.4,1.8,'#c98a1c',K)+P('M12.5 6V12','none','#fff9',2);
+ICON.globe=C(16,16,13.5,'#3f8fe0',K)+P('M8 9C12 6 15 9 13 12 11 14 7 13 8 9ZM18 17C22 14 26 18 23 22 20 25 16 21 18 17Z','#52c27a')+P('M3 16H29M16 3C10 9 10 23 16 29 22 23 22 9 16 3','none','#ffffff66',1.2);
+ICON.users=C(11,10.5,4.6,'#ffd9a8',K)+P('M2.5 27C2.5 20 6.5 17 11 17S19.5 20 19.5 27Z','#4f8fe0',K)+C(22,11.5,4.2,'#f2c28e',K)+P('M16 27C16 21 19 18 22 18S29.5 21 29.5 27Z','#e8718d',K);
+ICON.refresh=P('M26 14A10 10 0 0 0 8 10','none','#7ad7ff',3.2)+P('M4.5 4.5 7 13.5 15.5 11Z','#7ad7ff')+P('M6 18A10 10 0 0 0 24 22','none','#7ad7ff',3.2)+P('M27.5 27.5 25 18.5 16.5 21Z','#7ad7ff');
+ICON.box=P('M3 11 16 5 29 11V24L16 30 3 24Z','#c9965a',K)+P('M3 11 16 17 29 11 16 5Z','#e6b878')+P('M16 17V30','none','#8a5f2a',1.4)+P('M10 8 22 14','none','#8a5f2a',1.6);
+ICON.fish=P('M3 16C8 7 20 7 25 16 20 25 8 25 3 16Z','#4fb4f0',K)+P('M24.5 16 30 9.5V22.5Z','#2f8fd0',K)+P('M12 8.5 15 4 18 9','#2f8fd0')+C(9.5,14,1.7,'#fff')+C(9.5,14,.8,'#123')+P('M14 12 14 20','none','#2f8fd0',1.2);
+ICON.rod=P('M4 29 24 4','none','#8a5a2a',2.8)+P('M24 4Q29 13 26.5 21.5','none','#e8edf8',1.2)+C(26.4,23.2,2.2,'#e5484d')+C(25.6,22.4,.8,'#fff');
+ICON.up=P('M16 3 28 17H20V29H12V17H4Z','#33c27a',K)+P('M16 3 28 17H16Z','#ffffff33');
+ICON.pin=P('M16 30C16 30 5 18.5 5 12A11 11 0 0 1 27 12C27 18.5 16 30 16 30Z','#e5484d',K)+C(16,12,4.2,'#fff');
+ICON.shirt=P('M11 3.5 2.5 8 6 15.5 10 13.5V28.5H22V13.5L26 15.5 29.5 8 21 3.5C20 7 18 8.5 16 8.5S12 7 11 3.5Z','#4f8fe0',K)+P('M13 3.5C14 6 18 6 19 3.5','none','#fff6',1.4);
+ICON.cart=P('M2.5 5H7L10.5 21H25L28.5 10H8.2','none','#dfe6f5',2.4)+P('M9 10H28L25 20H11Z','#ffb02e',K)+C(12.5,26,2.7,'#e8edf8',K)+C(23,26,2.7,'#e8edf8',K);
+ICON.handshake=P('M1.5 10H9L17 13 12 21 5 18 1.5 10Z','#f2c28e',K)+P('M30.5 10H23L15 13 20 21 27 18 30.5 10Z','#d9a46e',K)+C(16,15.5,4.2,'#ffd9a8',K)+P('M12 24 16 27 20 24','none','#d9a46e',1.6);
+ICON.sun=C(16,16,7,'#ffc233',K)+P('M16 2.5V6.5M16 25.5V29.5M2.5 16H6.5M25.5 16H29.5M6.5 6.5 9.3 9.3M22.7 22.7 25.5 25.5M25.5 6.5 22.7 9.3M9.3 22.7 6.5 25.5','none','#ffc233',2.6);
+ICON.sunrise=P('M4 24A12 12 0 0 1 28 24Z','#ffb02e',K)+P('M1.5 24H30.5','none','#dfe6f5',2.4)+P('M16 5V9M5.5 10.5 8.3 13.3M26.5 10.5 23.7 13.3','none','#ffc233',2.4)+P('M8 28H24','none','#9fb4e0',2);
+ICON.moon=P('M21 3.5A12.5 12.5 0 1 0 28.5 22 10.4 10.4 0 0 1 21 3.5Z','#ffe28a',K)+C(12,19,1.8,'#e0c060')+C(16.5,24,1.3,'#e0c060');
+ICON.cloud=P('M9 24C3.5 24 2 17.5 6.5 15.5 6.5 9 14.5 6.5 18 11 22 8.5 28.5 11.5 27 17.5 31 18 31 24 26 24Z','#dfe6f5',K);
+ICON.rain=P('M9 18C3.5 18 2 11.5 6.5 9.5 6.5 3 14.5 1 18 5 22 2.5 28.5 5.5 27 11.5 31 12 31 18 26 18Z','#aab6d4',K)+P('M9 22 7 28M16 22 14 29M23 22 21 28','none','#5fb4f0',2.6);
+ICON.storm=P('M9 17C3.5 17 2 10.5 6.5 8.5 6.5 2 14.5 0 18 4 22 1.5 28.5 4.5 27 10.5 31 11 31 17 26 17Z','#6f7a9a',K)+P('M17.5 15 12 24H16.5L14.5 31 23 20H18.5L21 15Z','#ffd23f',K);
+ICON.flask=P('M12 3H20V12L27 25C28.5 28 26.5 30 23.5 30H8.5C5.5 30 3.5 28 5 25L12 12Z','#e8f3ff',K)+P('M7.6 21.5Q16 18 24.4 21.5L27 25C28.5 28 26.5 30 23.5 30H8.5C5.5 30 3.5 28 5 25Z','#9a58ff')+C(13,25,1.6,'#e9d8ff')+C(19.5,26.5,1.2,'#e9d8ff');
+ICON.clover=C(12,11,5,'#33c27a')+C(20,11,5,'#33c27a')+C(12,19,5,'#2fb06c')+C(20,19,5,'#2fb06c')+C(16,15,2,'#a8f0c4')+P('M16 20Q15 26 19 29','none','#2a8a52',2);
+ICON.paw=C(16,21,6.6,'#b07a4a',K)+C(6.6,14.2,2.9,'#b07a4a',K)+C(11.8,8.4,3.1,'#b07a4a',K)+C(20.2,8.4,3.1,'#b07a4a',K)+C(25.4,14.2,2.9,'#b07a4a',K);
+ICON.camera=R(2.5,9,27,18,3.4,'#3a4468',K)+R(20.5,5.5,7,4.5,1.6,'#ccd5ee')+C(16,18,6.6,'#9fb4e0',K)+C(16,18,3.8,'#2e3a66')+C(14.8,16.8,1.2,'#fff');
+ICON.question=C(16,16,13.5,'#7a58e0',K)+P('M11.5 12.5A4.5 4.5 0 1 1 16 17.2V19','none','#fff',3.2)+C(16,23.6,1.9,'#fff');
+ICON.chick=C(16,17,10.5,'#ffd23f',K)+P('M16 16.5 21.5 19 16 21.5Z','#ff8a2b')+C(11.6,14.2,1.7,'#2b2147')+C(20.4,14.2,1.7,'#2b2147')+P('M13 6.5Q16 2 19 6.5','none','#ffd23f',2.4)+P('M6.5 20Q4 24 8.5 25','#ffc233');
+ICON.tag=P('M2.5 15.5 15.5 2.5H29.5V16.5L16.5 29.5Z','#4fb4f0',K)+C(23,9,2.8,'#fff');
+ICON.heart=P('M16 28.5C3.5 20.5 2.5 11 7.5 7 12 3.5 16 7 16 10 16 7 20 3.5 24.5 7 29.5 11 28.5 20.5 16 28.5Z','#ff5b7a',K)+P('M8 9C9.5 7.5 12 8 12.5 10','none','#fff8',1.6);
+ICON.store=P('M2.5 12 6 4H26L29.5 12Z','#e5484d',K)+R(4.5,12,23,16,1.2,'#f1e3c4',K)+P('M2.5 12Q6 16 9.5 12 13 16 16 12 19 16 22.5 12 26 16 29.5 12','#ffffff')+R(12.5,18,7,10,1.4,'#7a4f2b',K)+R(6.5,17.5,4,5,.8,'#9fd0f0')+R(21.5,17.5,4,5,.8,'#9fd0f0');
+ICON.medal=P('M9.5 2.5 16 14 22.5 2.5Z','#e5484d',K)+C(16,21,8.6,'#e0a02c',K)+C(16,21,6.2,'#ffd23f')+P('M16 16.8 17.4 19.6 20.5 20 18.2 22.1 18.8 25 16 23.6 13.2 25 13.8 22.1 11.5 20 14.6 19.6Z','#fff3b0');
+ICON.bed=R(2.5,15.5,27,8,2.2,'#4f8fe0',K)+R(2.5,9,4.5,19,1.4,'#8a5a2a',K)+R(8.5,11.5,9,5,2.5,'#ffffff',K)+R(25.5,19,4,9,1.2,'#8a5a2a',K);
+ICON.bell=P('M16 3C11 3 8 7 8 13V19L5 23.5H27L24 19V13C24 7 21 3 16 3Z','#ffc233',K)+C(16,27,3.2,'#e0a02c',K)+P('M12 8Q14 6 16 6','none','#fff8',1.6);
+ICON.squid=P('M16 2.5C9 2.5 7 10 9 16.5H23C25 10 23 2.5 16 2.5Z','#e8718d',K)+P('M10 16 8 27M14 16 13 29M18 16 19 29M22 16 24 27','none','#e8718d',2.6)+C(12.8,11.5,2.2,'#fff')+C(19.2,11.5,2.2,'#fff')+C(13,11.8,1,'#2b2147')+C(19,11.8,1,'#2b2147');
+ICON.ghost=P('M5.5 29V14C5.5 7 10 3 16 3S26.5 7 26.5 14V29L22.3 25 19 29 16 25 13 29 9.7 25Z','#eef0fb',K)+C(12.4,14,2.2,'#2b2147')+C(19.6,14,2.2,'#2b2147')+P('M13.5 19.5Q16 21.5 18.5 19.5','none','#2b2147',1.6);
+ICON.party=P('M3 29 10 9 23 22Z','#ffb02e',K)+P('M10 9 16 25','none','#e0801c',1.4)+C(20,6.5,1.8,'#ff5b7a')+C(26,12,1.8,'#4fb4f0')+C(26.5,5,1.4,'#33c27a')+P('M17 9 20 12M23 3 25 6M27 17 30 18','none','#ffd23f',2);
+ICON.crown=P('M2.5 24.5 4.5 9.5 11.5 16 16 5.5 20.5 16 27.5 9.5 29.5 24.5Z','#ffd23f',K)+R(2.5,24.5,27,4.5,1.8,'#e0a02c',K)+C(16,19,2,'#e5484d')+C(8.5,20,1.4,'#4fb4f0')+C(23.5,20,1.4,'#4fb4f0');
+ICON.scroll=R(5,4,20,23,3.4,'#f1e3c4',K)+P('M5 24C5 28 9 28 9 24H25','none','#b59a56',1.4)+P('M10 10H21M10 14H21M10 18H17','none','#8a6f3a',1.6);
+ICON.fire2=ICON.flame;
+ICON.dice=R(4,4,24,24,5,'#f1f0ff',K)+C(11,11,2.4,'#2b2147')+C(21,11,2.4,'#2b2147')+C(16,16,2.4,'#2b2147')+C(11,21,2.4,'#2b2147')+C(21,21,2.4,'#2b2147');
+YA.ico=function(k,sz){var b=ICON[k];if(!b)return'';return'<svg class="yi" viewBox="0 0 32 32"'+(sz?' width="'+sz+'" height="'+sz+'"':'')+' aria-hidden="true">'+gdefs(b)+b+'</svg>'};
 /* emoji -> simge anahtarı (yalnız eski metinler için; oyun yeni metinlerde doğrudan anahtar kullanır) */
-var EM={'⚔':'sword','🛡':'shield','🔮':'orb','💚':'heal','✚':'cross','🗡':'dagger','🌀':'spin','💨':'charge','📣':'roar','📢':'taunt','💥':'slam','❄':'nova','⚡':'bolt','✨':'blink','🌿':'hot','🔥':'flame','🌑':'shadow','☠':'poison','🌫':'smoke','👊':'fist','🪙':'coin','🪵':'wood','🪨':'stone','🟤':'copper','⛓':'iron','⚪':'silver','🟡':'goldore','🔷':'mithril','🟧':'i_copper','⬛':'i_iron','⬜':'i_silver','🟨':'i_gold','🟦':'i_mithril','🔹':'titan','🌠':'aster','🌳':'hwood','🟩':'i_titan','🟪':'i_aster','🦷':'fang','💎':'crystal','🎒':'bag','💬':'chat','☰':'menu','🗺':'map','🔨':'hammer','⛏':'pickaxe','🧺':'sack','✋':'hand','⏳':'hourglass','🚪':'door','🏘':'house','🕳':'cave','🐺':'wolf','🏰':'castle','📱':'phone','🔴':'dotred','🟣':'dotpur','🌲':'r_orman','☄':'meteor','🔗':'chain','💀':'skull','📖':'book','🔶':'core','🌟':'star','🏛':'guild','⚖':'scale'};
+var EM={'⚔':'sword','🛡':'shield','🔮':'orb','💚':'heal','✚':'cross','🗡':'dagger','🌀':'spin','💨':'charge','📣':'roar','📢':'taunt','💥':'slam','❄':'nova','⚡':'bolt','✨':'blink','🌿':'hot','🔥':'flame','🌑':'shadow','☠':'poison','🌫':'smoke','👊':'fist','🪙':'coin','🪵':'wood','🪨':'stone','🟤':'copper','⛓':'iron','⚪':'silver','🟡':'goldore','🔷':'mithril','🟧':'i_copper','⬛':'i_iron','⬜':'i_silver','🟨':'i_gold','🟦':'i_mithril','🔹':'titan','🌠':'aster','🌳':'hwood','🟩':'i_titan','🟪':'i_aster','🦷':'fang','💎':'crystal','🎒':'bag','💬':'chat','☰':'menu','🗺':'map','🔨':'hammer','⛏':'pickaxe','🧺':'sack','✋':'hand','⏳':'hourglass','🚪':'door','🏘':'house','🕳':'cave','🐺':'wolf','🏰':'castle','📱':'phone','🔴':'dotred','🟣':'dotpur','🌲':'r_orman','☄':'meteor','🔗':'chain','💀':'skull','📖':'book','🔶':'core','🌟':'star','🏛':'guild','⚖':'scale','🎁':'gift','🔒':'lock','🔓':'unlock','✓':'check','✔':'check','✅':'check','✕':'xmark','✖':'xmark','❌':'xmark','⚠':'warn','🧭':'compass','🥚':'egg','🏆':'trophy','🌐':'globe','🌍':'globe','👥':'users','🔄':'refresh','📦':'box','🐟':'fish','🎣':'rod','⬆':'up','📍':'pin','👗':'shirt','🛒':'cart','🤝':'handshake','☀':'sun','🌅':'sunrise','🌙':'moon','⛈':'storm','🌧':'rain','☁':'cloud','⚗':'flask','🍀':'clover','🐾':'paw','📸':'camera','❔':'question','❓':'question','🐣':'chick','🏷':'tag','❤':'heart','♥':'heart','💖':'heart','🏪':'store','🎖':'medal','🛏':'bed','🔔':'bell','🦑':'squid','👻':'ghost','🎉':'party','👑':'crown','📜':'scroll','🎲':'dice','⭐':'star','★':'star','👋':'hand','💰':'sack','🧳':'bag','♨':'flame','📘':'book','🌳':'hwood','🔶':'core'};
 var EMRE=new RegExp('('+Object.keys(EM).join('|')+')\\uFE0F?','g');
 YA.em=function(s){return String(s).replace(EMRE,function(m,a){return YA.ico(EM[a])})};
 YA.plain=function(s){return String(s).replace(EMRE,function(m,a){return({'🪨':' Taş','🪵':' Odun','🟤':' Bakır','⛓':' Demir','⚪':' Gümüş','🟡':' Altın','🔷':' Mitril','🦷':' Diş','💎':' Kristal','🪙':' altın'})[a]||''})};
 YA.dom=function(root){var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),a=[],n;while(n=w.nextNode())if(EMRE.test(n.nodeValue)){a.push(n)}EMRE.lastIndex=0;a.forEach(function(n){EMRE.lastIndex=0;var sp=document.createElement('span');sp.innerHTML=YA.em(n.nodeValue.replace(/&/g,'&amp;').replace(/</g,'&lt;'));n.parentNode.replaceChild(sp,n)})};
 var IMG={};
-YA.img=function(k){if(IMG[k])return IMG[k];var im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64">'+(ICON[k]||'')+'</svg>');return IMG[k]=im};
+YA.img=function(k){if(IMG[k])return IMG[k];var im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64">'+gdefs(ICON[k]||'')+(ICON[k]||'')+'</svg>');return IMG[k]=im};
 YA.draw=function(ctx,k,x,y,s){var im=YA.img(k);if(im.complete&&im.naturalWidth)ctx.drawImage(im,x-s/2,y-s/2,s,s)};
 
 /* ================= TUVAL ÇİZİMLERİ ================= */
