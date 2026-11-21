@@ -137,7 +137,7 @@ function tick(dt){if(!G||G.mode!=='world'){if(DAY_CHIP)DAY_CHIP.style.display='n
   acc+=dt;if(acc>.4){acc=0;chipUpdate(h)}
   achCheck()}
 function inTown(){return D.inTownF()}
-function chipUpdate(h){if(!DAY_CHIP)return;var w=weatherNow(),cp=window.matchMedia&&matchMedia('(max-height:520px),(max-width:620px)').matches,t=(h<8?'🌙':h<10?'🌅':h>=22?'🌆':'☀️')+' '+clockTxt()+' '+WI[w]+(cp?'':' '+WN[w]);
+function chipUpdate(h){if(!DAY_CHIP)return;var w=weatherNow(),cp=window.matchMedia&&matchMedia('(max-height:520px),(max-width:620px)').matches,t=(h<8?'🌙':h<10?'🌅':h>=22?'🌆':'☀️')+' '+clockTxt()+' '+(w==='rain'&&window.YSN&&YSN.on()?'❄️':WI[w])+(cp?'':' '+(w==='rain'&&window.YSN&&YSN.on()?'Kar':WN[w]));
   if(redMoonOn())t+=' · 🌑 Kızıl Ay '+(X.rm===dayIdx()?Math.min(25,rm.k||0):0)+'/25';else if(goldRainOn())t+=' · 💰 Altın Yağmuru';
   if(traderOn())t+=' · 🧳';if(window.YX3&&!cp){var c3=YX3.chip();if(c3)t+=' · '+c3}
   if(X.xb>Date.now())t+=' · ⚗️';if(X.lk>Date.now())t+=' · 🍀';
@@ -240,7 +240,7 @@ function draw(ctx,camX,camY,t,dg){if(!G||!P)return;if(dg){return}if(window.YR)tr
   if(dkn>.6&&w==='clear'){starT-=1/60;if(starT<=0&&!star){star={x:Math.random()*W*.7,y:Math.random()*H*.35,t:0};starT=5+Math.random()*8}
     if(star){star.t+=1/60;var sp=star.t/.8;if(sp>=1)star=null;else{var sx2=star.x+sp*220,sy2=star.y+sp*110;ctx.strokeStyle='rgba(255,255,255,'+(1-sp)+')';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx2,sy2);ctx.lineTo(sx2-60*(1-sp*.5),sy2-30*(1-sp*.5));ctx.stroke()}}}
   /* yağmur */
-  if(w==='rain'||w==='storm'){var n=w==='storm'?240:130;ctx.strokeStyle='rgba(110,150,235,.75)';ctx.lineWidth=1.7;ctx.beginPath();for(var q=0;q<n;q++){var r1=rnd(q*1.37),r2=rnd(q*2.91+5),r3=rnd(q*4.13+1),x=((r1*W-t*90*(w==='storm'?1.6:1))%W+W)%W,y=((r2*H+t*(650+r3*350))%H);ctx.moveTo(x,y);ctx.lineTo(x-5,y+15)}ctx.stroke()}
+  if((w==='rain'&&!(window.YSN&&YSN.on()))||w==='storm'){var n=w==='storm'?240:130;ctx.strokeStyle='rgba(110,150,235,.75)';ctx.lineWidth=1.7;ctx.beginPath();for(var q=0;q<n;q++){var r1=rnd(q*1.37),r2=rnd(q*2.91+5),r3=rnd(q*4.13+1),x=((r1*W-t*90*(w==='storm'?1.6:1))%W+W)%W,y=((r2*H+t*(650+r3*350))%H);ctx.moveTo(x,y);ctx.lineTo(x-5,y+15)}ctx.stroke()}
   if(w==='fog'){var fg=ctx.createLinearGradient(0,0,0,H);fg.addColorStop(0,'rgba(215,222,235,.22)');fg.addColorStop(.5,'rgba(215,222,235,.32)');fg.addColorStop(1,'rgba(215,222,235,.2)');ctx.fillStyle=fg;ctx.fillRect(0,0,W,H);
     for(var b=0;b<5;b++){ctx.fillStyle='rgba(235,240,250,.1)';ctx.beginPath();ctx.ellipse(((t*14+b*W/3)%(W*1.4))-W*.2,H*(.2+b*.16),W*.35,50,0,0,6.28);ctx.fill()}}
   if(flash>0){ctx.fillStyle='rgba(235,240,255,'+(flash*.7)+')';ctx.fillRect(0,0,W,H)}

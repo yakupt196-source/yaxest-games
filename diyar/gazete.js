@@ -3,13 +3,13 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=1;
+var SAYI=2;
 var HABER=[
- {d:'21 Kasım',k:'Manşet',h:'Rün Ustası\'nın tezgâhı doldu taştı!',s:'Diyar\'da ilk kez Efsanevi rünler görüldü. Ejder, Vampir, Anka ve Kader dillerde.'},
- {d:'21 Kasım',k:'Ticaret',h:'Sandıklardan artık rün çıkıyor',s:'Tüccarlar yemin ediyor: oranlar sandığın altında açıkça yazıyor.'},
- {d:'21 Kasım',k:'Kasaba',h:'Surlar yükseldi, kapı önü hareketlendi',s:'Dört kapı, sekiz kule. Muhafızlar dışarıda canavarların çoğaldığını söylüyor.'},
+ {d:'21 Kasım',k:'Manşet',h:'Kış Şenliği başladı: Diyar kar altında!',s:'Meydana dev bir şenlik ağacı dikildi, fenerler yandı. Şenlik Ustası kahramanları bekliyor.'},
+ {d:'21 Kasım',k:'Kasaba',h:'Geceleri gökyüzünde yeşil ışıklar',s:'Kutup ışıkları kasabanın üstünde dans ediyor. Saat başı fişek gösterisi var.'},
+ {d:'21 Kasım',k:'Ticaret',h:'Kış kostümleri ve Buz Kurdu yavruları',s:'Şenlik Ustası, yıldız getirenlere özel ödüller veriyor.'},
+ {d:'21 Kasım',k:'Pazar',h:'Altın artık eskisi kadar kolay bulunmuyor',s:'Tüccarlar kemerleri sıkmış: yollardaki paralar azaldı, sandıklar pahalı.'},
  {d:'21 Kasım',k:'Pazar',h:'Oyuncu Pazarı kapılarını açtı',s:'Kahramanlar eşyalarını kendi fiyatıyla satabiliyor.'},
- {d:'21 Kasım',k:'Zindan',h:'Zindanlarda gizemli mühürler',s:'Maceracılar dalgalar, sütunlar ve mühürlerden söz ediyor.'},
  {d:'21 Kasım',k:'Kısa kısa',h:'Kılıçlar artık elde dik duruyor',s:'Demirci: "Ucu yere sürtmüyor, şükür."'}
 ];
 var KEY='yd-gz-seen',OX=-120,OY=6;
