@@ -206,12 +206,12 @@ function panels(){
   const nx=lv[bi+1];$('pb').innerHTML='<span>'+lv[bi][1]+'</span><small>'+(nx?(nx[0]-n)+' oyun daha, '+nx[1]+' olursun':'Hepsini keşfettin!')+'</small>';
   $('stamps').innerHTML=GAMES.map(g=>`<span class="${seenSet.has(g.id)?'on':''}" style="--c:${g.c}" title="${g.n}">${g.i}</span>`).join('');
   const rc=seen().map(id=>byId[id]).filter(g=>g&&bestOf(g)>0).slice(0,4);
-  $('rec').innerHTML=rc.length?rc.map(g=>`<li><a href="${g.id}/"><i>${g.i}</i><span>${g.n.replace('Yaxest ','')}</span><b>${bestOf(g)}</b></a></li>`).join(''):'<li class="none">Henüz rekor yok. İlk oyununu oyna!</li>'}
+  $('rec').innerHTML=rc.length?rc.map(g=>`<li><a href="${g.id}/"><i>${g.i}</i><span>${(window.YT?YT(g.n):g.n).replace('Yaxest ','')}</span><b>${bestOf(g)}</b></a></li>`).join(''):'<li class="none">Henüz rekor yok. İlk oyununu oyna!</li>'}
 $('q').oninput=draw;
 $('chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.k;[...$('chips').children].forEach(x=>x.setAttribute('aria-pressed',x===b));draw()};
 $('rnd').onclick=()=>go(GAMES[Math.floor(Math.random()*GAMES.length)].id);
 if(window.YI18N){$('langslot').appendChild(YI18N.select());addEventListener('ylang',draw)}
-$('mq').innerHTML=[0,1].map(()=>GAMES.map(g=>`<span style="--c:${g.c}"><b>${g.i}</b>${g.n.replace('Yaxest ','')}</span>`).join('')).join('');
+$('mq').innerHTML=[0,1].map(()=>GAMES.map(g=>`<span style="--c:${g.c}"><b>${g.i}</b>${(window.YT?YT(g.n):g.n).replace('Yaxest ','')}</span>`).join('')).join('');
 (function(){try{var a=JSON.parse(ls('yx-days','[]')),S=new Set(a),d=new Date(),n=0,f=x=>x.getFullYear()+'-'+(x.getMonth()+1)+'-'+x.getDate();
 if(!S.has(f(d)))d.setDate(d.getDate()-1);while(S.has(f(d))){n++;d.setDate(d.getDate()-1)}
 var t=new Date(),h=(t.getFullYear()*372+t.getMonth()*31+t.getDate())%GAMES.length,g=GAMES[h];
@@ -238,7 +238,7 @@ function frame(dt,still){t+=dt;
   const gr=x.createRadialGradient(a.x,a.y,R*.2,a.x,a.y,R*1.9);gr.addColorStop(0,a.g.c+(on?'88':'44'));gr.addColorStop(1,a.g.c+'00');x.fillStyle=gr;x.beginPath();x.arc(a.x,a.y,R*1.9,0,7);x.fill();
   x.globalAlpha=on?1:.78;x.fillStyle='rgba(20,14,52,.82)';x.beginPath();x.arc(a.x,a.y,R,0,7);x.fill();x.lineWidth=on?3:1.6;x.strokeStyle=a.g.c;x.stroke();
   x.font=(R*1.05)+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillStyle='#fff';x.fillText(a.g.i,a.x,a.y+R*.06);x.globalAlpha=1;
-  if(on){const nm=a.g.n.replace('Yaxest ','');x.font='800 15px "Bricolage Grotesque",system-ui,sans-serif';const w=x.measureText(nm).width+22,px=Math.min(Math.max(a.x-w/2,6),W-w-6),py=a.y-R-34;x.fillStyle=a.g.c;x.beginPath();x.roundRect?x.roundRect(px,py<4?a.y+R+8:py,w,26,13):x.rect(px,py<4?a.y+R+8:py,w,26);x.fill();x.fillStyle='#0b0820';x.fillText(nm,px+w/2,(py<4?a.y+R+8:py)+14)}}
+  if(on){const nm=(window.YT?YT(a.g.n):a.g.n).replace('Yaxest ','');x.font='800 15px "Bricolage Grotesque",system-ui,sans-serif';const w=x.measureText(nm).width+22,px=Math.min(Math.max(a.x-w/2,6),W-w-6),py=a.y-R-34;x.fillStyle=a.g.c;x.beginPath();x.roundRect?x.roundRect(px,py<4?a.y+R+8:py,w,26,13):x.rect(px,py<4?a.y+R+8:py,w,26);x.fill();x.fillStyle='#0b0820';x.fillText(nm,px+w/2,(py<4?a.y+R+8:py)+14)}}
  cv.style.cursor=hv?'pointer':'default'}
 let zc=0;function loop(ts){if(!run)return;if(++zc%20===0)zone();const dt=Math.min(.05,(ts-last)/1000||.016);last=ts;frame(dt);requestAnimationFrame(loop)}
 function start(){if(run||reduce||document.hidden)return;run=true;last=performance.now();requestAnimationFrame(loop)}

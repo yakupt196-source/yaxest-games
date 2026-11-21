@@ -45,7 +45,7 @@
   panel.id='ymp';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Oyun menüsü');
   var html='<header><span>Yaxest Games</span><button id="ymx" type="button" aria-label="Menüyü kapat">✕</button></header><div id="ymg">';
   G.forEach(function(g){
-    html+='<a href="../'+g.id+'/"'+(g.id===cur?' class="cur" aria-current="page"':'')+'><span class="ico" style="background:'+g.c+'">'+g.i+'</span><span>'+g.n.replace('Yaxest ','')+(g.id===cur?'<small>Şu an oynuyorsun</small>':'')+'</span></a>';
+    html+='<a href="../'+g.id+'/"'+(g.id===cur?' class="cur" aria-current="page"':'')+'><span class="ico" style="background:'+g.c+'">'+g.i+'</span><span>'+(window.YT?YT(g.n):g.n).replace('Yaxest ','')+(g.id===cur?'<small>Şu an oynuyorsun</small>':'')+'</span></a>';
   });
   html+='</div><div class="ylw"></div><a class="home" href="../">← Ana sayfa</a>';
   panel.innerHTML=html;
