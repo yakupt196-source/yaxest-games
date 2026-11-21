@@ -186,7 +186,7 @@ function drawPet(c,id,x,y,t,sleep){var p=PETS[id],b=Math.sin(t*5+x*.01)*(sleep?.
   c.restore()}
 
 /* ---------- çizim (dünya + ekran) ---------- */
-function draw(ctx,camX,camY,t,dg){if(!G||!P)return;if(dg){return}if(window.YR)try{YR.aura(ctx,G,t,P)}catch(e){}if(window.YX3)YX3.draw(ctx,camX,camY,t,D.VW,D.VH);
+function draw(ctx,camX,camY,t,dg){if(!G||!P)return;if(dg){return}if(window.YR)try{YR.aura(ctx,G,t,P)}catch(e){}if(window.YTr)try{YTr.draw(ctx,G,t,P)}catch(e){}if(window.YT)try{YT.draw(ctx,G,t,P)}catch(e){}if(window.YX3)YX3.draw(ctx,camX,camY,t,D.VW,D.VH);
   var W=D.VW,H=D.VH,dpr=D.dpr,h=hourP(),dkn=darkness(h),w=weatherNow(),red=redMoonOn();
   /* sayfalar */
   PAGES.forEach(function(p){if(X.pg.indexOf(p.i)>=0)return;var sx=p.x-camX,sy=p.y-camY;if(sx<-60||sy<-60||sx>W+60||sy>H+60)return;

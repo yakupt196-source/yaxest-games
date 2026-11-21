@@ -4,7 +4,7 @@
 var D,G,P,Y,TS=48,ws=null,others={},me=null,msgs={w:[],l:[],k:[],p:[]},camX0=0,camY0=0,myPk='',lastSend=0,lastX=0,lastY=0,retry=0,live=0,timer=0,beat=0;
 function url(){return window.YD_NET||''}
 function on(){return !!(ws&&ws.readyState===1&&me)}
-function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;live=1;retry=0;if(window.YSoc)try{YSoc.init({D:D,Net:window.YNet})}catch(e){console.error(e)}if(!url()||!window.YXAcct||!YXAcct.token){D.say('🌐 Çevrimiçi kapalı: hesap modülü yok.','sys');return}connect()}
+function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;loadH();chUi();live=1;retry=0;if(window.YSoc)try{YSoc.init({D:D,Net:window.YNet})}catch(e){console.error(e)}if(!url()||!window.YXAcct||!YXAcct.token){D.say('🌐 Çevrimiçi kapalı: hesap modülü yok.','sys');return}connect()}
 function connect(){if(!live||ws||!G)return;
   YXAcct.token().then(function(s){if(!live||ws)return;var w;try{w=new WebSocket(url())}catch(e){return}ws=w;
     D.say('🌐 Sunucuya ulaşılıyor…','sys');w.onopen=function(){D.say('🌐 Bağlantı açıldı, giriş doğrulanıyor…','sys');send({t:'hi',tok:s.idToken,nick:P.nick,ap:P.ap,lv:P.lv,x:Math.round(G.px),y:Math.round(G.py)})};
@@ -18,7 +18,7 @@ function hand(m){
   else if(m.t==='leave'){delete others[m.id]}
   else if(m.t==='p'){var o=others[m.id];if(o){o.x=m.x;o.y=m.y;o.f=m.f;if(m.lv)o.lv=m.lv}}
   else if(m.t==='snap'){G.px=m.x;G.py=m.y}
-  else if(m.t==='c'){if(window.YSoc&&YSoc.blocked(m.k))return;var k=m.ch==='l'?'l':m.ch==='k'?'k':m.ch==='p'?'p':'w',cg=m.cg||(others[m.id]&&others[m.id].cg)||(m.id===me&&window.YSoc?YSoc.myClan():'')||'';bub(m.id,m.m);msgs[k].push({n:m.n,m:m.m,me:m.id===me,cg:cg,t:Date.now()});if(msgs[k].length>50)msgs[k].shift();
+  else if(m.t==='c'){if(window.YSoc&&YSoc.blocked(m.k))return;var k=m.ch==='l'?'l':m.ch==='k'?'k':m.ch==='p'?'p':'w',cg=m.cg||(others[m.id]&&others[m.id].cg)||(m.id===me&&window.YSoc?YSoc.myClan():'')||'';bub(m.id,m.m);var mn=m.id!==me&&mentioned(m.m);msgs[k].push({n:m.n,m:m.m,me:m.id===me,cg:cg,t:Date.now(),mn:mn});if(msgs[k].length>50)msgs[k].shift();if(mn){D.say('🔔 '+m.n+' senden bahsetti: '+m.m,'sys');try{D.floatTxt(G.px,G.py-100,'🔔 '+m.n,'#ffd23f')}catch(e){}}saveH();
     D.say('('+CH[k][0]+') '+m.n+(cg&&k!=='k'?' ['+cg+']':'')+': '+m.m,'x');
     var pc=document.getElementById('p-chat'),nc=document.getElementById('ncl'),vis=pc&&pc.classList.contains('on')&&nc&&nc.dataset.k===k;if(!vis&&m.id!==me){unread[k]++;ub()}refresh()}
   else if(m.t==='dup'){live=0;clearTimeout(timer);D.say('🌐 Hesabınla başka bir yerden girildi, bu bağlantı kapatıldı.','sys')}
@@ -53,18 +53,51 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;
 var curTab=1;
 var CH={w:['Dünya','#ffb02e','Tüm oyuncular görür'],l:['Yerel','#d0d6e6','Yakındaki oyuncular görür (yaklaşık 20 kare)'],k:['Klan','#c07cff','Sadece klan üyeleri görür'],p:['Parti','#7dff9b','Sadece parti üyeleri görür']},unread={w:0,l:0,k:0,p:0};
 function hm(t){var d=new Date(t||Date.now());return('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
-function list(k){return msgs[k].map(function(x){return'<div style="margin:2px 0"><small style="color:var(--mute)">'+hm(x.t)+'</small> <b style="color:'+CH[k][1]+'">('+CH[k][0]+')</b> <b style="color:'+(x.me?'#ffd23f':'#8fd6ff')+'">'+esc(x.n)+(x.cg&&k!=='k'?' <span style="color:#c07cff;font-weight:600">['+esc(x.cg)+']</span>':'')+':</b> '+esc(x.m)+'</div>'}).join('')||'<div style="color:var(--mute)">Henüz mesaj yok.</div>'}
+function list(k){return msgs[k].map(function(x){return'<div style="margin:2px 0'+(x.mn?';background:#ffd23f22;border-left:3px solid #ffd23f;padding-left:5px':'')+'"><small style="color:var(--mute)">'+hm(x.t)+'</small> <b style="color:'+CH[k][1]+'">('+CH[k][0]+')</b> <b style="color:'+(x.me?'#ffd23f':'#8fd6ff')+'">'+esc(x.n)+(x.cg&&k!=='k'?' <span style="color:#c07cff;font-weight:600">['+esc(x.cg)+']</span>':'')+':</b> '+esc(x.m)+'</div>'}).join('')||'<div style="color:var(--mute)">Henüz mesaj yok.</div>'}
 function ub(){var n=unread.w+unread.l+unread.k+unread.p,b=document.getElementById('cbd'),ic=document.getElementById('ichat');if(ic&&!b){b=document.createElement('i');b.id='cbd';b.className='sbd';b.style.display='none';ic.style.position='relative';ic.appendChild(b)}if(b){b.style.display=n?'block':'none';b.textContent=n>9?'9+':n}}
+
+/* ---- sohbet: kanal, komutlar, bahsetme, geçmiş ---- */
+var ch='w',hT=0;
+function escRe(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function mentioned(t){if(!P||!P.nick)return false;try{return new RegExp('(^|[^a-z0-9çğıöşü])@?'+escRe(P.nick)+'($|[^a-z0-9çğıöşü])','i').test(t)}catch(e){return false}}
+function hk(){return'yx-ch-'+(P&&P.nick)}
+function saveH(){clearTimeout(hT);hT=setTimeout(function(){try{localStorage.setItem(hk(),JSON.stringify({w:msgs.w.slice(-30),l:msgs.l.slice(-30)}))}catch(e){}},1500)}
+function loadH(){try{var h=JSON.parse(localStorage.getItem(hk())||'null');if(!h)return;['w','l'].forEach(function(k){if(h[k]&&!msgs[k].length)msgs[k]=h[k].map(function(x){return{n:x.n,m:x.m,me:!!x.me,cg:x.cg,t:x.t,mn:x.mn}})})}catch(e){}}
+function canCh(k){return k==='w'||k==='l'||(k==='k'&&window.YSoc&&YSoc.inClan())||(k==='p'&&window.YSoc&&YSoc.inParty())}
+function chUi(){var c=document.getElementById('chch'),i=document.getElementById('chi');if(c){c.textContent=CH[ch][0];c.style.color=CH[ch][1];c.style.borderColor=CH[ch][1]}if(i)i.placeholder='Mesaj yaz…  /yardim'}
+function setCh(k){if(!canCh(k)){D.say(k==='k'?'Bir klanda değilsin.':'Bir partide değilsin.','sys');return false}ch=k;chUi();return true}
+function cycleCh(){var o=['w','l','k','p'],i=o.indexOf(ch);for(var q=1;q<=4;q++){var k=o[(i+q)%4];if(canCh(k)){ch=k;break}}chUi()}
+function sendChat(v,fc){v=String(v||'').trim();if(!v)return;var k=fc||ch;if(!canCh(k)){k='w'}
+  if(v.charAt(0)==='/')return cmd(v,k);
+  if(window.YT)try{YT.ev('chat')}catch(e){}
+  if(!on()){D.say('🌐 Çevrimiçi değilsin; bağlanılıyor…','sys');return}
+  send({t:'c',m:v,ch:k})}
+function cmd(v,k){var sp=v.indexOf(' '),c=(sp<0?v:v.slice(0,sp)).toLowerCase(),r=sp<0?'':v.slice(sp+1).trim(),S=window.YSoc,one={'/d':'w','/y':'l','/k':'k','/p':'p'};
+  if(one[c]){if(!r){setCh(one[c]);return}if(!canCh(one[c])){D.say(one[c]==='k'?'Bir klanda değilsin.':'Bir partide değilsin.','sys');return}return sendChat(r,one[c])}
+  if(c==='/w'||c==='/f'||c==='/fisilda'){if(S)S.whisper(r)}
+  else if(c==='/r'){if(S)S.reply(r)}
+  else if(c==='/me'){if(r)send({t:'c',m:'* '+P.nick+' '+r,ch:k})}
+  else if(c==='/zar'){var z=Math.floor(Math.random()*100)+1;send({t:'c',m:'🎲 '+P.nick+' zar attı: '+z+'/100'+(z===100?' 🎉 KRİTİK!':z===1?' 💀':''),ch:k})}
+  else if(c==='/arkadas'){if(r)send({t:'iv',k:'fr',n:r.split(' ')[0]});else D.say('Kullanım: /arkadas takmaad','sys')}
+  else if(c==='/parti'){if(r)send({t:'iv',k:'pt',n:r.split(' ')[0]});else D.say('Kullanım: /parti takmaad','sys')}
+  else if(c==='/ev'){if(window.YDock)YDock.tp('home')}
+  else if(c==='/kasaba'){if(window.YDock)YDock.tp('town')}
+  else if(c==='/saat'){D.say('🕒 '+new Date().toLocaleTimeString('tr-TR'),'sys')}
+  else if(c==='/hazine'){if(window.YTr)YTr.open()}
+  else if(c==='/rehber'){if(window.YT)YT.show()}
+  else if(c==='/temizle'){msgs.w=[];msgs.l=[];refresh();saveH()}
+  else if(c==='/yardim'||c==='/?'){['📜 Sohbet komutları:','/w ad mesaj → arkadaşa fısılda · /r mesaj → son fısıltıya cevap','/d /y /k /p mesaj → Dünya/Yerel/Klan/Parti kanalına (mesajsız: kanalı seç)','/me eylem · /zar · /saat · /temizle','/arkadas ad · /parti ad → istek gönder','/ev · /kasaba → ışınlan · /hazine · /rehber','@takmaad yazarsan o oyuncunun ekranında 🔔 çıkar.'].forEach(function(l){D.say(l,'sys')})}
+  else D.say('Bilinmeyen komut. /yardim yaz.','sys')}
 function seen(k){unread[k]=0;ub()}
 function chatTab(i){if(i<1||i>4)return'';curTab=i;if(!url())return'';if(!on())return'<div style="color:var(--mute)">Çevrimiçi dünyaya bağlanılıyor… (hesabına giriş yapmış olmalısın)</div>';
   if(i===3&&!(window.YSoc&&YSoc.inClan()))return'<div style="color:var(--mute)">Bir klanda değilsin. 👥 menüsünden klan kur ya da katıl.</div>';if(i===4&&!(window.YSoc&&YSoc.inParty()))return'<div style="color:var(--mute)">Bir partide değilsin. Bir oyuncuya dokunup partiye çağır.</div>';
   var k=i===2?'l':i===3?'k':i===4?'p':'w';seen(k);return'<div id="ncl" data-k="'+k+'">'+list(k)+'</div><div style="font-size:.76rem;margin-top:6px;color:'+CH[k][1]+'">Yazdığın kanal: <b>('+CH[k][0]+')</b> · <span style="color:var(--mute)">'+CH[k][2]+'</span></div><form id="ncf" style="display:flex;gap:6px;margin-top:8px"><input id="nci" maxlength="120" autocomplete="off" placeholder="'+(k==='l'?'Yakındakilere yaz':k==='k'?'Klana yaz':k==='p'?'Partiye yaz':'Herkese yaz')+'" style="flex:1;min-width:0;padding:9px 12px;border-radius:12px;border:1.5px solid #ffffff33;background:#ffffff12;color:inherit;font:inherit"><button class="btn" type="submit">Gönder</button></form>'}
 function chatBind(el){var f=el&&el.querySelector('#ncf');if(!f)return;var c=el.querySelector('#ncl');c.scrollTop=c.scrollHeight;
-  f.onsubmit=function(e){e.preventDefault();var i=f.querySelector('#nci'),v=i.value.trim();if(!v)return;send({t:'c',m:v,ch:c.dataset.k});i.value=''}}
+  f.onsubmit=function(e){e.preventDefault();var i=f.querySelector('#nci'),v=i.value.trim();if(!v)return;sendChat(v,c.dataset.k);i.value=''}}
 function refresh(){var c=document.getElementById('ncl');if(c){c.innerHTML=list(c.dataset.k);c.scrollTop=c.scrollHeight}}
 function leave(){if(window.YSoc)try{YSoc.leave()}catch(e){}live=0;clearTimeout(timer);if(ws){try{ws.close()}catch(e){}}ws=null;me=null;others={}}
 function unreadOf(k){return unread[k]||0}
 function pick(cx,cy){var wx=cx+Math.round(camX0),wy=cy+Math.round(camY0),b=null,bd=52;for(var id in others){var o=others[id],d=Math.hypot(o.dx-wx,o.dy-wy+8);if(d<bd){bd=d;b=o}}return b}
 function seed(k,list){if(msgs[k]&&!msgs[k].length)msgs[k]=list.map(function(x){return{n:x.n,m:x.m,me:false}})}
-window.YNet={unread:unreadOf,send:send,others:function(){return others},myId:function(){return me},myPk:function(){return myPk},bub:bub,pick:pick,seed:seed,refresh:refresh,init:init,tick:tick,draw:draw,on:on,chatTab:chatTab,chatBind:chatBind,leave:leave,count:function(){return Object.keys(others).length+(on()?1:0)}};
+window.YNet={sendChat:sendChat,curCh:function(){return ch},cycleCh:cycleCh,setCh:setCh,chUi:chUi,unread:unreadOf,send:send,others:function(){return others},myId:function(){return me},myPk:function(){return myPk},bub:bub,pick:pick,seed:seed,refresh:refresh,init:init,tick:tick,draw:draw,on:on,chatTab:chatTab,chatBind:chatBind,leave:leave,count:function(){return Object.keys(others).length+(on()?1:0)}};
 })();

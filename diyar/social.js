@@ -162,6 +162,9 @@ function depHtml(){var c=S.cl,r=myRole();if(!c)return'<p class="sub">Klanın yok
   inv.forEach(function(x){h+='<div class="it"><span style="width:30px">'+D.itIc(x.k)+'</span><div class="t"><b>'+esc(D.itName(x.k))+'</b> <small>×'+x.q+'</small></div>'+btn('1','dpt|'+x.k+'|1','alt')+(x.q>1?btn('10','dpt|'+x.k+'|10','alt')+btn('Tümü','dpt|'+x.k+'|'+x.q,'alt'):'')+'</div>'});
   return h}
 function openDepot(){if(!S.cl){S.tab='cl';S.view=null;send({t:'cs',q:S.csq});say('Önce bir klana katıl.')}else S.view={t:'dep'};render();D.openPan('p-soc')}
+function findFr(n){n=String(n).toLowerCase();return S.fr.filter(function(f){return f.n.toLowerCase()===n})[0]||S.fr.filter(function(f){return f.n.toLowerCase().indexOf(n)===0})[0]}
+function whisper(r){var sp=r.indexOf(' '),n=sp<0?r:r.slice(0,sp),m=sp<0?'':r.slice(sp+1).trim();if(!n||!m)return say('Kullanım: /w takmaad mesaj','sys');var f=findFr(n);if(!f)return say('“'+n+'” arkadaş listende yok. Fısıldamak için arkadaş olmalısınız: /arkadas '+n,'sys');if(!f.on)say('(çevrimdışı; mesaj kaydedilir)','sys');send({t:'dm',k:f.k,m:m});S.lastDm=f.k;say('💬 → '+f.n+': '+m,'x')}
+function reply(m){if(!S.lastDm)return say('Cevaplanacak özel mesaj yok.','sys');if(!m)return say('Kullanım: /r mesaj','sys');var f=S.fr.filter(function(x){return x.k===S.lastDm})[0];send({t:'dm',k:S.lastDm,m:m});say('💬 → '+(f?f.n:'')+': '+m,'x')}
 /* ---------- eylemler ---------- */
 function ask(k){if(confKey===k&&Date.now()-confT<4000){confKey='';return true}confKey=k;confT=Date.now();re();setTimeout(function(){if(confKey===k){confKey='';re()}},4100);return false}
 function val(i){var x=$(i);return x?x.value.trim():''}
@@ -249,7 +252,7 @@ function hand(m){
     case 'cs':S.cs=m.list;re();return true;
     case 'lb':S.lb=m;re();return true;
     case 'dm':{var k=m.k;S.dm[k]=(S.dm[k]||[]).concat([m.e]).slice(-40);var viewing=S.view&&S.view.t==='dm'&&S.view.k===k&&panelOn();
-      if(m.e.f!==S.myPk){var f=S.fr.filter(function(x){return x.k===k})[0];if(!viewing){if(f)f.un=(f.un||0)+1;toast('💬 <b>'+esc(f?f.n:'Arkadaş')+'</b>: '+esc(m.e.m));say('💬 '+(f?f.n:'')+' (özel): '+m.e.m,'x')}else send({t:'dmh',k:k})}
+      if(m.e.f!==S.myPk){S.lastDm=k;var f=S.fr.filter(function(x){return x.k===k})[0];if(!viewing){if(f)f.un=(f.un||0)+1;toast('💬 <b>'+esc(f?f.n:'Arkadaş')+'</b>: '+esc(m.e.m));say('💬 '+(f?f.n:'')+' (özel): '+m.e.m,'x')}else send({t:'dmh',k:k})}
       re();return true}
     case 'dmh':S.dm[m.k]=m.list;re();return true;
     case 'ds':duelStart(m);return true;
@@ -280,5 +283,5 @@ function draw(ctx,camX,camY,t,W,H){
     ctx.save();ctx.font='700 11px system-ui';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.strokeStyle='#000';ctx.lineWidth=3;var tx=cx+rx-Math.cos(ang)*26,ty=cy+ry-Math.sin(ang)*26+4;ctx.strokeText(m.n,tx,ty);ctx.fillText(m.n,tx,ty);ctx.restore()})}
 }
 function xpMul(){var v=1;if(S.cl)v+=Math.max(0,(S.cl.lv||1)-1)*.01;if(S.pt&&S.pt.mem){var os=others(),n=S.pt.mem.filter(function(m){return m.id===S.myId||os[m.id]}).length;v+=.05*Math.max(0,n-1)}return v}
-window.YSoc={openDepot:openDepot,init:init,leave:leave,onHi:onHi,hand:hand,tick:tick,draw:draw,plate:plate,drawOther:drawOther,xpMul:xpMul,duelOn:duelOn,duelHit:duelHit,blocked:function(k){return !!k&&S.bl.indexOf(k)>=0},inClan:function(){return !!S.cl},myClan:function(){return S.cl?S.cl.tag:''},inParty:function(){return !!(S.pt&&S.pt.mem&&S.pt.mem.length>1)},open:openP,wager:function(v){S.wager=+v||0},dbg:{S:function(){return S}}};
+window.YSoc={whisper:whisper,reply:reply,openDepot:openDepot,init:init,leave:leave,onHi:onHi,hand:hand,tick:tick,draw:draw,plate:plate,drawOther:drawOther,xpMul:xpMul,duelOn:duelOn,duelHit:duelHit,blocked:function(k){return !!k&&S.bl.indexOf(k)>=0},inClan:function(){return !!S.cl},myClan:function(){return S.cl?S.cl.tag:''},inParty:function(){return !!(S.pt&&S.pt.mem&&S.pt.mem.length>1)},open:openP,wager:function(v){S.wager=+v||0},dbg:{S:function(){return S}}};
 })();
