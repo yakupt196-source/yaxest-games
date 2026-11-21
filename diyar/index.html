@@ -134,6 +134,15 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #xc{font-size:.58rem!important;padding:2px 8px!important;opacity:.8}#htr{font-size:.56rem;padding:2px 7px;opacity:.75;top:118px}#zn{opacity:.85}
 #dock{left:max(140px,calc(env(safe-area-inset-left) + 140px));width:min(calc(100vw - 380px),340px);opacity:.92}#dock #log{font-size:.68rem;line-height:1.3;max-height:34px}#dock.big #log{max-height:110px}
 }
+/* sohbet: üst solda küçük düğme, dokununca alttan açılır */
+#dkbar{position:absolute;left:max(8px,env(safe-area-inset-left));top:84px;display:flex;gap:6px;z-index:4}
+#dkbar button{position:relative;width:42px;height:38px;border-radius:12px;border:1.5px solid rgba(255,255,255,.28);background:rgba(14,10,34,.78);color:#fff;font-size:1.15rem;display:grid;place-items:center;padding:0}
+#dkbar #dkb{border-color:var(--yel);background:rgba(255,210,63,.14)}#dkbar #dkc.on{border-color:#5be39a;background:rgba(91,227,154,.18)}
+#dkbar #dkp{left:0;top:calc(100% + 8px);bottom:auto}
+#dkt{position:absolute;top:84px;left:108px;max-width:min(52vw,420px);padding:6px 11px;border-radius:12px;background:rgba(14,10,34,.82);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.74rem;line-height:1.3;opacity:0;pointer-events:none;transition:opacity .25s;z-index:4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#dkt.on{opacity:1}
+#dock.shut{display:none}
+#chx{position:absolute;left:8px;top:4px;width:26px;height:20px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.35);color:#fff;font-size:.7rem;line-height:1;z-index:2}
+@media (pointer:coarse){#dkp{grid-template-columns:repeat(4,56px)!important;gap:4px!important;padding:6px!important}#dkp .ib{min-height:44px!important;font-size:1.15rem!important}#dkp .ib::after{font-size:.58rem}#dkbar button{width:36px;height:32px;font-size:1rem}#dkt{left:94px;font-size:.64rem;padding:4px 9px}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
@@ -179,7 +188,8 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
  <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button></div>
  <div id="joy"><i id="jk"></i></div>
  <div id="poib"></div><div id="htr"></div><div id="tut"></div>
- <div id="dock"><div id="dkp"><button class="ib" id="ix" type="button" aria-label="Diyar+">✨</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="itut" type="button" aria-label="Rehber">📘</button><button class="ib" id="itr" type="button" aria-label="Hazine">🧭</button><button class="ib" id="iatl" type="button" aria-label="Keşif">🗺️</button><button class="ib" id="ihome" type="button" aria-label="Evim">🏠</button><button class="ib" id="itown" type="button" aria-label="Kasaba">🏘️</button><button class="ib" id="imenu" type="button" aria-label="Ayarlar">⚙️</button></div><div id="chbox"><button id="chtg" type="button" aria-label="Sohbeti büyüt/küçült">⤢</button><div id="log"></div><div id="dkrow"><button id="dkb" type="button" aria-label="Menü">☰<i id="dkn" class="sbd" style="display:none"></i></button><button id="chch" type="button" aria-label="Kanal">Dünya</button><input id="chi" maxlength="120" autocomplete="off" enterkeyhint="send" placeholder="Mesaj yaz…  /yardim"><button id="chh" type="button" aria-label="Sohbet geçmişi">📜<b id="chn" class="sbd" style="display:none"></b></button></div></div></div>
+ <div id="dkbar"><button id="dkc" type="button" aria-label="Sohbeti aç">💬<i id="dkcn" class="sbd" style="display:none"></i></button></div><div id="dkt"></div>
+ <div id="dock" class="shut"><div id="dkp"><button class="ib" id="ix" type="button" aria-label="Diyar+">✨</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="itut" type="button" aria-label="Rehber">📘</button><button class="ib" id="itr" type="button" aria-label="Hazine">🧭</button><button class="ib" id="iatl" type="button" aria-label="Keşif">🗺️</button><button class="ib" id="ihome" type="button" aria-label="Evim">🏠</button><button class="ib" id="itown" type="button" aria-label="Kasaba">🏘️</button><button class="ib" id="imenu" type="button" aria-label="Ayarlar">⚙️</button></div><div id="chbox"><button id="chtg" type="button" aria-label="Sohbeti büyüt/küçült">⤢</button><div id="log"></div><div id="dkrow"><button id="dkb" type="button" aria-label="Menü">☰<i id="dkn" class="sbd" style="display:none"></i></button><button id="chch" type="button" aria-label="Kanal">Dünya</button><input id="chi" maxlength="120" autocomplete="off" enterkeyhint="send" placeholder="Mesaj yaz…  /yardim"><button id="chh" type="button" aria-label="Sohbet geçmişi">📜<b id="chn" class="sbd" style="display:none"></b></button></div></div></div>
  <div id="acts"><div class="ab" id="b0">⚔️</div><div class="ab" id="b1"></div><div class="ab" id="b2"></div><div class="ab" id="b3"></div><div class="ab" id="b4"></div><div class="ab" id="bi">✋<small>E</small></div></div>
 </div>
 
@@ -195,11 +205,11 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
-<script src="../account-config.js?v=20261121p"></script><script src="../account.js?v=20261121p"></script><script src="../i18n-dict.js?v=20261121p"></script><script src="../economy.js?v=20261121p"></script>
-<script src="look.js?v=20261121p"></script><script src="sim.js?v=20261121p"></script><script src="art.js?v=20261121p"></script><script src="runes.js?v=20261121p"></script><script src="game.js?v=20261121p"></script><script src="../games.js?v=20261121p"></script><script src="net-config.js?v=20261121p"></script><script src="net.js?v=20261121p"></script><script src="social.js?v=20261121p"></script>
-<script src="evler.js?v=20261121p"></script>
-<script src="hazine.js?v=20261121p"></script>
-<script src="rehber.js?v=20261121p"></script>
-<script src="atmos.js?v=20261121p"></script>
-<script src="dock.js?v=20261121p"></script><script src="extra2.js?v=20261121p"></script><script src="extra.js?v=20261121p"></script><script src="yeni.js?v=20261121p"></script>
+<script src="../account-config.js?v=20261121q"></script><script src="../account.js?v=20261121q"></script><script src="../i18n-dict.js?v=20261121q"></script><script src="../economy.js?v=20261121q"></script>
+<script src="look.js?v=20261121q"></script><script src="sim.js?v=20261121q"></script><script src="art.js?v=20261121q"></script><script src="runes.js?v=20261121q"></script><script src="game.js?v=20261121q"></script><script src="../games.js?v=20261121q"></script><script src="net-config.js?v=20261121q"></script><script src="net.js?v=20261121q"></script><script src="social.js?v=20261121q"></script>
+<script src="evler.js?v=20261121q"></script>
+<script src="hazine.js?v=20261121q"></script>
+<script src="rehber.js?v=20261121q"></script>
+<script src="atmos.js?v=20261121q"></script>
+<script src="dock.js?v=20261121q"></script><script src="extra2.js?v=20261121q"></script><script src="extra.js?v=20261121q"></script><script src="yeni.js?v=20261121q"></script>
 </body></html>
