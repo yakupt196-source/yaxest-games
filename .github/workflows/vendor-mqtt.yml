@@ -1,0 +1,16 @@
+name: MQTT kütüphanesini depoya al
+on: { workflow_dispatch: {} }
+permissions: { contents: write }
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p lib
+          curl -fsSL https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js -o lib/mqtt.min.js
+          test $(wc -c < lib/mqtt.min.js) -gt 100000
+          echo "sha384-$(openssl dgst -sha384 -binary lib/mqtt.min.js | openssl base64 -A)" > lib/mqtt.min.js.sri
+      - run: |
+          git config user.name github-actions; git config user.email actions@github.com
+          git add lib; git commit -m "mqtt@5.10.1 depoya alındı (kendi sunucundan yüklenir)" || exit 0; git push

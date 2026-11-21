@@ -9,8 +9,8 @@ Report vulnerabilities or copyright violations to the address above.
 - İstemci: tüm kullanıcı metni `esc()` ile kaçışlanır (`& < > " '`), sayfalar iframe içine alınamaz (frame-buster).
 
 ## Bilinen sınırlar
-- Altın/envanter/takas istemci tarafında tutulur; sunucu doğrulaması yok (tek oyunculu bölümler için kabul edildi).
-- Üçüncü taraf CDN betiklerinde (MQTT) SRI yok.
+- Altın/envanter istemcide tutulur (tarayıcı oyunu). Takasta sunucu şunları zorlar: iki taraf da en az 5. seviye, kendinle takas yok, teklif tavanları (200.000 altın, 6 kalem), hesap başına günlük 40 takas ve 1.000.000 altın hacmi. Tam çözüm envanteri sunucuya taşımaktır (büyük yeniden yazım).
+- MQTT kütüphanesi önce kendi sunucundan (`/lib/mqtt.min.js`) yüklenir; Actions → "MQTT kütüphanesini depoya al" bir kez çalıştırılınca CDN'e ihtiyaç kalmaz (CDN yalnızca yedek).
 - Repo herkese açıktır: `server/` kaynağı görünür, ancak içinde gizli anahtar yoktur.
 
 ## Firestore kuralları

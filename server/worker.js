@@ -345,6 +345,8 @@ export class World {
   /* ---- takas ---- */
   async startTrade(w1, w2) {
     const a1 = this.A(w1), a2 = this.A(w2), tid = rid(6);
+    if (a1.pk && a1.pk === a2.pk) return this.snd(w1, { t: 'tx', m: 'Kendinle takas yapamazsın.' });
+    if ((a1.lv || 1) < 5 || (a2.lv || 1) < 5) { for (const w of [w1, w2]) this.snd(w, { t: 'tx', m: 'Takas için iki tarafın da en az 5. seviye olması gerekir.' }); return; }
     const T = { a: { id: a1.id, n: a1.nick, g: 0, it: {}, lk: 0, ok: 0 }, b: { id: a2.id, n: a2.nick, g: 0, it: {}, lk: 0, ok: 0 } };
     this.setA(w1, x => { x.tr = tid; }); this.setA(w2, x => { x.tr = tid; }); await this.s('tr:' + tid, T); this.tpush(T);
   }
@@ -362,6 +364,9 @@ export class World {
     else if (m.t === 'tc') {
       if (!(T.a.lk && T.b.lk)) return; T[s].ok = 1;
       if (T.a.ok && T.b.ok) {
+        const day = Math.floor(Date.now() / 864e5), vol = T.a.g + T.b.g, lim = [];
+        for (const x of ['a', 'b']) { const w = this.byId(T[x].id), pk = w && this.A(w).pk; if (!pk) continue; const k = 'tv:' + pk, v = await this.g(k, null), cur = v && v.d === day ? v : { d: day, n: 0, g: 0 }; cur.n++; cur.g += vol; if (cur.n > 40 || cur.g > 1000000) lim.push(T[x].n); else await this.s(k, cur); }
+        if (lim.length) return this.tradeCancel(a.tr, 'Günlük takas sınırı aşıldı (' + lim.join(', ') + '). Yarın tekrar dene.');
         for (const x of ['a', 'b']) { const w = this.byId(T[x].id), y = x === 'a' ? 'b' : 'a'; if (w) { this.setA(w, z => { z.tr = null; }); this.snd(w, { t: 'td', give: { g: T[x].g, it: T[x].it }, get: { g: T[y].g, it: T[y].it }, fn: T[y].n }); } }
         await this.state.storage.delete('tr:' + a.tr); return;
       }

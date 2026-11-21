@@ -18,7 +18,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp
    Oda sahibi ve misafir aynı anda birkaç aracıya bağlanır, ilk cevap veren seçilir. Misafir ayrılırsa (Last Will) oda sahibi otomatik haberdar olur. */
 var BROKERS=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081'];
 function loadMqtt(){return new Promise(function(res,rej){if(window.mqtt)return res(window.mqtt);
-  var urls=['https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js','https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'],i=0;
+  var urls=['/lib/mqtt.min.js','https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js','https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'],i=0;
   (function next(){if(i>=urls.length)return rej(new Error('mqtt'));var s=document.createElement('script');s.src=urls[i++];s.onload=function(){window.mqtt?res(window.mqtt):next()};s.onerror=next;document.head.appendChild(s)})()})}
 function mbase(gid,code){return'yaxest7/'+gid+'/'+code+'/'}
 function mconn(M,url,will,onUp){var done=false,c;
