@@ -1,9 +1,9 @@
 /* Yaxest Diyarı: Rün Atölyesi v2 (window.YR)
-   12 rün, 3 yuva (silah / zırh / tılsım), seviye 1–5, otomatik takma, set bonusu,
+   24 rün (5 nadirlik), 3 yuva (silah / zırh / tılsım), seviye 1–5, otomatik takma, set bonusu,
    canavar düşürmesi ve karakter çevresinde dönen rün ışıkları. */
 (function(){
 'use strict';
-var RC=['#c9ced9','#7be07b','#5cb0ff','#c07cff'],RN=['Sıradan','Ender','Nadir','Mistik'];
+var RC=['#c9ced9','#7be07b','#5cb0ff','#c07cff','#ffb02e'],RN=['Sıradan','Ender','Nadir','Mistik','Efsanevi'];
 var SL={w:'Silah',a:'Zırh',t:'Tılsım'},SK={w:'sw',a:'sa',t:'st'},TALI_LV=8,MAXL=5;
 /* k: etki anahtarı, b: 1. seviye değeri. Seviye çarpanı: 1 + .25*(sv-1) */
 var R={
@@ -18,9 +18,22 @@ var R={
   altin:{n:'Altın Rünü',ic:'🪙',slot:'t',r:1,k:'goldx',b:.25,col:'#ffd23f',c:{i_copper:3,goldore:2,gold:120}},
   bilge:{n:'Bilgelik Rünü',ic:'📖',slot:'t',r:2,k:'xpx',b:.10,col:'#7ad7ff',c:{crystal:3,i_silver:1,gold:260}},
   maden:{n:'Madenci Rünü',ic:'⛏️',slot:'t',r:1,k:'gath',b:.15,col:'#f0904a',c:{wood:10,i_iron:2,gold:150}},
-  sans:{n:'Şans Rünü',ic:'🍀',slot:'t',r:3,k:'luck',b:.5,col:'#6ef0a0',c:{core:1,i_gold:3,crystal:3,gold:800}}
+  sans:{n:'Şans Rünü',ic:'🍀',slot:'t',r:3,k:'luck',b:.5,col:'#6ef0a0',c:{core:1,i_gold:3,crystal:3,gold:800}},
+  /* 21 Kasım: 12 yeni rün + Efsanevi nadirlik */
+  avci:{n:'Avcı Rünü',ic:'🐾',slot:'w',r:1,k:'crit',b:.20,col:'#ffb07a',c:{fang:6,i_copper:2,gold:120}},
+  yildirim:{n:'Yıldırım Rünü',ic:'⚡',slot:'w',r:3,k:'atk',b:.18,col:'#ffe14a',c:{i_mithril:3,crystal:4,gold:1400}},
+  ejder:{n:'Ejder Rünü',ic:'☄',slot:'w',r:4,k:'atk',b:.26,col:'#ff6a3a',c:{i_titan:3,core:2,ruby:2,gold:5000}},
+  vampir:{n:'Vampir Rünü',ic:'💀',slot:'w',r:4,k:'ls',b:.09,col:'#ff4d6d',c:{i_titan:2,core:2,emerald:2,gold:5000}},
+  tas:{n:'Taş Rünü',ic:'🪨',slot:'a',r:0,k:'red',b:.05,col:'#b8b2a6',c:{stone:12,gold:20}},
+  yaprak:{n:'Yaprak Rünü',ic:'🍃',slot:'a',r:1,k:'regen',b:.022,col:'#8ff07a',c:{wood:14,crystal:1,gold:90}},
+  kalp:{n:'Kalp Rünü',ic:'❤',slot:'a',r:3,k:'hp',b:.20,col:'#ff6b8a',c:{i_mithril:3,crystal:4,gold:1400}},
+  anka:{n:'Anka Rünü',ic:'☀',slot:'a',r:4,k:'regen',b:.035,col:'#ffb02e',c:{i_titan:3,core:2,sapphire:2,gold:5000}},
+  yildiz:{n:'Yıldız Rünü',ic:'🌟',slot:'t',r:3,k:'gath',b:.30,col:'#fff08a',c:{i_mithril:2,crystal:3,gold:1200}},
+  hazine:{n:'Hazine Rünü',ic:'👑',slot:'t',r:3,k:'goldx',b:.45,col:'#ffd23f',c:{i_gold:6,crystal:3,gold:1500}},
+  kadim:{n:'Kadim Rünü',ic:'📜',slot:'t',r:4,k:'xpx',b:.22,col:'#e8c070',c:{core:2,i_aster:2,gold:6000}},
+  kader:{n:'Kader Rünü',ic:'🎲',slot:'t',r:4,k:'luck',b:1.0,col:'#7bffcf',c:{core:3,i_aster:2,gold:6000}}
 };
-var ORDER={w:['kurt','kristal','alev','golge'],a:['orman','demir','buz','ruzgar'],t:['altin','maden','bilge','sans']};
+var ORDER={w:['kurt','avci','kristal','alev','golge','yildirim','ejder','vampir'],a:['tas','orman','yaprak','demir','buz','ruzgar','kalp','anka'],t:['altin','maden','bilge','sans','yildiz','hazine','kadim','kader']};
 var ZERO=function(){return{crit:0,cd:0,atk:0,ls:0,regen:0,red:0,hp:0,spd:0,goldx:0,xpx:0,gath:0,luck:0}};
 function pct(v,d){return Math.round(v*100*(d||1))/(d||1)}
 var TXT={
@@ -47,7 +60,7 @@ function drop(m,api){var P=api.P;if(!m||!P)return;ensure(P);
   var boss=m.boss||m.type==='guardian'||m.type==='lich'||m.type==='alpha',meta=m.type==='metin';
   var ch=boss?.6:meta?.6:(m.lv>=P.lv-6?.045:.015);ch*=1+mods(P).luck;
   if(Math.random()>=ch)return;
-  var w=boss||meta?[0,40,45,15]:[60,28,11,1],x=Math.random()*100,r=0,s=0;for(var i=0;i<4;i++){s+=w[i];if(x<s){r=i;break}}
+  var w=boss||meta?[0,30,42,20,8]:[58,28,11,2.6,.4],x=Math.random()*100,r=0,s=0;for(var i=0;i<5;i++){s+=w[i];if(x<s){r=i;break}}
   var pool=Object.keys(R).filter(function(k){return R[k].r===r});if(!pool.length)pool=Object.keys(R);
   var id=pool[Math.floor(Math.random()*pool.length)];P.rn[id]=(P.rn[id]||0)+1;
   api.say('🔮 '+RN[R[id].r]+' '+R[id].n+' düştü! (Rün Ustası’ndan tak ya da güçlendir)','sys');

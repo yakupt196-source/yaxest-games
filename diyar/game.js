@@ -363,7 +363,7 @@ function drawTrade(){var inv=myInv(),stock=botStock(),vo=trSum(TR.o),vw=trSum(TR
 var gTab=0;
 var RRW={1:{gold:200,txt:'🪙200'},2:{gold:600,crystal:2,txt:'🪙600 · 💎2'},3:{gold:1500,rune:2,txt:'🪙1500 · 🔮 Nadir rün'},4:{gold:3500,core:1,txt:'🪙3500 · 🔶 Efsane Çekirdeği'},5:{gold:8000,rune:3,txt:'🪙8000 · 🔮 Mistik rün'},6:{gold:20000,core:3,rune:3,txt:'🪙20000 · 🔶×3 · 🔮 Mistik rün'}};
 function ensureWQ(){var wk=Math.floor((Date.now()/864e5+3)/7);if(!P.wq||P.wq.wk!==wk)P.wq={wk:wk,list:Y.genWeekly(wk,P.lv).map(function(q){q.st=0;q.have=0;return q})}}
-function giveRune(r){r=Math.max(0,Math.min(3,r|0));var pool=Object.keys(YR.R).filter(function(k){return YR.R[k].r===r});if(!pool.length)return'';var id=pool[Math.floor(Math.random()*pool.length)];P.rn[id]=(P.rn[id]||0)+1;return YR.R[id].n+' rünü'}
+function giveRune(r){r=Math.max(0,Math.min(4,r|0));var pool=Object.keys(YR.R).filter(function(k){return YR.R[k].r===r});if(!pool.length)return'';var id=pool[Math.floor(Math.random()*pool.length)];P.rn[id]=(P.rn[id]||0)+1;return YR.R[id].n+' rünü'}
 function dir8(dx,dy){var a=Math.atan2(dy,dx)*180/Math.PI,n=['doğusunda','güneydoğusunda','güneyinde','güneybatısında','batısında','kuzeybatısında','kuzeyinde','kuzeydoğusunda'];return n[((Math.round(a/45)%8)+8)%8]}
 function lvCol(p){return P.lv>=p.hi?'#7dff9b':P.lv>=p.lv-1?'#ffd23f':'#ff6b6b'}
 function atlasHtml(){var h='',P0=Y.poiPos(),d=P.disc||{},n=Object.keys(d).filter(function(k){return d[k]===1}).length,ms=[3,7,10,14],claimed=P.dm||{};

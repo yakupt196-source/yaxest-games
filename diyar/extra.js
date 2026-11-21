@@ -153,13 +153,13 @@ function redMoonTick(dt){if(X.rm!==dayIdx())X.rm=dayIdx(),rm={k:0,done:false};
     var m=D.mkMon(ty2,lv,x,y,null);m.hp=m.max=Math.round(m.hp*1.6);m.dmg=Math.round(m.dmg*1.2);m.xp=Math.round(m.xp*2.5);m.gold=Math.round(m.gold*2.5);m.col='#ff3b4d';m.xm=1;G.mons.push(m)}
   for(var i=G.mons.length-1;i>=0;i--){var q=G.mons[i];if(q.xm&&hyp(q.x-G.px,q.y-G.py)>1100)G.mons.splice(i,1)}}
 function killRed(){for(var i=G.mons.length-1;i>=0;i--)if(G.mons[i].xm)G.mons.splice(i,1)}
-function kill(m){if(!G||!m)return;if(m.xq&&window.YX3){YX3.grantChest(4);giveEgg(2)}if(m.type==='goldslime'){var gg=200+P.lv*40;P.gold+=gg;D.say('✨ Altın Balçık '+gg+' altın bıraktı!','sys')}X.c.k++;if(m.boss)X.c.b++;
+function kill(m){if(!G||!m)return;if(m.xq&&window.YX3){YX3.grantChest(2);if(Math.random()<.2)giveEgg(1)}if(m.type==='goldslime'){var gg=200+P.lv*40;P.gold+=gg;D.say('✨ Altın Balçık '+gg+' altın bıraktı!','sys')}X.c.k++;if(m.boss)X.c.b++;
   if(G.mode==='world'){var xb=petBonus('xp')+(X.xb>Date.now()?.5:0)+(hourP()<8?.25:0),gb=petBonus('gold')+(X.lk>Date.now()?.5:0);
     if(xb>0){var e=Math.round(m.xp*xb);if(e>0)D.giveXp(e)}if(gb>0){var g=Math.round(m.gold*gb);if(g>0)P.gold+=g}}
   if(X.act&&X.pt[X.act]){var p=X.pt[X.act];if(p.lv<petMax(X.act)){p.xp=(p.xp||0)+1;if(p.xp>=30*p.lv){p.xp=0;p.lv++;D.say('🐾 '+PETS[X.act].n+' seviye atladı! (Sv '+p.lv+')','sys')}}}
   var ch=m.xm?.02:m.boss?.05:m.type==='metin'?.1:.002;if(X.eg.length<8&&Math.random()<ch)giveEgg(m.xm||m.boss?1:0);
-  if(!rm.done&&X.rm===dayIdx()&&redMoonOn()&&G.mode==='world'){rm.k+=m.xm?2:1;if(m.xm||rm.k<25)D.floatTxt(G.px,G.py-70,'🌑 '+Math.min(25,rm.k)+'/25','#ff7a8a');if(rm.k>=25){rm.k=25;rm.done=true;X.c.r++;var g2=300+P.lv*60;P.gold+=g2;giveEgg(2);spawnQueen();D.say('🌑 KIZIL AY TAMAM! +'+g2+' altın ve özel bir yumurta kazandın!','sys');D.floatTxt(G.px,G.py-90,'🏆 Kızıl Ay Tamam!','#ffd23f')}}}
-function spawnQueen(){var a=Math.random()*6.28,x=G.px+Math.cos(a)*TS*5,y=G.py+Math.sin(a)*TS*5,q=D.mkMon('queen',Math.min(60,P.lv+6),x,y,null);if(q){q.xq=1;q.boss=1;G.mons.push(q);D.say('👑 Kızıl Ay Kraliçesi belirdi! Yen ve Efsanevi sandığı kap.','sys')}}
+  if(!rm.done&&X.rm===dayIdx()&&redMoonOn()&&G.mode==='world'){rm.k+=m.xm?2:1;if(m.xm||rm.k<25)D.floatTxt(G.px,G.py-70,'🌑 '+Math.min(25,rm.k)+'/25','#ff7a8a');if(rm.k>=25){rm.k=25;rm.done=true;X.c.r++;var g2=300+P.lv*60;P.gold+=g2;var eg2=Math.random()<.25;if(eg2)giveEgg(1);spawnQueen();D.say('🌑 KIZIL AY TAMAM! +'+g2+' altın'+(eg2?' ve bir yumurta':'')+' kazandın!','sys');D.floatTxt(G.px,G.py-90,'🏆 Kızıl Ay Tamam!','#ffd23f')}}}
+function spawnQueen(){var a=Math.random()*6.28,x=G.px+Math.cos(a)*TS*5,y=G.py+Math.sin(a)*TS*5,q=D.mkMon('queen',Math.min(60,P.lv+6),x,y,null);if(q){q.xq=1;q.boss=1;G.mons.push(q);D.say('👑 Kızıl Ay Kraliçesi belirdi! Yen ve Nadir sandığı kap.','sys')}}
 function giveEgg(lk){X.eg.push({at:Date.now()+240000,lk:lk||0});D.say('🥚 Gizemli bir yumurta buldun! Yoldaş panelinden çatlatabilirsin (4 dk).','sys')}
 function gather(){if(X)X.c.g++}
 function died(){if(X)X.c.d++}
@@ -298,7 +298,7 @@ function pagesHtml(){var n=X.pg.length,h='<p class="sub">Yaxest, Diyar\'ın dör
 function worldHtml(){var w=weatherNow(),h=hourP(),m=Date.now(),nx=function(ms){var s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+('0'+s%60).slice(-2)};
   var next=hourP()<8?'Gün doğumuna '+nx((8-h)*30000):'Gece '+(h<22?nx((22-h)*30000)+' sonra':'başlıyor');
   var t='<p class="sub">Diyar saati: <b>'+clockTxt()+'</b> · Hava: <b>'+WI[w]+' '+WN[w]+'</b> · '+next+'</p>';
-  t+='<div class="it"><span style="font-size:1.4rem">🌑</span><div class="t"><b>Kızıl Ay</b><br><small>Bazı geceler doğar. 25 canavar yen (her tür sayılır, kırmızı elitler çift sayılır): altın + Efsanevi Yumurta. '+(redMoonOn()?'<b style="color:#ff7a8a">ŞU AN AKTİF ('+Math.min(25,X.rm===dayIdx()?rm.k:0)+'/25)</b>':'Şu an yok.')+'</small></div></div>';
+  t+='<div class="it"><span style="font-size:1.4rem">🌑</span><div class="t"><b>Kızıl Ay</b><br><small>Bazı geceler doğar. 25 canavar yen (her tür sayılır, kırmızı elitler çift sayılır): altın + %25 yumurta, ardından Kızıl Ay Kraliçesi (Nadir Sandık, %20 yumurta). '+(redMoonOn()?'<b style="color:#ff7a8a">ŞU AN AKTİF ('+Math.min(25,X.rm===dayIdx()?rm.k:0)+'/25)</b>':'Şu an yok.')+'</small></div></div>';
   t+='<div class="it"><span style="font-size:1.4rem">🧳</span><div class="t"><b>Gezgin Tüccar</b><br><small>Kasabaya uğrar; yumurta, iksir ve kostüm satar. '+(traderOn()?'<b style="color:#5be39a">ŞU AN KASABADA</b>':'Şu an yok.')+'</small></div></div>';
   t+='<div class="it"><span style="font-size:1.4rem">💰</span><div class="t"><b>Altın Yağmuru</b><br><small>Aralıklı olarak gökten sikke yağar. '+(goldRainOn()?'<b style="color:#ffd23f">ŞU AN YAĞIYOR</b>':'Şu an yok.')+'</small></div></div>';
   t+='<div class="it"><span style="font-size:1.4rem">⛈️</span><div class="t"><b>Fırtına</b><br><small>Yıldırımlar düştüğü yere Yıldırım Kristali bırakır.</small></div></div>';
