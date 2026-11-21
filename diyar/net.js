@@ -37,11 +37,28 @@ function hand(m){
     var pc=document.getElementById('p-chat'),nc=document.getElementById('ncl'),vis=pc&&pc.classList.contains('on')&&nc&&nc.dataset.k===k;if(!vis&&m.id!==me){unread[k]++;ub()}refresh()}
   else if(m.t==='dup'){live=0;clearTimeout(timer);D.say('🌐 Hesabınla başka bir yerden girildi, bu bağlantı kapatıldı.','sys')}
   else if(m.t==='ct'){if(others[m.id])others[m.id].cg=m.cg;if(window.YSoc)YSoc.hand(m)}
+  else if(m.t==='adm'){applyAdm(m.q)}
+  else if(m.t==='ban'){live=0;clearTimeout(timer);var bu=m.until?' ('+new Date(m.until).toLocaleString('tr-TR')+' tarihine kadar)':' (süresiz)';D.say('⛔ Hesabın yasaklandı'+bu+(m.m?': '+m.m:'')+'. İtiraz için: yakupt196@gmail.com','sys');try{alert('⛔ Hesabın yasaklandı'+bu+(m.m?'\nSebep: '+m.m:''))}catch(e){}}
   else if(m.t==='sys'){D.say('⚠️ '+m.m,'sys')}
   else if(m.t==='err'){D.say(m.m==='hub'?'Merkez sunucuya ulaşılamadı, biraz sonra /dunya ile tekrar dene.':'Çevrimiçi giriş yapılamadı (hesabına yeniden giriş yap).','sys')}
   else if(window.YSoc){YSoc.hand(m)}}
+/* yönetici eşyası/ayarı: sunucudan gelir, kayda bir kez uygulanır (P.adm kimlik listesi çift teslimi önler) */
+function applyAdm(q){if(!q||!q.id||!P)return;send({t:'aa',id:q.id});P.adm=P.adm||[];if(P.adm.indexOf(q.id)>=0)return;P.adm.push(q.id);if(P.adm.length>60)P.adm.shift();
+  var tx=[],sg=q.k==='take'?-1:1,cl=function(v){return Math.max(0,Math.min(1e9,Math.floor(+v||0)))};
+  if(q.k==='lv'){var v=Math.max(1,Math.min(150,Math.floor(+q.v)||1));P.lv=v;P.xp=0;tx.push('⭐ Seviye '+v)}
+  else if(q.k==='give'||q.k==='take'){
+    if(q.g){var g=cl(q.g);P.gold=Math.max(0,(P.gold||0)+sg*g);tx.push('🪙 '+(sg>0?'+':'−')+g)}
+    Object.keys(q.it||{}).forEach(function(k){var n=Math.max(0,Math.min(1e6,Math.floor(+q.it[k]||0)));if(!n)return;var a=k.split(':'),nm=k;
+      try{if(k==='jeton'){if(sg>0&&window.YX&&YX.earn){YX.earn(n,'gift',true);tx.push('🎟️ '+n+' jeton')}else if(window.YX&&YX.spend){YX.spend(n);tx.push('🎟️ −'+n+' jeton')}}
+      else if(k.indexOf('cos.')===0){var c=k.split('.');P.cs=P.cs||{};if(window.YL&&YL.CAT[c[1]]){if(sg>0)P.cs[c[1]+':'+c[2]]=1;else delete P.cs[c[1]+':'+c[2]];tx.push('👗 '+(sg>0?'+':'−')+'kostüm')}}
+      else if(a[0]==='m'&&Y.MATS[a[1]]){P[a[1]]=Math.max(0,(P[a[1]]||0)+sg*n);tx.push((sg>0?'+':'−')+n+' '+Y.MATS[a[1]].n)}
+      else if(a[0]==='r'&&window.YR&&YR.R[a[1]]){P.rn=P.rn||{};P.rn[a[1]]=Math.max(0,(P.rn[a[1]]||0)+sg*n);tx.push((sg>0?'+':'−')+n+' '+YR.R[a[1]].n)}
+      else if(window.YK&&YK.valid(k)){if(sg>0)YK.put(P,k,n);else YK.take(P,k,n);tx.push((sg>0?'+':'−')+YK.name(k))}}catch(e){}})}
+  if(!tx.length)return;D.saveNow();D.say((sg>0||q.k==='lv'?'🎁 ':'⚠️ ')+(q.msg||'Yönetici değişikliği')+': '+tx.join(' · '),'sys')}
+var snT=99;
+function sendSn(){if(!P||!Y)return;var mats={};Object.keys(Y.MATS).forEach(function(k){if(P[k]>0)mats[k]=P[k]});send({t:'sn',d:{cls:P.cls,lv:P.lv,xp:P.xp,gold:P.gold,wt:P.wt,at:P.at,mats:mats,rn:P.rn||{},ow:P.ow||{},oz:P.oz||{},pe:P.pe||{}}})}
 function add(p){if(!p||!p.id||p.id===me)return;others[p.id]={id:p.id,k:p.k,n:p.n,ap:p.ap,lv:p.lv||1,x:p.x,y:p.y,dx:p.x,dy:p.y,f:0,cg:p.cg||'',w:p.w||0,l:p.l||0}}
-function tick(dt){if(!G)return;if(window.YSoc)try{YSoc.tick(dt)}catch(e){}beat+=dt;if(!on())return;lastSend+=dt;
+function tick(dt){if(!G)return;if(window.YSoc)try{YSoc.tick(dt)}catch(e){}beat+=dt;if(!on())return;snT+=dt;if(snT>(me?105:999)){snT=0;try{sendSn()}catch(e){}}lastSend+=dt;
   var wx=G.px,wy=G.py;if(G.mode!=='world'){if(!G.saveW)return;wx=G.saveW.x;wy=G.saveW.y}/* zindanda arena koordinatı sunucuya gitmez */
   if(!isFinite(wx)||!isFinite(wy))return;
   var mv=Math.abs(wx-lastX)+Math.abs(wy-lastY)>2;
@@ -116,5 +133,5 @@ function leave(){if(window.YSoc)try{YSoc.leave()}catch(e){}live=0;clearTimeout(t
 function unreadOf(k){return unread[k]||0}
 function pick(cx,cy){var wx=cx+Math.round(camX0),wy=cy+Math.round(camY0),b=null,bd=52;for(var id in others){var o=others[id],d=Math.hypot(o.dx-wx,o.dy-wy+8);if(d<bd){bd=d;b=o}}return b}
 function seed(k,list){if(msgs[k]&&!msgs[k].length)msgs[k]=list.map(function(x){return{n:x.n,m:x.m,me:false}})}
-window.YNet={pickWorld:pickWorld,world:function(){return wn},sendChat:sendChat,curCh:function(){return ch},cycleCh:cycleCh,setCh:setCh,chUi:chUi,unread:unreadOf,send:send,others:function(){return others},myId:function(){return me},myPk:function(){return myPk},bub:bub,pick:pick,seed:seed,refresh:refresh,init:init,tick:tick,draw:draw,on:on,chatTab:chatTab,chatBind:chatBind,leave:leave,count:function(){return Object.keys(others).length+(on()?1:0)}};
+window.YNet={applyAdm:applyAdm,pickWorld:pickWorld,world:function(){return wn},sendChat:sendChat,curCh:function(){return ch},cycleCh:cycleCh,setCh:setCh,chUi:chUi,unread:unreadOf,send:send,others:function(){return others},myId:function(){return me},myPk:function(){return myPk},bub:bub,pick:pick,seed:seed,refresh:refresh,init:init,tick:tick,draw:draw,on:on,chatTab:chatTab,chatBind:chatBind,leave:leave,count:function(){return Object.keys(others).length+(on()?1:0)}};
 })();

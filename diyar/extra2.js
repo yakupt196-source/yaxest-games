@@ -113,7 +113,7 @@ function zoneFor(f){var w=Math.min(.6,f.z+fishLv()*.012),c=.12+Math.random()*(.7
 function status(){return{idle:F.msg||'Oltayı at: ekrana dokun veya düğmeye bas.',wait:F.msg||'Şamandırayı izle… balık vurunca hemen çek!',bite:'‼ BALIK VURDU! ÇEK!',reel:F.msg||'Çizgi yeşil alandayken dokun!'}[F.ph]}
 function btnTxt(){return{idle:'🎣 AT',wait:'ÇEK',bite:'ÇEK!!',reel:'TUT!'}[F.ph]}
 function fishAct(){
-  if(F.ph==='idle'){F.ph='wait';var w=A.weatherNow();F.t=(w==='rain'||w==='storm'?1.5:2.2)+Math.random()*3.8;F.msg='';F.res=null;F.hit=0}
+  if(F.ph==='idle'){if(window.YSes)YSes.sfx('splash',0);F.ph='wait';var w=A.weatherNow();F.t=(w==='rain'||w==='storm'?1.5:2.2)+Math.random()*3.8;F.msg='';F.res=null;F.hit=0}
   else if(F.ph==='wait'){F.ph='idle';F.msg='😬 Çok erken çektin, balık ürktü.'}
   else if(F.ph==='bite'){F.fish=pickFish();F.need=F.fish.stages||1;F.st=1;F.zone=zoneFor(F.fish);F.speed=2.2+(1-Math.min(.5,F.fish.z))*3.4;F.mt=Math.random()*6;F.ph='reel';F.msg=F.fish.stages?'🦑 DEV BİR ŞEY! (1/'+F.need+')':'';F.shake=.4}
   else if(F.ph==='reel'){
@@ -125,7 +125,7 @@ function catchFish(){var f=F.fish,xp=Math.max(2,Math.round(f.v/6));X.fh[f.id]=(X
   var extra='';if(f.bottle){giveMap(1);extra='İçinden bir define haritası çıktı! 🗺️'}
   if(f.id==='leviathan'){inc('lv');P.gold+=2000;A.giveEgg(2);extra='+2000 altın ve Efsanevi Yumurta!';D.say('🦑 GÖL CANAVARINI YAKALADIN!','sys')}
   if(f.id==='yaxest')D.say('🐟 Yaxest Balığı yakaladın! Kurucu seninle gurur duyuyor.','sys');
-  F.ph='idle';F.msg='';F.res={f:f,xp:xp,up:up,nw:nw,extra:extra};F.resT=3.2;F.fish=null;D.saveNow()}
+  F.ph='idle';F.msg='';F.res={f:f,xp:xp,up:up,nw:nw,extra:extra};if(window.YSes)YSes.sfx(up?'level':'catch',0);F.resT=3.2;F.fish=null;D.saveNow()}
 /* ---- arayüz ---- */
 var FCSS='.fo{position:fixed;inset:0;z-index:70;display:flex;flex-direction:row;background:#07102a;color:#fff;font-family:inherit;user-select:none;-webkit-user-select:none;touch-action:manipulation}.fo *{box-sizing:border-box}.fo-sc{position:relative;flex:1;min-width:0}.fo canvas{position:absolute;inset:0;width:100%;height:100%;display:block}'
 +'.fo-top{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));background:linear-gradient(#000a,#0000);z-index:3}'
@@ -161,7 +161,7 @@ function sheet(kind){F.sheet=kind;var sc=fo('fosc');var old=fo('fosheet');if(old
   h+='</div>'+(kind==='bag'&&tot?'<button class="fo-sell" id="fosell" type="button">Hepsini sat · 🪙 '+tot+'</button>':'');d.innerHTML=h;sc.parentNode.appendChild(d);d.style.position='absolute';
   fo('fosx').onclick=function(){sheet('')};var sl=fo('fosell');if(sl)sl.onclick=function(){X.fh={};P.gold+=tot;F.msg='🪙 '+tot+' altına sattın.';D.saveNow();sheet('');hud()}}
 function loop(){if(!F.open)return;var now=performance.now(),dt=Math.min(.05,(now-F.last)/1000);F.last=now;
-  if(F.ph==='wait'){F.t-=dt;if(F.t<=0){F.ph='bite';F.t=1.25;hud()}}
+  if(F.ph==='wait'){F.t-=dt;if(F.t<=0){if(window.YSes)YSes.sfx('bite',0);F.ph='bite';F.t=1.25;hud()}}
   else if(F.ph==='bite'){F.t-=dt;if(F.t<=0){F.ph='idle';F.msg='😞 Çok yavaştın, balık kaçtı.';hud()}}
   else if(F.ph==='reel'){F.mt+=dt*F.speed;F.pos=.5+.5*Math.sin(F.mt)}
   if(F.res){F.resT-=dt;if(F.resT<=0){F.res=null;hud()}}if(F.shake>0)F.shake-=dt;if(F.hit>0)F.hit-=dt;
@@ -179,7 +179,14 @@ function scene(t){var cv=fo('focv');if(!cv)return;var W=cv.clientWidth,H=cv.clie
   var wg=c.createLinearGradient(0,hz,0,H);wg.addColorStop(0,night?'#0f2a5e':'#2f8fd6');wg.addColorStop(1,night?'#050f2a':'#0b3a78');c.fillStyle=wg;c.fillRect(0,hz,W,H-hz);
   c.strokeStyle=night?'rgba(160,190,255,.16)':'rgba(255,255,255,.22)';c.lineWidth=1.6;for(var r=0;r<9;r++){var y=hz+8+r*(H-hz)/9.5;c.beginPath();for(var x2=0;x2<=W;x2+=12){var yy=y+Math.sin(x2*.02+t*1.2+r)*(2+r*.5);x2?c.lineTo(x2,yy):c.moveTo(x2,yy)}c.stroke()}
   var bx=W*.56,by=hz+(H-hz)*.42,bob=Math.sin(t*2.2)*2,dip=0;if(F.ph==='bite')dip=7+Math.sin(t*40)*4;if(F.ph==='reel')dip=3;by+=bob+dip;
-  /* oyuncu ve olta */ var px=W*.13,py=H*.9;try{YL.hero(c,px,py,P.ap,t,false,Math.max(1.4,Math.min(2.6,H/260)))}catch(e){}
+  /* küçük ada: karakter suda durmasın */ var px=W*.13,py=H*.84,ps=Math.max(1.4,Math.min(2.6,H/260)),iw=62*ps,ih=17*ps,iy=py+7*ps;
+  c.fillStyle=night?'rgba(120,160,230,.18)':'rgba(255,255,255,.3)';c.beginPath();c.ellipse(px,iy+3*ps,iw+10+Math.sin(t*2)*3,ih+5+Math.sin(t*2)*1.5,0,0,6.3);c.fill();
+  c.fillStyle=night?'#5a4a36':'#c9a45f';c.beginPath();c.ellipse(px,iy+2*ps,iw,ih,0,0,6.3);c.fill();
+  c.fillStyle=night?'#8a7350':'#e6c98a';c.beginPath();c.ellipse(px,iy-1*ps,iw*.93,ih*.8,0,0,6.3);c.fill();
+  c.fillStyle=night?'#1f4a33':'#4aa863';c.beginPath();c.ellipse(px-iw*.28,iy-3*ps,iw*.5,ih*.5,0,0,6.3);c.fill();
+  c.fillStyle=night?'#2b3548':'#9aa3b5';c.beginPath();c.ellipse(px+iw*.62,iy+1*ps,7*ps,4.5*ps,0,0,6.3);c.fill();c.beginPath();c.ellipse(px+iw*.74,iy+3*ps,4.5*ps,3*ps,0,0,6.3);c.fill();
+  c.fillStyle=night?'#183a2a':'#2f8a4f';for(var ti=-1;ti<=1;ti++){c.beginPath();c.arc(px-iw*.5+ti*8*ps,iy-5*ps,4.5*ps,0,6.3);c.fill()}
+  /* oyuncu ve olta */ try{YL.hero(c,px,py,P.ap,t,false,Math.max(1.4,Math.min(2.6,H/260)))}catch(e){}
   var rx=px+34,ry=py-H*.34;c.strokeStyle='#6b4a2b';c.lineWidth=3.5;c.lineCap='round';c.beginPath();c.moveTo(px+14,py-26);c.lineTo(rx,ry);c.stroke();c.strokeStyle='rgba(255,255,255,.75)';c.lineWidth=1.3;c.beginPath();c.moveTo(rx,ry);
   if(F.ph==='idle'&&!F.res)c.lineTo(rx+6,ry+22);else c.quadraticCurveTo((rx+bx)/2,Math.min(ry,by)-30,bx,by-6);c.stroke();c.lineCap='butt';
   if(F.ph!=='idle'){c.strokeStyle='rgba(255,255,255,.5)';c.lineWidth=1.4;for(var k=0;k<3;k++){var rr=(t*14+k*9)%27;c.globalAlpha=1-rr/27;c.beginPath();c.ellipse(bx,by+4,rr+6,(rr+6)*.32,0,0,6.3);c.stroke()}c.globalAlpha=1;

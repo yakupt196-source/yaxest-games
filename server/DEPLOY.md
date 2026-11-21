@@ -29,3 +29,10 @@ Sonra Actions → **Sunucu** → Run workflow.
 - Bir dünya erişilemezse yalnızca o dünyada tutulan kayıtlara dokunan işlemler o an çalışmaz. Konum ve sohbet çalışır.
 - Altın ve envanter hâlâ istemci tarafında tutulur (sunucu doğrulaması yok).
 - Dünya sayısını artırmak için `WORLDS` sabitini ve istemcide `net.js` içindeki `WNAMES` listesini büyüt.
+
+## Yönetim (admin) API'si
+- `POST https://dunya.yaxestgames.com/adm` — yalnızca Firebase ID token'ındaki e-posta `ADMINS` listesinde (`server/worker.js`) ise çalışır. Panel: `/admin/`.
+- İşlemler: çevrimiçi liste (5 dünya), oyuncu bul (envanter görüntüsü), ban/ban kaldır, sustur, at, eşya/altın ver-al, seviye ayarla, özel mesaj, duyuru, ban listesi, işlem günlüğü.
+- Eşya/ayar kuyruğu oyuncu çevrimdışıysa girişte teslim edilir; oyuncu tarafı çift teslimi engeller.
+- Envanter görüntüsü oyuncu istemcisinden gelir (2 dakikada bir), sunucu doğrulaması değildir.
+- Bu özellik için Worker'ın güncellenmesi şart (Cloudflare Git entegrasyonu otomatik yapar).

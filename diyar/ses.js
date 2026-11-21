@@ -33,6 +33,9 @@ var FX={
   loot:function(t){[72,76,79].forEach(function(m,i){tone(mtof(m),t+i*.07,.3,.07,{type:'triangle'})})},
   level:function(t){[60,64,67,72,76,79].forEach(function(m,i){tone(mtof(m),t+i*.09,.55,.09,{type:'triangle'});tone(mtof(m)*2,t+i*.09,.3,.03)})},
   die:function(t){[64,62,59,55].forEach(function(m,i){tone(mtof(m),t+i*.22,.7,.11,{type:'sawtooth',lp:700})})},
+  splash:function(t){noise(t,.3,.12,900,'lowpass');tone(500,t,.15,.05,{slide:200})},
+  bite:function(t){tone(900,t,.08,.1,{type:'square',lp:2500});tone(900,t+.12,.12,.1,{type:'square',lp:2500})},
+  catch:function(t){[67,71,74,79].forEach(function(m,i){tone(mtof(m),t+i*.08,.35,.08,{type:'triangle'})})},
   boss:function(t){tone(70,t,.8,.2,{slide:40,type:'sawtooth',lp:300});noise(t,.6,.08,200,'lowpass')}
 };
 function sfx(n,gap){if(mode<1||!AC||document.hidden||!FX[n])return;var now=performance.now();if(now-(lastT[n]||0)<(gap||60))return;lastT[n]=now;try{FX[n](AC.currentTime+.005)}catch(e){}}

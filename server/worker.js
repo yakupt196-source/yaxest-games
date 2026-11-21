@@ -10,14 +10,14 @@ const TTL = { pt: 60e3, tr: 60e3, du: 60e3 }, WEEK = 7 * 864e5;
 /* Ortak veri (profil, klan, takma ad, DM, sıralama) merkezsizdir: her anahtar, adının özetine göre 5 dünyadan birinde tutulur
    (shard). Herhangi bir dünya, sahibi olan dünyaya /kv ile sorar; tek hata noktası ve tek yük merkezi yoktur.
    Eski veri Dünya 1'de duruyorsa okuma bulamayınca oraya da bakar (taşıma gerekmez). Canlı olanlar dünyaya özel kalır. */
-const SHARED = k => /^(u:|c:|nk:|d:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell';
+const SHARED = k => /^(u:|c:|nk:|d:|ban:|mt:|adm:|sn:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell' || k === 'bidx' || k === 'alog';
 const shardOf = k => { let h = 2166136261; for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (h % WORLDS) + 1; };
 const KINDS = ['fr', 'pt', 'tr', 'du', 'cl', 'gf'];
 const WAGERS = [0, 100, 500, 1000, 5000];
 let keys = null, keysAt = 0;
 const b64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(s.length / 4) * 4, '=')), c => c.charCodeAt(0));
 const jd = s => JSON.parse(new TextDecoder().decode(b64(s)));
-async function verify(tok) {
+async function verifyPl(tok) {
   try {
     if (typeof tok !== 'string' || tok.length > 4000) return null;
     const [h, p, sg] = tok.split('.'); if (!sg) return null;
@@ -27,9 +27,12 @@ async function verify(tok) {
     const jwk = keys.find(k => k.kid === hd.kid); if (!jwk) return null;
     const key = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
     const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, b64(sg), new TextEncoder().encode(h + '.' + p));
-    return ok ? pl.sub : null;
+    return ok ? pl : null;
   } catch (e) { return null; }
 }
+async function verify(tok) { const pl = await verifyPl(tok); return pl ? pl.sub : null; }
+const ADMINS = ['yakupt196@gmail.com'];
+const isAdminPl = pl => !!pl && ADMINS.includes(String(pl.email || '').toLowerCase()) && (pl.email_verified === true || (pl.firebase && pl.firebase.sign_in_provider === 'password'));
 async function pkOf(uid) { const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('yx|' + uid))); let s = 'p'; for (let i = 0; i < 7; i++) s += h[i].toString(16).padStart(2, '0'); return s; }
 const clean = (s, n) => String(s || '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, n);
 const bad = t => { const l = t.toLocaleLowerCase('tr'); return BAD.some(w => l.includes(w)); };
@@ -58,6 +61,9 @@ export class World {
     const pn = new URL(req.url).pathname;
     if (pn === '/kv') { const b = await req.json(); if (!SHARED(String(b.k))) return new Response('no', { status: 400 }); if (b.op === 'g') { const v = await this.state.storage.get(b.k); return new Response(JSON.stringify({ v: v === undefined ? null : v })); } if (b.op === 's') { await this.state.storage.put(b.k, b.v); return new Response('{}'); } if (b.op === 'd') { await this.state.storage.delete(b.k); return new Response('{}'); } return new Response('bad', { status: 400 }); }
     const wh = +req.headers.get('x-world') || 0; if (wh && wh !== this.wn) { this.wn = wh; await this.state.storage.put('_wn', wh); }
+    if (pn === '/who') return new Response(JSON.stringify(this.all().map(w => this.A(w)).filter(a => a.id).map(a => ({ w: this.me(), id: a.id, pk: a.pk, n: a.nick, lv: a.lv, x: Math.round(a.x), y: Math.round(a.y), cg: a.cg || '', ip: a.ip || '', mu: a.mu || 0 }))));
+    if (pn === '/live') { const b = await req.json(); let n = 0; for (const w of this.all()) { const a = this.A(w); if (!a.id || (!b.all && a.pk !== b.pk)) continue; n++; if (b.mu !== undefined) this.setA(w, x => { x.mu = b.mu; }); if (b.send) this.snd(w, b.send); if (b.kick) { try { w.close(1008, 'adm'); } catch (e) {} } } return new Response(String(n)); }
+    if (pn === '/admop') return this.admop(await req.json());
     if (pn === '/count') return new Response(String(this.all().filter(w => this.A(w).id).length));
     if (req.headers.get('Upgrade') !== 'websocket') return new Response('Yaxest world', { status: 426 });
     /* Bağlantı seli koruması: kimliği doğrulanmamış soketler 10 sn içinde 'hi' göndermezse kapatılır;
@@ -110,25 +116,29 @@ export class World {
     const uid = await verify(m.tok);
     if (!uid) { this.snd(ws, { t: 'err', m: 'auth' }); ws.close(1008, 'auth'); return; }
     const pk = await pkOf(uid);
+    const bn = await this.g('ban:' + pk, null);
+    if (bn && (!bn.until || bn.until > now)) { this.snd(ws, { t: 'ban', m: bn.reason || '', until: bn.until || 0 }); try { ws.close(1008, 'ban'); } catch (e) {} return; }
+    const mtv = await this.g('mt:' + pk, 0);
     for (const o of this.all()) { if (o !== ws && this.A(o).pk === pk) { this.snd(o, { t: 'dup' }); this.bc({ t: 'leave', id: this.A(o).id }, o); try { o.serializeAttachment({}); o.close(1000, 'dup'); } catch (e) {} } }
     const nick = clean(m.nick, 16) || 'Oyuncu';
     let ap = ''; try { ap = JSON.stringify(m.ap) || ''; } catch (e) {} if (ap.length > 500) ap = '';
     const p = await this.prof(pk); p.n = nick; let cg = '';
     if (p.cl) { const C = await this.g('c:' + p.cl, null); if (C && C.mem[pk]) { cg = p.cl; C.mem[pk].n = nick; await this.s('c:' + p.cl, C); } else p.cl = null; }
     await this.saveP(pk, p); await this.s('nk:' + nick.toLocaleLowerCase('tr'), pk);
-    const a = { ip: prev.ip || '', id: rid(8), pk, nick, ap: ap ? JSON.parse(ap) : null, lv: int(m.lv, 1, 99), x: num(m.x, 0, WORLD_PX), y: num(m.y, 0, WORLD_PX), pt: now, ct: 0, cg, w: p.w, l: p.l };
+    const a = { ip: prev.ip || '', id: rid(8), pk, nick, ap: ap ? JSON.parse(ap) : null, lv: int(m.lv, 1, 99), x: num(m.x, 0, WORLD_PX), y: num(m.y, 0, WORLD_PX), pt: now, ct: 0, cg, w: p.w, l: p.l, mu: mtv > now ? mtv : 0 };
     ws.serializeAttachment(a);
     const roster = this.all().map(w => this.A(w)).filter(x => x.id && x.id !== a.id).map(pub);
     this.snd(ws, { t: 'hi', id: a.id, k: pk, roster });
     this.bc({ t: 'join', p: pub(a) }, ws);
     await this.fl(ws); await this.notifyFriends(pk);
     if (cg) await this.clanPush(cg);
+    const aq = await this.g('adm:' + pk, []); for (const q of aq.slice(0, 20)) this.snd(ws, { t: 'adm', q });
   }
   async webSocketMessage(ws, msg) {
     if (typeof msg !== 'string' || msg.length > 5000) return;
     let m; try { m = JSON.parse(msg); } catch (e) { return; }
     if (!m || typeof m !== 'object') return;
-    if (m.t !== 'hi' && msg.length > 900) return;
+    if (m.t !== 'hi' && msg.length > (m.t === 'sn' ? 4500 : 900)) return;
     const now = Date.now();
     if (m.t === 'hi') { try { await this.hi(ws, m, now); } catch (e) { this.snd(ws, { t: 'err', m: 'hub' }); } return; }
     const a = this.A(ws); if (!a.id) return;
@@ -140,6 +150,8 @@ export class World {
     switch (m.t) {
       case 'p': return this.pos(ws, a, m, now);
       case 'c': return this.chat(ws, a, m, now);
+      case 'sn': return this.snap(ws, a, m, now);
+      case 'aa': return this.admAck(a, m);
       case 'em': { if (now - (a.et || 0) < 800) return; const e = int(m.e, 0, 11); this.setA(ws, x => { x.et = now; }); const o = { t: 'em', id: a.id, e }; this.snd(ws, o); this.bc(o, ws); return; }
       case 'iv': return this.iv(ws, a, m, now);
       case 'ra': return this.ra(ws, a, m, now);
@@ -184,6 +196,7 @@ export class World {
   /* ---- sohbet ---- */
   async chat(ws, a, m, now) {
     if (now - a.ct < 1500) return this.err(ws, 'Çok hızlı yazıyorsun.');
+    if (a.mu && a.mu > now) return this.err(ws, 'Susturuldun. Süre bitince yazabilirsin (' + Math.ceil((a.mu - now) / 60000) + ' dk).');
     const txt = clean(m.m, 120); if (!txt) return;
     if (bad(txt)) return this.err(ws, 'Mesajın uygunsuz bulundu.');
     const ch = ['l', 'w', 'k', 'p'].includes(m.ch) ? m.ch : 'w';
@@ -342,6 +355,52 @@ export class World {
     const clans = Object.keys(ix).map(t => ({ tag: t, ...ix[t], lv: lvl(ix[t].xp) })).sort((a, b) => b.xp - a.xp).slice(0, 10);
     this.snd(ws, { t: 'lb', duel, clans });
   }
+
+  /* ---- yönetim: ban, susturma, eşya kuyruğu, oyuncu anlık görüntüsü ---- */
+  async snap(ws, a, m, now) {
+    if (now - (a.sn || 0) < 100e3) return; this.setA(ws, x => { x.sn = now; });
+    const d = m.d; if (!d || typeof d !== 'object') return;
+    const mp = (o, re, n) => { const r = {}; if (o && typeof o === 'object') for (const k of Object.keys(o).slice(0, n)) if (re.test(k)) { const v = int(o[k], 0, 1e9); if (v) r[k] = v; } return r; };
+    const ls = (o, n) => (o && typeof o === 'object' ? Object.keys(o).filter(k => /^\w{1,16}:\d{1,2}$/.test(k) && o[k]).slice(0, n) : []);
+    const o = { cls: clean(d.cls, 14), lv: int(d.lv, 1, 999), xp: int(d.xp, 0, 1e12), gold: int(d.gold, 0, 1e12), jt: int(d.jt, 0, 1e12), wt: int(d.wt, 0, 99), at: int(d.at, 0, 99), mats: mp(d.mats, /^\w{1,16}$/, 60), rn: mp(d.rn, /^\w{1,16}$/, 40), ow: ls(d.ow, 80), oz: ls(d.oz, 80), pe: mp(d.pe, /^\w{1,16}$/, 40) };
+    await this.s('sn:' + a.pk, { t: now, w: this.me(), n: a.nick, d: o });
+  }
+  async admAck(a, m) {
+    const id = clean(m.id, 12); if (!id) return;
+    const q = await this.g('adm:' + a.pk, []), r = q.filter(x => x.id !== id);
+    if (r.length !== q.length) { if (r.length) await this.s('adm:' + a.pk, r); else await this.del('adm:' + a.pk); await this.alog({ op: 'teslim', pk: a.pk, n: a.nick, d: id }); }
+  }
+  async alog(e) { const L = await this.g('alog', []); L.push({ t: Date.now(), ...e }); await this.s('alog', L.slice(-200)); }
+  async resolvePk(q) {
+    q = clean(q, 20); if (!q) return null; if (/^p[0-9a-f]{14}$/.test(q)) return q;
+    return await this.g('nk:' + q.toLocaleLowerCase('tr'), null);
+  }
+  async admop(b) {
+    const now = Date.now(), by = clean(b.by, 40), op = b.op;
+    if (op === 'bans') return this.js({ bans: await this.g('bidx', {}) });
+    if (op === 'log') return this.js({ log: (await this.g('alog', [])).slice(-100).reverse() });
+    if (op === 'ann') { const m = clean(b.m, 140); if (!m) return this.js({ err: 'Boş duyuru' }); await this.alog({ by, op: 'duyuru', d: m }); return this.js({ live: { all: true, send: { t: 'sys', m: '📢 ' + m } } }); }
+    const pk = await this.resolvePk(b.q); if (!pk) return this.js({ err: 'Oyuncu bulunamadı' });
+    const prof = await this.g('u:' + pk, null), nick = (prof && prof.n) || clean(b.q, 16);
+    if (op === 'find') return this.js({ pk, n: nick, cl: prof && prof.cl || null, w: prof && prof.w || 0, l: prof && prof.l || 0, sn: await this.g('sn:' + pk, null), ban: await this.g('ban:' + pk, null), mt: await this.g('mt:' + pk, 0), q: await this.g('adm:' + pk, []) });
+    if (op === 'ban') { const mins = int(b.mins, 0, 525600), reason = clean(b.reason, 120), until = mins ? now + mins * 60000 : 0; await this.s('ban:' + pk, { until, reason, at: now, by });
+      const ix = await this.g('bidx', {}); ix[pk] = { n: nick, until, reason, at: now }; await this.s('bidx', ix); await this.alog({ by, op: 'ban', pk, n: nick, d: (mins ? mins + ' dk' : 'kalıcı') + ' ' + reason });
+      return this.js({ pk, live: { pk, kick: 1, send: { t: 'ban', m: reason, until } } }); }
+    if (op === 'unban') { await this.del('ban:' + pk); const ix = await this.g('bidx', {}); delete ix[pk]; await this.s('bidx', ix); await this.alog({ by, op: 'ban kalktı', pk, n: nick }); return this.js({ pk }); }
+    if (op === 'mute') { const mins = int(b.mins, 1, 43200), until = now + mins * 60000; await this.s('mt:' + pk, until); await this.alog({ by, op: 'susturma', pk, n: nick, d: mins + ' dk' }); return this.js({ pk, live: { pk, mu: until, send: { t: 'sys', m: 'Yönetici seni ' + mins + ' dakika susturdu.' } } }); }
+    if (op === 'unmute') { await this.del('mt:' + pk); await this.alog({ by, op: 'susturma kalktı', pk, n: nick }); return this.js({ pk, live: { pk, mu: 0, send: { t: 'sys', m: 'Susturman kaldırıldı.' } } }); }
+    if (op === 'kick') { await this.alog({ by, op: 'at', pk, n: nick }); return this.js({ pk, live: { pk, kick: 1, send: { t: 'sys', m: 'Yönetici seni sunucudan attı.' } } }); }
+    if (op === 'msg') { const m = clean(b.m, 140); if (!m) return this.js({ err: 'Boş mesaj' }); await this.alog({ by, op: 'mesaj', pk, n: nick, d: m }); return this.js({ pk, live: { pk, send: { t: 'sys', m: '📩 Yönetici: ' + m } } }); }
+    if (op === 'give' || op === 'take' || op === 'setlv') {
+      const q = { id: rid(8), k: op === 'setlv' ? 'lv' : op, at: now };
+      if (op === 'setlv') q.v = int(b.v, 1, 150); else { q.g = int(b.g, 0, 1e9); q.it = {}; let n = 0; if (b.it && typeof b.it === 'object') for (const k of Object.keys(b.it)) { if (n >= 20) break; if (!/^(m|r|w|z|e):[\w:]{1,24}$/.test(k) && !/^cos\.\w+\.\w+$/.test(k) && k !== 'jeton') continue; const v = int(b.it[k], 0, 1e6); if (v > 0) { q.it[k] = v; n++; } } if (!q.g && !n) return this.js({ err: 'Boş içerik' }); }
+      q.msg = clean(b.msg, 100);
+      const L = await this.g('adm:' + pk, []); L.push(q); await this.s('adm:' + pk, L.slice(-30)); await this.alog({ by, op, pk, n: nick, d: JSON.stringify(q.v ?? { g: q.g, it: q.it }).slice(0, 200) });
+      return this.js({ pk, live: { pk, send: { t: 'adm', q } } });
+    }
+    return this.js({ err: 'Bilinmeyen işlem' });
+  }
+  js(o) { return new Response(JSON.stringify(o), { headers: { 'content-type': 'application/json' } }); }
   /* ---- takas ---- */
   async startTrade(w1, w2) {
     const a1 = this.A(w1), a2 = this.A(w2), tid = rid(6);
@@ -470,6 +529,22 @@ export default {
       const out = [];
       for (let i = 1; i <= WORLDS; i++) { let n = 0; try { n = +(await (await env.WORLD.get(env.WORLD.idFromName('dunya-' + i)).fetch('https://w/count')).text()) || 0; } catch (e) {} out.push({ w: i, n, max: MAXP }); }
       return new Response(JSON.stringify(out), { headers: CORS });
+    }
+    if (u.pathname === '/adm') {
+      const org = req.headers.get('origin') || '', okO = /^https:\/\/(www\.)?yaxestgames\.com$/.test(org) || /^http:\/\/localhost(:\d+)?$/.test(org);
+      const H = { 'access-control-allow-origin': okO ? org : 'https://yaxestgames.com', 'access-control-allow-headers': 'content-type', 'access-control-allow-methods': 'POST, OPTIONS', 'vary': 'origin', 'content-type': 'application/json' };
+      if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: H });
+      if (req.method !== 'POST') return new Response('{"err":"POST"}', { status: 405, headers: H });
+      let b; try { b = await req.json(); } catch (e) { return new Response('{"err":"json"}', { status: 400, headers: H }); }
+      const pl = await verifyPl(b && b.tok); if (!isAdminPl(pl)) return new Response('{"err":"yetki yok"}', { status: 403, headers: H });
+      const D = i => env.WORLD.get(env.WORLD.idFromName('dunya-' + i));
+      const live = async l => { let n = 0; for (let i = 1; i <= WORLDS; i++) { try { n += +(await (await D(i).fetch('https://w/live', { method: 'POST', body: JSON.stringify(l) })).text()) || 0; } catch (e) {} } return n; };
+      const who = async () => { const out = []; for (let i = 1; i <= WORLDS; i++) { try { out.push(...await (await D(i).fetch('https://w/who')).json()); } catch (e) {} } return out; };
+      if (b.op === 'online') return new Response(JSON.stringify({ list: await who() }), { headers: H });
+      const r = await (await D(1).fetch('https://w/admop', { method: 'POST', body: JSON.stringify({ ...b, tok: undefined, by: pl.email }) })).json();
+      if (r.live) { r.sent = await live(r.live); delete r.live; }
+      if (b.op === 'find') { const on = (await who()).filter(x => x.pk === r.pk)[0]; r.on = on || null; }
+      return new Response(JSON.stringify(r), { headers: H });
     }
     if (u.pathname === '/ws') { const w = Math.floor(+u.searchParams.get('w')) || 1; if (w < 1 || w > WORLDS) return new Response('bad world', { status: 400 }); const rq = new Request(req); rq.headers.set('x-world', String(w)); return env.WORLD.get(env.WORLD.idFromName('dunya-' + w)).fetch(rq); }
     return new Response('Yaxest Diyarı sunucusu çalışıyor.', { headers: { 'content-type': 'text/plain; charset=utf-8' } });
