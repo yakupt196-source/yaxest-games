@@ -71,6 +71,6 @@ function sendGift(o){return token().then(function(s){var p=o.nick&&o.nick!=='*'?
     return tf(FS+'/gifts',{method:'POST',headers:{Authorization:'Bearer '+s.idToken,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){if(!r.ok)return httpErr(r);return r.json()})})})}
 function listGifts(){return token().then(function(s){return tf(FS+'/gifts?pageSize=40&orderBy=t%20desc',{headers:{Authorization:'Bearer '+s.idToken}}).then(function(r){if(!r.ok)return httpErr(r);return r.json()}).then(function(j){return(j.documents||[]).map(giftRow)})})}
 function delGift(id){return token().then(function(s){return fetch(FS+'/gifts/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+s.idToken}}).then(function(r){return r.ok})})}
-window.YXAcct={myGifts:myGifts,claimGift:claimGift,sendGift:sendGift,listGifts:listGifts,delGift:delGift,claimNick:claimNick,releaseNick:releaseNick,nickKey:nickKey,conf:conf,state:st,signUp:signUp,signIn:signIn,signOut:signOut,reset:reset,pull:pull,push:push,sync:sync,del:del};
+window.YXAcct={myGifts:myGifts,claimGift:claimGift,sendGift:sendGift,listGifts:listGifts,delGift:delGift,claimNick:claimNick,releaseNick:releaseNick,nickKey:nickKey,conf:conf,state:st,signUp:signUp,signIn:signIn,signOut:signOut,reset:reset,pull:pull,push:push,sync:sync,del:del,token:token};
 if(window.YXBackup)bg();else{var s=document.createElement('script');s.src=(document.currentScript&&document.currentScript.src||'').replace('account.js','backup.js');if(s.src){s.onload=bg;document.head.appendChild(s)}}
 })();

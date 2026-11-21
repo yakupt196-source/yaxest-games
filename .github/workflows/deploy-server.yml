@@ -1,0 +1,15 @@
+# Çok oyunculu sunucuyu Cloudflare'e yükler (ücretsiz plan). Gerekli gizli anahtarlar:
+# CLOUDFLARE_API_TOKEN (Workers düzenleme izni) ve CLOUDFLARE_ACCOUNT_ID
+name: Sunucu
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: server

@@ -24,6 +24,7 @@ function mergeKey(k,cur,inc){
   return inc}
 async function parse(code){code=String(code||'').replace(/\s+/g,'');var m=/^YX1-([ZP][A-Za-z0-9_-]+)-([0-9a-f]{8})$/.exec(code);
   if(!m)throw new Error('format');if(hash(m[1])!==m[2])throw new Error('hash');var o=JSON.parse(await unpack(m[1]));if(!o||o.v!==1||!o.d)throw new Error('bad');return o}
-async function restore(code){var o=await parse(code),n=0;for(var k in o.d){if(typeof o.d[k]!=='string')continue;try{var v=mergeKey(k,localStorage.getItem(k),o.d[k]);if(v!==localStorage.getItem(k)){localStorage.setItem(k,v);n++}}catch(e){}}return{keys:n,t:o.t}}
+var BLOCK={'yx-bkt':1,'yx-msg':1,'yx-acct':1,'yx-sync':1,'yx-bkr':1,'__proto__':1,'constructor':1};
+async function restore(code){var o=await parse(code),n=0;for(var k in o.d){if(BLOCK[k]||k.length>80||!Object.prototype.hasOwnProperty.call(o.d,k)||typeof o.d[k]!=='string'||o.d[k].length>2000000)continue;try{var v=mergeKey(k,localStorage.getItem(k),o.d[k]);if(v!==localStorage.getItem(k)){localStorage.setItem(k,v);n++}}catch(e){}}return{keys:n,t:o.t}}
 window.YXBackup={make:make,restore:restore,parse:parse,snap:snap,hash:hash};
 })();

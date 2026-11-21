@@ -320,13 +320,15 @@ function aura(a){if(!a)return'';var s='';
  if(a==='snow'){[[12,10,0],[30,4,.6],[70,8,1.2],[88,14,.3],[20,40,1.5],[84,44,.9]].forEach(function(p){s+='<circle class="yx-d" style="animation-delay:'+p[2]+'s" cx="'+p[0]+'" cy="'+p[1]+'" r="2.4" fill="#dff6ff"/>'})}
  if(a==='fire'){[[8,70],[92,70]].forEach(function(p,i){s+='<path class="yx-f" style="animation-delay:'+(i*.4)+'s" d="M'+p[0]+' 90C'+(p[0]-12)+' 76 '+(p[0]-2)+' 68 '+p[0]+' 54C'+(p[0]+4)+' 66 '+(p[0]+14)+' 74 '+p[0]+' 90Z" fill="#ff7a2e"/><path class="yx-f" style="animation-delay:'+(i*.4+.2)+'s" d="M'+p[0]+' 90C'+(p[0]-5)+' 82 '+p[0]+' 78 '+p[0]+' 70C'+(p[0]+3)+' 78 '+(p[0]+7)+' 84 '+p[0]+' 90Z" fill="#ffd23f"/>'})}
  return s}
+var FULL={};SP.slice(SP.map(function(x){return x[0]}).indexOf('cemile')).forEach(function(x){FULL[x[0]]=1});
 function av(c,mood){c=c||S.eq;var sp=BODY[c.sp]?c.sp:'blob',col=c.col||'#ffd23f',d=shade(col,-.3),l=shade(col,.35),P=POS[sp],m=mood||'n',o='';
  o+=aura(c.aura)+'<ellipse cx="50" cy="93" rx="27" ry="4" fill="rgba(0,0,0,.28)"/><g class="yx-b">';
- if(c.neck==='cape')o+='<path d="M27 '+(P.N-3)+'L73 '+(P.N-3)+'L86 94L14 94Z" fill="#7a4cff"/><path d="M27 '+(P.N-3)+'L73 '+(P.N-3)+'L78 '+(P.N+14)+'L22 '+(P.N+14)+'Z" fill="#5b34d6" opacity=".6"/>';
+ if(!FULL[sp]&&c.neck==='cape')o+='<path d="M27 '+(P.N-3)+'L73 '+(P.N-3)+'L86 94L14 94Z" fill="#7a4cff"/><path d="M27 '+(P.N-3)+'L73 '+(P.N-3)+'L78 '+(P.N+14)+'L22 '+(P.N+14)+'Z" fill="#5b34d6" opacity=".6"/>';
  o+=BODY[sp](col,d,l,m);
- if(c.neck&&NECKS[c.neck])o+=NECKS[c.neck](P.N);if(c.neck==='cape')o+='<circle cx="50" cy="'+(P.N-1)+'" r="3.2" fill="#ffd23f"/>';
- if(c.face&&FACES[c.face])o+=FACES[c.face](P.E,P.dx);
- if(c.hat&&HATS[c.hat])o+=HATS[c.hat](P.T,P.E);
+ var fl=FULL[sp];
+ if(!fl&&c.neck&&NECKS[c.neck])o+=NECKS[c.neck](P.N);if(!FULL[sp]&&c.neck==='cape')o+='<circle cx="50" cy="'+(P.N-1)+'" r="3.2" fill="#ffd23f"/>';
+ if(!fl&&c.face&&FACES[c.face])o+=FACES[c.face](P.E,P.dx);
+ if(!fl&&c.hat&&HATS[c.hat])o+=HATS[c.hat](P.T,P.E);
  return'<svg class="yxa" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+o+'</g></svg>'}
 
 /* ---------- tema ---------- */

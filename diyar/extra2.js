@@ -207,8 +207,8 @@ function near(){if(!X||!G||G.mode!=='world')return null;
   if(nearWater())return{t:'x',o:{k:'fish'}};return null}
 function interact(o){if(o.k==='dig')dig();else if(o.k==='fish')openFish()}
 function chip(){if(!X||!X.tm||!G)return'';var d=hyp(X.tm.x-G.px,X.tm.y-G.py)/TS;return '🗺️ '+(d<4?'🔥 Burada kaz!':d<12?'♨️ Çok yakın':d<30?'🧭 Yakın':'❄️ Uzak')+' ('+Math.round(d)+')'}
-function draw(ctx,camX,camY,t,W,H){if(!X||!X.tm||!G||G.mode!=='world')return;var tm=X.tm,sx=tm.x-camX,sy=tm.y-camY,gx=G.px-camX,gy=G.py-camY;
-  if(sx>-80&&sx<W+80&&sy>-80&&sy<H+80){var pu=.5+.5*Math.sin(t*4);ctx.fillStyle='rgba(255,60,60,'+(.12+.12*pu)+')';ctx.beginPath();ctx.arc(sx,sy,26+6*pu,0,6.28);ctx.fill();ctx.strokeStyle='#d62d2d';ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sx-12,sy-12);ctx.lineTo(sx+12,sy+12);ctx.moveTo(sx+12,sy-12);ctx.lineTo(sx-12,sy+12);ctx.stroke();ctx.lineCap='butt'}
+function draw(ctx,camX,camY,t,W,H){if(!X||!X.tm||!G||G.mode!=='world')return;var tm=X.tm,sx=tm.x-camX,sy=tm.y-camY,gx=G.px,gy=G.py;
+  if(sx>-80&&sx<W+80&&sy>-80&&sy<H+80){var pu=.5+.5*Math.sin(t*4);ctx.fillStyle='rgba(255,60,60,'+(.12+.12*pu)+')';ctx.beginPath();ctx.arc(tm.x,tm.y,26+6*pu,0,6.28);ctx.fill();ctx.strokeStyle='#d62d2d';ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tm.x-12,tm.y-12);ctx.lineTo(tm.x+12,tm.y+12);ctx.moveTo(tm.x+12,tm.y-12);ctx.lineTo(tm.x-12,tm.y+12);ctx.stroke();ctx.lineCap='butt'}
   else{var a=Math.atan2(tm.y-G.py,tm.x-G.px),ax=gx+Math.cos(a)*90,ay=gy+Math.sin(a)*90;ctx.save();ctx.translate(ax,ay);ctx.rotate(a);ctx.fillStyle='rgba(255,210,63,.9)';ctx.strokeStyle='#7a5a00';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(14,0);ctx.lineTo(-8,-9);ctx.lineTo(-4,0);ctx.lineTo(-8,9);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}}
 window.YX3={init:init,near:near,interact:interact,chip:chip,draw:draw,shopChests:shopChests,grantChest:grantChest,
  tabs:{fish:function(){return'<p class="sub">Balık tutmak için göl kenarında ✋ düğmesine bas.</p>'}},bind:function(){},TIERS:TIERS,dbg:{roll:roll,F:F,FISH:FISH,giveMap:giveMap,dig:dig}};
