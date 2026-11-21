@@ -117,7 +117,7 @@ function enter(){var st=Y.pstat(P);toSvgImg();
   try{var el=document.documentElement;if(el.requestFullscreen&&!document.fullscreenElement)el.requestFullscreen().catch(function(){})}catch(e){}
   try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(function(){})}catch(e){}
   say('Yaxest Diyarı\'na hoş geldin, '+P.nick+'! Yürü, saldır (⚔️), topla (✋). Harita: M veya mini haritaya dokun.','sys');
-  say('Bu bir tek kişilik Eğitim Diyarı. Çok oyunculu diyar sunucu kurulunca açılacak.','sys');
+  say('Çevrimiçi dünya: giriş yaptıysan bağlanılıyor… Canavar, altın ve ilerleme şimdilik sana özel.','sys');
   cancelAnimationFrame(raf);lastT=performance.now();raf=requestAnimationFrame(loop);setTimeout(chkFs,1200)}
 /* ---- hediye kutusu: yönetici hediyeleri oyuna girince ve 90 sn'de bir alınır ---- */
 function giftTick(){if(!G||!P||!window.YXAcct||!YXAcct.myGifts)return;YXAcct.myGifts().then(function(l){if(!G||!P)return;P.gb=P.gb||[];var got=[];
