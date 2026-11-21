@@ -146,7 +146,11 @@ function leaveGame(){if(window.YNet)try{YNet.leave()}catch(e){}clearInterval(gif
 function initSpawns(){G.spawns=[];
   for(var ty=4;ty<Y.MH-4;ty+=6)for(var tx=4;tx<Y.MW-4;tx+=6){var jx=tx+Math.floor(Y.hash(tx,ty,21)*4),jy=ty+Math.floor(Y.hash(tx,ty,22)*4),z=Y.zoneAt(jx,jy);if(z===3||z===4)continue;
     var dx=jx-Y.CX,dy=jy-Y.CY,d=Math.sqrt(dx*dx+dy*dy);if(d<21||Y.hash(tx,ty,23)>.55)continue;
-    G.spawns.push({x:(jx+.5)*TS,y:(jy+.5)*TS,z:z,lv:Math.max(1,Y.zoneLv(z,d)),m:null,rt:0,type:Y.monPick(z,d,Y.hash(tx,ty,24),Y.hash(tx,ty,25),Y.quad(dx,dy))})}}
+    G.spawns.push({x:(jx+.5)*TS,y:(jy+.5)*TS,z:z,lv:Math.max(1,Y.zoneLv(z,d)),m:null,rt:0,type:Y.monPick(z,d,Y.hash(tx,ty,24),Y.hash(tx,ty,25),Y.quad(dx,dy))})}
+  /* başlangıç halkası (surun hemen dışı, 14-45 karo): daha sık canavar, yeni oyuncu boş harita görmesin */
+  for(var ty2=Y.CY-45;ty2<=Y.CY+45;ty2+=3)for(var tx2=Y.CX-45;tx2<=Y.CX+45;tx2+=3){var jx2=tx2+Math.floor(Y.hash(tx2,ty2,61)*2),jy2=ty2+Math.floor(Y.hash(tx2,ty2,62)*2),dx2=jx2-Y.CX,dy2=jy2-Y.CY,d2=Math.sqrt(dx2*dx2+dy2*dy2);
+    if(d2<14||d2>=45||Y.hash(tx2,ty2,63)>.36)continue;var z2=Y.zoneAt(jx2,jy2);if(z2===3||z2===4)continue;var px2=(jx2+.5)*TS,py2=(jy2+.5)*TS;if(typeof blocked==='function'&&blocked(px2,py2))continue;
+    G.spawns.push({x:px2,y:py2,z:z2,lv:Math.max(1,Y.zoneLv(z2,Math.max(d2,15))),m:null,rt:0,type:Y.monPick(z2,Math.max(d2,15),Y.hash(tx2,ty2,64),Y.hash(tx2,ty2,65),Y.quad(dx2,dy2))})}}
 function addMetins(){Y.PVP.forEach(function(z){[[-3,-1],[3,2]].forEach(function(o){var f=findFree(z.tx+o[0],z.ty+o[1]);G.spawns.push({x:f.x,y:f.y,z:2,lv:9,m:null,rt:0,type:'metin'})})})}
 function mkMon(type,lv,x,y,sp){var b=Y.MON[type],s=Y.mstat(type,lv);return{type:type,lv:lv,hp:s.hp,max:s.hp,dmg:s.dmg,xp:s.xp,gold:s.gold,x:x,y:y,sx:x,sy:y,sp:b.sp,sz:b.sz,boss:b.boss,col:b.c,n:b.n,hit:0,atkT:.6,slow:0,taunt:0,dotT:0,dotD:0,dotAcc:0,wx:0,wy:0,wt:0,sp8:sp,bob:Math.random()*6}}
 
@@ -567,9 +571,9 @@ function drawMon(m,t){YA.monster(ctx,m,t,G.px,G.py);var top=m.type==='metin'?m.y
 function drawHero(t){var x=G.px,y=G.py,c=C(),mv=!!(G.jx||G.jy||G.keys.u||G.keys.d||G.keys.l||G.keys.r),ang=Math.atan2(G.fy,G.fx),sw=G.swT>0?(G.swT/.18-.5)*1.9:0;
   ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(x,y+22,20,8,0,0,6.28);ctx.fill();
   var gl=ctx.createRadialGradient(x,y+20,2,x,y+20,34);gl.addColorStop(0,c.col);gl.addColorStop(1,'rgba(0,0,0,0)');ctx.globalAlpha=.55;ctx.fillStyle=gl;ctx.beginPath();ctx.ellipse(x,y+20,34,13,0,0,6.28);ctx.fill();ctx.globalAlpha=G.evade>0?.4:1;
-  if(G.fy<-.3)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv);
+  var wBk=G.fy<-.3||(G.swT<=0&&P.cls!=='tank');if(wBk)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv,P.ap);
   YL.hero(ctx,x,y+21,P.ap,t,mv,1)
-  if(G.fy>=-.3)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv);
+  if(!wBk)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv,P.ap);
   ctx.globalAlpha=1;
   if(G.guard>0){ctx.strokeStyle='#5cb4ff';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,y,34,0,6.28);ctx.stroke()}if(G.buff>0){ctx.strokeStyle='#ffb27a';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,38,0,6.28);ctx.stroke()}
   YA.plate(ctx,x,y+15+YL.topY(P.ap),P.nick,c.col);if(window.YX2)YX2.plate(ctx,x,y+15+YL.topY(P.ap)-17);
