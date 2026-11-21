@@ -229,9 +229,9 @@ function duelHitMsg(m){var D1=S.duel,G=D.G;if(!D1)return;var tome=m.to===S.myId;
   var o=others()[D1.opp];if(tome)D.floatTxt(G.px,G.py-48,'-'+m.d+(m.c?'★':''),'#ff6b6b');else if(o)D.floatTxt(o.dx,o.dy-48,'-'+m.d+(m.c?'★':''),'#ffd23f')}
 
 /* ---------- takas bitişi ---------- */
-function validKey(k){var a=String(k).split(':'),Y=D.Y;if(a[0]==='m')return !!Y.MATS[a[1]];if(a[0]==='r'){try{D.itName(k);return true}catch(e){return false}}if(a[0]==='w')return !!(Y.WEAPONS[a[1]]&&Y.WEAPONS[a[1]][+a[2]]);return false}
-function takeIt(k,q){var P=pl(),a=k.split(':');if(a[0]==='m')P[a[1]]=Math.max(0,(P[a[1]]||0)-q);else if(a[0]==='r'){P.rn=P.rn||{};P.rn[a[1]]=Math.max(0,(P.rn[a[1]]||0)-q)}else if(P.ow)delete P.ow[a[1]+':'+a[2]]}
-function addIt(k,q){var P=pl(),a=k.split(':');if(!validKey(k))return;if(a[0]==='m')P[a[1]]=(P[a[1]]||0)+q;else if(a[0]==='r'){P.rn=P.rn||{};P.rn[a[1]]=(P.rn[a[1]]||0)+q}else{P.ow=P.ow||{};P.ow[a[1]+':'+a[2]]=true}}
+function validKey(k){var a=String(k).split(':'),Y=D.Y;if(a[0]==='m')return !!Y.MATS[a[1]];if(a[0]==='r'){try{D.itName(k);return true}catch(e){return false}}if(a[0]==='w'||a[0]==='z'||a[0]==='e')return !!(window.YK&&YK.valid(k));return false}
+function takeIt(k,q){var P=pl(),a=k.split(':');if(a[0]==='m')P[a[1]]=Math.max(0,(P[a[1]]||0)-q);else if(a[0]==='r'){P.rn=P.rn||{};P.rn[a[1]]=Math.max(0,(P.rn[a[1]]||0)-q)}else if(window.YK)YK.take(P,k,q)}
+function addIt(k,q){var P=pl(),a=k.split(':');if(!validKey(k))return;if(a[0]==='m')P[a[1]]=(P[a[1]]||0)+q;else if(a[0]==='r'){P.rn=P.rn||{};P.rn[a[1]]=(P.rn[a[1]]||0)+q}else if(window.YK)YK.put(P,k,q)}
 function tradeDone(m){var P=pl(),sum=[];
   for(var k in m.give.it)takeIt(k,m.give.it[k]);P.gold=Math.max(0,(P.gold||0)-m.give.g);
   for(var k2 in m.get.it){addIt(k2,m.get.it[k2]);try{sum.push(D.itName(k2)+' ×'+m.get.it[k2])}catch(e){}}

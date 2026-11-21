@@ -36,7 +36,7 @@ const need = l => l >= 20 ? 0 : (l * l) * 400;
 const pub = a => ({ id: a.id, k: a.pk, n: a.nick, ap: a.ap, lv: a.lv, x: a.x, y: a.y, cg: a.cg || '', w: a.w || 0, l: a.l || 0 });
 const cleanOffer = (g, it) => {
   const o = { g: int(g, 0, 200000), it: {} }; let n = 0;
-  if (it && typeof it === 'object') for (const k of Object.keys(it)) { if (n >= 6) break; if (!/^[mrw]:[\w:]{1,24}$/.test(k)) continue; const q = int(it[k], 0, 99999); if (q > 0) { o.it[k] = k[0] === 'w' ? 1 : q; n++; } }
+  if (it && typeof it === 'object') for (const k of Object.keys(it)) { if (n >= 6) break; if (!/^[mrwze]:[\w:]{1,24}$/.test(k)) continue; const q = int(it[k], 0, 99999); if (q > 0) { o.it[k] = (k[0] === 'w' || k[0] === 'z') ? 1 : q; n++; } }
   return o;
 };
 
@@ -379,7 +379,7 @@ export class World {
   }
   async clanDepot(ws, a, m) {
     if (!a.cg) return; const k = String(m.k || ''); if (!/^(m:[a-z_0-9]{1,14}|r:[a-z]{2,12}|w:[a-z]{3,10}:\d{1,2})$/.test(k)) return;
-    const q = k[0] === 'w' ? 1 : int(m.q, 1, 999), C = await this.g('c:' + a.cg, null); if (!C || !C.mem[a.pk]) return; C.dep = C.dep || {};
+    const q = (k[0] === 'w' || k[0] === 'z') ? 1 : int(m.q, 1, 999), C = await this.g('c:' + a.cg, null); if (!C || !C.mem[a.pk]) return; C.dep = C.dep || {};
     const cap = 300 + 200 * lvl(C.xp), tot = Object.values(C.dep).reduce((s, v) => s + v, 0), nm = clean(m.n, 24) || k, me = C.mem[a.pk];
     if (m.t === 'cdp') { if (tot + q > cap) return this.err(ws, 'Klan deposu dolu (' + cap + ').'); if (Object.keys(C.dep).length >= 60 && !C.dep[k]) return this.err(ws, 'Depoda çok fazla tür var.'); C.dep[k] = (C.dep[k] || 0) + q; C.msgs.push({ n: '📦', m: a.nick + ' depoya ' + q + '× ' + nm + ' koydu.', t: Date.now() }); }
     else { if (!(me.r === 'lead' || me.r === 'off' || C.dw)) return this.err(ws, 'Bu klanda depodan sadece lider ve subaylar alabilir.'); if ((C.dep[k] || 0) < q) return this.err(ws, 'Depoda yeterli yok.'); C.dep[k] -= q; if (!C.dep[k]) delete C.dep[k]; C.msgs.push({ n: '📦', m: a.nick + ' depodan ' + q + '× ' + nm + ' aldı.', t: Date.now() }); }

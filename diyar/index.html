@@ -115,6 +115,15 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 .wdcol{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.wdcol .wl{flex-basis:100%;margin:2px 0 0}.sw{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.3);cursor:pointer;padding:0}.sw.on{border-color:#fff;box-shadow:0 0 0 2px var(--yel)}
 .wdb{grid-column:1/-1;display:flex;gap:8px;align-items:center;justify-content:flex-end}.wdgold{margin-right:auto;font-weight:700;color:var(--yel)}
 @media (max-width:640px),(max-height:520px){.wd{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;overflow:auto}.wdl{flex-direction:row;gap:12px;align-items:flex-start;justify-content:center}.wdl canvas{width:150px;height:200px}}
+
+/* v-k: mobil sadeleştirme: sohbet boşta kendini gizler, rozetler küçülür, boş düğmeler saklanır */
+#dock{transition:opacity .35s}#dock #log{transition:max-height .3s ease,opacity .3s ease,padding .3s ease}
+#dock.idle #log{max-height:0!important;padding-top:0;padding-bottom:0;opacity:0;pointer-events:none}
+#dock.idle #chbox{background:rgba(14,10,34,.5);border-color:rgba(255,255,255,.14)}
+.ab:empty{display:none}
+#xc{font-size:.68rem!important;padding:3px 10px!important}
+#htr{font-size:.66rem;padding:3px 9px;opacity:.9;top:140px}
+@media (max-height:480px),(max-width:620px){#acts{transform:scale(.9);transform-origin:100% 100%}#joy{opacity:.8}#zn{font-size:.7rem!important;padding:3px 10px!important;top:6px!important}#xc{top:34px!important}#mm{width:88px;height:88px}.top .hi .gr:nth-of-type(3){display:none}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
@@ -176,11 +185,11 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
-<script src="../account-config.js?v=20261121j"></script><script src="../account.js?v=20261121j"></script><script src="../i18n-dict.js?v=20261121j"></script><script src="../economy.js?v=20261121j"></script>
-<script src="look.js?v=20261121j"></script><script src="sim.js?v=20261121j"></script><script src="art.js?v=20261121j"></script><script src="runes.js?v=20261121j"></script><script src="game.js?v=20261121j"></script><script src="../games.js?v=20261121j"></script><script src="net-config.js?v=20261121j"></script><script src="net.js?v=20261121j"></script><script src="social.js?v=20261121j"></script>
-<script src="evler.js?v=20261121j"></script>
-<script src="hazine.js?v=20261121j"></script>
-<script src="rehber.js?v=20261121j"></script>
-<script src="atmos.js?v=20261121j"></script>
-<script src="dock.js?v=20261121j"></script><script src="extra2.js?v=20261121j"></script><script src="extra.js?v=20261121j"></script>
+<script src="../account-config.js?v=20261121k"></script><script src="../account.js?v=20261121k"></script><script src="../i18n-dict.js?v=20261121k"></script><script src="../economy.js?v=20261121k"></script>
+<script src="look.js?v=20261121k"></script><script src="sim.js?v=20261121k"></script><script src="art.js?v=20261121k"></script><script src="runes.js?v=20261121k"></script><script src="game.js?v=20261121k"></script><script src="../games.js?v=20261121k"></script><script src="net-config.js?v=20261121k"></script><script src="net.js?v=20261121k"></script><script src="social.js?v=20261121k"></script>
+<script src="evler.js?v=20261121k"></script>
+<script src="hazine.js?v=20261121k"></script>
+<script src="rehber.js?v=20261121k"></script>
+<script src="atmos.js?v=20261121k"></script>
+<script src="dock.js?v=20261121k"></script><script src="extra2.js?v=20261121k"></script><script src="extra.js?v=20261121k"></script><script src="yeni.js?v=20261121k"></script>
 </body></html>

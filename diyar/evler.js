@@ -21,10 +21,10 @@ function plotPos(pl){if(pos[pl.id])return pos[pl.id];var TS=Y.TS,r=pl.a*Math.PI/
 function price(i,d){return Math.round(PL[i].p*(.85+.4*Y.hash(d==null?day():d,i+1,5)))}
 function plotOf(id){for(var i=0;i<PL.length;i++)if(PL[i].id===id)return PL[i]}
 function used(h){var n=0;for(var k in h.dp)n+=h.dp[k];return n}
-function have(k){var a=k.split(':');if(a[0]==='m')return P[a[1]]||0;if(a[0]==='r')return P.rn[a[1]]||0;return P.ow[a[1]+':'+a[2]]?1:0}
-function put(k,q){var a=k.split(':');if(a[0]==='m')P[a[1]]=(P[a[1]]||0)+q;else if(a[0]==='r')P.rn[a[1]]=(P.rn[a[1]]||0)+q;else P.ow[a[1]+':'+a[2]]=1}
-function take(k,q){var a=k.split(':');if(a[0]==='m')P[a[1]]=Math.max(0,(P[a[1]]||0)-q);else if(a[0]==='r')P.rn[a[1]]=Math.max(0,(P.rn[a[1]]||0)-q);else delete P.ow[a[1]+':'+a[2]]}
-function valid(k){var a=String(k).split(':');if(a[0]==='m')return !!Y.MATS[a[1]];if(a[0]==='r')return !!(window.YR&&YR.R[a[1]]);if(a[0]==='w')return !!(Y.WEAPONS[a[1]]&&Y.WEAPONS[a[1]][+a[2]]);return false}
+function have(k){var a=k.split(':');if(a[0]==='m')return P[a[1]]||0;if(a[0]==='r')return P.rn[a[1]]||0;return window.YK?YK.have(P,k):0}
+function put(k,q){var a=k.split(':');if(a[0]==='m')P[a[1]]=(P[a[1]]||0)+q;else if(a[0]==='r')P.rn[a[1]]=(P.rn[a[1]]||0)+q;else if(window.YK)YK.put(P,k,q)}
+function take(k,q){var a=k.split(':');if(a[0]==='m')P[a[1]]=Math.max(0,(P[a[1]]||0)-q);else if(a[0]==='r')P.rn[a[1]]=Math.max(0,(P.rn[a[1]]||0)-q);else if(window.YK)YK.take(P,k,q)}
+function valid(k){var a=String(k).split(':');if(a[0]==='m')return !!Y.MATS[a[1]];if(a[0]==='r')return !!(window.YR&&YR.R[a[1]]);if(a[0]==='w'||a[0]==='z'||a[0]==='e')return !!(window.YK&&YK.valid(k));return false}
 function nm(k){try{return D.itName(k)}catch(e){return k}}
 function ic(k){try{return D.itIc(k)}catch(e){return''}}
 function val(k){try{return Math.max(1,D.itVal(k))}catch(e){return 10}}

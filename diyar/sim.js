@@ -93,8 +93,17 @@ Object.keys(NEWSK).forEach(function(k){CLASSES[k].sk=CLASSES[k].sk.concat(NEWSK[
 /* silahlar: her sınıfta 9 kademe. m = hasar çarpanı, c = yapım malzemesi */
 var WT=[{lv:1,m:1,rar:0,c:null},{lv:5,m:1.25,rar:0,c:{wood:10,stone:10,gold:60}},{lv:8,m:1.55,rar:1,c:{i_copper:4,gold:160}},{lv:12,m:1.95,rar:1,c:{i_iron:5,gold:380}},{lv:16,m:2.45,rar:2,c:{i_silver:6,gold:800}},{lv:20,m:3,rar:2,c:{i_gold:6,gold:1600}},{lv:26,m:3.8,rar:3,c:{i_mithril:6,gold:3200}},{lv:32,m:4.8,rar:4,c:{i_mithril:10,core:3,gold:8000}},{lv:40,m:6.2,rar:5,c:{i_mithril:20,core:8,gold:20000}}];
 var WN={savasci:['Çırak Kılıcı','Demirbaş Kılıç','Bakır Pala','Demir Kılıç','Gümüş Kılıç','Altın Pala','Mitril Kılıç','Kan Kesen','Dünya Yarıcı'],tank:['Eski Kalkan','Meşe Kalkan','Bakır Kalkan','Demir Kalkan','Gümüş Kalkan','Altın Kalkan','Mitril Kalkan','Ejder Siperi','Dünya Kalesi'],buyucu:['Çırak Asası','Meşe Asa','Bakır Asa','Demir Asa','Gümüş Asa','Altın Asa','Mitril Asa','Yıldız Asası','Kıyamet Küresi'],sifaci:['Şifa Çubuğu','Meşe Asası','Bakır Hale','Demir Hale','Gümüş Hale','Altın Hale','Mitril Hale','Kutsal Asa','Işığın Tahtı'],suikastci:['Paslı Hançer','Demirbaş Hançer','Bakır Hançer','Demir Hançer','Gümüş Hançer','Altın Hançer','Mitril Hançer','Gölge Dişi','Sessiz Son']};
+var WLV=[1,5,8,12,16,20,26,32,40,48,56,64,72,80,88,96,104,112,120,128,136,144,150];
+var PFX=['Çırak','Meşe','Bakır','Demir','Gümüş','Altın','Mitril','Ejder','Kadim','Titanyum','Obsidyen','Yıldız','Gölge','Kızıl Ay','Buzul','Volkan','Fırtına','Göksel','Kıyamet','Ölümsüz','Efsane','Yaxest','Ezeli'];
+var WNOUN={savasci:'Kılıç',tank:'Kalkan',buyucu:'Büyü Asası',sifaci:'Şifa Asası',suikastci:'Hançer'};
+var ZNOUN={savasci:'Zırh',tank:'Plaka Zırh',buyucu:'Cüppe',sifaci:'Cübbe',suikastci:'Pelerin'};
+for(var wi=9;wi<WLV.length;wi++){var gm=['ruby','emerald','sapphire'][wi%3],cc={};cc[wi<13?'i_titan':'i_aster']=wi+1;cc.core=wi-3;cc[gm]=wi-2;cc.gold=Math.round(20000*Math.pow(1.36,wi-8)/100)*100;WT.push({lv:WLV[wi],m:Math.round(6.2*Math.pow(1.085,wi-8)*100)/100,rar:wi<15?4:wi<20?5:6,c:cc})}
+Object.keys(WN).forEach(function(k){for(var i=9;i<WLV.length;i++)WN[k].push(PFX[i]+' '+WNOUN[k])});
 var WEAPONS={};Object.keys(WN).forEach(function(k){WEAPONS[k]=WN[k].map(function(n,i){return{n:n,lv:WT[i].lv,m:WT[i].m,rar:WT[i].rar,c:WT[i].c,t:i}})});
-var RARITY=[{n:'Sıradan',c:'#c9ced9'},{n:'Seçkin',c:'#7be07b'},{n:'Nadir',c:'#5cb0ff'},{n:'Destansı',c:'#c07cff'},{n:'Efsanevi',c:'#ffb02e'},{n:'Mitik',c:'#ff5b6e'}];
+/* zırh kademeleri: her sınıfın kendi zırhı var, seviyeye göre kuşanılır */
+var ZT=WLV.map(function(lv,i){var w=WT[i],c=null;if(w.c){c={};for(var k in w.c)c[k]=Math.max(1,Math.ceil(w.c[k]*.8))}return{lv:lv,h:i<=8?1+.16*i:2.28+.22*(i-8),r:Math.min(.15,i*.007),rar:w.rar,c:c}});
+var ARMOR={};Object.keys(ZNOUN).forEach(function(k){ARMOR[k]=ZT.map(function(z,i){return{n:PFX[i]+' '+ZNOUN[k],lv:z.lv,h:z.h,r:z.r,rar:z.rar,c:z.c,t:i}})});
+var RARITY=[{n:'Sıradan',c:'#c9ced9'},{n:'Seçkin',c:'#7be07b'},{n:'Nadir',c:'#5cb0ff'},{n:'Destansı',c:'#c07cff'},{n:'Efsanevi',c:'#ffb02e'},{n:'Mitik',c:'#ff5b6e'},{n:'Ezeli',c:'#7df9ff'}];
 var RANKS=[{n:'Acemi',mp:0,c:'#c9ced9'},{n:'Bronz',mp:80,c:'#d98a4a'},{n:'Gümüş',mp:260,c:'#dfe6f5'},{n:'Altın',mp:650,c:'#ffd23f'},{n:'Platin',mp:1400,c:'#7ad7ff'},{n:'Elmas',mp:2800,c:'#9b8cff'},{n:'Efsane',mp:5500,c:'#ff5b6e'}];
 function rankOf(mp){var r=0;for(var i=0;i<RANKS.length;i++)if(mp>=RANKS[i].mp)r=i;return r}
 /* PvP kuralı: saldıran, kendinden en fazla 1 seviye üstteki oyuncuya saldırabilir/öldürebilir. 5 altı yeni oyuncular korunur. */
@@ -112,12 +121,28 @@ function genQuests(day,lv){function r(i){return hash(day,i,77)}var L=[],K=lv<5?[
  L.push({id:'d'+day,t:'dg',k:lv>=10?'kristal':'kurt',n:1,mp:lv>=10?40:22,gold:80+lv*14,xp:120+lv*30});
  return L}
 function genWeekly(wk,lv){return[{id:'wk'+wk,t:'kill',k:'any',n:120,mp:90,gold:300+lv*50,xp:300+lv*60,w:1,tt:'Büyük Av'},{id:'wg'+wk,t:'gather',k:'any',n:120,mp:90,gold:260+lv*45,xp:260+lv*50,w:1,tt:'Büyük Hasat'},{id:'wd'+wk,t:'dg',k:'any',n:2,mp:140,gold:500+lv*70,xp:600+lv*80,w:1,tt:'Zindan Sözleşmesi'}]}
+/* Zindanlar: aşama aşama (oda oda). k: mob | elite | trap | chest | boss. Her boss kendine özgü mekaniklere sahip. */
+function mob(n,t,c,x){return{k:'mob',n:n,t:t,c:c,extra:x||null}}
+function elite(n,t,x){return{k:'elite',n:n,t:t,c:1,extra:x||null}}
+function trap(n,t,c){return{k:'trap',n:n,t:t,c:c}}
+function chest(n){return{k:'chest',n:n,t:'',c:0}}
+function bossS(n,t,mech,add){return{k:'boss',n:n,t:t,c:1,mech:mech,add:add}}
+function dgRw(lv,mul){mul=mul||1;var r=lv/4;return{gold:Math.round(60*Math.pow(r,1.45)*mul),xp:Math.round(140*Math.pow(r,1.9)*mul),crystal:Math.max(2,Math.round(lv/12)),core:Math.max(1,Math.round(lv/22)),mp:Math.round(15+lv*1.1)}}
 var DUNGEONS={
- kurt:{n:'Kurt İni',ic:'🐺',lv:4,party:1,rk:0,desc:'Alfa Kurt ve sürüsü. Tek başına girilebilir.',waves:[{t:'wolf',c:4},{t:'wolf',c:6},{t:'alpha',c:1,extra:{t:'wolf',c:2}}],reward:{gold:60,xp:140,fang:2,mp:15}},
- kristal:{n:'Kristal Mağara',ic:'💎',lv:10,party:2,rk:1,desc:'Golemler ve kristal bekçisi. En az 2 kişilik parti.',waves:[{t:'golem',c:4},{t:'golem',c:6},{t:'guardian',c:1,extra:{t:'golem',c:2}}],reward:{gold:200,xp:520,crystal:3,mp:40}},
- kale:{n:'Taş Kale',ic:'🏰',lv:16,party:3,rk:2,desc:'Büyük zindan: en az 3 kişilik parti ve Gümüş rütbe.',waves:[{t:'boar',c:6},{t:'golem',c:6,extra:{t:'wolf',c:4}},{t:'golem',c:8,extra:{t:'boar',c:4}},{t:'guardian',c:2,extra:{t:'golem',c:4}}],reward:{gold:600,xp:1500,crystal:6,core:1,mp:90}},
- golge:{n:'Gölge Mezarlığı',ic:'💀',lv:22,party:3,rk:3,desc:'İskelet ordusu ve Mezar Lordu. Altın rütbe, 3 kişilik parti.',waves:[{t:'skel',c:6},{t:'skel',c:8,extra:{t:'wolf',c:4}},{t:'skel',c:10},{t:'lich',c:1,extra:{t:'skel',c:6}}],reward:{gold:1400,xp:3600,crystal:10,core:2,mp:160}}
+ kurt:{n:'Kurt İni',ic:'🐺',lv:4,party:1,rk:0,th:'cave',desc:'5 aşama: sürü yuvası, kemik mağarası, hazine odası, Kurt Şefi ve Alfa Kurt. Tek başına girilebilir.',stages:[mob('Sürü Yuvası','wolf',4),mob('Kemik Mağarası','wolf',6),chest('Gizli Hazine Odası'),elite('Kurt Şefi','wolf',{t:'wolf',c:2}),bossS('Alfa Kurdun İni','alpha',['summon','enrage'],{t:'wolf',c:2})],reward:{gold:60,xp:140,fang:2,mp:15}},
+ kristal:{n:'Kristal Mağara',ic:'💎',lv:10,party:2,rk:1,th:'crystal',desc:'6 aşama: kristal tüneller, tuzak odası, hazine ve Kristal Bekçi. En az 2 kişilik parti.',stages:[mob('Kristal Tüneller','golem',4),trap('Titreşim Odası','golem',5),chest('Kristal Hazinesi'),mob('Yankı Salonu','bat',8,{t:'golem',c:2}),elite('Taş Muhafız','golem',{t:'golem',c:2}),bossS('Bekçinin Kalbi','guardian',['slam','heal'],{t:'golem',c:2})],reward:{gold:200,xp:520,crystal:3,mp:40}},
+ kale:{n:'Taş Kale',ic:'🏰',lv:16,party:3,rk:2,th:'castle',desc:'7 aşama: kale kapısı, surlar, zindan hücreleri, hazine, şövalye ve Kale Muhafızı. 3 kişi, Gümüş rütbe.',stages:[mob('Kale Kapısı','boar',6),mob('Surlar','golem',6,{t:'wolf',c:4}),trap('Zindan Hücreleri','golem',6),chest('Silah Odası'),mob('Büyük Salon','golem',8,{t:'boar',c:4}),elite('Kale Şövalyesi','golem',{t:'boar',c:3}),bossS('Taht Salonu','warden',['charge','summon'],{t:'boar',c:3})],reward:{gold:600,xp:1500,crystal:6,core:1,mp:90}},
+ golge:{n:'Gölge Mezarlığı',ic:'💀',lv:22,party:3,rk:3,th:'crypt',desc:'7 aşama: mezar kapısı, lahitler, ruh salonu, hazine, Gölge Şövalyesi ve Mezar Lordu. Altın rütbe.',stages:[mob('Mezar Kapısı','skel',6),mob('Lahitler','skel',8,{t:'wolf',c:4}),trap('Ruh Salonu','skel',8),chest('Gömü Odası'),mob('Kemik Koridoru','skel',10),elite('Gölge Şövalyesi','skel',{t:'skel',c:4}),bossS('Lord\'un Odası','lich',['nova','summon','heal'],{t:'skel',c:4})],reward:{gold:1400,xp:3600,crystal:10,core:2,mp:160}},
+ buz:{n:'Buz Sarayı',ic:'❄️',lv:34,party:3,rk:3,th:'ice',desc:'7 aşama: donmuş koridorlar, kar fırtınası, hazine ve Buz Kralı. Dondurucu şok dalgaları!',stages:[mob('Donmuş Koridor','icewolf',7),mob('Kar Salonu','yeti',6,{t:'icewolf',c:4}),trap('Buz Pisti','icewolf',8),chest('Buzul Hazinesi'),mob('Kırağı Köprüsü','frostwraith',8),elite('Buz Muhafızı','yeti',{t:'icewolf',c:4}),bossS('Buz Kralının Tahtı','frostking',['nova','slam'],{t:'icewolf',c:3})],reward:dgRw(34)},
+ col:{n:'Kum Mezarı',ic:'🏺',lv:46,party:3,rk:3,th:'desert',desc:'7 aşama: kum tünelleri, mumya odaları, hazine ve Firavun. Kutsal lanet ve mumya orduları.',stages:[mob('Kum Tüneli','sandworm',7),mob('Mumya Odası','mummy',7,{t:'cobra',c:4}),trap('Diken Koridoru','cobra',8),chest('Firavun Hazinesi'),mob('Sütunlu Salon','mummy',8,{t:'sandworm',c:4}),elite('Sfenks Bekçi','sandelem',{t:'cobra',c:4}),bossS('Firavunun Mezarı','pharaoh',['summon','slam','enrage'],{t:'mummy',c:3})],reward:dgRw(46)},
+ batak:{n:'Çürük Yuva',ic:'🐸',lv:60,party:4,rk:4,th:'swamp',desc:'8 aşama: zehirli göletler, cadı kulübesi, hazine ve Hidra. Kendini yenileyen canavar!',stages:[mob('Zehirli Gölet','bogtoad',8),mob('Sülük Çukuru','leech',8,{t:'bogtoad',c:4}),trap('Çürük Köprü','croc',8),chest('Cadının Sandığı'),mob('Cadı Kulübesi','hag',6,{t:'leech',c:4}),mob('Çürük Salon','fenbeast',6,{t:'croc',c:4}),elite('Bataklık Bekçisi','fenbeast',{t:'hag',c:3}),bossS('Hidranın Havuzu','hydra',['heal','slam','summon'],{t:'leech',c:4})],reward:dgRw(60)},
+ volkan:{n:'Magma Çekirdeği',ic:'🌋',lv:76,party:4,rk:4,th:'lava',desc:'8 aşama: lav nehirleri, ifrit odası, hazine ve Magma Lordu. Ateşli saldırılar ve öfke!',stages:[mob('Lav Nehri','magmaslime',8),mob('İfrit Odası','imp',8,{t:'magmaslime',c:4}),trap('Kızgın Zemin','hellhound',8),chest('Magma Sandığı'),mob('Cehennem Köprüsü','hellhound',7,{t:'imp',c:4}),mob('Semender Yuvası','salamander',6),elite('Lav Şövalyesi','lavagolem',{t:'hellhound',c:3}),bossS('Magma Çekirdeği','magmalord',['nova','charge','enrage'],{t:'imp',c:4})],reward:dgRw(76)},
+ gok:{n:'Gök Kulesi',ic:'⛈️',lv:92,party:4,rk:5,th:'sky',desc:'8 aşama: bulut basamakları, fırtına odaları, hazine ve Fırtına Titanı. Şimşek ve ani hamleler!',stages:[mob('Bulut Basamakları','frostwraith',8),mob('Fırtına Odası','djinn',6,{t:'sandelem',c:4}),trap('Şimşek Koridoru','djinn',8),chest('Gök Hazinesi'),mob('Rüzgar Terası','mammoth',5,{t:'frostwraith',c:4}),mob('Titan Salonu','sphinx',6,{t:'djinn',c:3}),elite('Bulut Muhafızı','mammoth',{t:'djinn',c:3}),bossS('Fırtınanın Gözü','stormtitan',['charge','nova','slam'],{t:'djinn',c:3})],reward:dgRw(92)},
+ tapinak:{n:'Kadim Tapınak',ic:'🛕',lv:110,party:5,rk:5,th:'temple',desc:'9 aşama: unutulmuş salonlar, rün odaları, hazine ve Kadim Bekçi. Her mekaniği bilir.',stages:[mob('Unutulmuş Salon','sphinx',7),mob('Rün Odası','mummy',8,{t:'fenbeast',c:4}),trap('Kader Koridoru','sphinx',8),chest('Tapınak Hazinesi'),mob('Yankı Tapınağı','fenbeast',7,{t:'sphinx',c:4}),mob('Yıldız Salonu','mammoth',6),mob('Kadim Bekçiler','sphinx',6,{t:'mammoth',c:3}),elite('Kutsal Muhafız','sphinx',{t:'fenbeast',c:3}),bossS('Kadim Odası','elder',['summon','nova','heal','enrage'],{t:'sphinx',c:3})],reward:dgRw(110,1.1)},
+ bosluk:{n:'Boşluk Kapısı',ic:'🕳️',lv:130,party:5,rk:6,th:'void',desc:'9 aşama: boşluk koridorları, ejder yuvaları, hazine ve Boşluk Lordu. Efsane rütbe.',stages:[mob('Boşluk Koridoru','frostdrake',6),mob('Ejder Yuvası','swampdrake',6,{t:'lavadrake',c:3}),trap('Gerçeklik Çatlağı','lavadrake',7),chest('Boşluk Sandığı'),mob('Kayıp Salon','frostdrake',7,{t:'swampdrake',c:4}),mob('Ejder Mezarlığı','lavadrake',7,{t:'frostdrake',c:4}),mob('Karanlık Geçit','swampdrake',8),elite('Boşluk Şövalyesi','lavadrake',{t:'frostdrake',c:3}),bossS('Boşluğun Kalbi','voidlord',['slam','nova','charge','enrage'],{t:'lavadrake',c:3})],reward:dgRw(130,1.2)},
+ ezeli:{n:'Ezeli Taht',ic:'👑',lv:150,party:5,rk:6,th:'void',desc:'10 aşama: Yaxest\'in son sınavı. Tüm ejderhalar, hazine ve Ezeli Muhafız Yaxest. Seviye 150 gerekir.',stages:[mob('Taht Yolu','lavadrake',8),mob('Buz Salonu','frostdrake',8),mob('Bataklık Salonu','swampdrake',8),trap('Ezeli Koridor','lavadrake',9),chest('Ezeli Hazine'),mob('Gök Salonu','mammoth',8,{t:'djinn',c:4}),mob('Ejder Kralları','frostdrake',8,{t:'lavadrake',c:4}),elite('Ezeli Şövalye','lavadrake',{t:'swampdrake',c:4}),elite('Taht Bekçisi','frostdrake',{t:'frostdrake',c:4}),bossS('Yaxest\'in Tahtı','yaxest',['summon','slam','nova','charge','enrage','heal'],{t:'lavadrake',c:3})],reward:dgRw(150,1.4)}
 };
+Object.keys(DUNGEONS).forEach(function(k){var d=DUNGEONS[k];d.waves=d.stages})
 var MON={
  slime:{n:'Balçık',c:'#6fe08a',hm:1,dm:.8,sp:70,sz:16,xp:1,g:1},
  wolf:{n:'Kurt',c:'#aab2c4',hm:1.3,dm:1.1,sp:115,sz:18,xp:1.2,g:1.2},
@@ -142,26 +167,54 @@ var MON={
  queen:{n:'Kızıl Ay Kraliçesi',c:'#ff3b6e',hm:14,dm:2.3,sp:95,sz:34,xp:14,g:16,boss:1},
  leviathan:{n:'Göl Canavarı',c:'#2a8fbf',hm:16,dm:2.4,sp:80,sz:36,xp:16,g:20,boss:1}
 };
-/* bölgeye ve uzaklığa göre canavar seçimi (h: 0..1 rastgele) */
-function monPick(z,d,h,h2){
+/* yeni canavarlar: [id,ad,renk,can,hasar,hız,boyut,xp,altın,min seviye] */
+[['mushroom','Mantar Cücesi','#d9544d',.8,.9,65,14,1,1,1],['frog','Zıplayan Kurbağa','#5fb35a',.9,.8,110,14,1,1,1],['snail','Dev Salyangoz','#b98a5a',1.4,.6,40,16,1,1,2],
+ ['goblin','Goblin Hırsızı','#6aa84f',1.4,1.3,120,17,1.6,2,5],['snake','Orman Yılanı','#8bc34a',1.1,1.5,115,16,1.5,1.4,5],['beetle','Boynuzlu Böcek','#5a4a2a',2,1.1,80,18,1.6,1.5,6],['wisp','Orman Ruhu','#9be6c8',1,1.7,125,14,1.9,1.8,7],
+ ['harpy','Harpi','#c9a0dc',1.7,1.7,135,18,2.4,2.2,14],['gargoyle','Gargoyl','#7a7f8f',3.2,1.6,75,24,2.8,2.5,16],
+ ['icewolf','Buz Kurdu','#bfe8ff',2.2,1.5,125,20,3,2.6,20],['yeti','Yeti','#e8f2ff',4,1.8,80,28,3.6,3.2,32],['frostwraith','Kırağı Hayaleti','#8fd0ff',2.8,2.3,115,20,4,3.6,48],['iceelem','Buz Elementali','#5cc8ff',5,2.2,70,28,4.6,4,68],['mammoth','Mamut','#9a8f86',7,2.4,70,34,5.4,5,95],['frostdrake','Buz Ejderi','#7ad7ff',6.5,2.8,105,30,6,6,125],
+ ['sandworm','Kum Solucanı','#d9b36a',2.4,1.6,95,22,3,2.6,20],['cobra','Kobra','#9acd32',2,2,130,18,3.4,3,32],['mummy','Mumya','#d8c9a0',4,1.9,70,24,3.8,3.4,48],['sandelem','Kum Elementali','#e0b45a',5,2.1,85,28,4.5,4,68],['sphinx','Sfenks Muhafızı','#c9a24a',7,2.4,75,34,5.4,5,95],['djinn','Çöl Cini','#5cd6e0',6,3,115,26,6,6,125],
+ ['bogtoad','Bataklık Kurbağası','#4f8a4a',2.6,1.5,100,22,3,2.6,20],['leech','Dev Sülük','#6a3a4a',2.2,1.9,90,20,3.4,3,32],['croc','Timsah','#4a7a3a',4.4,2,85,30,3.8,3.4,48],['hag','Bataklık Cadısı','#7a5a8a',3.6,2.4,95,22,4.6,4,68],['fenbeast','Çürük Canavarı','#5a6a3a',7.5,2.2,70,34,5.4,5,95],['swampdrake','Bataklık Ejderi','#6aa04a',6.5,2.8,100,30,6,6,125],
+ ['magmaslime','Magma Balçığı','#ff6a2a',2.6,1.6,80,22,3,2.6,20],['imp','İfrit Cücesi','#ff4a3a',2,2.1,130,18,3.4,3,32],['lavagolem','Lav Golemi','#c8501e',5,2,65,30,3.8,3.4,48],['hellhound','Cehennem Köpeği','#8a1e1e',3.8,2.5,135,24,4.6,4,68],['salamander','Semender','#ff8a2a',7,2.3,90,30,5.4,5,95],['lavadrake','Magma Ejderi','#e0261d',6.5,3,105,32,6,6,125]
+].forEach(function(r){MON[r[0]]={n:r[1],c:r[2],hm:r[3],dm:r[4],sp:r[5],sz:r[6],xp:r[7],g:r[8],ml:r[9]}});
+/* boss canavarlar (zindan bosları): [id,ad,renk,can,hasar,hız,boyut,min seviye,mekanikler] */
+[['warden','Kale Muhafızı','#ff7a5c',15,2.1,85,36,16],['frostking','Buz Kralı','#9ae0ff',17,2.4,80,38,34],['pharaoh','Firavun','#e8c050',18,2.4,85,36,46],['hydra','Hidra','#4a9a4a',20,2.5,80,40,60],['magmalord','Magma Lordu','#ff5a1e',22,2.7,85,40,76],['stormtitan','Fırtına Titanı','#7a8cff',24,2.8,95,42,92],['elder','Kadim Bekçi','#b0ffd0',26,3,85,42,110],['voidlord','Boşluk Lordu','#6a2aaa',28,3.2,95,44,130],['yaxest','Yaxest, Ezeli Muhafız','#ffd23f',32,3.5,100,48,150]
+].forEach(function(r){MON[r[0]]={n:r[1],c:r[2],hm:r[3],dm:r[4],sp:r[5],sz:r[6],xp:r[3]*.8,g:r[3],boss:1,ml:r[7]}});
+(function(m){for(var k in m)MON[k].ml=m[k]})({slime:1,rabbit:1,bee:2,boar:3,wolf:5,fox:5,spider:7,treant:9,golem:11,bat:12,scorpion:13,bear:15,wraith:20,skel:22,goldslime:5,alpha:4,guardian:10,lich:22,drake:40,queen:30,leviathan:35,metin:9});
+var SECT=[['icewolf','yeti','frostwraith','iceelem','mammoth','frostdrake'],['sandworm','cobra','mummy','sandelem','sphinx','djinn'],['bogtoad','leech','croc','hag','fenbeast','swampdrake'],['magmaslime','imp','lavagolem','hellhound','salamander','lavadrake']];
+var SECN=['Buzul Diyarı','Kum Denizi','Çürük Bataklık','Magma Ovası'];
+function quad(dx,dy){return dx>=0&&dy<0?0:dx>=0?1:dy>=0?2:3}
+/* evcil hayvanlar: her canavarın kendi yavru yoldaşı vardır. Yumurta olarak çok nadir düşer. */
+var PETB=['xp','gold','regen'],PETD={},PETN=0;
+Object.keys(MON).forEach(function(k){if(k==='metin')return;var m=MON[k],r=m.boss?(m.ml<30?3:4):(m.ml<12?0:m.ml<30?1:m.ml<60?2:3);PETD[k]={id:'p_'+k,t:k,n:m.boss?m.n.split(',')[0]+' Yavrusu':'Yavru '+m.n,r:r,col:m.c,b:PETB[(PETN++)%3],ml:m.ml||1,boss:!!m.boss,ic:m.boss?'👑':'🥚'}});
+var EGGMIN=[3,8,15,30,60];
+function eggChance(type,lv,pl,elite,inDg){var p=PETD[type];if(!p)return 0;var c=p.boss?(inDg?.12:.07):[.0045,.0035,.0026,.0018,.0012][p.r]*(elite?6:1);if(pl-(lv||1)>10)c*=.3;return c}
+function eggPrice(type){var p=PETD[type];if(!p)return 0;return Math.round((800+60*p.ml)*[1,3,9,30,100][p.r]*lvF(p.ml)/10)*10}
+function monPick(z,d,h,h2,q){
   if(h2!=null&&h2<.012&&(z===0||z===1))return 'goldslime';
-  if(z===0)return h<.42?'slime':h<.6?'boar':h<.8?'rabbit':'bee';
-  if(z===1)return h<.3?'wolf':h<.45?'boar':h<.65?'fox':h<.85?'spider':(d>=34?'treant':'wolf');
-  if(d>=100&&h>.94)return 'drake';
-  return h<.28?'golem':h<.48?'bat':h<.66?'scorpion':h<.8?'bear':(d>=70?'wraith':'golem')}
+  if(z===0)return h<.28?'slime':h<.42?'boar':h<.56?'rabbit':h<.7?'bee':h<.82?'mushroom':h<.92?'frog':'snail';
+  if(z===1&&d<56)return h<.17?'wolf':h<.28?'boar':h<.4?'fox':h<.52?'spider':h<.64?'goblin':h<.74?'snake':h<.83?'beetle':h<.91?'wisp':'treant';
+  if(d<70)return h<.2?'golem':h<.34?'bat':h<.48?'scorpion':h<.6?'bear':h<.74?'harpy':h<.88?'gargoyle':'wraith';
+  if(d>=100&&h>.975)return 'drake';
+  var lv=zoneLv(0,d),bi=lv<32?0:lv<48?1:lv<68?2:lv<95?3:lv<125?4:5;bi+=h<.16?-1:h>.9?1:0;bi=Math.max(0,Math.min(5,bi));return SECT[q||0][bi]}
+function regionAt(dx,dy,d){return d<34?'Çimenlik Ovalar':d<56?'Gölge Ormanı':d<70?'Kayalık Yaylalar':SECN[quad(dx,dy)]}
 /* seviye farkı: kendinden yüksek canavara hasar azalır, aldığın hasar artar; düşüğe tersine */
 function lvMod(pl,ml){var d=ml-pl;return d>0?Math.max(.08,1-.24*d):Math.min(1.4,1+.03*(-d))}
 function lvIn(pl,ml){var d=ml-pl;return d>0?Math.min(4,1+.3*d):Math.max(.45,1+.06*d)}
 function monFor(zone){return zone===0?(Math.random()<.75?'slime':'boar'):zone===1?(Math.random()<.6?'wolf':'boar'):'golem'}
-function zoneLv(zone,d){return zone===0?1+Math.floor(Math.max(0,d-8)/6):zone===1?5+Math.floor((d-27)/5):10+Math.floor((d-46)/3.5)}
+var ZLV=[[0,3],[21,3],[34,5],[46,8],[56,12],[70,20],[85,32],[100,60],[115,100],[128,140],[142,162]];
+function zoneLv(zone,d){for(var i=1;i<ZLV.length;i++){if(d<=ZLV[i][0]){var a=ZLV[i-1],b=ZLV[i];return Math.max(1,Math.floor(a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])))}}return 162}
 function xpNeed(l){return Math.round(70*l*l+40*l)}
-function mstat(type,lv){var m=MON[type];return{hp:Math.round((30+lv*24+lv*lv*1.1)*m.hm),dmg:Math.round((4+lv*2.3)*m.dm),xp:Math.round((10+lv*8)*m.xp),gold:Math.round((2+lv*2)*m.g)}}
-function pstat(p){var c=CLASSES[p.cls],l=p.lv,wl=p.wl||0,al=p.al||0;
-  return{maxhp:Math.round((c.hp+l*13)*(1+.12*al)),dmg:Math.round((c.dmg*(1+.13*(l-1)))*(1+.18*wl)*WEAPONS[p.cls][Math.min(8,p.wt||0)].m),red:Math.min(.5,al*.035),spd:c.spd,rng:c.rng,aspd:c.aspd}}
+function lvF(lv){var e=Math.max(0,lv-40);return 1+e*e/1400}
+function mstat(type,lv){var m=MON[type],f=lvF(lv);return{hp:Math.round((30+lv*24+lv*lv*1.1)*m.hm*(1+Math.max(0,lv-40)/60)),dmg:Math.round((4+lv*2.3)*m.dm*(1+Math.max(0,lv-40)/50)),xp:Math.round((10+lv*8)*m.xp*f),gold:Math.round((2+lv*2)*m.g*f)}}
+/* seviyeye göre kuşanılabilen en yüksek kademe */
+function effT(arr,t,lv){t=Math.min(arr.length-1,t||0);while(t>0&&arr[t].lv>lv)t--;return t}
+function pstat(p){var c=CLASSES[p.cls],l=p.lv,wl=p.wl||0,al=p.al||0,W=WEAPONS[p.cls][effT(WEAPONS[p.cls],p.wt,l)],Z=ARMOR[p.cls][effT(ARMOR[p.cls],p.at,l)];
+  return{maxhp:Math.round((c.hp+l*13)*(1+.12*al)*Z.h),dmg:Math.round((c.dmg*(1+.13*(l-1)))*(1+.18*wl)*W.m),red:Math.min(.6,al*.035+Z.r),spd:c.spd,rng:c.rng,aspd:c.aspd}}
+POIS.forEach(function(p){if(p.d>=46){var l=zoneLv(0,p.d);p.lv=Math.max(1,l-3);p.hi=l+4}});
 var UPI=[0,0,0,0,['i_copper',2],['i_copper',3],['i_iron',2],['i_iron',3],['i_silver',2],['i_silver',3],['i_gold',2],['i_mithril',2],['i_mithril',3]];
 function upCost(kind,n){var c=kind==='w'?{wood:4+3*n,stone:2+2*n,gold:10+15*n}:{wood:3+2*n,stone:3+3*n,gold:8+12*n},u=UPI[n];c.iron=0;if(u){c.ik=u[0];c.ic=u[1]+(kind==='w'?1:0)}return c}
 var PROF={wood:'Odunculuk',mine:'Madencilik'};
 function profNeed(l){return 8+l*8+l*l}
-root.YD={genWeekly:genWeekly,POIS:POIS,poiPos:poiPos,poiOf:poiOf,TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:50};
+root.YD={genWeekly:genWeekly,POIS:POIS,poiPos:poiPos,poiOf:poiOf,TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,quad:quad,regionAt:regionAt,SECT:SECT,SECN:SECN,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,PETD:PETD,EGGMIN:EGGMIN,eggChance:eggChance,eggPrice:eggPrice,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:150,lvF:lvF,effT:effT,ARMOR:ARMOR,ZT:ZT,WT:WT,WLV:WLV};
 if(typeof module!=='undefined')module.exports=root.YD;
 })(typeof window!=='undefined'?window:globalThis);
