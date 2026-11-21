@@ -124,6 +124,16 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #xc{font-size:.68rem!important;padding:3px 10px!important}
 #htr{font-size:.66rem;padding:3px 9px;opacity:.9;top:140px}
 @media (max-height:480px),(max-width:620px){#acts{transform:scale(.9);transform-origin:100% 100%}#joy{opacity:.8}#zn{font-size:.7rem!important;padding:3px 10px!important;top:6px!important}#xc{top:34px!important}#mm{width:88px;height:88px}.top .hi .gr:nth-of-type(3){display:none}}
+/* mobil: joystick hariç her şey küçük ve silik; ekran oyuna kalsın */
+@media (pointer:coarse){
+.top{padding:3px 8px 4px 3px;gap:5px;border-radius:11px;opacity:.88}.rg{width:58px;height:58px}.rg .av{width:28px;height:28px}.lvb{font-size:.55rem!important;min-width:18px!important}.top small{font-size:.58rem}.top b,.top .nm{font-size:.74rem!important}.bar{height:6px;margin-top:2px}
+.tr{gap:4px}.tr .ib{width:32px;height:32px;border-radius:9px;font-size:.95rem;opacity:.8}
+#mm{width:76px;height:76px;border-radius:10px;opacity:.85}
+#acts{transform:scale(.7)!important;transform-origin:100% 100%!important;right:6px;bottom:6px}.ab{opacity:.8}.ab small{font-size:.5rem}
+#joy{width:124px;height:124px;opacity:.9}
+#xc{font-size:.58rem!important;padding:2px 8px!important;opacity:.8}#htr{font-size:.56rem;padding:2px 7px;opacity:.75;top:118px}#zn{opacity:.85}
+#dock{left:max(140px,calc(env(safe-area-inset-left) + 140px));width:min(calc(100vw - 380px),340px);opacity:.92}#dock #log{font-size:.68rem;line-height:1.3;max-height:34px}#dock.big #log{max-height:110px}
+}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Yaxest Diyarı">
@@ -185,11 +195,11 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
-<script src="../account-config.js?v=20261121m"></script><script src="../account.js?v=20261121m"></script><script src="../i18n-dict.js?v=20261121m"></script><script src="../economy.js?v=20261121m"></script>
-<script src="look.js?v=20261121m"></script><script src="sim.js?v=20261121m"></script><script src="art.js?v=20261121m"></script><script src="runes.js?v=20261121m"></script><script src="game.js?v=20261121m"></script><script src="../games.js?v=20261121m"></script><script src="net-config.js?v=20261121m"></script><script src="net.js?v=20261121m"></script><script src="social.js?v=20261121m"></script>
-<script src="evler.js?v=20261121m"></script>
-<script src="hazine.js?v=20261121m"></script>
-<script src="rehber.js?v=20261121m"></script>
-<script src="atmos.js?v=20261121m"></script>
-<script src="dock.js?v=20261121m"></script><script src="extra2.js?v=20261121m"></script><script src="extra.js?v=20261121m"></script><script src="yeni.js?v=20261121m"></script>
+<script src="../account-config.js?v=20261121o"></script><script src="../account.js?v=20261121o"></script><script src="../i18n-dict.js?v=20261121o"></script><script src="../economy.js?v=20261121o"></script>
+<script src="look.js?v=20261121o"></script><script src="sim.js?v=20261121o"></script><script src="art.js?v=20261121o"></script><script src="runes.js?v=20261121o"></script><script src="game.js?v=20261121o"></script><script src="../games.js?v=20261121o"></script><script src="net-config.js?v=20261121o"></script><script src="net.js?v=20261121o"></script><script src="social.js?v=20261121o"></script>
+<script src="evler.js?v=20261121o"></script>
+<script src="hazine.js?v=20261121o"></script>
+<script src="rehber.js?v=20261121o"></script>
+<script src="atmos.js?v=20261121o"></script>
+<script src="dock.js?v=20261121o"></script><script src="extra2.js?v=20261121o"></script><script src="extra.js?v=20261121o"></script><script src="yeni.js?v=20261121o"></script>
 </body></html>
