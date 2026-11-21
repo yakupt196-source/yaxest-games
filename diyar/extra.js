@@ -255,7 +255,7 @@ function takePage(i){if(X.pg.indexOf(i)>=0)return;X.pg.push(i);X.c.p++;D.saveNow
   openPanel('pages')}
 
 /* ---------- panel ---------- */
-var TABS=[['pet','🐾 Yoldaş'],['ach','🏆 Başarım'],['pages','📜 Günlük'],['world','🌍 Dünya'],['fun','📸 Eğlence'],['salon','🎮 Salon'],['fish','🎣 Balık'],['trader','🧳 Tüccar']];
+var TABS=[['pet','🐾 Yoldaş'],['ach','🏆 Başarım'],['pages','📜 Günlük'],['world','🌍 Dünya'],['fun','📸 Eğlence'],['salon','🎮 Salon'],['trader','🧳 Tüccar']];
 function openPanel(tb){tab=tb||tab;render();D.openPan('p-x')}
 function render(){var el=$('xb');if(!el)return;
   var h='<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:8px">'+TABS.filter(function(t){return t[0]!=='trader'||traderOn()||tab==='trader'}).map(function(t){return'<button type="button" class="btn '+(t[0]===tab?'':'alt')+'" data-xt="'+t[0]+'" style="padding:6px 10px;font-size:.8rem">'+t[1]+'</button>'}).join('')+'</div>';
