@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 var FOUNDER='yakupt196@gmail.com';
-var FX={name:'Kurucunun Gazabı',ic:'bolt',kind:'bolt',cd:9,r:560,n:10,m:5.5,col:'#bfe9ff',d:'Gökten yıldırım yağdırır: yakındaki 10 düşmana ağır hasar verir ve sersemletir. Yalnızca Kurucu kullanabilir.'};
+var FX={name:'Kurucunun Gazabı',ic:'bolt',kind:'bolt',cd:7,r:1100,n:80,m:1e13,col:'#bfe9ff',d:'Gökten yıldırım yağdırır: görüş alanındaki HER düşmanı tek vuruşta yok eder (boss dahil). Yalnızca Kurucu kullanabilir.'};
 var T={
  fire:{name:'Alev Patlaması',ic:'flame',kind:'aoe',r:190,m:4.2,col:'#ff8a2b',slow:0,d:'Etrafında alev patlaması: yakındaki düşmanlara yüksek hasar.'},
  frost:{name:'Buz Çağı',ic:'nova',kind:'aoe',r:220,m:3.2,col:'#7ad7ff',slow:5,d:'Çevreyi dondurur: hasar verir ve düşmanları 5 sn yavaşlatır.'},

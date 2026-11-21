@@ -34,7 +34,7 @@ var SLOTKEY={hair:'h',top:'t',bottom:'b',shoes:'sh',hat:'hat',face:'fc',neck:'nk
 
 /* özel kahramanlar */
 var PRESETS={
- basic:{n:'Standart',d:'Sade, herkesin başlangıç görünümü.',ap:{g:'m',bd:1,ht:1,es:0,br:0,mo:0,body:'human',sk:'#f0c39a',h:'short',hc:'#5b3a1e',ey:'#4a3020',t:'tee',tc:'#4a90d9',b:'jeans',bc:'#262636',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
+ basic:{n:'Standart',d:'Sade, herkesin başlangıç görünümü.',ap:{g:'m',bd:1,ht:1,es:0,br:0,mo:0,fd:0,body:'human',sk:'#f0c39a',h:'short',hc:'#5b3a1e',ey:'#4a3020',t:'tee',tc:'#4a90d9',b:'jeans',bc:'#262636',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
  zilan:{shop:'zilan',n:'Zilan-chan (Gözlüklü)',d:'Turuncu kısa saçlı, elf kulaklı gözlüklü peri.',ap:{body:'svg',sv:'zilan'}},
  zilan2:{shop:'zilan',n:'Zilan-chan (Gözlüksüz)',d:'Aynı peri, gözlüğü çıkarmış hali.',ap:{body:'svg',sv:'zilanng'}},
  atacan:{shop:'atacan',n:'Atacan',d:'Esmer, uzun boylu, kaslı ve yakışıklı.',ap:{body:'svg',sv:'atacan'}},
@@ -65,15 +65,15 @@ var PRESETS={
  atlas:{shop:'atlas',n:'Time Mage Chronos',d:'Zamanı büyüyle bükebilen beyaz sakallı bilge.',ap:{body:'svg',sv:'atlas'}},
  kaya:{shop:'kaya',n:'Titan King Goliath',d:'Titanların kralı; taçlı, pelerinli, yenilmez.',ap:{body:'svg',sv:'kaya'}},
  sultan:{shop:'sultan',n:'Altın Sultan',d:'Altın ve mücevherlerle süslü hükümdar.',ap:{body:'svg',sv:'sultan'}},
- yaxest:{shop:'yaxest',n:'Yaxest',d:'Kıvırcık saçlı, ela gözlü; sweatshirt, eşofman ve bere.',ap:{body:'human',sk:'#e9b17f',h:'curly',hc:'#2b1a10',ey:'#a8742c',t:'hoodie',tc:'#8e9aaf',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'beanie',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
+ yaxest:{founder:1,n:'Yaxest (Kurucu)',d:'Yalnızca Kurucuya özel. Yıldırım auralı.',ap:{fd:1,body:'human',sk:'#e9b17f',h:'curly',hc:'#2b1a10',ey:'#a8742c',t:'hoodie',tc:'#8e9aaf',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'beanie',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
  cemile:{shop:'cemile',n:'Cemile',d:'Tombul yanaklı sevimli hamster.',ap:{body:'hamster',sk:'#f0b872',h:'short',hc:'#8a5a2a',ey:'#3b2616',t:'tee',tc:'#e8718d',b:'sweat',bc:'#6f778c',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#e8718d',fc:'none',nk:'bowtie',nkc:'#e8718d',mk:'none',bk:'none',bkc:'#c0392b'}},
- yaxest2:{shop:'yaxestp',n:'Yaxest (Palto)',d:'Siyah palto, beyaz boğazlı kazak, keçi sakal.',ap:{body:'human',sk:'#e6b48c',h:'curly',hc:'#241711',ey:'#a8742c',t:'coat',tc:'#1b1b24',b:'trousers',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'goatee',bk:'none',bkc:'#c0392b'}},
+ yaxest2:{founder:1,n:'Yaxest (Kurucu Palto)',d:'Yalnızca Kurucuya özel. Siyah palto, yıldırım auralı.',ap:{fd:1,body:'human',sk:'#e6b48c',h:'curly',hc:'#241711',ey:'#a8742c',t:'coat',tc:'#1b1b24',b:'trousers',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'goatee',bk:'none',bkc:'#c0392b'}},
  almin:{shop:'almin',n:'Almin',d:'Mor saçlı, havalı, deri ceketli.',ap:{body:'human',sk:'#f6cba0',h:'wavy',hc:'#9b5cff',ey:'#9b5cff',t:'leather',tc:'#1b1b24',b:'jeans',bc:'#262636',sh:'boots',shc:'#1b1b24',hat:'headphones',htc:'#2b2b33',fc:'none',nk:'choker',nkc:'#1b1b24',mk:'none',bk:'none',bkc:'#c0392b'}}};
 function def(){var o={};var p=PRESETS.basic.ap;for(var k in p)o[k]=p[k];return o}
 function isFree(slot,id){var l=CAT[slot];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i].p===0;return false}
 function price(slot,id){var l=CAT[slot];for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i].p;return 0}
 function valid(ap){var d=def(),o={};for(var k in d)o[k]=ap&&ap[k]!=null?ap[k]:d[k];
-  Object.keys(SLOTKEY).forEach(function(s){var f=SLOTKEY[s],ok=CAT[s].some(function(x){return x.id===o[f]});if(!ok)o[f]=d[f]});o.g=o.g==='f'?'f':'m';[['bd',2],['ht',2],['es',2],['br',3],['mo',3]].forEach(function(q){var v=parseInt(o[q[0]],10);o[q[0]]=isNaN(v)?d[q[0]]:Math.max(0,Math.min(q[1],v))});if(ap&&ap.body==='svg'&&typeof ap.sv==='string'&&/^[a-z]+$/.test(ap.sv)){o.body='svg';o.sv=ap.sv}else if(o.body!=='hamster')o.body='human';return o}
+  Object.keys(SLOTKEY).forEach(function(s){var f=SLOTKEY[s],ok=CAT[s].some(function(x){return x.id===o[f]});if(!ok)o[f]=d[f]});o.g=o.g==='f'?'f':'m';o.fd=o.fd?1:0;[['bd',2],['ht',2],['es',2],['br',3],['mo',3]].forEach(function(q){var v=parseInt(o[q[0]],10);o[q[0]]=isNaN(v)?d[q[0]]:Math.max(0,Math.min(q[1],v))});if(ap&&ap.body==='svg'&&typeof ap.sv==='string'&&/^[a-z]+$/.test(ap.sv)){o.body='svg';o.sv=ap.sv}else if(o.body!=='hamster')o.body='human';return o}
 
 /* ---------- çizim ---------- */
 function hairBack(c,ap,hy){var h=ap.h,hc=ap.hc,d=sh(hc,-30);
@@ -234,6 +234,9 @@ function hamster(c,ap,bob,t,mv,sw){var fur=ap.sk,belly='#fff7ea',pk='#f4a3b0';
   if(ap.mk==='blush'||ap.mk==='freckles'){c.fillStyle='rgba(255,90,120,.45)';c.beginPath();c.arc(-11,hy+2,2.6,0,TAU);c.arc(11,hy+2,2.6,0,TAU);c.fill()}
   return hy}
 
+function founderAura(c,t){var p=.6+Math.sin(t*3)*.15;var g=c.createRadialGradient(0,-26,4,0,-26,42);g.addColorStop(0,'rgba(190,230,255,'+(.35*p)+')');g.addColorStop(.6,'rgba(120,180,255,'+(.16*p)+')');g.addColorStop(1,'rgba(120,180,255,0)');c.fillStyle=g;c.beginPath();c.arc(0,-26,42,0,TAU);c.fill();
+  c.strokeStyle='rgba(255,226,138,'+(.5+.3*Math.sin(t*5))+')';c.lineWidth=1.6;c.beginPath();c.ellipse(0,2,22,7,0,0,TAU);c.stroke();
+  var k=Math.floor(t*7)%5;c.strokeStyle='rgba(220,240,255,.9)';c.lineWidth=1.3;c.beginPath();var a=k*1.26+t*.4,x0=Math.cos(a)*24,y0=-26+Math.sin(a)*26;c.moveTo(x0,y0);for(var i=1;i<=3;i++){c.lineTo(x0*(1-i*.22)+(((k+i)*7)%5-2)*3,y0*(1-i*.1)-i*2+(((k*3+i)*5)%4-1.5)*3)}c.stroke()}
 /* feet at (x,y); sc=ölçek */
 var SVI={};
 function svgImg(id){var m=SVI[id];if(m)return m;m=SVI[id]={im:new Image(),ok:false};try{var s=root.YX.av({sp:id,col:'#ffd23f'},'n').replace('<svg ','<svg width="200" height="200" ');m.im.onload=function(){m.ok=true;try{root.dispatchEvent(new Event('yl-img'))}catch(e){}};m.im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)}catch(e){}return m}
@@ -242,6 +245,7 @@ function hero(c,x,y,ap0,t,mv,sc){var ap=valid(ap0),bob=Math.sin(t*(mv?9:2.2))*(m
   c.save();c.translate(x,y);var hS=hm||ap.body==='svg'?1:[.93,1,1.07][ap.ht|0];c.scale((sc||1)*hS,(sc||1)*hS);
   if(ap.body==='svg'){svgHero(c,ap,bob);c.restore();return}
   el(c,0,1,hm?17:15,5,'rgba(0,0,0,.32)');
+  if(ap.fd)founderAura(c,t);
   backDraw(c,ap,bob,t,mv);
   var hy,ex=4;
   if(hm){hy=hamster(c,ap,bob,t,mv,sw);ex=6.4;

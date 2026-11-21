@@ -21,7 +21,7 @@ function on(){return !!(ws&&ws.readyState===1&&me)}
 function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;loadH();chUi();live=1;retry=0;if(window.YSoc)try{YSoc.init({D:D,Net:window.YNet})}catch(e){console.error(e)}if(!(window.YD_NET)||!window.YXAcct||!YXAcct.token){D.say('🌐 Çevrimiçi kapalı: hesap modülü yok.','sys');return}pickWorld(true)}
 function connect(){if(!live||ws||!G)return;
   YXAcct.token().then(function(s){if(!live||ws)return;var w;try{w=new WebSocket(url())}catch(e){return}ws=w;
-    D.say('🌐 Sunucuya ulaşılıyor…','sys');w.onopen=function(){D.say('🌐 Bağlantı açıldı, giriş doğrulanıyor…','sys');send({t:'hi',tok:s.idToken,nick:P.nick,ap:P.ap,lv:P.lv,x:Math.round(G.px),y:Math.round(G.py)})};
+    D.say('🌐 Sunucuya ulaşılıyor…','sys');w.onopen=function(){D.say('🌐 Bağlantı açıldı, giriş doğrulanıyor…','sys');send({t:'hi',tok:s.idToken,nick:P.nick,ap:apx(),lv:P.lv,x:Math.round(G.px),y:Math.round(G.py)})};
     w.onmessage=function(e){var m;try{m=JSON.parse(e.data)}catch(x){return}hand(m)};
     w.onclose=function(ev){if(!me&&retry<2)D.say('🌐 Bağlantı kapandı (kod '+(ev&&ev.code)+').','sys');ws=null;me=null;others={};if(live){clearTimeout(timer);timer=setTimeout(connect,Math.min(30000,2000*Math.pow(2,retry++)))}};
     w.onerror=function(){try{w.close()}catch(e){}}}).catch(function(e){if(retry<1)D.say('🌐 Çevrimiçi için hesabına giriş yapmalısın (Hesap menüsü). '+((e&&e.code)||''),'sys');if(live){clearTimeout(timer);timer=setTimeout(connect,Math.min(30000,3000*Math.pow(2,retry++)))}})}
@@ -62,7 +62,7 @@ function tick(dt){if(!G)return;if(window.YSoc)try{YSoc.tick(dt)}catch(e){}beat+=
   var wx=G.px,wy=G.py;if(G.mode!=='world'){if(!G.saveW)return;wx=G.saveW.x;wy=G.saveW.y}/* zindanda arena koordinatı sunucuya gitmez */
   if(!isFinite(wx)||!isFinite(wy))return;
   var mv=Math.abs(wx-lastX)+Math.abs(wy-lastY)>2;
-  if((mv&&lastSend>.15)||beat>3){var jmp=Math.hypot(wx-lastX,wy-lastY)>260&&lastX!==0;send({t:'p',x:Math.round(wx),y:Math.round(wy),f:mv?1:0,lv:P.lv,j:jmp?1:undefined,ap:beat>3?P.ap:undefined});lastSend=0;lastX=wx;lastY=wy;if(beat>3)beat=0}
+  if((mv&&lastSend>.15)||beat>3){var jmp=Math.hypot(wx-lastX,wy-lastY)>260&&lastX!==0;send({t:'p',x:Math.round(wx),y:Math.round(wy),f:mv?1:0,lv:P.lv,j:jmp?1:undefined,ap:beat>3?apx():undefined});lastSend=0;lastX=wx;lastY=wy;if(beat>3)beat=0}
   var k=Math.min(1,dt*9);for(var id in others){var o=others[id];o.dx+=(o.x-o.dx)*k;o.dy+=(o.y-o.dy)*k}}
 var bubs={};
 function bub(id,txt){bubs[id]={m:String(txt).slice(0,120),t:performance.now()}}
@@ -72,12 +72,17 @@ function bubble(ctx,id,x,y){var b=bubs[id];if(!b)return;var age=(performance.now
   ctx.fillStyle='rgba(255,255,255,.96)';ctx.strokeStyle='#1b1640';ctx.lineWidth=2.5;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx,by,w,h,10);else ctx.rect(bx,by,w,h);ctx.fill();ctx.stroke();
   ctx.beginPath();ctx.moveTo(x-7,by+h-1);ctx.lineTo(x,by+h+9);ctx.lineTo(x+7,by+h-1);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='rgba(255,255,255,.96)';ctx.fillRect(x-6,by+h-3,12,4);
   ctx.fillStyle='#1b1640';ctx.textAlign='center';ctx.textBaseline='middle';L.forEach(function(l,i){ctx.fillText(l,x,by+10+i*16)});ctx.restore()}
+function apx(){var a=Object.assign({},P.ap||{});a.cl=P.cls;return a}
+var CLK={savasci:1,tank:1,buyucu:1,sifaci:1,suikastci:1};
 function draw(ctx,camX,camY,t,W,H){if(!on()||G.mode!=='world')return;camX0=camX;camY0=camY;
   try{bubble(ctx,me,G.px,G.py+15+YL.topY(P.ap||YL.def())-50)}catch(e){}
   for(var id in others){var o=others[id],sx=o.dx,sy=o.dy,cx=o.dx-camX,cy=o.dy-camY;if(cx<-80||cy<-90||cx>W+80||cy>H+80)continue;
     var mv=Math.abs(o.x-o.dx)+Math.abs(o.y-o.dy)>3;
     ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(sx,sy+22,20,8,0,0,6.28);ctx.fill();
+    var oc=o.ap&&CLK[o.ap.cl]?o.ap.cl:'savasci',vap=(o.ap&&o.ap.body!=='svg'&&o.ap.body!=='hamster')?o.ap:null;if(mv)o.fa=Math.atan2(o.y-o.dy,o.x-o.dx);var fa=o.fa||0,wb=vap&&Math.sin(fa)<-.3;
+    try{if(wb)YA.weapon(ctx,oc,sx,sy-2,fa,0,t,0,vap.sk,vap.tc,mv)}catch(e){}
     try{YL.hero(ctx,sx,sy+21,o.ap||YL.def(),t,mv,1)}catch(e){}
+    try{if(vap&&!wb)YA.weapon(ctx,oc,sx,sy-2,fa,0,t,0,vap.sk,vap.tc,mv)}catch(e){}
     try{var pl=window.YSoc?YSoc.plate(o):null;YA.plate(ctx,sx,sy+15+YL.topY(o.ap||YL.def()),pl?pl.t:o.n+' · Sv'+o.lv,pl?pl.c:'#8fd6ff')}catch(e){}
     if(window.YSoc)try{YSoc.drawOther(ctx,o,sx,sy+15+YL.topY(o.ap||YL.def()))}catch(e){}
     try{bubble(ctx,id,sx,sy+15+YL.topY(o.ap||YL.def())-24)}catch(e){}}
