@@ -61,7 +61,7 @@ var ICON={
  r_kristal:rune('<path d="M16 8 22 16 16 24 10 16Z" fill="COL" stroke="#fff" stroke-width="1"/>','#7ad7ff'),
  r_orman:rune('<path d="M16 24V12M16 17C11 17 10 13 10 10 14 10 16 13 16 17M16 15C20 15 22 12 22 9 18 9 16 11 16 15" stroke="COL" stroke-width="2" fill="none" stroke-linecap="round"/>','#6ef0a0'),
  r_demir:rune('<path d="M11 9H21M16 9V24M11 24H21M11 16H21" stroke="COL" stroke-width="2.2" fill="none" stroke-linecap="round"/>','#c7cbd8'),
- r_alev:rune('<path d="M16 8C19 12 22 14 21 19 20 23 17 24 16 24 13 24 11 22 11 19 11 16 14 15 14 12 15 10 16 8Z" fill="COL"/>','#ff9a3c'),
+ r_alev:rune('<path d="M16 8C19 12 22 14 21 19 20 23 17 24 16 24 13 24 11 22 11 19 11 16 14 15 14 12 14 10 15 9 16 8Z" fill="COL"/>','#ff9a3c'),
  r_golge:rune('<path d="M20 9A8 8 0 1 0 20 23 6.5 6.5 0 0 1 20 9Z" fill="COL"/>','#b88cff'),
  r_buz:rune('<path d="M16 8V24M9.5 12 22.5 20M9.5 20 22.5 12" stroke="COL" stroke-width="2" fill="none" stroke-linecap="round"/>','#9fe8ff'),
  r_ruzgar:rune('<path d="M9 13H19A3 3 0 1 0 16 10M9 18H23A3 3 0 1 1 20 21M9 23H15" stroke="COL" stroke-width="2" fill="none" stroke-linecap="round"/>','#8ff0d0'),
