@@ -131,7 +131,7 @@ function mkBind(el,redraw){var P=PL();
 function mkWarn(){var now=Date.now();mkMine().forEach(function(l){if(!YK.valid(l.k)||now-l.t<9e5)return;var ref=mkRef(l.k,l.n),g=mkTag(l.pr,ref),key=l.id+':'+l.pr;if(g.lv<1||MK.warned[key])return;MK.warned[key]=1;
   var m=YK.name(l.k)+' ilanın '+(g.lv>=2?'çok pahalı':'pahalı')+' (🪙'+l.pr+', piyasa 🪙'+ref+'). Fiyatı indirirsen daha çabuk satılır.';D.say('🏷️ '+m,'sys');if(D.banner)D.banner('Fiyatı indir',esc(m))})}
 function mkApplyD(d){var P=PL();if(!d||!P)return;P.mkc=P.mkc||[];
-  if(P.mkc.indexOf(d.c)<0){var tx=[];if(d.g>0){P.gold+=d.g;tx.push('+🪙'+d.g+(d.n?' ('+d.n+' satış, %5 vergi düşüldü)':''))}(d.it||[]).forEach(function(e){var pp=String(e).split('#'),k=pp[0],n=Math.max(1,Math.min(9999,+pp[1]||1));if(YK.valid(k)){YK.put(P,k,n);tx.push(YK.name(k)+(n>1?' ×'+n:'')+' iade')}});
+  if(P.mkc.indexOf(d.c)<0){var tx=[];if(d.g>0){P.gold+=d.g;tx.push('+🪙'+d.g+(d.n?' ('+d.n+' satış, %5 vergi düşüldü)':''))}(d.it||[]).forEach(function(e){var pp=String(e).split('#'),k=pp[0],n=Math.max(1,Math.min(9999,+pp[1]||1));if(YK.valid(k)){YK.put(P,k,n);tx.push(YK.name(k)+(n>1?' ×'+n:'')+' teslim edildi')}});
     P.mkc.push(d.c);if(P.mkc.length>20)P.mkc.shift();D.saveNow();if(tx.length)D.say('🧑 Oyuncu Pazarı: '+tx.join(' · '),'sys');if(d.g>0&&D.banner)D.banner('Satış geliri','+🪙'+d.g)}
   if(window.YNet)YNet.send({t:'mka',c:d.c})}
 YK.mkHand=function(m){var P=PL();if(!P||!D)return false;
