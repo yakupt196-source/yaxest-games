@@ -13,7 +13,9 @@ function openHist(){var m=window.YNet&&YNet.curCh?{w:1,l:2,k:3,p:4}[YNet.curCh()
 function init(){var b=$('dkb'),p=$('dkp');if(!b||!p)return;
   b.onclick=function(e){e.stopPropagation();p.classList.toggle('on')};
   document.addEventListener('click',function(e){if(!p.classList.contains('on'))return;if(e.target.closest&&e.target.closest('#dkb'))return;if(e.target.closest&&e.target.closest('#dkp .ib')){setTimeout(function(){p.classList.remove('on')},60);return}p.classList.remove('on')},true);
-  $('log').onclick=$('chh').onclick=openHist;
+  var dk=$('dock');try{if(localStorage.getItem('yx-chbig')==='1')dk.classList.add('big')}catch(e){}
+  function tgl(e){if(e)e.stopPropagation();dk.classList.toggle('big');var b=dk.classList.contains('big');$('chtg').textContent=b?'⤡':'⤢';try{localStorage.setItem('yx-chbig',b?'1':'0')}catch(x){}}
+  $('log').onclick=tgl;$('chtg').onclick=tgl;$('chh').onclick=openHist;$('iatl').onclick=function(){if(D())D().openAtlas()};
   $('chch').onclick=function(){if(window.YNet)YNet.cycleCh()};
   var i=$('chi');['keydown','keyup','keypress'].forEach(function(t){i.addEventListener(t,function(e){e.stopPropagation()})});
   i.addEventListener('keydown',function(e){if(e.key==='Enter'){var v=i.value.trim();i.value='';if(v&&window.YNet)YNet.sendChat(v);i.blur()}});

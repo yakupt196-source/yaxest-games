@@ -81,6 +81,18 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #tut h4{margin:0 0 3px;font-size:.9rem;color:#5be39a}#tut .tb{height:6px;border-radius:3px;background:#ffffff1f;margin:6px 0;overflow:hidden}#tut .tb i{display:block;height:100%;background:#5be39a}#tut .tr2{display:flex;gap:6px;margin-top:6px}#tut button{min-height:32px;padding:0 11px;border-radius:10px;border:1.5px solid var(--line);background:#ffffff14;color:#fff;font:inherit;font-size:.76rem}#tut button.go{background:#5be39a;color:#06240f;border-color:#5be39a;font-weight:800}
 #tut.big{z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88vw,380px);font-size:.9rem;text-align:center;border-color:var(--yel)}
 .tuthl{animation:tuthl 1s ease-in-out infinite}@keyframes tuthl{50%{box-shadow:0 0 0 4px #5be39acc,0 0 18px #5be39a}}
+
+/* ---- sade profil, büyüyüp küçülen sohbet, lokasyon afişi, lonca, atmosfer ---- */
+.rg{width:60px;height:60px}.rg .av{width:30px;height:30px}.lvb{font-size:.62rem;min-width:20px;padding:0 5px}.top{gap:7px;padding:4px 11px 6px 4px;border-radius:13px}.top .hi .gr:nth-of-type(2){display:none}.top .gr{font-size:.66rem;line-height:1.15}.top #hn{font-size:.88rem}.top small{font-size:.66rem}
+#dock #log{max-height:52px;transition:max-height .22s ease;cursor:pointer}#dock.big #log{max-height:190px}
+#chtg{position:absolute;right:8px;top:4px;width:26px;height:20px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.35);color:#fff;font-size:.7rem;line-height:1;z-index:2}
+@media (max-height:480px){#dock #log{max-height:44px}#dock.big #log{max-height:120px}}
+#poib{position:fixed;left:50%;top:54px;transform:translate(-50%,-10px);z-index:24;display:none;flex-direction:column;align-items:center;gap:2px;padding:9px 26px;border-radius:14px;background:linear-gradient(180deg,rgba(40,26,10,.95),rgba(18,12,30,.95));border:1.5px solid #ffc450;box-shadow:0 8px 30px rgba(0,0,0,.55),0 0 24px rgba(255,196,80,.25);text-align:center;pointer-events:none}
+#poib.on{display:flex;animation:poin .5s ease forwards}#poib b{font-size:1.05rem;color:#ffe9a8;letter-spacing:.5px}#poib small{color:#d9d4ff;font-size:.74rem}@keyframes poin{to{transform:translate(-50%,0);opacity:1}from{opacity:0}}
+.gh{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:linear-gradient(135deg,rgba(122,59,48,.55),rgba(74,42,122,.4));border:1px solid rgba(255,196,80,.35);margin-bottom:8px}.gh .t{flex:1}
+.gem{width:46px;height:46px;border-radius:50%;border:3px solid;display:grid;place-items:center;font-weight:800;font-size:1.2rem;flex:none;background:rgba(0,0,0,.4);box-shadow:0 0 12px rgba(255,196,80,.25)}.gem.sm{width:32px;height:32px;font-size:.9rem;border-width:2px}
+.card{border-color:rgba(255,196,80,.32)!important;box-shadow:0 12px 44px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,214,120,.22)}.pan h2{position:relative;padding-bottom:7px;color:#ffd98a}.pan h2::after{content:"";position:absolute;left:0;bottom:0;width:70px;height:3px;border-radius:2px;background:linear-gradient(90deg,#ffc450,transparent)}
+#atm{position:fixed;inset:0;width:100%;height:100%;pointer-events:none!important;z-index:0;display:none}#vig{position:fixed;inset:0;pointer-events:none!important;z-index:0;display:none;background:radial-gradient(ellipse at 50% 46%,transparent 52%,rgba(8,4,20,.5) 100%)}#grade{position:fixed;inset:0;pointer-events:none!important;z-index:0;display:none;transition:background 2.5s ease;mix-blend-mode:soft-light}
 #emp{top:auto!important;right:auto!important;left:50%!important;bottom:calc(86px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)}
 
 .pan{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,3,15,.6);z-index:5;touch-action:pan-y}
@@ -143,12 +155,12 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
  <div class="wdr"><div class="wdt" id="wdt"></div><div class="wdg" id="wdg"></div><div class="wdcol" id="wdcol"></div></div>
  <div class="wdb"><span id="wdgold" class="wdgold"></span><button class="btn alt" id="wdx" type="button">İptal</button><button class="btn" id="wdok" type="button">Kaydet</button></div>
 </div></div>
-<div id="hud">
+<div id="hud"><canvas id="atm"></canvas><div id="vig"></div><div id="grade"></div>
  <div class="top"><div class="rg"><svg viewBox="0 0 110 110"><g fill="none" stroke-linecap="round" transform="rotate(-90 55 55)"><circle class="tk" cx="55" cy="55" r="50" stroke-width="8"/><circle id="rh" class="fg" cx="55" cy="55" r="50" stroke-width="8" pathLength="100" stroke="#ff5b6e" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="40" stroke-width="7"/><circle id="rs" class="fg" cx="55" cy="55" r="40" stroke-width="7" pathLength="100" stroke="#ffc83d" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="31" stroke-width="6"/><circle id="rx" class="fg" cx="55" cy="55" r="31" stroke-width="6" pathLength="100" stroke="#4fb3ff" stroke-dasharray="0 100"/></g></svg><div class="av" id="hav"></div><b id="rlv" class="lvb">1</b></div><div class="hi"><b id="hn"></b><small id="hl"></small><div class="gr"><i style="background:#ff5b6e"></i><span id="th"></span></div><div class="gr"><i style="background:#ffc83d"></i><span id="ts"></span></div><div class="gr"><i style="background:#4fb3ff"></i><span id="tx"></span></div></div></div>
  <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button></div>
  <div id="joy"><i id="jk"></i></div>
- <div id="htr"></div><div id="tut"></div>
- <div id="dock"><div id="dkp"><button class="ib" id="ix" type="button" aria-label="Diyar+">✨</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="itut" type="button" aria-label="Rehber">📘</button><button class="ib" id="itr" type="button" aria-label="Hazine">🧭</button><button class="ib" id="ihome" type="button" aria-label="Evim">🏠</button><button class="ib" id="itown" type="button" aria-label="Kasaba">🏘️</button><button class="ib" id="imenu" type="button" aria-label="Ayarlar">⚙️</button></div><div id="chbox"><div id="log"></div><div id="dkrow"><button id="dkb" type="button" aria-label="Menü">☰<i id="dkn" class="sbd" style="display:none"></i></button><button id="chch" type="button" aria-label="Kanal">Dünya</button><input id="chi" maxlength="120" autocomplete="off" enterkeyhint="send" placeholder="Mesaj yaz…  /yardim"><button id="chh" type="button" aria-label="Sohbet geçmişi">📜<b id="chn" class="sbd" style="display:none"></b></button></div></div></div>
+ <div id="poib"></div><div id="htr"></div><div id="tut"></div>
+ <div id="dock"><div id="dkp"><button class="ib" id="ix" type="button" aria-label="Diyar+">✨</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="itut" type="button" aria-label="Rehber">📘</button><button class="ib" id="itr" type="button" aria-label="Hazine">🧭</button><button class="ib" id="iatl" type="button" aria-label="Keşif">🗺️</button><button class="ib" id="ihome" type="button" aria-label="Evim">🏠</button><button class="ib" id="itown" type="button" aria-label="Kasaba">🏘️</button><button class="ib" id="imenu" type="button" aria-label="Ayarlar">⚙️</button></div><div id="chbox"><button id="chtg" type="button" aria-label="Sohbeti büyüt/küçült">⤢</button><div id="log"></div><div id="dkrow"><button id="dkb" type="button" aria-label="Menü">☰<i id="dkn" class="sbd" style="display:none"></i></button><button id="chch" type="button" aria-label="Kanal">Dünya</button><input id="chi" maxlength="120" autocomplete="off" enterkeyhint="send" placeholder="Mesaj yaz…  /yardim"><button id="chh" type="button" aria-label="Sohbet geçmişi">📜<b id="chn" class="sbd" style="display:none"></b></button></div></div></div>
  <div id="acts"><div class="ab" id="b0">⚔️</div><div class="ab" id="b1"></div><div class="ab" id="b2"></div><div class="ab" id="b3"></div><div class="ab" id="b4"></div><div class="ab" id="bi">✋<small>E</small></div></div>
 </div>
 
@@ -164,10 +176,11 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
-<script src="../account-config.js?v=20261121i"></script><script src="../account.js?v=20261121i"></script><script src="../i18n-dict.js?v=20261121i"></script><script src="../economy.js?v=20261121i"></script>
-<script src="look.js?v=20261121i"></script><script src="sim.js?v=20261121i"></script><script src="art.js?v=20261121i"></script><script src="runes.js?v=20261121i"></script><script src="game.js?v=20261121i"></script><script src="../games.js?v=20261121i"></script><script src="net-config.js?v=20261121i"></script><script src="net.js?v=20261121i"></script><script src="social.js?v=20261121i"></script>
-<script src="evler.js?v=20261121i"></script>
-<script src="hazine.js?v=20261121i"></script>
-<script src="rehber.js?v=20261121i"></script>
-<script src="dock.js?v=20261121i"></script><script src="extra2.js?v=20261121i"></script><script src="extra.js?v=20261121i"></script>
+<script src="../account-config.js?v=20261121j"></script><script src="../account.js?v=20261121j"></script><script src="../i18n-dict.js?v=20261121j"></script><script src="../economy.js?v=20261121j"></script>
+<script src="look.js?v=20261121j"></script><script src="sim.js?v=20261121j"></script><script src="art.js?v=20261121j"></script><script src="runes.js?v=20261121j"></script><script src="game.js?v=20261121j"></script><script src="../games.js?v=20261121j"></script><script src="net-config.js?v=20261121j"></script><script src="net.js?v=20261121j"></script><script src="social.js?v=20261121j"></script>
+<script src="evler.js?v=20261121j"></script>
+<script src="hazine.js?v=20261121j"></script>
+<script src="rehber.js?v=20261121j"></script>
+<script src="atmos.js?v=20261121j"></script>
+<script src="dock.js?v=20261121j"></script><script src="extra2.js?v=20261121j"></script><script src="extra.js?v=20261121j"></script>
 </body></html>
