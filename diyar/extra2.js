@@ -80,7 +80,15 @@ function openChest(i,el){var T=TIERS[i],box=el.querySelector('#xchres');if(P.gol
     var it=items[k++],d=document.createElement('div');d.className='it';d.style.cssText='border-color:'+RC[it.r]+';animation:xpop .35s';d.innerHTML='<span style="font-size:1.3rem">'+it.ic+'</span><div class="t"><b style="color:'+RC[it.r]+'">'+esc(it.t)+'</b></div>';l.appendChild(d);setTimeout(nx,i>=3?420:260)})()}
 function shopChests(el){if(!el)return;if(!$('xstyle')){var st=document.createElement('style');st.id='xstyle';st.textContent='@keyframes xpop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}';document.head.appendChild(st)}
   var w=document.createElement('div');w.innerHTML=chestHtml();el.insertBefore(w,el.firstChild);w.querySelectorAll('[data-chest]').forEach(function(b){b.onclick=function(){openChest(+b.dataset.chest,el)}})}
-function grantChest(ti){var items=roll(ti);items.forEach(function(it){it.f()});D.saveNow();D.say('🎁 '+TIERS[ti].n+' ödülü: '+items.map(function(i){return i.t}).join(', '),'sys')}
+function giveBox(ti,src){ti=Math.max(0,Math.min(TIERS.length-1,ti|0));X.cb=X.cb||{};X.cb[ti]=(X.cb[ti]||0)+1;D.saveNow();D.say('🎁 '+TIERS[ti].n+(src?' ('+src+')':'')+' envantere düştü! Çanta panelinden açabilirsin.','sys');try{if(D.banner)D.banner('🎁 '+TIERS[ti].n,'Envantere eklendi')}catch(e){}}
+function grantChest(ti){giveBox(ti,'ödül')}
+function bagChests(el){if(!el||!X)return;var cb=X.cb||{},tot=0;TIERS.forEach(function(T,i){tot+=cb[i]||0});if(!tot)return;
+  var w=document.createElement('div');var h='<h3 style="margin:8px 0 6px">🎁 Sandıklar <small style="font-weight:400;opacity:.8">(envanterde)</small></h3>';
+  TIERS.forEach(function(T,i){if(!(cb[i]>0))return;h+='<div class="it"><span style="font-size:1.6rem">'+T.ic+'</span><div class="t"><b style="color:'+T.col+'">'+T.n+'</b> ×'+cb[i]+'<br><small>'+(2+i)+' ödül</small></div><button class="btn" data-own="'+i+'" type="button">Aç</button></div>'});
+  w.innerHTML=h+'<div id="xchres"></div>';el.appendChild(w);
+  w.querySelectorAll('[data-own]').forEach(function(b){b.onclick=function(){var i=+b.dataset.own;if(!(X.cb[i]>0))return;X.cb[i]--;inc('ch');var items=roll(i),T=TIERS[i];items.forEach(function(it){it.f()});D.saveNow();
+    var box=w.querySelector('#xchres');box.innerHTML='<p class="sub"><b style="color:'+T.col+'">'+T.n+'</b> açıldı:</p>';items.forEach(function(it){var d=document.createElement('div');d.className='it';d.style.cssText='border-color:'+RC[it.r]+';animation:xpop .35s';d.innerHTML='<span style="font-size:1.3rem">'+it.ic+'</span><div class="t"><b style="color:'+RC[it.r]+'">'+esc(it.t)+'</b></div>';box.appendChild(d)});
+    b.parentNode.querySelector('.t b').nextSibling.textContent=' ×'+X.cb[i];if(!X.cb[i])b.disabled=true}})}
 
 /* ====================== define haritası ====================== */
 function giveMap(ti){if(X.tm){var g=300*(ti+1);P.gold+=g;D.say('🗺️ Zaten bir define haritan var; yerine '+g+' altın aldın.','sys');return}
@@ -217,6 +225,6 @@ function chip(){if(!X||!X.tm||!G)return'';var d=hyp(X.tm.x-G.px,X.tm.y-G.py)/TS;
 function draw(ctx,camX,camY,t,W,H){if(!X||!X.tm||!G||G.mode!=='world')return;var tm=X.tm,sx=tm.x-camX,sy=tm.y-camY,gx=G.px,gy=G.py;
   if(sx>-80&&sx<W+80&&sy>-80&&sy<H+80){var pu=.5+.5*Math.sin(t*4);ctx.fillStyle='rgba(255,60,60,'+(.12+.12*pu)+')';ctx.beginPath();ctx.arc(tm.x,tm.y,26+6*pu,0,6.28);ctx.fill();ctx.strokeStyle='#d62d2d';ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tm.x-12,tm.y-12);ctx.lineTo(tm.x+12,tm.y+12);ctx.moveTo(tm.x+12,tm.y-12);ctx.lineTo(tm.x-12,tm.y+12);ctx.stroke();ctx.lineCap='butt'}
   else{var a=Math.atan2(tm.y-G.py,tm.x-G.px),ax=gx+Math.cos(a)*90,ay=gy+Math.sin(a)*90;ctx.save();ctx.translate(ax,ay);ctx.rotate(a);ctx.fillStyle='rgba(255,210,63,.9)';ctx.strokeStyle='#7a5a00';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(14,0);ctx.lineTo(-8,-9);ctx.lineTo(-4,0);ctx.lineTo(-8,9);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}}
-window.YX3={init:init,near:near,interact:interact,chip:chip,draw:draw,shopChests:shopChests,grantChest:grantChest,
+window.YX3={init:init,near:near,interact:interact,chip:chip,draw:draw,shopChests:shopChests,grantChest:grantChest,giveBox:giveBox,bagChests:bagChests,
  tabs:{fish:function(){return'<p class="sub">Balık tutmak için göl kenarında ✋ düğmesine bas.</p>'}},bind:function(){},TIERS:TIERS,dbg:{roll:roll,F:F,FISH:FISH,giveMap:giveMap,dig:dig}};
 })();
