@@ -9,3 +9,8 @@ class_name = "World"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["World"]
+
+# Alan adın Cloudflare'de ise sunucu dunya.yaxestgames.com adresinden yayınlanır
+[[routes]]
+pattern = "dunya.yaxestgames.com"
+custom_domain = true
