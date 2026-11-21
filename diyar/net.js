@@ -4,13 +4,13 @@
 var D,G,P,Y,TS=48,ws=null,others={},me=null,msgs={w:[],l:[]},lastSend=0,lastX=0,lastY=0,retry=0,live=0,timer=0,beat=0;
 function url(){return window.YD_NET||''}
 function on(){return !!(ws&&ws.readyState===1&&me)}
-function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;live=1;retry=0;if(!url()||!window.YXAcct||!YXAcct.token)return;connect()}
+function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;live=1;retry=0;if(!url()||!window.YXAcct||!YXAcct.token){D.say('🌐 Çevrimiçi kapalı: hesap modülü yok.','sys');return}connect()}
 function connect(){if(!live||ws||!G)return;
   YXAcct.token().then(function(s){if(!live||ws)return;var w;try{w=new WebSocket(url())}catch(e){return}ws=w;
-    w.onopen=function(){send({t:'hi',tok:s.idToken,nick:P.nick,ap:P.ap,lv:P.lv,x:Math.round(G.px),y:Math.round(G.py)})};
+    D.say('🌐 Sunucuya ulaşılıyor…','sys');w.onopen=function(){D.say('🌐 Bağlantı açıldı, giriş doğrulanıyor…','sys');send({t:'hi',tok:s.idToken,nick:P.nick,ap:P.ap,lv:P.lv,x:Math.round(G.px),y:Math.round(G.py)})};
     w.onmessage=function(e){var m;try{m=JSON.parse(e.data)}catch(x){return}hand(m)};
-    w.onclose=function(){ws=null;me=null;others={};if(live){clearTimeout(timer);timer=setTimeout(connect,Math.min(30000,2000*Math.pow(2,retry++)))}};
-    w.onerror=function(){try{w.close()}catch(e){}}}).catch(function(){if(live){clearTimeout(timer);timer=setTimeout(connect,Math.min(30000,3000*Math.pow(2,retry++)))}})}
+    w.onclose=function(ev){if(!me&&retry<2)D.say('🌐 Bağlantı kapandı (kod '+(ev&&ev.code)+').','sys');ws=null;me=null;others={};if(live){clearTimeout(timer);timer=setTimeout(connect,Math.min(30000,2000*Math.pow(2,retry++)))}};
+    w.onerror=function(){try{w.close()}catch(e){}}}).catch(function(e){if(retry<1)D.say('🌐 Çevrimiçi için hesabına giriş yapmalısın (Hesap menüsü). '+((e&&e.code)||''),'sys');if(live){clearTimeout(timer);timer=setTimeout(connect,Math.min(30000,3000*Math.pow(2,retry++)))}})}
 function send(o){if(ws&&ws.readyState===1)ws.send(JSON.stringify(o))}
 function hand(m){
   if(m.t==='hi'){me=m.id;retry=0;others={};(m.roster||[]).forEach(add);D.say('🌐 Çevrimiçi dünyaya bağlandın ('+(1+Object.keys(others).length)+' oyuncu). Sohbet: Dünya/Yerel sekmesi.','sys')}
