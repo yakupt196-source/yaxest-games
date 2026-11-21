@@ -4,7 +4,7 @@
    Sosyal katman: arkadaş, DM, parti, takas, düello, klan, emote, dünya çanı. Kalıcı veri DO depolamasında (SQLite). */
 const PROJECT = 'yaxest-games';
 const JWKS = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
-const MAXP = 60, WORLD_PX = 200 * 48, MAX_SPEED = 900;
+const MAXP = 150, WORLDS = 5, NEAR = 1800, WORLD_PX = 200 * 48, MAX_SPEED = 900;
 const BAD = ['amk','aq','orospu','piç','sik','yarrak','ibne','göt','oç','mal','salak','gerizekal','fuck','shit','bitch','nigg'];
 const TTL = { pt: 60e3, tr: 60e3, du: 60e3 }, WEEK = 7 * 864e5;
 const KINDS = ['fr', 'pt', 'tr', 'du', 'cl', 'gf'];
@@ -43,6 +43,7 @@ const cleanOffer = (g, it) => {
 export class World {
   constructor(state, env) { this.state = state; this.env = env; }
   async fetch(req) {
+    if (new URL(req.url).pathname === '/count') return new Response(String(this.all().filter(w => this.A(w).id).length));
     if (req.headers.get('Upgrade') !== 'websocket') return new Response('Yaxest world', { status: 426 });
     if (this.state.getWebSockets().length >= MAXP) return new Response('full', { status: 503 });
     const [c, s] = Object.values(new WebSocketPair());
@@ -56,6 +57,8 @@ export class World {
   byPk(pk) { if (!pk) return null; for (const w of this.all()) { const a = this.A(w); if (a.id && a.pk === pk) return w; } return null; }
   snd(w, o) { try { w.send(JSON.stringify(o)); } catch (e) {} }
   err(w, m) { this.snd(w, { t: 'sys', m }); }
+  /* yalnızca yakındakilere (NEAR piksel) gönder: konum yayını yükünü kırar */
+  bcNear(o, a, except) { const t = JSON.stringify(o); for (const w of this.all()) { if (w === except) continue; const b = this.A(w); if (b.id && Math.abs(b.x - a.x) < NEAR && Math.abs(b.y - a.y) < NEAR) try { w.send(t); } catch (e) {} } }
   bc(o, except) { const t = JSON.stringify(o); for (const w of this.all()) { if (w === except) continue; if (this.A(w).id) try { w.send(t); } catch (e) {} } }
   async g(k, d) { const v = await this.state.storage.get(k); return v === undefined ? d : v; }
   async s(k, v) { await this.state.storage.put(k, v); }
@@ -135,7 +138,7 @@ export class World {
     a.x = x; a.y = y; a.pt = now; a.lv = num(m.lv, 1, 99) || a.lv;
     if (m.ap) { try { const s = JSON.stringify(m.ap); if (s.length <= 500) a.ap = JSON.parse(s); } catch (e) {} }
     ws.serializeAttachment(a);
-    this.bc({ t: 'p', id: a.id, x: Math.round(x), y: Math.round(y), f: m.f ? 1 : 0, lv: a.lv }, ws);
+    this.bcNear({ t: 'p', id: a.id, x: Math.round(x), y: Math.round(y), f: m.f ? 1 : 0, lv: a.lv }, a, ws);
     if (a.du && now - a.du.t0 > 180e3) { const ow = this.byId(a.du.o); await this.endDuel(null, null, ws, ow); }
   }
   /* ---- sohbet ---- */
@@ -417,7 +420,13 @@ export class World {
 export default {
   async fetch(req, env) {
     const u = new URL(req.url);
-    if (u.pathname === '/ws') return env.WORLD.get(env.WORLD.idFromName('dunya-1')).fetch(req);
+    const CORS = { 'access-control-allow-origin': '*', 'content-type': 'application/json' };
+    if (u.pathname === '/worlds') {
+      const out = [];
+      for (let i = 1; i <= WORLDS; i++) { let n = 0; try { n = +(await (await env.WORLD.get(env.WORLD.idFromName('dunya-' + i)).fetch('https://w/count')).text()) || 0; } catch (e) {} out.push({ w: i, n, max: MAXP }); }
+      return new Response(JSON.stringify(out), { headers: CORS });
+    }
+    if (u.pathname === '/ws') { const w = Math.floor(+u.searchParams.get('w')) || 1; if (w < 1 || w > WORLDS) return new Response('bad world', { status: 400 }); return env.WORLD.get(env.WORLD.idFromName('dunya-' + w)).fetch(req); }
     return new Response('Yaxest Diyarı sunucusu çalışıyor.', { headers: { 'content-type': 'text/plain; charset=utf-8' } });
   }
 };
