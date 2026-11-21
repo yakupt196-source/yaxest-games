@@ -422,24 +422,25 @@ export class World {
     const now = Date.now(), EXP = 72 * 36e5, st = this.state.storage;
     const S = (await st.get('mkx')) || { L: [], Q: {}, H: {} };
     const Qf = pk => S.Q[pk] || (S.Q[pk] = { g: 0, it: [] });
-    S.L = S.L.filter(l => { if (now - l.t < EXP) return true; const q = Qf(l.s); if (q.it.length < 30) q.it.push(l.k); return false; });
+    S.L = S.L.filter(l => { if (now - l.t < EXP) return true; const q = Qf(l.s); if (q.it.length < 30) q.it.push(l.k + (l.n > 1 ? '#' + l.n : '')); return false; });
     const pk = String(b.pk || ''), out = { ok: 1, a: b.a, q: b.q };
     const band = f => [Math.max(1, Math.ceil(f * .3)), Math.floor(f * 3)];
     if (b.a === 'add') {
       const k = String(b.ik || ''), f = int(b.f, 1, 5e7), pr = int(b.pr, 1, 2e8), [lo, hi] = band(f);
-      if (!/^[wze]:[\w:]{1,24}$/.test(k)) out.ok = 0, out.e = 'Geçersiz eşya.';
+      const n = k[0] === 'm' ? int(b.n, 1, 9999) : 1;
+      if (!/^[mrwze]:[\w:]{1,24}$/.test(k)) out.ok = 0, out.e = 'Geçersiz eşya.';
       else if (pr < lo || pr > hi) out.ok = 0, out.e = 'Fiyat ' + lo + ' – ' + hi + ' arasında olmalı.';
       else if (S.L.filter(l => l.s === pk).length >= 8) out.ok = 0, out.e = 'En fazla 8 ilanın olabilir.';
       else if (S.L.length >= 300) out.ok = 0, out.e = 'Pazar şu an dolu, biraz sonra dene.';
-      else S.L.push({ id: rid(6), s: pk, sn: clean(b.sn, 16), k, pr, f, t: now });
+      else S.L.push({ id: rid(6), s: pk, sn: clean(b.sn, 16), k, n, pr, f, t: now });
     } else if (b.a === 'buy') {
       const i = S.L.findIndex(l => l.id === String(b.id || ''));
       if (i < 0) out.ok = 0, out.e = 'İlan artık yok (satılmış ya da kaldırılmış).';
       else if (S.L[i].s === pk) out.ok = 0, out.e = 'Kendi ilanını satın alamazsın.';
-      else { const l = S.L[i]; S.L.splice(i, 1); const q = Qf(l.s); q.g += Math.max(1, Math.floor(l.pr * .95)); q.sold = (q.sold || 0) + 1; (S.H[l.k] = S.H[l.k] || []).push(l.pr); if (S.H[l.k].length > 6) S.H[l.k].shift(); out.k = l.k; out.pr = l.pr; }
+      else { const l = S.L[i]; S.L.splice(i, 1); const q = Qf(l.s); q.g += Math.max(1, Math.floor(l.pr * .95)); q.sold = (q.sold || 0) + 1; (S.H[l.k] = S.H[l.k] || []).push(Math.max(1, Math.round(l.pr / (l.n || 1)))); if (S.H[l.k].length > 6) S.H[l.k].shift(); out.k = l.k; out.n = l.n || 1; out.pr = l.pr; }
     } else if (b.a === 'cancel') {
       const i = S.L.findIndex(l => l.id === String(b.id || '') && l.s === pk);
-      if (i < 0) out.ok = 0, out.e = 'İlan bulunamadı.'; else { const l = S.L.splice(i, 1)[0], q = Qf(pk); if (q.it.length < 30) q.it.push(l.k); }
+      if (i < 0) out.ok = 0, out.e = 'İlan bulunamadı.'; else { const l = S.L.splice(i, 1)[0], q = Qf(pk); if (q.it.length < 30) q.it.push(l.k + (l.n > 1 ? '#' + l.n : '')); }
     } else if (b.a === 'reprice') {
       const l = S.L.find(x => x.id === String(b.id || '') && x.s === pk), pr = int(b.pr, 1, 2e8);
       if (!l) out.ok = 0, out.e = 'İlan bulunamadı.'; else { const [lo, hi] = band(l.f); if (pr < lo || pr > hi) out.ok = 0, out.e = 'Fiyat ' + lo + ' – ' + hi + ' arasında olmalı.'; else l.pr = pr; }
@@ -450,14 +451,14 @@ export class World {
       const q = S.Q[pk]; if (q && q.d && q.d.c === String(b.c || '')) { delete q.d; if (!q.g && !q.it.length) delete S.Q[pk]; }
     }
     await st.put('mkx', S);
-    out.L = S.L.map(l => ({ id: l.id, s: l.s, sn: l.sn, k: l.k, pr: l.pr, f: l.f, t: l.t })); out.H = S.H;
+    out.L = S.L.map(l => ({ id: l.id, s: l.s, sn: l.sn, k: l.k, n: l.n || 1, pr: l.pr, f: l.f, t: l.t })); out.H = S.H;
     return out;
   }
   async mkt(ws, a, m, now) {
     if (!a.pk) return;
     if (now - (a.mkt || 0) < 350) return this.snd(ws, { t: 'mkr', ok: 0, a: m.t, q: int(m.q, 0, 1e9), e: 'Çok hızlı, bir saniye bekle.' }); this.setA(ws, x => { x.mkt = now; });
     const map = { mkq: 'q', mkl: 'add', mkb: 'buy', mkc: 'cancel', mkp: 'reprice', mkk: 'collect', mka: 'ack' };
-    const b = { a: map[m.t], pk: a.pk, sn: a.nick, ik: m.k, f: m.f, pr: m.pr, id: m.id, c: m.c, q: int(m.q, 0, 1e9), op: 'mk', k: 'mkx' };
+    const b = { a: map[m.t], pk: a.pk, sn: a.nick, ik: m.k, n: m.n, f: m.f, pr: m.pr, id: m.id, c: m.c, q: int(m.q, 0, 1e9), op: 'mk', k: 'mkx' };
     if (b.a === 'add' && bad(clean(a.nick, 16))) b.sn = 'Oyuncu';
     let r; try { const w = shardOf('mkx'); r = w === this.me() ? await this.mkApply(b) : await (await this.kv(w, b)).json(); } catch (e) { return this.snd(ws, { t: 'mkr', ok: 0, a: b.a, q: b.q, e: 'Pazara şu an ulaşılamıyor.' }); }
     r.t = 'mkr'; r.me = a.pk; this.snd(ws, r);
