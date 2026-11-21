@@ -45,9 +45,9 @@ function build(){
   document.addEventListener('click',function(e){if(em.style.display==='grid'&&!e.target.closest('#emp')&&!e.target.closest('#iem'))em.style.display='none'});
 }
 function hud(){
-  var tr=document.querySelector('.tr');if(!tr)return;
+  var tr=$('imenu')&&$('imenu').parentNode;if(!tr)return;
   if(!$('isoc')){var b=document.createElement('button');b.className='ib';b.id='isoc';b.type='button';b.setAttribute('aria-label','Sosyal');b.innerHTML='👥<i class="sbd" id="sbd" style="display:none"></i>';tr.insertBefore(b,$('imenu'));b.onclick=function(){if(D.G&&D.G.mode==='world')openP(S.inn.length?'in':S.tab)};}
-  if(!$('iem')){var e=document.createElement('button');e.className='ib';e.id='iem';e.type='button';e.setAttribute('aria-label','Emote');e.textContent='😀';tr.insertBefore(e,$('imenu'));e.onclick=function(){var p=$('emp');p.style.display=p.style.display==='grid'?'none':'grid'}}
+  if(!$('iem')){var e=document.createElement('button');e.className='ib';e.id='iem';e.type='button';e.setAttribute('aria-label','Duygu');e.textContent='😀';tr.insertBefore(e,$('imenu'));e.onclick=function(){var p=$('emp');p.style.display=p.style.display==='grid'?'none':'grid'}}
   var cv=$('cv');if(cv&&!cv._soc){cv._soc=1;cv.addEventListener('click',function(e){var G=D&&D.G;if(!G||G.paused||G.mode!=='world'||!Net)return;var o=Net.pick(e.clientX,e.clientY);if(o)openProf(o.id)})}
 }
 function init(api){D=api.D;Net=api.Net;build();hud();reset();badge();var d=$('duelbar');if(d)d.style.display='none'}

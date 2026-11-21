@@ -58,6 +58,22 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 #bi{right:90px;bottom:140px;width:60px;height:60px;display:none;border-color:#5be39a;background:rgba(40,120,80,.85)}
 #log{position:absolute;left:max(160px,calc(env(safe-area-inset-left) + 160px));bottom:max(10px,env(safe-area-inset-bottom));width:min(34vw,330px);max-height:96px;overflow:hidden;font-size:.72rem;line-height:1.35;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.7);font-weight:600;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;text-shadow:0 1px 2px #000}
 #log div{opacity:.95}
+/* ---- derli toplu HUD: tek menü + belirgin sohbet kutusu ---- */
+#dock{position:absolute;left:max(160px,calc(env(safe-area-inset-left) + 160px));bottom:max(10px,env(safe-area-inset-bottom));width:min(calc(100vw - 500px),460px);min-width:250px;z-index:3}
+#chbox{background:rgba(14,10,34,.8);border:1.5px solid rgba(255,255,255,.24);border-radius:18px;overflow:hidden;box-shadow:0 6px 22px rgba(0,0,0,.45)}
+#dock #log{position:static;left:auto;bottom:auto;width:auto;max-height:112px;padding:8px 11px 4px;font-size:.8rem;line-height:1.38;pointer-events:auto;cursor:pointer;-webkit-mask-image:linear-gradient(transparent 0,#000 34%);mask-image:linear-gradient(transparent 0,#000 34%)}
+#dock #log:empty{display:none}
+#dkrow{display:flex;gap:7px;padding:6px;border-top:1px solid rgba(255,255,255,.12)}
+#dkb{position:relative;width:44px;height:40px;flex:none;border-radius:12px;border:1.5px solid var(--yel);background:rgba(255,210,63,.14);color:#fff;font-size:1.25rem}
+#chin{flex:1;display:flex;align-items:center;justify-content:space-between;min-height:40px;padding:0 13px;border-radius:12px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);color:#d9d4ff;font-size:.88rem;cursor:text}
+#chin b{min-width:20px;height:20px;border-radius:10px;background:#ff5a5a;color:#fff;font-size:.72rem;display:grid;place-items:center;padding:0 5px}
+#dkp{display:none;position:absolute;left:0;bottom:calc(100% + 8px);grid-template-columns:repeat(4,70px);gap:6px;padding:8px;border-radius:16px;background:rgba(20,14,50,.97);border:1.5px solid var(--yel);box-shadow:0 10px 30px rgba(0,0,0,.55)}
+#dkp.on{display:grid}
+#dkp .ib{position:relative;width:auto;height:auto;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;font-size:1.5rem}
+#dkp .ib::after{content:attr(aria-label);font-size:.68rem;color:var(--mute);font-weight:700}
+@media (max-height:480px){#dock #log{max-height:78px}}
+#emp{top:auto!important;right:auto!important;left:50%!important;bottom:calc(86px + env(safe-area-inset-bottom))!important;transform:translateX(-50%)}
+
 .pan{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(5,3,15,.6);z-index:5;touch-action:pan-y}
 .pan.on{display:flex}.pan .card{width:min(92vw,560px)}
 .pan h2{margin:0 0 8px;font-size:1.2rem;color:var(--yel)}
@@ -65,7 +81,7 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 .tabs{display:flex;gap:6px;margin-bottom:8px}.tabs button{flex:1;min-height:38px;border-radius:10px;border:1.5px solid var(--line);background:#161232;color:#fff;font:inherit;font-size:.82rem}.tabs button[aria-pressed=true]{border-color:var(--yel)}
 #rot{position:fixed;left:50%;top:150px;transform:translateX(-50%);z-index:20;display:none;align-items:center;gap:10px;width:min(92vw,460px);padding:10px 12px;border-radius:16px;background:rgba(20,14,50,.96);border:1.5px solid var(--yel);box-shadow:0 8px 30px rgba(0,0,0,.5);animation:rin .4s ease}@keyframes rin{from{opacity:0;transform:translate(-50%,-14px)}}#rot .tx{display:grid;gap:2px;font-size:.78rem;color:var(--mute);text-align:left;flex:1}#fsb{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:20;display:none;align-items:center;gap:8px;width:min(94vw,560px);padding:8px 10px;border-radius:16px;background:rgba(20,14,50,.96);border:1.5px solid var(--yel)}#fsb .tx{display:grid;gap:2px;font-size:.74rem;color:var(--mute);flex:1}#fsb .tx b{color:#fff;font-size:.9rem}#fsb .btn{min-height:36px;padding:0 14px;font-size:.85rem}#rot .tx b{color:#fff;font-size:.92rem}#rot .btn{min-height:36px;padding:0 14px;font-size:.85rem}
 #rot .ph{font-size:1.8rem;animation:rt 2s ease-in-out infinite}@keyframes rt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
-@media (orientation:portrait){#mm{width:112px;height:112px;order:5}.top{min-width:0;max-width:calc(100vw - 160px)}.tr{gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:140px}.ib{width:40px;height:40px}.ib .yi{width:22px;height:22px}#zn{top:62px!important;left:10px!important;transform:none!important;font-size:.7rem}#log{bottom:186px!important;left:10px!important;right:auto!important;max-width:54vw;font-size:.7rem}#joy{width:112px;height:112px}}
+@media (orientation:portrait){#mm{width:112px;height:112px;order:5}.top{min-width:0;max-width:calc(100vw - 160px)}.tr{gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:140px}.ib{width:40px;height:40px}.ib .yi{width:22px;height:22px}#zn{top:62px!important;left:10px!important;transform:none!important;font-size:.7rem}#dock{left:10px;right:10px;width:auto;min-width:0;bottom:214px}#dkp{grid-template-columns:repeat(4,1fr);right:0}#joy{width:112px;height:112px}}
 @media (hover:hover) and (pointer:fine){#joy{display:none}}
 @media (max-height:430px){#mm{width:96px;height:96px}.top{min-width:0}.rg{width:76px;height:76px}.rg .av{width:36px;height:36px}#joy{width:112px;height:112px}}
 .gtab{display:flex;gap:6px;background:rgba(255,255,255,.06);border-radius:12px;padding:4px;margin:6px 0 4px}.gtab button{flex:1;min-height:38px;border:0;border-radius:9px;background:transparent;color:var(--mute);font:inherit;font-weight:700;cursor:pointer}.gtab button.on{background:var(--y);color:#241a00}
@@ -120,9 +136,9 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 </div></div>
 <div id="hud">
  <div class="top"><div class="rg"><svg viewBox="0 0 110 110"><g fill="none" stroke-linecap="round" transform="rotate(-90 55 55)"><circle class="tk" cx="55" cy="55" r="50" stroke-width="8"/><circle id="rh" class="fg" cx="55" cy="55" r="50" stroke-width="8" pathLength="100" stroke="#ff5b6e" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="40" stroke-width="7"/><circle id="rs" class="fg" cx="55" cy="55" r="40" stroke-width="7" pathLength="100" stroke="#ffc83d" stroke-dasharray="100 100"/><circle class="tk" cx="55" cy="55" r="31" stroke-width="6"/><circle id="rx" class="fg" cx="55" cy="55" r="31" stroke-width="6" pathLength="100" stroke="#4fb3ff" stroke-dasharray="0 100"/></g></svg><div class="av" id="hav"></div><b id="rlv" class="lvb">1</b></div><div class="hi"><b id="hn"></b><small id="hl"></small><div class="gr"><i style="background:#ff5b6e"></i><span id="th"></span></div><div class="gr"><i style="background:#ffc83d"></i><span id="ts"></span></div><div class="gr"><i style="background:#4fb3ff"></i><span id="tx"></span></div></div></div>
- <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button><button class="ib" id="ix" type="button" aria-label="Diyar+">✨</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="imenu" type="button" aria-label="Menü">☰</button></div>
+ <div class="tr"><canvas id="mm" width="128" height="128"></canvas><button class="ib" id="ibag" type="button" aria-label="Çanta">🎒</button></div>
  <div id="joy"><i id="jk"></i></div>
- <div id="log"></div>
+ <div id="dock"><div id="dkp"><button class="ib" id="ix" type="button" aria-label="Diyar+">✨</button><button class="ib" id="ichat" type="button" aria-label="Sohbet">💬</button><button class="ib" id="ihome" type="button" aria-label="Evim">🏠</button><button class="ib" id="itown" type="button" aria-label="Kasaba">🏘️</button><button class="ib" id="imenu" type="button" aria-label="Ayarlar">⚙️</button></div><div id="chbox"><div id="log"></div><div id="dkrow"><button id="dkb" type="button" aria-label="Menü">☰<i id="dkn" class="sbd" style="display:none"></i></button><div id="chin"><span>💬 Mesaj yaz…</span><b id="chn" style="display:none"></b></div></div></div></div>
  <div id="acts"><div class="ab" id="b0">⚔️</div><div class="ab" id="b1"></div><div class="ab" id="b2"></div><div class="ab" id="b3"></div><div class="ab" id="b4"></div><div class="ab" id="bi">✋<small>E</small></div></div>
 </div>
 
@@ -138,7 +154,8 @@ input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--lin
 
 <div id="rot" role="status"><div class="ph">📱</div><div class="tx"><b>Telefonunu yatay çevir</b><span>Daha geniş görüş ve rahat kontrol için. Ekran döndürme kilidi kapalı olmalı.</span></div><button class="btn" id="rotgo" type="button">Tamam</button></div>
 
-<script src="../account-config.js?v=20261121g"></script><script src="../account.js?v=20261121g"></script><script src="../i18n-dict.js?v=20261121g"></script><script src="../economy.js?v=20261121g"></script>
-<script src="look.js?v=20261121g"></script><script src="sim.js?v=20261121g"></script><script src="art.js?v=20261121g"></script><script src="runes.js?v=20261121g"></script><script src="game.js?v=20261121g"></script><script src="../games.js?v=20261121g"></script><script src="net-config.js?v=20261121g"></script><script src="net.js?v=20261121g"></script><script src="social.js?v=20261121g"></script>
-<script src="evler.js?v=20261121g"></script><script src="extra2.js?v=20261121g"></script><script src="extra.js?v=20261121g"></script>
+<script src="../account-config.js?v=20261121h"></script><script src="../account.js?v=20261121h"></script><script src="../i18n-dict.js?v=20261121h"></script><script src="../economy.js?v=20261121h"></script>
+<script src="look.js?v=20261121h"></script><script src="sim.js?v=20261121h"></script><script src="art.js?v=20261121h"></script><script src="runes.js?v=20261121h"></script><script src="game.js?v=20261121h"></script><script src="../games.js?v=20261121h"></script><script src="net-config.js?v=20261121h"></script><script src="net.js?v=20261121h"></script><script src="social.js?v=20261121h"></script>
+<script src="evler.js?v=20261121h"></script>
+<script src="dock.js?v=20261121h"></script><script src="extra2.js?v=20261121h"></script><script src="extra.js?v=20261121h"></script>
 </body></html>
