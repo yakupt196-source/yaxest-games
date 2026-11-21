@@ -7,9 +7,11 @@ const JWKS = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@sys
 const MAXP = 150, WORLDS = 5, NEAR = 1800, WORLD_PX = 200 * 48, MAX_SPEED = 900;
 const BAD = ['amk','aq','orospu','piç','sik','yarrak','ibne','göt','oç','mal','salak','gerizekal','fuck','shit','bitch','nigg'];
 const TTL = { pt: 60e3, tr: 60e3, du: 60e3 }, WEEK = 7 * 864e5;
-/* Ortak veri (profil, klan, takma ad, DM, sıralama): tek merkez = Dünya 1. Diğer dünyalar /kv ile merkeze sorar.
-   Canlı olanlar (parti, takas, düello, çevrimiçi göstergesi, konum) dünyaya özel kalır. */
+/* Ortak veri (profil, klan, takma ad, DM, sıralama) merkezsizdir: her anahtar, adının özetine göre 5 dünyadan birinde tutulur
+   (shard). Herhangi bir dünya, sahibi olan dünyaya /kv ile sorar; tek hata noktası ve tek yük merkezi yoktur.
+   Eski veri Dünya 1'de duruyorsa okuma bulamayınca oraya da bakar (taşıma gerekmez). Canlı olanlar dünyaya özel kalır. */
 const SHARED = k => /^(u:|c:|nk:|d:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell';
+const shardOf = k => { let h = 2166136261; for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (h % WORLDS) + 1; };
 const KINDS = ['fr', 'pt', 'tr', 'du', 'cl', 'gf'];
 const WAGERS = [0, 100, 500, 1000, 5000];
 let keys = null, keysAt = 0;
@@ -45,12 +47,13 @@ const cleanOffer = (g, it) => {
 
 export class World {
   constructor(state, env) { this.state = state; this.env = env; this.wn = 0; state.blockConcurrencyWhile(async () => { this.wn = (await state.storage.get('_wn')) || 0; }); }
-  hub() { return this.env.WORLD.get(this.env.WORLD.idFromName('dunya-1')); }
-  async kv(body) {
-    const r = await this.hub().fetch('https://w/kv', { method: 'POST', body: JSON.stringify(body) });
-    if (!r.ok) throw new Error('hub');
+  me() { return this.wn || 1; }
+  async kv(w, body) {
+    const r = await this.env.WORLD.get(this.env.WORLD.idFromName('dunya-' + w)).fetch('https://w/kv', { method: 'POST', body: JSON.stringify(body) });
+    if (!r.ok) throw new Error('shard');
     return r;
   }
+  async rd(w, k) { if (w === this.me()) { const v = await this.state.storage.get(k); return v === undefined ? null : v; } return (await (await this.kv(w, { op: 'g', k })).json()).v; }
   async fetch(req) {
     const pn = new URL(req.url).pathname;
     if (pn === '/kv') { const b = await req.json(); if (!SHARED(String(b.k))) return new Response('no', { status: 400 }); if (b.op === 'g') { const v = await this.state.storage.get(b.k); return new Response(JSON.stringify({ v: v === undefined ? null : v })); } if (b.op === 's') { await this.state.storage.put(b.k, b.v); return new Response('{}'); } if (b.op === 'd') { await this.state.storage.delete(b.k); return new Response('{}'); } return new Response('bad', { status: 400 }); }
@@ -72,13 +75,17 @@ export class World {
   /* yalnızca yakındakilere (NEAR piksel) gönder: konum yayını yükünü kırar */
   bcNear(o, a, except) { const t = JSON.stringify(o); for (const w of this.all()) { if (w === except) continue; const b = this.A(w); if (b.id && Math.abs(b.x - a.x) < NEAR && Math.abs(b.y - a.y) < NEAR) try { w.send(t); } catch (e) {} } }
   bc(o, except) { const t = JSON.stringify(o); for (const w of this.all()) { if (w === except) continue; if (this.A(w).id) try { w.send(t); } catch (e) {} } }
-  isHub() { return this.wn === 1 || this.wn === 0; }
   async g(k, d) {
-    if (SHARED(k) && !this.isHub()) { const j = await (await this.kv({ op: 'g', k })).json(); return j.v === null || j.v === undefined ? d : j.v; }
-    const v = await this.state.storage.get(k); return v === undefined ? d : v;
+    if (!SHARED(k)) { const v = await this.state.storage.get(k); return v === undefined ? d : v; }
+    const w = shardOf(k); let v = await this.rd(w, k);
+    if ((v === null || v === undefined) && w !== 1) v = await this.rd(1, k);
+    return v === null || v === undefined ? d : v;
   }
-  async s(k, v) { if (SHARED(k) && !this.isHub()) { await this.kv({ op: 's', k, v }); return; } await this.state.storage.put(k, v); }
-  async del(k) { if (SHARED(k) && !this.isHub()) { await this.kv({ op: 'd', k }); return; } await this.state.storage.delete(k); }
+  async s(k, v) { if (!SHARED(k)) { await this.state.storage.put(k, v); return; } const w = shardOf(k); if (w === this.me()) await this.state.storage.put(k, v); else await this.kv(w, { op: 's', k, v }); }
+  async del(k) {
+    if (!SHARED(k)) { await this.state.storage.delete(k); return; }
+    for (const w of new Set([shardOf(k), 1])) { if (w === this.me()) await this.state.storage.delete(k); else await this.kv(w, { op: 'd', k }); }
+  }
   async prof(pk) { const p = await this.g('u:' + pk, null); return p || { n: '', fr: {}, in: [], un: {}, cl: null, w: 0, l: 0, bl: [], gs: 0, gd: 0 }; }
   saveP(pk, p) { return this.s('u:' + pk, p); }
   fresh(r, now) { return now - r.t < (TTL[r.k] || WEEK); }
