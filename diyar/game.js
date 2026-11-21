@@ -6,7 +6,7 @@ var cv=$('cv'),ctx=cv.getContext('2d'),VW=0,VH=0,dpr=1;
 var P=null,G=null,KEY='yd1-',raf=0,lastT=0,saveT=0,sprite=null,mmc=null;
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function hyp(a,b){return Math.sqrt(a*a+b*b)}
-function show(id){['s-load','s-gate','s-char'].forEach(function(x){$(x).classList.toggle('on',x===id)});$('hud').classList.toggle('on',id==='hud');cv.style.display=id==='hud'?'block':'none'}
+function show(id){try{if(window.YF&&id!=='hud')YF.hide()}catch(e){}['s-load','s-gate','s-char'].forEach(function(x){$(x).classList.toggle('on',x===id)});$('hud').classList.toggle('on',id==='hud');cv.style.display=id==='hud'?'block':'none'}
 function acct(){try{return window.YXAcct&&YXAcct.state()}catch(e){return null}}
 function loadSave(){try{var a=acct();return a?JSON.parse(localStorage.getItem(KEY+a.uid)||'null'):null}catch(e){return null}}
 function saveNow(){var a=acct();if(!P||!a)return;try{if(G&&G.mode==='world'){P.x=G.px;P.y=G.py}P.sv=Date.now();localStorage.setItem(KEY+a.uid,JSON.stringify(P))}catch(e){}}
