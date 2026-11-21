@@ -9,7 +9,7 @@ function hyp(a,b){return Math.sqrt(a*a+b*b)}
 function show(id){['s-load','s-gate','s-char'].forEach(function(x){$(x).classList.toggle('on',x===id)});$('hud').classList.toggle('on',id==='hud');cv.style.display=id==='hud'?'block':'none'}
 function acct(){try{return window.YXAcct&&YXAcct.state()}catch(e){return null}}
 function loadSave(){try{var a=acct();return a?JSON.parse(localStorage.getItem(KEY+a.uid)||'null'):null}catch(e){return null}}
-function saveNow(){var a=acct();if(!P||!a)return;try{if(G&&G.mode==='world'){P.x=G.px;P.y=G.py}localStorage.setItem(KEY+a.uid,JSON.stringify(P))}catch(e){}}
+function saveNow(){var a=acct();if(!P||!a)return;try{if(G&&G.mode==='world'){P.x=G.px;P.y=G.py}P.sv=Date.now();localStorage.setItem(KEY+a.uid,JSON.stringify(P))}catch(e){}}
 var CKEYS=['lv','xp','wl','al','sw','sa','sr','sl','wt'];
 function lookOk(ap){var a=YL.valid(ap);if(a.body==='hamster'&&!preOwn('cemile'))return YL.valid(YL.PRESETS.basic.ap);if(a.body==='svg'){var ok=Object.keys(YL.PRESETS).some(function(k){var q=YL.PRESETS[k];return q.ap&&q.ap.sv===a.sv&&preOwn(k)});if(!ok)return YL.valid(YL.PRESETS.basic.ap)}return a}
 function fix(p){p.done=p.done||{};p.pf=p.pf||{};['wood','mine'].forEach(function(k){p.pf[k]=p.pf[k]||{l:1,x:0}});Object.keys(Y.MATS).concat(['gold','wl','al','xp']).forEach(function(k){p[k]=p[k]||0});p.lv=p.lv||1;p.cl=p.cl||{};p.rn=p.rn||{};YR.ensure(p);p.sr=p.sr||{};p.wt=p.wt||0;p.ow=p.ow||{};if(window.YN)YN.fix(p);p.mp=p.mp||0;p.ap=lookOk(p.ap);p.cs=p.cs||{};p.tl=p.tl||{pk:0,ax:0};p.party=p.party||[];if(p.mv!==2){p.mv=2;p.x=Y.CX*TS;p.y=Y.CY*TS}if(p.x==null){p.x=Y.CX*TS;p.y=Y.CY*TS}return p}

@@ -18,6 +18,9 @@ function mergeKey(k,cur,inc){
   if(cur==null)return inc;
   try{
     if(k==='yx-eco'){var a=JSON.parse(cur),b=JSON.parse(inc);return num(b.t)>=num(a.t)?inc:cur}
+    if(/^yd1-/.test(k)){var a3=JSON.parse(cur),b3=JSON.parse(inc);if(!a3||!b3)return inc;
+      var sa=num(a3.sv),sb=num(b3.sv);if(sa&&sb)return sb>sa?inc:cur;
+      var ra=num(a3.lv)*1e9+num(a3.xp),rb=num(b3.lv)*1e9+num(b3.xp);return rb>ra?inc:cur}
     if(/^yx-tc-/.test(k)){var a2=JSON.parse(cur),b2=JSON.parse(inc);return num(b2.all)>=num(a2.all)?inc:cur}
   }catch(e){}
   if(/best$/.test(k)||/^yx-days$/.test(k)&&false){return num(inc)>=num(cur)?inc:cur}

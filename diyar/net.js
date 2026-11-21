@@ -38,7 +38,7 @@ function hand(m){
   else if(m.t==='dup'){live=0;clearTimeout(timer);D.say('🌐 Hesabınla başka bir yerden girildi, bu bağlantı kapatıldı.','sys')}
   else if(m.t==='ct'){if(others[m.id])others[m.id].cg=m.cg;if(window.YSoc)YSoc.hand(m)}
   else if(m.t==='sys'){D.say('⚠️ '+m.m,'sys')}
-  else if(m.t==='err'){D.say('Çevrimiçi giriş yapılamadı (hesabına yeniden giriş yap).','sys')}
+  else if(m.t==='err'){D.say(m.m==='hub'?'Merkez sunucuya ulaşılamadı, biraz sonra /dunya ile tekrar dene.':'Çevrimiçi giriş yapılamadı (hesabına yeniden giriş yap).','sys')}
   else if(window.YSoc){YSoc.hand(m)}}
 function add(p){if(!p||!p.id||p.id===me)return;others[p.id]={id:p.id,k:p.k,n:p.n,ap:p.ap,lv:p.lv||1,x:p.x,y:p.y,dx:p.x,dy:p.y,f:0,cg:p.cg||'',w:p.w||0,l:p.l||0}}
 function tick(dt){if(!G)return;if(window.YSoc)try{YSoc.tick(dt)}catch(e){}beat+=dt;if(!on())return;lastSend+=dt;
