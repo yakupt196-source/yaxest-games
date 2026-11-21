@@ -212,7 +212,7 @@ var ZLV=[[0,3],[21,3],[34,5],[46,8],[56,12],[70,20],[85,32],[100,60],[115,100],[
 function zoneLv(zone,d){for(var i=1;i<ZLV.length;i++){if(d<=ZLV[i][0]){var a=ZLV[i-1],b=ZLV[i];return Math.max(1,Math.floor(a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])))}}return 162}
 function xpNeed(l){return Math.round(70*l*l+40*l)}
 function lvF(lv){var e=Math.max(0,lv-40);return 1+e*e/1400}
-function mstat(type,lv){var m=MON[type],f=lvF(lv);return{hp:Math.round((30+lv*24+lv*lv*1.1)*m.hm*(1+Math.max(0,lv-40)/60)),dmg:Math.round((4+lv*2.3)*m.dm*(1+Math.max(0,lv-40)/50)),xp:Math.round((10+lv*8)*m.xp*f),gold:Math.round((2+lv*2)*m.g*f)}}
+function mstat(type,lv){var m=MON[type],f=lvF(lv);return{hp:Math.round((30+lv*24+lv*lv*1.1)*m.hm*(1+Math.max(0,lv-40)/60)),dmg:Math.round((4+lv*2.3)*m.dm*(1+Math.max(0,lv-40)/50)),xp:Math.round((10+lv*8)*m.xp*f),gold:Math.max(1,Math.round((2+lv*2)*m.g*f*.55))}}
 /* seviyeye göre kuşanılabilen en yüksek kademe */
 function effT(arr,t,lv){t=Math.min(arr.length-1,t||0);while(t>0&&arr[t].lv>lv)t--;return t}
 function pstat(p){var c=CLASSES[p.cls],l=p.lv,wl=p.wl||0,al=p.al||0,W=WEAPONS[p.cls][effT(WEAPONS[p.cls],p.wt,l)],Z=ARMOR[p.cls][effT(ARMOR[p.cls],p.at,l)];

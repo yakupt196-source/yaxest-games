@@ -64,12 +64,12 @@ function runeItem(ti,force){var YRr=window.YR&&YR.R;if(!YRr)return null;var w=RU
   var pool=Object.keys(YRr).filter(function(k){return YRr[k].r===r});if(!pool.length)return null;var id=pool[Math.floor(Math.random()*pool.length)],R0=YRr[id];
   return{ic:String(R0.ic||'🔮').replace(/\uFE0F/g,''),t:R0.n+' ('+RNAME[r]+')',r:RCOL[r],f:function(){P.rn=P.rn||{};P.rn[id]=(P.rn[id]||0)+1}}}
 function roll(ti){var T=TIERS[ti],out=[],n=2+ti;
-  var g=Math.round(T.p*(.2+Math.random()*.5)*(Math.random()<.04?3:1));out.push({ic:'🪙',t:g+' altın',r:Math.min(5,Math.max(0,Math.floor(ti*.6))),f:function(){P.gold+=g}});
+  var g=Math.round(T.p*(.1+Math.random()*.25)*(Math.random()<.04?2:1));out.push({ic:'🪙',t:g+' altın',r:Math.min(5,Math.max(0,Math.floor(ti*.6))),f:function(){P.gold+=g}});
   for(var i=1;i<n;i++){var r=Math.random();
     if(r<.55){var k=pick(T.mat),q=Y.MATS[k]&&Y.MATS[k].ing?1+Math.floor(Math.random()*(1+ti)):2+Math.floor(Math.random()*(3+ti*2));out.push({ic:Y.MATS[k].ic,t:q+' '+Y.MATS[k].n,r:Math.min(5,ti),f:(function(k,q){return function(){P[k]=(P[k]||0)+q}})(k,q)})}
     else if(r<.7){out.push({ic:'⚗️',t:'XP İksiri (10 dk +%50 XP)',r:2,f:function(){X.xb=Math.max(Date.now(),X.xb||0)+600000}})}
-    else if(r<.85){var cs=cosmetic(ti);if(cs)out.push({ic:'✨',t:'Kostüm: '+cs.n,r:Math.min(5,2+Math.floor(ti*.6)),f:function(){P.cs[cs.slot+':'+cs.id]=1}});else{var g2=Math.round(T.p*.2);out.push({ic:'🪙',t:g2+' altın',r:ti>1?1:0,f:function(){P.gold+=g2}})}}
-    else{var g3=Math.round(T.p*(.1+Math.random()*.3));out.push({ic:'🪙',t:g3+' altın',r:ti>1?1:0,f:function(){P.gold+=g3}})}}
+    else if(r<.85){var cs=cosmetic(ti);if(cs)out.push({ic:'✨',t:'Kostüm: '+cs.n,r:Math.min(5,2+Math.floor(ti*.6)),f:function(){P.cs[cs.slot+':'+cs.id]=1}});else{var g2=Math.round(T.p*.12);out.push({ic:'🪙',t:g2+' altın',r:ti>1?1:0,f:function(){P.gold+=g2}})}}
+    else{var g3=Math.round(T.p*(.06+Math.random()*.18));out.push({ic:'🪙',t:g3+' altın',r:ti>1?1:0,f:function(){P.gold+=g3}})}}
   var rc=RUNEN[ti]+(ti===0&&Math.random()<RUNE0?1:0);for(var ri=0;ri<rc;ri++){var ru=runeItem(ti,ti===5&&ri===0?(Math.random()<.35?4:3):null);if(ru)out.push(ru)}
   if(Math.random()<EGGP(ti)){var lk=ti>=3?1:0;out.push({ic:'🥚',t:'Gizemli Yumurta',r:Math.min(5,2+ti%4),f:function(){A.giveEgg(lk)}})}
   if(ti>=2&&Math.random()<MAPP(ti)){out.push({ic:'🗺️',t:'Define Haritası',r:3,f:function(){giveMap(ti)}})}
@@ -105,7 +105,7 @@ function giveMap(ti){if(X.tm){var g=300*(ti+1);P.gold+=g;D.say('🗺️ Zaten bi
   for(var k=0;k<200;k++){var a=Math.random()*6.28,d=26+Math.random()*(46+ti*4),tx=Math.floor(Y.CX+Math.cos(a)*d),ty=Math.floor(Y.CY+Math.sin(a)*d);
     if(tx<6||ty<6||tx>=Y.MW-6||ty>=Y.MH-6)continue;var z=Y.zoneAt(tx,ty);if(z===3||z===4||Y.nodeAt(tx,ty))continue;X.tm={x:(tx+.5)*TS,y:(ty+.5)*TS,tier:Math.min(5,ti)};D.say('🗺️ Define haritası! Üstteki çipte sıcak/soğuk ipucu çıkar. Yerini bulunca ✋ ile kaz.','sys');return}
   P.gold+=500}
-function dig(){var tm=X.tm;if(!tm)return;X.tm=null;inc('dg');var ti=tm.tier,T=TIERS[Math.min(5,ti+1)],items=roll(Math.min(5,ti+1));items.forEach(function(it){it.f()});var g=Math.round(T.p*.6);P.gold+=g;
+function dig(){var tm=X.tm;if(!tm)return;X.tm=null;inc('dg');var ti=tm.tier,T=TIERS[Math.min(5,ti+1)],items=roll(Math.min(5,ti+1));items.forEach(function(it){it.f()});var g=Math.round(T.p*.35);P.gold+=g;
   D.say('💰 Define bulundu! '+items.map(function(i){return i.t}).join(', ')+' + '+g+' altın','sys');D.floatTxt(G.px,G.py-90,'💰 DEFİNE!','#ffd23f');D.saveNow()}
 
 /* ====================== balık tutma (tam ekran sahne) ====================== */

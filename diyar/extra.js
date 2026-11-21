@@ -122,13 +122,13 @@ function tick(dt){if(!G||G.mode!=='world'){if(DAY_CHIP)DAY_CHIP.style.display='n
   if(rmo)redMoonTick(dt);
   /* Altın Yağmuru */
   var gr=goldRainOn();if(gr!==lastGR){lastGR=gr;if(gr)D.say('💰 ALTIN YAĞMURU! Etrafta düşen altınları topla (1,5 dk)!','sys')}
-  if(gr){nextPick-=dt;if(nextPick<=0){nextPick=.9;if(coin.length<16){var a=Math.random()*6.28,r=120+Math.random()*340;coin.push({x:G.px+Math.cos(a)*r,y:G.py+Math.sin(a)*r,k:'coin',t:0})}}}
+  if(gr){nextPick-=dt;if(nextPick<=0){nextPick=3.4;if(coin.length<8){var a=Math.random()*6.28,r=120+Math.random()*340;coin.push({x:G.px+Math.cos(a)*r,y:G.py+Math.sin(a)*r,k:'coin',t:0})}}}
   /* fırtınada yıldırım kristali */
   if(weatherNow()==='storm'&&!inTown()){starT-=dt;if(flashT<=0&&Math.random()<dt*.18){flash=1;flashT=.4;if(Math.random()<.5&&coin.length<18){var a2=Math.random()*6.28,r2=140+Math.random()*260;coin.push({x:G.px+Math.cos(a2)*r2,y:G.py+Math.sin(a2)*r2,k:'crystal',t:0})}}}
   if(flashT>0)flashT-=dt;flash=Math.max(0,flash-dt*2.6);
   /* toplananlar */
   for(var i=coin.length-1;i>=0;i--){var c=coin[i];c.t+=dt;if(c.t>45){coin.splice(i,1);continue}
-    if(hyp(c.x-G.px,c.y-G.py)<34){coin.splice(i,1);if(c.k==='coin'){var v=Math.max(3,P.lv*2+Math.floor(Math.random()*6));P.gold+=v;X.c.co++;D.floatTxt(c.x,c.y-20,'+'+v+' 🪙','#ffd23f')}else{var v2=Math.max(25,P.lv*14);P.gold+=v2;D.floatTxt(c.x,c.y-20,'⚡ +'+v2+' 🪙','#8fe3ff');D.say('Yıldırım Kristali buldun! +'+v2+' altın','sys');if(Math.random()<.08)giveEgg(1)}}}
+    if(hyp(c.x-G.px,c.y-G.py)<34){coin.splice(i,1);if(c.k==='coin'){var v=Math.max(2,Math.round(P.lv*.5)+Math.floor(Math.random()*4));P.gold+=v;X.c.co++;D.floatTxt(c.x,c.y-20,'+'+v+' 🪙','#ffd23f')}else{var v2=Math.max(15,P.lv*6);P.gold+=v2;D.floatTxt(c.x,c.y-20,'⚡ +'+v2+' 🪙','#8fe3ff');D.say('Yıldırım Kristali buldun! +'+v2+' altın','sys');if(Math.random()<.08)giveEgg(1)}}}
   /* yoldaş */
   petTick(dt);
   /* rejenerasyon */
@@ -153,7 +153,7 @@ function redMoonTick(dt){if(X.rm!==dayIdx())X.rm=dayIdx(),rm={k:0,done:false};
     var m=D.mkMon(ty2,lv,x,y,null);m.hp=m.max=Math.round(m.hp*1.6);m.dmg=Math.round(m.dmg*1.2);m.xp=Math.round(m.xp*2.5);m.gold=Math.round(m.gold*2.5);m.col='#ff3b4d';m.xm=1;G.mons.push(m)}
   for(var i=G.mons.length-1;i>=0;i--){var q=G.mons[i];if(q.xm&&hyp(q.x-G.px,q.y-G.py)>1100)G.mons.splice(i,1)}}
 function killRed(){for(var i=G.mons.length-1;i>=0;i--)if(G.mons[i].xm)G.mons.splice(i,1)}
-function kill(m){if(!G||!m)return;if(m.xq&&window.YX3){YX3.grantChest(2);if(Math.random()<.2)giveEgg(1)}if(m.type==='goldslime'){var gg=200+P.lv*40;P.gold+=gg;D.say('✨ Altın Balçık '+gg+' altın bıraktı!','sys')}X.c.k++;if(m.boss)X.c.b++;
+function kill(m){if(!G||!m)return;if(m.xq&&window.YX3){YX3.grantChest(2);if(Math.random()<.2)giveEgg(1)}if(m.type==='goldslime'){var gg=100+P.lv*20;P.gold+=gg;D.say('✨ Altın Balçık '+gg+' altın bıraktı!','sys')}X.c.k++;if(m.boss)X.c.b++;
   if(G.mode==='world'){var xb=petBonus('xp')+(X.xb>Date.now()?.5:0)+(hourP()<8?.25:0),gb=petBonus('gold')+(X.lk>Date.now()?.5:0);
     if(xb>0){var e=Math.round(m.xp*xb);if(e>0)D.giveXp(e)}if(gb>0){var g=Math.round(m.gold*gb);if(g>0)P.gold+=g}}
   if(X.act&&X.pt[X.act]){var p=X.pt[X.act];if(p.lv<petMax(X.act)){p.xp=(p.xp||0)+1;if(p.xp>=30*p.lv){p.xp=0;p.lv++;D.say('🐾 '+PETS[X.act].n+' seviye atladı! (Sv '+p.lv+')','sys')}}}
