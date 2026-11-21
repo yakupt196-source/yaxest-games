@@ -1,4 +1,6 @@
 # Ücretsiz yedek yayın: GitHub Pages (Netlify kredisi bitince siteyi buradan yayınlar)
+# Paketleme (build) ve yayın (deploy) ayrı işlerde: yayın işi paketi API'de görünür olduktan sonra başlar.
+# Aynı anda gelen pushlarda bekleyen eski yayın iptal edilmez, sırayla biter (yarış hatası olmaz).
 name: Pages
 on:
   push:
@@ -10,18 +12,26 @@ permissions:
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.d.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.d.outputs.page_url }}
+    steps:
+      - name: Paket görünür olana kadar kısa bekleme
+        run: sleep 5
       - id: d
         uses: actions/deploy-pages@v4
+        with:
+          error_count: 20
