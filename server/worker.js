@@ -37,8 +37,9 @@ export class World {
   }
   bc(o, except) { const t = JSON.stringify(o); for (const w of this.state.getWebSockets()) { if (w === except) continue; const a = w.deserializeAttachment(); if (a && a.id) try { w.send(t); } catch (e) {} } }
   async webSocketMessage(ws, msg) {
-    if (typeof msg !== 'string' || msg.length > 700) return;
+    if (typeof msg !== 'string' || msg.length > 5000) return;
     let m; try { m = JSON.parse(msg); } catch (e) { return; }
+    if (m.t !== 'hi' && msg.length > 700) return;
     let a = ws.deserializeAttachment() || {}, now = Date.now();
     if (m.t === 'hi') {
       if (a.id) return;
