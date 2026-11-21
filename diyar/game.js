@@ -155,7 +155,7 @@ function moveH(dx,dy){if(!blocked(G.px+dx,G.py))G.px+=dx;if(!blocked(G.px,G.py+d
 function moveE(e,dx,dy){if(!blocked(e.x+dx,e.y))e.x+=dx;if(!blocked(e.x,e.y+dy))e.y+=dy}
 function curMons(){return G.mode==='dungeon'?G.dg.mons:G.mons}
 function nearest(range,from){var best=null,bd=1e9,list=curMons();for(var i=0;i<list.length;i++){var m=list[i];if(m.dead)continue;var d=hyp(m.x-(from?from.x:G.px),m.y-(from?from.y:G.py))-m.sz;if(d<range&&d<bd){bd=d;best=m}}return best}
-function giveXp(n){P.xp+=n;if(n>=3)floatTxt(G.px+14,G.py-64,'+'+n+' XP','#6ec4ff');var lv=false;while(P.lv<Y.MAXLV&&P.xp>=Y.xpNeed(P.lv)){P.xp-=Y.xpNeed(P.lv);P.lv++;lv=true}
+function giveXp(n){if(window.YSoc&&n>0){try{n=Math.max(1,Math.round(n*YSoc.xpMul()))}catch(e){}}P.xp+=n;if(n>=3)floatTxt(G.px+14,G.py-64,'+'+n+' XP','#6ec4ff');var lv=false;while(P.lv<Y.MAXLV&&P.xp>=Y.xpNeed(P.lv)){P.xp-=Y.xpNeed(P.lv);P.lv++;lv=true}
   if(lv){G.hp=S().maxhp;floatTxt(G.px,G.py-50,'SEVİYE '+P.lv+'!','#ffd23f');say('Seviye atladın: '+P.lv+(Y.skillPts(P)?' · '+Y.skillPts(P)+' beceri puanın var (K)':''),'sys');refreshBar();addFx({k:'ring',x:G.px,y:G.py,r:110,c:'#ffd23f',l:.7})}}
 function giveProf(k,n){var p=P.pf[k];p.x+=n;while(p.x>=Y.profNeed(p.l)){p.x-=Y.profNeed(p.l);p.l++;say(Y.PROF[k]+' seviyen '+p.l+' oldu!','sys')}}
 
@@ -178,7 +178,7 @@ function killMon(m){m.dead=1;if(window.YX2)try{YX2.kill(m)}catch(e){}qProg('kill
     var r=Math.random();if(r<.28){P.wood++;say('+1 Odun','x')}else if(r<.5){P.stone++;say('+1 Taş','x')}
     var i=G.mons.indexOf(m);if(i>=0)G.mons.splice(i,1)}
   else dgCheck()}
-function attack(){if(G.atkCd>0||G.dead>0)return;var st=S(),c=C(),t=nearest(st.rng+(c.melee?16:0));G.atkCd=st.aspd;G.swT=.18;
+function attack(){if(G.atkCd>0||G.dead>0)return;if(window.YSoc&&YSoc.duelOn()){var c0=C();G.atkCd=Math.max(.45,S().aspd);G.swT=.18;addFx({k:'swing',x:G.px,y:G.py,fx:G.fx,fy:G.fy,c:c0.col,l:.15});YSoc.duelHit();return}var st=S(),c=C(),t=nearest(st.rng+(c.melee?16:0));G.atkCd=st.aspd;G.swT=.18;
   if(!t){addFx({k:'swing',x:G.px,y:G.py,fx:G.fx,fy:G.fy,c:c.col,l:.12});G.atkCd=Math.min(.3,st.aspd);return}
   var dx=t.x-G.px,dy=t.y-G.py,h=hyp(dx,dy)||1;G.fx=dx/h;G.fy=dy/h;
   var crit=Math.random()<(P.cls==='suikastci'?.22:.1)+S().crit,d=st.dmg*(G.buff>0?(G.bm||1.5):1)*(.9+Math.random()*.2)*(crit?1.7:1);
@@ -261,7 +261,7 @@ function dgDone(){var dg=G.dg,d=Y.DUNGEONS[dg.id],r=d.reward;dg.done=true;qProg(
 function exitDg(){G.comp&&G.comp.forEach(function(c){c.x=G.saveW.x;c.y=G.saveW.y});G.mode='world';G.px=G.saveW.x;G.py=G.saveW.y;G.dg=null;G.hp=Math.min(S().maxhp,G.hp+Math.round(S().maxhp*.3))}
 
 /* ---------- panel içerikleri ---------- */
-function openPan(id){['p-bag','p-npc','p-chat','p-menu','p-map','p-x'].forEach(function(x){var e=$(x);if(e)e.classList.toggle('on',x===id)});if(G)G.paused=!!id}
+function openPan(id){['p-bag','p-npc','p-chat','p-menu','p-map','p-x','p-soc'].forEach(function(x){var e=$(x);if(e)e.classList.toggle('on',x===id)});if(G)G.paused=!!id}
 function closePan(){openPan(null)}
 function bar(v,mx,c){return'<div class="bar" style="margin-top:2px"><i style="width:'+Math.min(100,Math.round(v/mx*100))+'%;background:'+c+'"></i></div>'}
 function skDesc(s){var k=s.kind;return k==='aoe'?'Çevrene %'+Math.round(s.m*100)+' hasar'+(s.slow?', yavaşlatır':''):k==='aoeT'?'Hedefe %'+Math.round(s.m*100)+' alan hasarı':k==='chain'?s.hits+' hedefe zincir, %'+Math.round(s.m*100)+' hasar':k==='dash'?'Atıl'+(s.m?', %'+Math.round(s.m*100)+' hasar':''):k==='buff'?'Hasar +%'+Math.round(((s.dmgm||1.5)-1)*100)+' ('+Math.round(s.dur)+' sn)':k==='taunt'?'Düşmanları üstüne çeker':k==='guard'?'Hasar -%'+Math.round(s.red*100)+' ('+Math.round(s.dur)+' sn)':k==='line'?'Çizgi boyunca %'+Math.round(s.m*100)+' hasar':k==='heal'?'Canının %'+Math.round(s.amt*100)+'\'ini yeniler':k==='hot'?Math.round(s.dur)+' sn boyunca can yeniler':k==='strike'?'Hedefe ışınlanıp %'+Math.round(s.m*100)+' vurur':k==='dot'?'Zehir: sürekli hasar':k==='evade'?'Kısa süre görünmez':''}
@@ -295,7 +295,7 @@ function botStock(){var slot=Math.floor(Date.now()/6e5),r=function(i){return Y.h
 function trSum(m){var v=0;for(var k in m)v+=itVal(k)*m[k];return v}
 function chipRow(k,have,sel,side){return'<div class="it"><span style="font-size:1.2rem">'+itIc(k)+'</span><div class="t">'+esc(itName(k))+' <small>×'+have+' · 🪙'+itVal(k)+'/adet</small></div><div style="display:flex;gap:4px;align-items:center"><button class="btn alt" style="min-height:30px;padding:0 11px" data-tm="'+side+'|'+k+'" type="button">−</button><b style="min-width:20px;text-align:center">'+sel+'</b><button class="btn alt" style="min-height:30px;padding:0 11px" data-tp="'+side+'|'+k+'|'+have+'" type="button">+</button></div></div>'}
 function drawTrade(){var inv=myInv(),stock=botStock(),vo=trSum(TR.o),vw=trSum(TR.w),fair=vw===0?0:vo/vw,ok=vo>0&&vw>0&&vo>=vw*1.15;
-  var h='<p class="sub">Altın takasa girmez; değerli madenler, külçeler, rünler ve silahlar takas edilir. Oyuncu-oyuncu takas çok oyunculu diyarda bu pencereyle yapılacak; şimdilik Kervan Takasçısı ile pratik yap.</p>';
+  var h='<p class="sub">Altın takasa girmez; değerli madenler, külçeler, rünler ve silahlar takas edilir. Oyuncularla takas için bir oyuncuya dokun → Takas teklif et (altın da dahil). Burada Kervan Takasçısı ile pratik yapabilirsin.</p>';
   h+='<div class="it"><div class="t"><b>Senin teklifin</b> · değer 🪙'+vo+'</div></div>';
   if(inv.length)inv.forEach(function(x){h+=chipRow(x.k,x.q,TR.o[x.k]||0,'o')});else h+='<p class="sub">Takas edilecek eşyan yok.</p>';
   h+='<div class="it"><div class="t"><b>Kervan Takasçısı\'ndan istediğin</b> · değer 🪙'+vw+'</div></div>';
@@ -318,7 +318,7 @@ function drawGuild(){ensureQ();var rk=Y.rankOf(P.mp),R=Y.RANKS[rk],nx=Y.RANKS[rk
   if(gTab===0){h+='<p class="sub">Günlük görevler her gün yenilenir. En fazla 3 görev alabilirsin.</p>';var act=P.q.list.filter(function(q){return q.st===1}).length;
     P.q.list.forEach(function(q,i){var done=q.have>=q.n;h+='<div class="it"><div class="t"><b>'+qTxt(q)+'</b><br><small>🪙'+q.gold+' · '+q.xp+' XP · '+q.mp+' MP'+(q.st===1?' · '+q.have+'/'+q.n:'')+'</small></div>'+(q.st===0?'<button class="btn" data-qa="'+i+'" '+(act>=3?'disabled':'')+' type="button">Kabul</button>':q.st===1?'<button class="btn" data-qc="'+i+'" '+(done?'':'disabled')+' type="button">'+(done?'Teslim':'Sürüyor')+'</button>':'<small>Bitti</small>')+'</div>'})}
   else if(gTab===1){h+='<p class="sub">Zindanlar rütbe, seviye ve parti büyüklüğü ister.</p>';Object.keys(Y.DUNGEONS).forEach(function(id){var d=Y.DUNGEONS[id],ok=rk>=d.rk&&P.lv>=d.lv;h+='<div class="it" style="opacity:'+(ok?1:.6)+'"><span style="font-size:1.4rem">'+d.ic+'</span><div class="t"><b>'+d.n+'</b><br><small>'+Y.RANKS[d.rk].n+' rütbe · Seviye '+d.lv+' · '+d.party+' kişi<br>'+d.desc+'</small></div><small>'+(ok?'Açık':'Kilitli')+'</small></div>'})}
-  else{h+='<p class="sub">Partin: sen + kiralık maceracılar (çok oyunculu diyarda gerçek oyuncularla parti kurulacak, aynı ekran). En fazla 4 kişi.</p><div class="it"><div class="t"><b>'+esc(P.nick)+'</b> · '+esc(C().n)+' · Sv '+P.lv+'</div><small>Lider</small></div>';
+  else{h+='<p class="sub">Partin: sen + kiralık maceracılar. Gerçek oyuncularla parti için bir oyuncuya dokun ya da 👥 menüsünü aç (parti XP bonusu, sohbet, pusula). En fazla 4 kişi.</p><div class="it"><div class="t"><b>'+esc(P.nick)+'</b> · '+esc(C().n)+' · Sv '+P.lv+'</div><small>Lider</small></div>';
     P.party.forEach(function(c,i){h+='<div class="it"><div class="t"><b>Kiralık '+Y.CLASSES[c.cls].n+'</b> · Sv '+P.lv+'</div><button class="btn alt" data-pd="'+i+'" type="button">Gönder</button></div>'});
     var fee=40*P.lv;if(P.party.length<3){h+='<div class="it"><div class="t"><b>Maceracı kirala</b> · 🪙 '+fee+'<br><small>Seviyene göre savaşır; Şifacı seni iyileştirir, Muhafız düşmanı çeker.</small></div></div><div class="cls">'+Object.keys(Y.CLASSES).map(function(k){var c=Y.CLASSES[k];return'<button type="button" data-ph="'+k+'" '+(P.gold<fee?'disabled':'')+'><span class="ic">'+c.ic+'</span><b>'+c.n+'</b></button>'}).join('')+'</div>'}}
   $('npc').innerHTML=h;
@@ -519,7 +519,7 @@ document.addEventListener('visibilitychange',function(){if(document.hidden)saveN
 function boot(){try{YA.dom(document.body)}catch(e){}if(!window.YXAcct||!YXAcct.conf()){show('s-gate');$('gerr').textContent='Hesap sistemi şu an hazır değil.';return}
   if(acct())toChar();else show('s-gate')}
 window.addEventListener('yx-acct',function(){if(!G&&!acct())show('s-gate')});
-window.__yd={get G(){return G},get P(){return P},get ctx(){return ctx},get VW(){return VW},get VH(){return VH},get dpr(){return dpr},say:say,floatTxt:floatTxt,saveNow:saveNow,openPan:openPan,closePan:closePan,giveXp:giveXp,mkMon:mkMon,inTownF:inTownF,S:S,enter:enter,cast:cast,attack:attack,interact:interact,openNpc:openNpc,enterDg:enterDg,die:die,respawn:respawn,drawSkills:drawSkills,Y:Y};
+window.__yd={get G(){return G},get P(){return P},get ctx(){return ctx},get VW(){return VW},get VH(){return VH},get dpr(){return dpr},say:say,floatTxt:floatTxt,saveNow:saveNow,openPan:openPan,closePan:closePan,giveXp:giveXp,mkMon:mkMon,inTownF:inTownF,S:S,enter:enter,cast:cast,attack:attack,interact:interact,openNpc:openNpc,enterDg:enterDg,die:die,respawn:respawn,drawSkills:drawSkills,Y:Y,myInv:myInv,itName:itName,itIc:itIc,itVal:itVal,closePan:closePan};
 setTimeout(boot,60);
 window.addEventListener('yl-img',function(){try{if(typeof drawNewPrev==='function'&&$('cnew')&&$('cnew').style.display!=='none')drawNewPrev();if(P)setAv();if($('s-wd').classList.contains('on'))drawWd();var pn=$('p-npc');if(pn&&pn.classList.contains('on')&&/Kahraman/.test($('npt').textContent))drawHeroShop()}catch(e){}});
 })();
