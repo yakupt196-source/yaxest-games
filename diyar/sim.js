@@ -82,6 +82,7 @@ function skRank(p,id){return(p.sr&&p.sr[id])||1}
 function genQuests(day,lv){function r(i){return hash(day,i,77)}var L=[],K=lv<5?['slime','boar']:lv<12?['wolf','boar','slime']:['golem','wolf','boar'],G=lv<6?['wood','stone']:lv<10?['wood','stone','copper']:lv<16?['copper','iron','wood']:['iron','silver','goldore'];
  var kk=K[Math.floor(r(1)*K.length)],gg=G[Math.floor(r(2)*G.length)],n1=8+Math.floor(r(3)*8),n2=8+Math.floor(r(4)*8);
  L.push({id:'k'+day,t:'kill',k:kk,n:n1,mp:10+n1,gold:30+lv*8+n1*3,xp:40+lv*18});
+ L.push({id:'a'+day,t:'kill',k:'any',n:25,mp:34,gold:70+lv*12,xp:90+lv*24});
  L.push({id:'g'+day,t:'gather',k:gg,n:n2,mp:10+n2,gold:25+lv*6+n2*3,xp:30+lv*14});
  L.push({id:'s'+day,t:'smelt',k:'any',n:4+Math.floor(r(5)*4),mp:18,gold:60+lv*10,xp:50+lv*16});
  L.push({id:'d'+day,t:'dg',k:lv>=10?'kristal':'kurt',n:1,mp:lv>=10?40:22,gold:80+lv*14,xp:120+lv*30});

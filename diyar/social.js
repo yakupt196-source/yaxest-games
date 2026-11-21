@@ -62,7 +62,7 @@ function btn(l,a,c,x){return'<button class="btn'+(c?' '+c:'')+'" data-a="'+a+'" 
 function render(){
   if(!root)return;var el=$('soc-b'),keep={};['dmi','fnick','ctag','cname','cmotto','csq','pnick','bellm','cinvn'].forEach(function(i){var x=$(i);if(x)keep[i]=x.value});
   var h='';
-  if(S.view&&S.view.t==='prof')h=profHtml();else if(S.view&&S.view.t==='dm')h=dmHtml();else if(S.view&&S.view.t==='trade')h=tradeHtml();
+  if(S.view&&S.view.t==='prof')h=profHtml();else if(S.view&&S.view.t==='dm')h=dmHtml();else if(S.view&&S.view.t==='trade')h=tradeHtml();else if(S.view&&S.view.t==='dep')h=depHtml();
   else{var T=[['fr','👥 Arkadaş'],['in','📨 İstek'],['pl','🌍 Oyuncu'],['cl','🛡️ Klan'],['pt','🎉 Parti'],['lb','🏆 Sıralama']];
     h='<div class="tabs">'+T.map(function(t){var n=t[0]==='in'?S.inn.length:t[0]==='fr'?S.fr.reduce(function(a,f){return a+(f.un||0)},0):0;return'<button type="button" data-a="tab|'+t[0]+'" aria-pressed="'+(S.tab===t[0])+'">'+t[1]+(n?'<i class="sbd">'+n+'</i>':'')+'</button>'}).join('')+'</div>';
     h+=({fr:frHtml,in:inHtml,pl:plHtml,cl:clHtml,pt:ptHtml,lb:lbHtml}[S.tab]||frHtml)()}
@@ -103,7 +103,7 @@ function clHtml(){
     var self=m.k===S.myPk;h2+='<div class="it"><span class="dot'+(m.on?' on':'')+'"></span><div class="t">'+(m.r==='lead'?'👑 ':m.r==='off'?'⭐ ':'')+'<b>'+esc(m.n)+'</b>'+(self?' <small>(sen)</small>':'')+' <small>· bağış 🪙'+m.c+'</small></div>'
       +((r==='lead'&&!self)?(m.r==='mem'?btn('⬆','cm|'+m.k+'|pro','alt'):btn('⬇','cm|'+m.k+'|dem','alt'))+btn('👑','cm|'+m.k+'|lead','alt'):'')
       +((!self&&(r==='lead'||(r==='off'&&m.r==='mem')))?btn(confKey==='cm|'+m.k+'|kick'?'Emin misin?':'❌','cm|'+m.k+'|kick','alt'):'')+'</div>'});
-  h2+='<div class="row" style="margin-top:10px">'+btn(confKey==='cleave'?'Emin misin? Evet, ayrıl':'Klandan ayrıl','cleave','alt')+'</div>';return h2}
+  h2+='<div class="row" style="margin-top:10px">'+btn('📦 Klan Deposu','cdep','')+'</div><div class="row" style="margin-top:8px">'+btn(confKey==='cleave'?'Emin misin? Evet, ayrıl':'Klandan ayrıl','cleave','alt')+'</div>';return h2}
 function ptHtml(){
   var p=S.pt,h='<p class="sub">Parti: en fazla 4 oyuncu. Parti sohbeti, “📍 Buraya gel” işareti, ekran dışındaki üyeleri gösteren pusula oku ve parti XP bonusu (üye başına +%5) verir.</p>';
   if(!p||!p.mem||p.mem.length<2)h+='<p class="sub">Bir partide değilsin. Bir oyuncuya dokunup “Partiye çağır” de ya da takma adını yaz.</p>';
@@ -151,12 +151,27 @@ function tradeHtml(){var T=S.tr;if(!T)return'<p class="sub">Takas bitti.</p><div
   h+='<p class="sub" style="margin:8px 0">'+(!m.lk?'Teklifini hazırla, sonra 🔒 Kilitle.':!o.lk?'Karşı tarafın kilitlemesi bekleniyor…':m.ok?'Karşı tarafın onayı bekleniyor…':'İkiniz de kilitlediniz: ✅ Onayla.')+' Teklif değişirse kilitler açılır.</p>';
   h+='<div class="row">'+btn(m.lk?'🔓 Kilidi aç':'🔒 Kilitle','tl')+btn(m.ok?'Bekleniyor…':'✅ Onayla','tc','',both&&!m.ok?'':' disabled')+btn('İptal','tx','alt')+'</div>';return h}
 
+/* ---- klan deposu ---- */
+function depOk(k){return window.YH&&YH.valid(k)}
+function depHtml(){var c=S.cl,r=myRole();if(!c)return'<p class="sub">Klanın yok.</p><div class="row">'+btn('Geri','back','alt')+'</div>';
+  var dep=c.dep||{},ks=Object.keys(dep).filter(function(k){return dep[k]>0&&depOk(k)}),u=0;for(var z in dep)u+=dep[z];var can=r==='lead'||r==='off'||c.dw;
+  var h='<div class="row" style="margin-bottom:6px">'+btn('← Klan','back','alt')+'</div><div class="it"><div class="t"><b>📦 ['+esc(c.tag)+'] Klan Deposu</b> <small>'+u+' / '+(c.cap||300)+' eşya · her klan seviyesi +200</small>'+bar(u,c.cap||300,'#7ad7ff')+'<small>Alma yetkisi: '+(c.dw?'tüm üyeler':'lider ve subaylar')+(can?' (sende var)':' (sende yok)')+'. Herkes depoya koyabilir.</small></div>'+(r==='lead'?btn(c.dw?'🔒 Kısıtla':'🔓 Üyelere aç','cdw|'+(c.dw?0:1),'alt'):'')+'</div>';
+  h+='<h3 style="margin:8px 0 4px">Depoda</h3>';if(!ks.length)h+='<p class="sub">Depo boş. Çantandan bir şey koy; klan arkadaşların ortak kullansın.</p>';
+  ks.forEach(function(k){var q=dep[k];h+='<div class="it"><span style="width:30px">'+D.itIc(k)+'</span><div class="t"><b>'+esc(D.itName(k))+'</b> <small>×'+q+'</small></div>'+(can?btn('1','dtk|'+k+'|1','alt')+(q>1?btn('Tümü','dtk|'+k+'|'+q,'alt'):''):'')+'</div>'});
+  var inv=D.myInv().filter(function(x){return depOk(x.k)});h+='<h3 style="margin:10px 0 4px">Çantandan koy</h3>';if(!inv.length)h+='<p class="sub">Çantan boş.</p>';
+  inv.forEach(function(x){h+='<div class="it"><span style="width:30px">'+D.itIc(x.k)+'</span><div class="t"><b>'+esc(D.itName(x.k))+'</b> <small>×'+x.q+'</small></div>'+btn('1','dpt|'+x.k+'|1','alt')+(x.q>1?btn('10','dpt|'+x.k+'|10','alt')+btn('Tümü','dpt|'+x.k+'|'+x.q,'alt'):'')+'</div>'});
+  return h}
+function openDepot(){if(!S.cl){S.tab='cl';S.view=null;send({t:'cs',q:S.csq});say('Önce bir klana katıl.')}else S.view={t:'dep'};render();D.openPan('p-soc')}
 /* ---------- eylemler ---------- */
 function ask(k){if(confKey===k&&Date.now()-confT<4000){confKey='';return true}confKey=k;confT=Date.now();re();setTimeout(function(){if(confKey===k){confKey='';re()}},4100);return false}
 function val(i){var x=$(i);return x?x.value.trim():''}
 function act(a){var p=a.split('|'),k=p[0],P=pl();
   if(k==='tab'){S.tab=p[1];S.view=null;if(S.tab==='lb')send({t:'lbq'});if(S.tab==='cl'&&!S.cl)send({t:'cs',q:S.csq});render()}
   else if(k==='back'){S.view=null;render()}
+  else if(k==='cdep'){S.view={t:'dep'};render()}
+  else if(k==='cdw'){send({t:'cdt',on:+p[1]})}
+  else if(k==='dpt'){if(!S.cl||!depOk(p[1]))return;var q=Math.min(+p[2]||1,YH.have(p[1]));if(q>0)send({t:'cdp',k:p[1],q:q,n:D.itName(p[1])})}
+  else if(k==='dtk'){if(p[1][0]==='w'&&YH.have(p[1]))return say('Bu silaha zaten sahipsin.');if(S.cl&&depOk(p[1]))send({t:'cdw',k:p[1],q:+p[2]||1,n:D.itName(p[1])})}
   else if(k==='close'){closeP()}
   else if(k==='addfr'){var n=val('fnick');if(n)send({t:'iv',k:'fr',n:n});$('fnick').value=''}
   else if(k==='fd'){if(ask(a))send({t:'fd',k:p[1]})}
@@ -229,6 +244,7 @@ function hand(m){
     case 'ct':if(m.id===S.myId&&!m.cg){S.cl=null;re()}return true;
     case 'cl':S.cl=m.c;if(m.c&&Net)Net.seed('k',m.c.msgs||[]);re();return true;
     case 'cok':addGold(-m.cost);say('🛡️ Klanını kurdun!');return true;
+    case 'cdr':{if(!window.YH||!YH.valid(m.k))return true;if(m.a==='p'){YH.take(m.k,m.q);say('📦 Klan deposuna '+m.q+'× '+D.itName(m.k)+' koydun.')}else{if(m.k[0]==='w'&&YH.have(m.k)){say('Bu silahın zaten var; depoda kaldı.')}else{YH.put(m.k,m.q);say('📦 Depodan '+m.q+'× '+D.itName(m.k)+' aldın.')}}D.saveNow();re();return true}
     case 'cdok':addGold(-m.g);say('🪙'+m.g+' klan kasasına bağışlandı.');return true;
     case 'cs':S.cs=m.list;re();return true;
     case 'lb':S.lb=m;re();return true;
@@ -264,5 +280,5 @@ function draw(ctx,camX,camY,t,W,H){
     ctx.save();ctx.font='700 11px system-ui';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.strokeStyle='#000';ctx.lineWidth=3;var tx=cx+rx-Math.cos(ang)*26,ty=cy+ry-Math.sin(ang)*26+4;ctx.strokeText(m.n,tx,ty);ctx.fillText(m.n,tx,ty);ctx.restore()})}
 }
 function xpMul(){var v=1;if(S.cl)v+=Math.max(0,(S.cl.lv||1)-1)*.01;if(S.pt&&S.pt.mem){var os=others(),n=S.pt.mem.filter(function(m){return m.id===S.myId||os[m.id]}).length;v+=.05*Math.max(0,n-1)}return v}
-window.YSoc={init:init,leave:leave,onHi:onHi,hand:hand,tick:tick,draw:draw,plate:plate,drawOther:drawOther,xpMul:xpMul,duelOn:duelOn,duelHit:duelHit,blocked:function(k){return !!k&&S.bl.indexOf(k)>=0},inClan:function(){return !!S.cl},myClan:function(){return S.cl?S.cl.tag:''},inParty:function(){return !!(S.pt&&S.pt.mem&&S.pt.mem.length>1)},open:openP,wager:function(v){S.wager=+v||0},dbg:{S:function(){return S}}};
+window.YSoc={openDepot:openDepot,init:init,leave:leave,onHi:onHi,hand:hand,tick:tick,draw:draw,plate:plate,drawOther:drawOther,xpMul:xpMul,duelOn:duelOn,duelHit:duelHit,blocked:function(k){return !!k&&S.bl.indexOf(k)>=0},inClan:function(){return !!S.cl},myClan:function(){return S.cl?S.cl.tag:''},inParty:function(){return !!(S.pt&&S.pt.mem&&S.pt.mem.length>1)},open:openP,wager:function(v){S.wager=+v||0},dbg:{S:function(){return S}}};
 })();

@@ -119,6 +119,8 @@ export class World {
       case 'cm': return this.clanManage(ws, a, m);
       case 'cx': return this.clanLeave(ws, a.pk);
       case 'cd': return this.clanDonate(ws, a, m);
+      case 'cdp': case 'cdw': return this.clanDepot(ws, a, m);
+      case 'cdt': return this.clanDepotToggle(ws, a, m);
       case 'ce': return this.clanEdit(ws, a, m);
       case 'cs': return this.clanSearch(ws, m);
       case 'lbq': return this.lb(ws);
@@ -324,7 +326,7 @@ export class World {
     await this.s('tr:' + a.tr, T); this.tpush(T);
   }
   /* ---- klan ---- */
-  cstate(C) { const mem = Object.keys(C.mem).map(k => ({ k, n: C.mem[k].n, r: C.mem[k].r, c: C.mem[k].c, on: !!this.byPk(k) })); const l = lvl(C.xp); return { tag: C.tag, name: C.name, lv: l, xp: C.xp, nx: need(l), motto: C.motto, open: C.open ? 1 : 0, mem, msgs: C.msgs.slice(-30) }; }
+  cstate(C) { const mem = Object.keys(C.mem).map(k => ({ k, n: C.mem[k].n, r: C.mem[k].r, c: C.mem[k].c, on: !!this.byPk(k) })); const l = lvl(C.xp); return { tag: C.tag, name: C.name, lv: l, xp: C.xp, nx: need(l), motto: C.motto, open: C.open ? 1 : 0, dep: C.dep || {}, dw: C.dw ? 1 : 0, cap: 300 + 200 * l, mem, msgs: C.msgs.slice(-30) }; }
   async clanPush(tag) { const C = await this.g('c:' + tag, null); if (!C) return; const st = { t: 'cl', c: this.cstate(C) }; for (const w of this.all()) if (this.A(w).cg === tag) this.snd(w, st); }
   async cidx(C) { const ix = await this.g('cidx', {}); if (C) ix[C.tag] = { n: C.name, xp: C.xp, m: Object.keys(C.mem).length, o: C.open ? 1 : 0 }; await this.s('cidx', ix); }
   setTag(pk, tag) { const w = this.byPk(pk); if (!w) return; const a = this.setA(w, x => { x.cg = tag || ''; }); this.bc({ t: 'ct', id: a.id, cg: tag || '' }); this.snd(w, { t: 'ct', id: a.id, cg: tag || '' }); if (!tag) this.snd(w, { t: 'cl', c: null }); }
@@ -374,6 +376,18 @@ export class World {
     if (!a.cg) return; const g = int(m.g, 1, 100000), C = await this.g('c:' + a.cg, null); if (!C || !C.mem[a.pk]) return;
     C.xp += g; C.mem[a.pk].c += g; C.msgs.push({ n: '📢', m: a.nick + ' kasaya ' + g + ' altın bağışladı.', t: Date.now() }); C.msgs = C.msgs.slice(-40);
     await this.s('c:' + a.cg, C); await this.cidx(C); this.snd(ws, { t: 'cdok', g }); await this.clanPush(a.cg);
+  }
+  async clanDepot(ws, a, m) {
+    if (!a.cg) return; const k = String(m.k || ''); if (!/^(m:[a-z_0-9]{1,14}|r:[a-z]{2,12}|w:[a-z]{3,10}:\d{1,2})$/.test(k)) return;
+    const q = k[0] === 'w' ? 1 : int(m.q, 1, 999), C = await this.g('c:' + a.cg, null); if (!C || !C.mem[a.pk]) return; C.dep = C.dep || {};
+    const cap = 300 + 200 * lvl(C.xp), tot = Object.values(C.dep).reduce((s, v) => s + v, 0), nm = clean(m.n, 24) || k, me = C.mem[a.pk];
+    if (m.t === 'cdp') { if (tot + q > cap) return this.err(ws, 'Klan deposu dolu (' + cap + ').'); if (Object.keys(C.dep).length >= 60 && !C.dep[k]) return this.err(ws, 'Depoda çok fazla tür var.'); C.dep[k] = (C.dep[k] || 0) + q; C.msgs.push({ n: '📦', m: a.nick + ' depoya ' + q + '× ' + nm + ' koydu.', t: Date.now() }); }
+    else { if (!(me.r === 'lead' || me.r === 'off' || C.dw)) return this.err(ws, 'Bu klanda depodan sadece lider ve subaylar alabilir.'); if ((C.dep[k] || 0) < q) return this.err(ws, 'Depoda yeterli yok.'); C.dep[k] -= q; if (!C.dep[k]) delete C.dep[k]; C.msgs.push({ n: '📦', m: a.nick + ' depodan ' + q + '× ' + nm + ' aldı.', t: Date.now() }); }
+    C.msgs = C.msgs.slice(-40); await this.s('c:' + a.cg, C); this.snd(ws, { t: 'cdr', a: m.t === 'cdp' ? 'p' : 'w', k, q }); await this.clanPush(a.cg);
+  }
+  async clanDepotToggle(ws, a, m) {
+    if (!a.cg) return; const C = await this.g('c:' + a.cg, null); if (!C || !C.mem[a.pk] || C.mem[a.pk].r !== 'lead') return;
+    C.dw = m.on ? 1 : 0; C.msgs.push({ n: '📦', m: 'Lider depodan alma yetkisini ' + (C.dw ? 'tüm üyelere açtı.' : 'subaylara kısıtladı.'), t: Date.now() }); C.msgs = C.msgs.slice(-40); await this.s('c:' + a.cg, C); await this.clanPush(a.cg);
   }
   async clanEdit(ws, a, m) {
     if (!a.cg) return; const C = await this.g('c:' + a.cg, null); if (!C || C.mem[a.pk].r !== 'lead') return;

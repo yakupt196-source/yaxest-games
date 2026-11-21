@@ -37,7 +37,7 @@ function val(P,id){return R[id].b*mul(lvl(P,id))}
 function unlocked(P,slot){return slot!=='t'||P.lv>=TALI_LV}
 function equipped(P){var o=[];['w','a','t'].forEach(function(s){var id=P[SK[s]];if(id&&R[id]&&R[id].slot===s&&unlocked(P,s))o.push(id)});return o}
 function setInfo(P){var e=equipped(P),full=e.length===3;return{full:full,master:full&&e.every(function(id){return lvl(P,id)>=MAXL})}}
-function mods(P){var m=ZERO();if(!P)return m;ensure(P);var e=equipped(P);e.forEach(function(id){m[R[id].k]+=val(P,id)});var si=setInfo(P);if(si.full)m.xpx+=.05;if(si.master)m.atk+=.05;return m}
+function mods(P){var m=ZERO();if(!P)return m;ensure(P);var e=equipped(P);var hmul=window.YH?YH.runeMul(P):1;e.forEach(function(id){m[R[id].k]+=val(P,id)*hmul});var si=setInfo(P);if(si.full)m.xpx+=.05;if(si.master)m.atk+=.05;return m}
 function effTxt(P,id,l){var v=R[id].b*mul(l||lvl(P,id));return TXT[R[id].k](v)}
 function stars(l){var s='';for(var i=1;i<=MAXL;i++)s+=i<=l?'★':'☆';return s}
 function chips(P){ensure(P);var e=equipped(P);if(!e.length)return'Rünün yok · Rün Ustası’ndan dövebilirsin';return e.map(function(id){return R[id].ic+' Sv'+lvl(P,id)}).join(' · ')}
