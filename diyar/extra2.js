@@ -4,7 +4,7 @@
 'use strict';
 var A=null,D=null,X=null,P=null,G=null,Y=null,TS=48;
 function $(i){return document.getElementById(i)}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function hyp(a,b){return Math.sqrt(a*a+b*b)}
 function pick(l){return l[Math.floor(Math.random()*l.length)]}
 function inc(k,n){X.c[k]=(X.c[k]||0)+(n||1)}

@@ -31,7 +31,7 @@ function hand(m){
   else if(m.t==='join'){add(m.p);D.say('🌐 '+m.p.n+' diyara katıldı.','x')}
   else if(m.t==='leave'){delete others[m.id]}
   else if(m.t==='p'){var o=others[m.id];if(o){if(Math.abs(m.x-o.x)+Math.abs(m.y-o.y)>500){o.dx=m.x;o.dy=m.y}o.x=m.x;o.y=m.y;o.f=m.f;if(m.lv)o.lv=m.lv}}
-  else if(m.t==='snap'){G.px=m.x;G.py=m.y}
+  else if(m.t==='snap'){if(G.mode==='world'&&isFinite(m.x)&&isFinite(m.y)&&!G.dead){G.px=m.x;G.py=m.y;lastX=m.x;lastY=m.y}}
   else if(m.t==='c'){if(window.YSoc&&YSoc.blocked(m.k))return;var k=m.ch==='l'?'l':m.ch==='k'?'k':m.ch==='p'?'p':'w',cg=m.cg||(others[m.id]&&others[m.id].cg)||(m.id===me&&window.YSoc?YSoc.myClan():'')||'';bub(m.id,m.m);var mn=m.id!==me&&mentioned(m.m);msgs[k].push({n:m.n,m:m.m,me:m.id===me,cg:cg,t:Date.now(),mn:mn});if(msgs[k].length>50)msgs[k].shift();if(mn){D.say('🔔 '+m.n+' senden bahsetti: '+m.m,'sys');try{D.floatTxt(G.px,G.py-100,'🔔 '+m.n,'#ffd23f')}catch(e){}}saveH();
     D.say('('+CH[k][0]+') '+m.n+(cg&&k!=='k'?' ['+cg+']':'')+': '+m.m,'x');
     var pc=document.getElementById('p-chat'),nc=document.getElementById('ncl'),vis=pc&&pc.classList.contains('on')&&nc&&nc.dataset.k===k;if(!vis&&m.id!==me){unread[k]++;ub()}refresh()}
@@ -42,8 +42,10 @@ function hand(m){
   else if(window.YSoc){YSoc.hand(m)}}
 function add(p){if(!p||!p.id||p.id===me)return;others[p.id]={id:p.id,k:p.k,n:p.n,ap:p.ap,lv:p.lv||1,x:p.x,y:p.y,dx:p.x,dy:p.y,f:0,cg:p.cg||'',w:p.w||0,l:p.l||0}}
 function tick(dt){if(!G)return;if(window.YSoc)try{YSoc.tick(dt)}catch(e){}beat+=dt;if(!on())return;lastSend+=dt;
-  var mv=Math.abs(G.px-lastX)+Math.abs(G.py-lastY)>2;
-  if((mv&&lastSend>.15)||beat>3){send({t:'p',x:Math.round(G.px),y:Math.round(G.py),f:mv?1:0,lv:P.lv,ap:beat>3?P.ap:undefined});lastSend=0;lastX=G.px;lastY=G.py;if(beat>3)beat=0}
+  var wx=G.px,wy=G.py;if(G.mode!=='world'){if(!G.saveW)return;wx=G.saveW.x;wy=G.saveW.y}/* zindanda arena koordinatı sunucuya gitmez */
+  if(!isFinite(wx)||!isFinite(wy))return;
+  var mv=Math.abs(wx-lastX)+Math.abs(wy-lastY)>2;
+  if((mv&&lastSend>.15)||beat>3){var jmp=Math.hypot(wx-lastX,wy-lastY)>260&&lastX!==0;send({t:'p',x:Math.round(wx),y:Math.round(wy),f:mv?1:0,lv:P.lv,j:jmp?1:undefined,ap:beat>3?P.ap:undefined});lastSend=0;lastX=wx;lastY=wy;if(beat>3)beat=0}
   var k=Math.min(1,dt*9);for(var id in others){var o=others[id];o.dx+=(o.x-o.dx)*k;o.dy+=(o.y-o.dy)*k}}
 var bubs={};
 function bub(id,txt){bubs[id]={m:String(txt).slice(0,120),t:performance.now()}}
@@ -63,7 +65,7 @@ function draw(ctx,camX,camY,t,W,H){if(!on()||G.mode!=='world')return;camX0=camX;
     if(window.YSoc)try{YSoc.drawOther(ctx,o,sx,sy+15+YL.topY(o.ap||YL.def()))}catch(e){}
     try{bubble(ctx,id,sx,sy+15+YL.topY(o.ap||YL.def())-24)}catch(e){}}
   if(window.YSoc)try{YSoc.draw(ctx,camX,camY,t,W,H)}catch(e){}}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var curTab=1;
 var CH={w:['Dünya','#ffb02e','Tüm oyuncular görür'],l:['Yerel','#d0d6e6','Yakındaki oyuncular görür (yaklaşık 20 kare)'],k:['Klan','#c07cff','Sadece klan üyeleri görür'],p:['Parti','#7dff9b','Sadece parti üyeleri görür']},unread={w:0,l:0,k:0,p:0};
 function hm(t){var d=new Date(t||Date.now());return('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}

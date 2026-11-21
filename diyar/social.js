@@ -8,7 +8,7 @@ var WG=[0,100,500,1000,5000],CLAN_COST=5000,BELL_COST=500;
 function reset(){S={fr:[],inn:[],bl:[],pt:null,cl:null,duel:null,tr:null,lb:null,cs:null,dm:{},tab:'fr',view:null,pings:[],myId:'',myPk:'',wager:0,csq:'',gift:0}}
 reset();
 function $(i){return document.getElementById(i)}
-function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function pl(){return D.P}
 function send(o){if(Net)Net.send(o)}
 function say(t,k){if(D)D.say(t,k||'sys')}

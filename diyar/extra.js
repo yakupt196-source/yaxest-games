@@ -7,7 +7,7 @@ var D=null,G=null,P=null,Y=null,TS=64,X=null;
 function $(i){return document.getElementById(i)}
 function rnd(n){var x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)}
 function hyp(a,b){return Math.sqrt(a*a+b*b)}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 
 /* ---------- zaman: 12 dk = 1 gün (herkeste aynı) ---------- */
 var DAY=720000,SH=DAY*3/24;

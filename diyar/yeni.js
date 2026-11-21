@@ -3,7 +3,7 @@
 var Y=window.YD,D=null,showAll=false,mTab=0,tEgg=0;
 var CIC={savasci:'sword',tank:'shield',buyucu:'orb',sifaci:'cross',suikastci:'dagger'};
 function $(i){return document.getElementById(i)}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function PL(){return D&&D.P}
 function cn(c){return Y.CLASSES[c]?Y.CLASSES[c].n:c}
 function costVal(c){var v=0;if(!c)return 0;for(var x in c)v+=x==='gold'?c[x]:(Y.MATS[x]?Y.MATS[x].v:0)*c[x];return v}

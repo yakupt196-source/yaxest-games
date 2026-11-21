@@ -11,7 +11,7 @@ var PL=[{id:'p1',n:'Çınar Bahçesi',a:32,p:600},{id:'p2',n:'Değirmen Yanı',a
 var BUYERS=['Gezgin Hasan','Tüccar Ayşe','Madenci Veli','Avcı Zeynep','Kervancı Murat','Şifacı Elif','Demirci Bekir','Çırak Can'];
 var pos={};
 function $(i){return document.getElementById(i)}
-function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function day(){return Math.floor(Date.now()/864e5)}
 function hm(){return P&&P.hm}
 function L(){var h=hm();return h?LV[h.lv]:null}

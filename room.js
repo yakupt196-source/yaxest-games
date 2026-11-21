@@ -11,7 +11,7 @@ var CH='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 function mkcode(){var s='';for(var i=0;i<5;i++)s+=CH[Math.floor(Math.random()*CH.length)];return s}
 function tok(){return Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,6)}
 function clone(o){return JSON.parse(JSON.stringify(o))}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 
 /* ---------- taşıma katmanları ---------- */
 /* Çevrimiçi taşıma: halka açık MQTT (WebSocket) aracıları üzerinden aktarma. NAT/telefon verisi/okul ağı fark etmez; kayıt veya anahtar gerekmez.

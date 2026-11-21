@@ -1,4 +1,17 @@
 # Güvenlik / Security
 Güvenlik açığı veya telif ihlali bildirmek için: yakupt196@gmail.com (konu: Yaxest güvenlik).
-Oyuncu verisi yalnızca cihazda (localStorage) tutulur; sunucuda hesap veya şifre yoktur.
 Report vulnerabilities or copyright violations to the address above.
+
+## Mimari özeti
+- Hesap: Firebase Auth. Oyuncu kaydı cihazda (localStorage) tutulur, hesaba bağlı bulut yedeği Firestore'dadır.
+- Çok oyunculu sunucu (`server/worker.js`): Firebase ID token'ı (RS256, imza + aud + iss + exp) doğrulanır; token'sız soket hiçbir şey yapamaz.
+- Sunucu tarafı korumalar: hız sınırı, konum hız denetimi (ışınlanma bayrağı 6 sn'de bir), doğrulanmamış soket zaman aşımı (10 sn), IP başına bağlantı sınırı, giriş denemesi sınırı, dünya başına 150 oyuncu.
+- İstemci: tüm kullanıcı metni `esc()` ile kaçışlanır (`& < > " '`), sayfalar iframe içine alınamaz (frame-buster).
+
+## Bilinen sınırlar
+- Altın/envanter/takas istemci tarafında tutulur; sunucu doğrulaması yok (tek oyunculu bölümler için kabul edildi).
+- Üçüncü taraf CDN betiklerinde (MQTT) SRI yok.
+- Repo herkese açıktır: `server/` kaynağı görünür, ancak içinde gizli anahtar yoktur.
+
+## Firestore kuralları
+`firestore.rules` dosyası taslaktır. Firebase Console → Firestore → Rules → **Rules Playground**'da test edip yayınla. Ayrıca Google Cloud Console → API anahtarını HTTP referrer (yaxestgames.com) ile kısıtla.

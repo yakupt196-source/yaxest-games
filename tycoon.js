@@ -120,7 +120,7 @@ function start(C){
     else{var g=ppGain();var h3='<div class="tpr"><div class="tic" style="font-size:2.4rem">✨</div><b>'+esc(T('Yeniden Doğuş'))+'</b><p>'+esc(T('Her şeyi sıfırla, kalıcı ✨ kazan. Her ✨ geliri %7 artırır.'))+'</p><p class="tbig">✨ '+S.pp+' · '+esc(T('Mevcut bonus'))+': +%'+Math.round(S.pp*7)+'</p><button class="tbuy wide" id="tpr" type="button"'+(g<1?' disabled':'')+'>'+(g>=1?esc(T('Yeniden doğ'))+' (+'+g+' ✨)':esc(T('Henüz yeterli değil'))+' · '+fmt(C.P0)+' '+cur)+'</button></div><h3 class="tah">'+esc(T('Başarımlar'))+' '+achCount()+'/'+ACH.length+'</h3><div class="tach">';
       ACH.forEach(function(a){h3+='<div class="ta'+(S.ach[a[0]]?' on':'')+'">'+(S.ach[a[0]]?'🏆':'🔒')+' '+esc(T(a[1].replace('{0}',fmt(a[2]))))+'</div>'});L.innerHTML=h3+'</div>'}
     document.querySelectorAll('.ttabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===tab)})}
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function upDesc(u){return u[2]==='all'?T('Tüm gelir')+' ×'+u[3]:u[2]==='tap'?T('Dokunma geliri')+' ×'+u[3]:u[2]==='off'?T('Çevrimdışı depo')+' ×'+u[3]:T('Altın fırsatlar daha sık')}
   function updateRows(){if(tab!=='b')return;var firstLock=-1;
     for(var i=0;i<N;i++){var d=rows[i];if(!d)continue;var u=C.units[i],owned=S.n[i],visible=i===0||S.n[i-1]>0||owned>0||i<=firstLock+0;

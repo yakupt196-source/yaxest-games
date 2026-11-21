@@ -60,9 +60,20 @@ export class World {
     const wh = +req.headers.get('x-world') || 0; if (wh && wh !== this.wn) { this.wn = wh; await this.state.storage.put('_wn', wh); }
     if (pn === '/count') return new Response(String(this.all().filter(w => this.A(w).id).length));
     if (req.headers.get('Upgrade') !== 'websocket') return new Response('Yaxest world', { status: 426 });
-    if (this.state.getWebSockets().length >= MAXP) return new Response('full', { status: 503 });
+    /* Bağlantı seli koruması: kimliği doğrulanmamış soketler 10 sn içinde 'hi' göndermezse kapatılır;
+       doğrulanmamış toplam sayısı ve aynı IP'den gelen sayı sınırlıdır. Kapasiteyi yalnızca giriş yapmış oyuncular doldurur. */
+    const ip = (req.headers.get('cf-connecting-ip') || '').slice(0, 45), t0 = Date.now();
+    let authed = 0, un = 0, ipAll = 0, ipUn = 0;
+    for (const w of this.all()) {
+      const a = this.A(w);
+      if (a.id) { authed++; if (ip && a.ip === ip) ipAll++; continue; }
+      if (t0 - (a.cn || 0) > 10e3) { try { w.close(1008, 'timeout'); } catch (e) {} continue; }
+      un++; if (ip && a.ip === ip) { ipUn++; ipAll++; }
+    }
+    if (authed >= MAXP) return new Response('full', { status: 503 });
+    if (un >= 40 || ipUn >= 4 || ipAll >= 30) return new Response('busy', { status: 429 });
     const [c, s] = Object.values(new WebSocketPair());
-    this.state.acceptWebSocket(s); s.serializeAttachment({});
+    this.state.acceptWebSocket(s); s.serializeAttachment({ cn: t0, ip });
     return new Response(null, { status: 101, webSocket: c });
   }
   /* ---- yardımcılar ---- */
@@ -93,7 +104,9 @@ export class World {
 
   /* ---- giriş ---- */
   async hi(ws, m, now) {
-    if (this.A(ws).id) return;
+    const prev = this.A(ws); if (prev.id) return;
+    if ((prev.hn || 0) >= 3) { try { ws.close(1008, 'many'); } catch (e) {} return; }
+    try { ws.serializeAttachment({ ...prev, hn: (prev.hn || 0) + 1 }); } catch (e) {}
     const uid = await verify(m.tok);
     if (!uid) { this.snd(ws, { t: 'err', m: 'auth' }); ws.close(1008, 'auth'); return; }
     const pk = await pkOf(uid);
@@ -103,7 +116,7 @@ export class World {
     const p = await this.prof(pk); p.n = nick; let cg = '';
     if (p.cl) { const C = await this.g('c:' + p.cl, null); if (C && C.mem[pk]) { cg = p.cl; C.mem[pk].n = nick; await this.s('c:' + p.cl, C); } else p.cl = null; }
     await this.saveP(pk, p); await this.s('nk:' + nick.toLocaleLowerCase('tr'), pk);
-    const a = { id: rid(8), pk, nick, ap: ap ? JSON.parse(ap) : null, lv: int(m.lv, 1, 99), x: num(m.x, 0, WORLD_PX), y: num(m.y, 0, WORLD_PX), pt: now, ct: 0, cg, w: p.w, l: p.l };
+    const a = { ip: prev.ip || '', id: rid(8), pk, nick, ap: ap ? JSON.parse(ap) : null, lv: int(m.lv, 1, 99), x: num(m.x, 0, WORLD_PX), y: num(m.y, 0, WORLD_PX), pt: now, ct: 0, cg, w: p.w, l: p.l };
     ws.serializeAttachment(a);
     const roster = this.all().map(w => this.A(w)).filter(x => x.id && x.id !== a.id).map(pub);
     this.snd(ws, { t: 'hi', id: a.id, k: pk, roster });
@@ -158,7 +171,10 @@ export class World {
   async pos(ws, a, m, now) {
     const dt = now - a.pt; if (dt < 100) return;
     const x = num(m.x, 0, WORLD_PX), y = num(m.y, 0, WORLD_PX), d = Math.hypot(x - a.x, y - a.y);
-    if (d / (dt / 1000) > MAX_SPEED && d > 120) { this.snd(ws, { t: 'snap', x: a.x, y: a.y }); return; }
+    /* ışınlanma/portal/ölüm dönüşü: istemci j:1 ile bildirir; en çok 6 sn'de bir kabul edilir. Aksi halde hız sınırı geçerli. */
+    const jump = m.j && now - (a.jt || 0) > 6000;
+    if (jump) a.jt = now;
+    else if (d / (dt / 1000) > MAX_SPEED && d > 120) { this.snd(ws, { t: 'snap', x: a.x, y: a.y }); return; }
     a.x = x; a.y = y; a.pt = now; a.lv = num(m.lv, 1, 99) || a.lv;
     if (m.ap) { try { const s = JSON.stringify(m.ap); if (s.length <= 500) a.ap = JSON.parse(s); } catch (e) {} }
     ws.serializeAttachment(a);
