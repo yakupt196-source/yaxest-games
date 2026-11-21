@@ -124,7 +124,7 @@ function mkBind(el,redraw){var P=PL();
     if(!mkOn()||pr<bd[0]||pr>bd[1]||YK.have(P,k)<n)return;
     if(g.lv>=2&&mkConf!==k){mkConf=k;b.textContent='Yine de ilan ver';var w=el.querySelector('[data-mnw="'+k+'"]');w.innerHTML='<b style="color:#ff6b6b">⚠ Çok pahalı! Önerilen 🪙'+Math.max(bd[0],Math.round(ref*1.1))+'. Bu fiyata zor satılır; yine de vermek için tekrar bas.</b>';return}
     mkConf='';YK.take(P,k,n);var q=mkSend({t:'mkl',k:k,n:n,f:f,pr:pr});if(!q){YK.put(P,k,n);return}MK.pend[q]={a:'add',k:k,n:n};D.saveNow();redraw()}});
-  el.querySelectorAll('[data-mkb]').forEach(function(b){b.onclick=function(){var l=MK.L.filter(function(x){return x.id===b.dataset.mkb})[0];if(!l||P.gold<l.pr||!mkOn()||!YK.canUse(P,l.k))return;P.gold-=l.pr;var q=mkSend({t:'mkb',id:l.id});if(!q){P.gold+=l.pr;return}MK.pend[q]={a:'buy',k:l.k,n:l.n||1,pr:l.pr};D.saveNow();redraw()}});
+  el.querySelectorAll('[data-mkb]').forEach(function(b){b.onclick=function(){var l=MK.L.filter(function(x){return x.id===b.dataset.mkb})[0];if(!l||P.gold<l.pr||!mkOn()||!YK.canUse(P,l.k))return;P.gold-=l.pr;P.mkp=P.mkp||{};P.mkp[l.id]={pr:l.pr,t:Date.now()};var q=mkSend({t:'mkb',id:l.id});if(!q){P.gold+=l.pr;delete P.mkp[l.id];return}MK.pend[q]={a:'buy',k:l.k,n:l.n||1,pr:l.pr,id:l.id};D.saveNow();redraw()}});
   el.querySelectorAll('[data-mkc]').forEach(function(b){b.onclick=function(){var q=mkSend({t:'mkc',id:b.dataset.mkc});if(q)MK.pend[q]={a:'cancel'}}});
   el.querySelectorAll('[data-mkp]').forEach(function(b){b.onclick=function(){var inp=el.querySelector('[data-mpr="'+b.dataset.mkp+'"]');var q=mkSend({t:'mkp',id:b.dataset.mkp,pr:Math.floor(+inp.value||0)});if(q)MK.pend[q]={a:'reprice'}}});
   el.querySelectorAll('[data-mkd]').forEach(function(b){b.onclick=function(){var a=b.dataset.mkd.split('|'),q=mkSend({t:'mkp',id:a[0],pr:+a[1]});if(q)MK.pend[q]={a:'reprice'}}})}
@@ -139,14 +139,15 @@ YK.mkHand=function(m){var P=PL();if(!P||!D)return false;
   if(m.L){MK.L=m.L;MK.H=m.H||{};MK.me=m.me||MK.me;MK.ts=Date.now()}
   var p=MK.pend[m.q];delete MK.pend[m.q];
   if(p&&p.a==='add'){if(m.ok){D.say('🧑 İlan verildi: '+YK.name(p.k)+(p.n>1?' ×'+p.n:''),'sys')}else{YK.put(P,p.k,p.n||1);D.say('🧑 '+(m.e||'İlan verilemedi.'),'sys')}D.saveNow()}
-  else if(p&&p.a==='buy'){if(m.ok){YK.put(P,p.k,p.n||1);D.say('🧑 Satın alındı: '+YK.name(p.k)+(p.n>1?' ×'+p.n:'')+' −🪙'+p.pr,'sys')}else{P.gold+=p.pr;D.say('🧑 '+(m.e||'Satın alınamadı.'),'sys')}D.saveNow()}
+  else if(p&&p.a==='buy'){if(P.mkp)delete P.mkp[p.id];if(m.ok){D.say('🧑 Satın alındı: '+YK.name(p.k)+(p.n>1?' ×'+p.n:'')+' −🪙'+p.pr+' (eşya teslim ediliyor)','sys');mkSend({t:'mkk'},450)}else{P.gold+=p.pr;D.say('🧑 '+(m.e||'Satın alınamadı.'),'sys')}D.saveNow()}
   else if(p&&p.a==='cancel'){if(m.ok){D.say('🧑 İlan kaldırıldı, eşya iade ediliyor.','sys');mkSend({t:'mkk'},450)}else D.say('🧑 '+(m.e||'İptal edilemedi.'),'sys')}
   else if(p&&p.a==='reprice'){D.say(m.ok?'🧑 Fiyat güncellendi.':'🧑 '+(m.e||'Fiyat güncellenemedi.'),'sys')}
+  if(m.a==='verify'&&P.mkp&&P.mkp[m.id]){var pp=P.mkp[m.id];delete P.mkp[m.id];if(m.bought){D.say('🧑 Satın alma tamamlandı, eşya teslim ediliyor.','sys');mkSend({t:'mkk'},450)}else{P.gold+=pp.pr;D.say('🧑 Yarım kalan satın alma iade edildi: +🪙'+pp.pr,'sys')}D.saveNow()}
   if(m.a==='collect'&&m.d)mkApplyD(m.d);
   if(m.a==='q')mkWarn();
   var el=document.getElementById('npc');if(mkRedraw&&mTab>=3&&el&&el.querySelector('[data-mt]')){var ae=document.activeElement;if(!(ae&&ae.tagName==='INPUT'&&el.contains(ae)))mkRedraw()}
   return true};
-YK.mkPoll=function(){if(mkOn()){mkSend({t:'mkq'});mkSend({t:'mkk'},500)}};
+YK.mkPoll=function(){if(!mkOn())return;var P=PL(),i=0;if(P&&P.mkp)Object.keys(P.mkp).forEach(function(id){if(Date.now()-P.mkp[id].t>15000){mkSend({t:'mkv',id:id},350*(++i))}});mkSend({t:'mkq'},350*(i+1));mkSend({t:'mkk'},350*(i+2))};
 YK.mkState=MK;
 
 /* ---------- Ticarethane: yumurta pazarı ---------- */

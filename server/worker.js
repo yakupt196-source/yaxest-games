@@ -166,7 +166,7 @@ export class World {
       case 'dh': return this.dh(ws, a, now);
       case 'dq': { if (!a.du) return; const ow = this.byId(a.du.o); return this.endDuel(ow, ws); }
       case 'to': case 'tl': case 'tc': case 'tx': return this.tradeAct(ws, a, m);
-      case 'mkq': case 'mkl': case 'mkb': case 'mkc': case 'mkp': case 'mkk': case 'mka': return this.mkt(ws, a, m, now);
+      case 'mkq': case 'mkl': case 'mkb': case 'mkc': case 'mkp': case 'mkk': case 'mka': case 'mkv': return this.mkt(ws, a, m, now);
       case 'cc': return this.clanCreate(ws, a, m, now);
       case 'cj': return this.clanJoin(ws, a, m, now);
       case 'cm': return this.clanManage(ws, a, m);
@@ -420,7 +420,7 @@ export class World {
      Fiyat bandı: adil değerin %30'u – %300'ü. Satışta %5 vergi (altın gideri). İlan 72 saat sürer, dolunca eşya satıcının kutusuna döner. ---- */
   async mkApply(b) {
     const now = Date.now(), EXP = 72 * 36e5, st = this.state.storage;
-    const S = (await st.get('mkx')) || { L: [], Q: {}, H: {} };
+    const S = (await st.get('mkx')) || { L: [], Q: {}, H: {} }; S.B = S.B || {};
     const Qf = pk => S.Q[pk] || (S.Q[pk] = { g: 0, it: [] });
     S.L = S.L.filter(l => { if (now - l.t < EXP) return true; const q = Qf(l.s); if (q.it.length < 30) q.it.push(l.k + (l.n > 1 ? '#' + l.n : '')); return false; });
     const pk = String(b.pk || ''), out = { ok: 1, a: b.a, q: b.q };
@@ -437,7 +437,8 @@ export class World {
       const i = S.L.findIndex(l => l.id === String(b.id || ''));
       if (i < 0) out.ok = 0, out.e = 'İlan artık yok (satılmış ya da kaldırılmış).';
       else if (S.L[i].s === pk) out.ok = 0, out.e = 'Kendi ilanını satın alamazsın.';
-      else { const l = S.L[i]; S.L.splice(i, 1); const q = Qf(l.s); q.g += Math.max(1, Math.floor(l.pr * .95)); q.sold = (q.sold || 0) + 1; (S.H[l.k] = S.H[l.k] || []).push(Math.max(1, Math.round(l.pr / (l.n || 1)))); if (S.H[l.k].length > 6) S.H[l.k].shift(); out.k = l.k; out.n = l.n || 1; out.pr = l.pr; }
+      else if ((Qf(pk).it || []).length >= 30) out.ok = 0, out.e = 'Teslim kutun dolu, önce Oyuncu Pazarı sekmesini yenileyip topla.';
+      else { const l = S.L[i]; S.L.splice(i, 1); const bq = Qf(pk); bq.it.push(l.k + (l.n > 1 ? '#' + l.n : '')); (S.B[pk] = S.B[pk] || []).push(l.id); if (S.B[pk].length > 12) S.B[pk].shift(); out.id = l.id; const q = Qf(l.s); q.g += Math.max(1, Math.floor(l.pr * .95)); q.sold = (q.sold || 0) + 1; (S.H[l.k] = S.H[l.k] || []).push(Math.max(1, Math.round(l.pr / (l.n || 1)))); if (S.H[l.k].length > 6) S.H[l.k].shift(); out.k = l.k; out.n = l.n || 1; out.pr = l.pr; }
     } else if (b.a === 'cancel') {
       const i = S.L.findIndex(l => l.id === String(b.id || '') && l.s === pk);
       if (i < 0) out.ok = 0, out.e = 'İlan bulunamadı.'; else { const l = S.L.splice(i, 1)[0], q = Qf(pk); if (q.it.length < 30) q.it.push(l.k + (l.n > 1 ? '#' + l.n : '')); }
@@ -447,6 +448,8 @@ export class World {
     } else if (b.a === 'collect') {
       const q = S.Q[pk]; if (q && !q.d && (q.g > 0 || q.it.length)) { q.d = { c: rid(8), g: q.g, it: q.it, n: q.sold || 0 }; q.g = 0; q.it = []; q.sold = 0; }
       if (q && q.d) out.d = q.d;
+    } else if (b.a === 'verify') {
+      out.id = String(b.id || ''); out.bought = (S.B[pk] || []).indexOf(out.id) >= 0;
     } else if (b.a === 'ack') {
       const q = S.Q[pk]; if (q && q.d && q.d.c === String(b.c || '')) { delete q.d; if (!q.g && !q.it.length) delete S.Q[pk]; }
     }
@@ -457,7 +460,7 @@ export class World {
   async mkt(ws, a, m, now) {
     if (!a.pk) return;
     if (now - (a.mkt || 0) < 350) return this.snd(ws, { t: 'mkr', ok: 0, a: m.t, q: int(m.q, 0, 1e9), e: 'Çok hızlı, bir saniye bekle.' }); this.setA(ws, x => { x.mkt = now; });
-    const map = { mkq: 'q', mkl: 'add', mkb: 'buy', mkc: 'cancel', mkp: 'reprice', mkk: 'collect', mka: 'ack' };
+    const map = { mkq: 'q', mkl: 'add', mkb: 'buy', mkc: 'cancel', mkp: 'reprice', mkk: 'collect', mka: 'ack', mkv: 'verify' };
     const b = { a: map[m.t], pk: a.pk, sn: a.nick, ik: m.k, n: m.n, f: m.f, pr: m.pr, id: m.id, c: m.c, q: int(m.q, 0, 1e9), op: 'mk', k: 'mkx' };
     if (b.a === 'add' && bad(clean(a.nick, 16))) b.sn = 'Oyuncu';
     let r; try { const w = shardOf('mkx'); r = w === this.me() ? await this.mkApply(b) : await (await this.kv(w, b)).json(); } catch (e) { return this.snd(ws, { t: 'mkr', ok: 0, a: b.a, q: b.q, e: 'Pazara şu an ulaşılamıyor.' }); }
