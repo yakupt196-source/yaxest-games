@@ -89,7 +89,7 @@ function buildPages(){PAGES=[];
     if(!best)best={x:(Y.CX+30+i*4)*TS,y:(Y.CY+(i%2?-1:1)*(12+i))*TS,i:i};PAGES.push(best)}}
 
 /* ---------- durum ---------- */
-var coin=[],flies=[],nextPick=0,rm={sp:0,act:false},petPos={x:0,y:0},petQ=null,emo=null,flash=0,flashT=0,star=null,starT=3,lastTr=false,lastRM=false,lastGR=false,lastNight=null,idle=0,lastPx=0,lastPy=0,acc=0,tab='pet',dk=null,dc=null,stockKey='';
+var coin=[],flies=[],nextPick=0,rm={sp:0,act:false,k:0,done:false},petPos={x:0,y:0},petQ=null,emo=null,flash=0,flashT=0,star=null,starT=3,lastTr=false,lastRM=false,lastGR=false,lastNight=null,idle=0,lastPx=0,lastPy=0,acc=0,tab='pet',dk=null,dc=null,stockKey='';
 var DAY_CHIP=null,compass=true,lastGhost=false;
 var QUOTES=['Oyun yapmak, kum saatini ters çevirip içine harita çizmek gibi.','İlk oyunumda 3 kişi oynadı. İkisi benim kardeşimdi.','Hata yoktur, sürpriz özellik vardır.','Slime\'lara fazla yüklenme; onların da bir hikâyesi var.','Gece yarısı kasabanın ışığı hâlâ yanıyor mu? İyi.','Her güncelleme bir şeyi bozar, bir şeyi güzelleştirir. Hangisi baskın? Sen söyle.','Bu diyarda her şey ücretsiz; sadece zaman değerli.','Bir gün sunucu kurulunca burası kalabalık olacak. Şimdilik sen ve ben varız.'];
 function ghostOn(){var r=realHour();return r<1.5}
@@ -99,7 +99,7 @@ function init(api){D=api;G=D.G;P=D.P;Y=D.Y;TS=Y.TS;
   P.x2=P.x2||{};X=P.x2;X.c=X.c||{k:0,b:0,g:0,d:0,w:0,n:0,r:0,h:0,p:0,ph:0,tr:0,co:0};X.pt=X.pt||{};X.eg=X.eg||[];X.pg=X.pg||[];X.ac=X.ac||{};X.tt=X.tt||'';X.act=X.act||'';X.xb=X.xb||0;X.lk=X.lk||0;X.fin=X.fin||0;
   if(X.act&&!X.pt[X.act])X.act='';
   if(window.YX3)try{YX3.init({D:function(){return D},X:function(){return X},giveEgg:giveEgg,hourP:hourP,weatherNow:weatherNow,ACH:ACH,render:render,openPanel:openPanel})}catch(e){console.error(e)}
-  coin=[];flies=[];rm={sp:0,act:false};lastTr=traderOn();lastRM=false;lastGR=false;lastNight=null;idle=0;lastPx=G.px;lastPy=G.py;
+  coin=[];flies=[];rm={sp:0,act:false,k:0,done:false};lastTr=traderOn();lastRM=false;lastGR=false;lastNight=null;idle=0;lastPx=G.px;lastPy=G.py;
   petPos={x:G.px-40,y:G.py+10};buildPages();ensureChip();
   var b=$('ix');if(b)b.onclick=function(){if(G&&G.mode==='world'&&!G.paused)openPanel('pet')};
   if(!X.intro){X.intro=1;D.say('✨ Diyar+ geldi: gece-gündüz, hava, yoldaşlar, başarımlar ve gizli sayfalar! Sağ üstteki ✨ düğmesine bak.','sys')}}
@@ -139,7 +139,7 @@ function tick(dt){if(!G||G.mode!=='world'){if(DAY_CHIP)DAY_CHIP.style.display='n
   achCheck()}
 function inTown(){return D.inTownF()}
 function chipUpdate(h){if(!DAY_CHIP)return;var w=weatherNow(),cp=window.matchMedia&&matchMedia('(max-height:520px),(max-width:620px)').matches,t=(h<8?'🌙':h<10?'🌅':h>=22?'🌆':'☀️')+' '+clockTxt()+' '+WI[w]+(cp?'':' '+WN[w]);
-  if(redMoonOn())t+=' · 🌑 Kızıl Ay '+(X.rm===dayIdx()?Math.min(25,rm.k):0)+'/25';else if(goldRainOn())t+=' · 💰 Altın Yağmuru';
+  if(redMoonOn())t+=' · 🌑 Kızıl Ay '+(X.rm===dayIdx()?Math.min(25,rm.k||0):0)+'/25';else if(goldRainOn())t+=' · 💰 Altın Yağmuru';
   if(traderOn())t+=' · 🧳';if(window.YX3&&!cp){var c3=YX3.chip();if(c3)t+=' · '+c3}
   if(X.xb>Date.now())t+=' · ⚗️';if(X.lk>Date.now())t+=' · 🍀';
   var n=nearestPage();if(!cp&&compass&&n&&X.pg.length<9){var d=n.d/TS;t+=' · '+(d<6?'🔥 Çok sıcak':d<16?'♨️ Sıcak':d<40?'🧭 Ilık':'❄️ Soğuk')}
