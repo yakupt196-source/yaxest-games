@@ -60,8 +60,10 @@ function stock(P){var s=slot(),r=function(i){return Y.hash(s,i,731+(P.lv>>3))},l
   for(i=0;i<2&&pk.length;i++){var e='e:'+pk[Math.floor(r(50+i)*pk.length)];if(!l.some(function(x){return x.k===e}))l.push({k:e,pr:Math.round(Y.eggPrice(e.split(':')[1])*.9)})}
   return l}
 function sold(P,i){return P.sb&&P.sb.s===slot()&&P.sb.n.indexOf(i)>=0}
-YK.market=function(){var P=PL();YK.fix(P);var h='',tabs=['💰 Sat','🛒 Satın Al','↩ Geri Al'];
-  h+='<div class="row" style="margin:0 0 8px">'+tabs.map(function(t,i){return'<button class="btn'+(i===mTab?'':' alt')+'" data-mt="'+i+'" style="min-height:36px;padding:0 12px" type="button">'+t+'</button>'}).join('')+'</div>';
+YK.market=function(){var P=PL();YK.fix(P);var h='',tabs=['💰 Sat','🛒 Satın Al','↩ Geri Al','🧑 Oyuncu Pazarı','📦 İlanlarım'];
+  h+='<div class="row" style="margin:0 0 8px">'+tabs.map(function(t,i){return'<button class="btn'+(i===mTab?'':' alt')+'" data-mt="'+i+'" style="min-height:36px;padding:0 10px;font-size:.85rem" type="button">'+t+(i===4&&mkMine().length?' ('+mkMine().length+')':'')+'</button>'}).join('')+'</div>';
+  if(mTab===3)return h+mkBrowse(P);
+  if(mTab===4)return h+mkSell(P);
   h+='<p class="sub">🏷️ İkinci El Pazarı: eski silah, zırh ve yumurtalarını bırak, yeni ihtiyacını uygun fiyata bul. Her ekipman seviyene ve sınıfına göre kilitlidir.</p><div class="it"><div class="t">🪙 <b>'+P.gold+'</b></div></div>';
   if(mTab===0){var it=YK.items(P);if(!it.length)h+='<p class="sub">Satılacak kuşanılmamış ekipman ya da yumurta yok.</p>';
     it.forEach(function(x){var pr=Math.max(1,Math.round(YK.val(x.k)*.45));h+='<div class="it"><span>'+YK.ic(x.k)+'</span><div class="t">'+esc(YK.name(x.k))+(x.q>1?' ×'+x.q:'')+'<br><small>Sv '+YK.req(x.k).lv+(YK.req(x.k).cls?' · '+esc(cn(YK.req(x.k).cls)):'')+' · Teklif 🪙'+pr+'</small></div><button class="btn" data-ms="'+x.k+'|'+pr+'" type="button">Sat</button></div>'})}
@@ -71,11 +73,75 @@ YK.market=function(){var P=PL();YK.fix(P);var h='',tabs=['💰 Sat','🛒 Satın
   else{if(!P.sh.length)h+='<p class="sub">Geri alınacak eşya yok. Sattığın son 12 eşya burada kalır.</p>';
     P.sh.forEach(function(x,i){var lock=P.lv<YK.req(x.k).lv;h+='<div class="it"><span>'+YK.ic(x.k)+'</span><div class="t">'+esc(YK.name(x.k))+'<br><small>Geri alma 🪙'+x.pr+'</small></div><button class="btn alt" data-mr="'+i+'" '+(P.gold<x.pr?'disabled':'')+' type="button">Geri al</button></div>'})}
   return h};
-YK.marketBind=function(el,redraw){var P=PL();
-  el.querySelectorAll('[data-mt]').forEach(function(b){b.onclick=function(){mTab=+b.dataset.mt;redraw()}});
+YK.marketBind=function(el,redraw){var P=PL();mkRedraw=redraw;mkBind(el,redraw);
+  el.querySelectorAll('[data-mt]').forEach(function(b){b.onclick=function(){mTab=+b.dataset.mt;if(mTab>=3){mkSend({t:'mkq'});mkSend({t:'mkk'},450)}redraw()}});
   el.querySelectorAll('[data-ms]').forEach(function(b){b.onclick=function(){var a=b.dataset.ms.split('|'),k=a[0],pr=+a[1];if(!YK.have(P,k))return;YK.take(P,k,1);P.gold+=pr;P.sh.unshift({k:k,pr:Math.round(pr*1.25)});if(P.sh.length>12)P.sh.pop();D.say(YK.name(k)+' satıldı: +🪙'+pr,'sys');D.saveNow();redraw()}});
   el.querySelectorAll('[data-mb]').forEach(function(b){b.onclick=function(){var i=+b.dataset.mb,x=stock(P)[i];if(!x||sold(P,i)||P.gold<x.pr||!YK.canUse(P,x.k))return;P.gold-=x.pr;YK.put(P,x.k,1);if(!P.sb||P.sb.s!==slot())P.sb={s:slot(),n:[]};P.sb.n.push(i);D.say(YK.name(x.k)+' satın alındı.','sys');D.saveNow();redraw()}});
   el.querySelectorAll('[data-mr]').forEach(function(b){b.onclick=function(){var i=+b.dataset.mr,x=P.sh[i];if(!x||P.gold<x.pr)return;P.gold-=x.pr;YK.put(P,x.k,1);P.sh.splice(i,1);D.say(YK.name(x.k)+' geri alındı.','sys');D.saveNow();redraw()}})};
+
+/* ---------- Oyuncu Pazarı: oyuncular birbirine eşya satar, fiyatı satıcı koyar; adil değere göre sınır ve uyarı ---------- */
+var MK={L:[],H:{},me:'',seq:1,pend:{},warned:{},ts:0},mkRedraw=null,mkConf='';
+function mkOn(){return !!(window.YNet&&YNet.on&&YNet.on())}
+function mkSend(o,delay){if(!mkOn()){return false}o.q=MK.seq++;if(delay)setTimeout(function(){if(mkOn())YNet.send(o)},delay);else YNet.send(o);return o.q}
+function mkMine(){return MK.L.filter(function(l){return l.s===MK.me})}
+function mkFair(k){return Math.max(1,YK.val(k))}
+function mkBand(f){return[Math.max(1,Math.ceil(f*.3)),Math.floor(f*3)]}
+function mkRef(k){var h=MK.H[k];if(h&&h.length>=2){var t=0;h.forEach(function(x){t+=x});return Math.max(1,Math.round(t/h.length))}return mkFair(k)}
+function mkTag(pr,ref){var r=pr/ref;
+  if(r<.5)return{t:'Çok ucuz',c:'#5bc0ff',lv:-2,n:'Çok ucuz: değerinin altında satıyorsun.'};
+  if(r<.85)return{t:'Fırsat',c:'#62d96b',lv:-1,n:'Hızlı satılır.'};
+  if(r<=1.3)return{t:'Adil fiyat',c:'#62d96b',lv:0,n:'Piyasa değerine yakın.'};
+  if(r<=1.8)return{t:'Pahalı',c:'#ffb347',lv:1,n:'Pahalı: zor satılır, fiyatı indirmeyi düşün.'};
+  return{t:'Çok pahalı',c:'#ff6b6b',lv:2,n:'Çok pahalı: bu fiyata kimse almaz. Fiyatı indir!'}}
+function mkAge(t){var m=Math.max(0,Math.floor((Date.now()-t)/6e4));return m<60?m+' dk':Math.floor(m/60)+' sa'}
+function mkChip(pr,ref){var g=mkTag(pr,ref);return'<b style="color:'+g.c+';border:1px solid '+g.c+';border-radius:999px;padding:0 8px;font-size:.75rem">'+g.t+'</b>'}
+function mkHead(P){var on=mkOn();return'<p class="sub">🧑 Oyuncu Pazarı: eşyanı kendi koyduğun fiyata diğer oyunculara sat. Fiyat, eşyanın adil değerinin %30 – %300 arasında olabilir; satış geliri %5 vergiyle sana ulaşır, ilan 72 saat kalır.'+(on?'':'<br><b style="color:#ff6b6b">Çevrimdışısın: pazara bağlanmak için çok oyunculu dünyaya girmen gerekir.</b>')+'</p><div class="it"><div class="t">🪙 <b>'+P.gold+'</b></div></div>'}
+function mkBrowse(P){var h=mkHead(P),ls=MK.L.slice().sort(function(a,b){return a.pr/mkRef(a.k)-b.pr/mkRef(b.k)});
+  if(!ls.length)return h+'<p class="sub">Şu an ilan yok. İlk ilanı sen ver: "İlanlarım" sekmesi.</p>';
+  ls.forEach(function(l){if(!YK.valid(l.k))return;var r=YK.req(l.k),mine=l.s===MK.me,ref=mkRef(l.k),lock=P.lv<r.lv||(r.cls&&r.cls!==P.cls),why=P.lv<r.lv?'Sv '+r.lv+' gerekir':(r.cls&&r.cls!==P.cls)?cn(r.cls)+' sınıfı':'';
+    h+='<div class="it" style="'+(lock?'opacity:.7':'')+'"><span>'+YK.ic(l.k)+'</span><div class="t">'+esc(YK.name(l.k))+' '+mkChip(l.pr,ref)+'<br><small>Sv '+r.lv+(r.cls?' · '+esc(cn(r.cls)):'')+' · 🪙'+l.pr+' · piyasa 🪙'+ref+' · '+esc(l.sn||'Oyuncu')+' · '+mkAge(l.t)+(why?' · <b style="color:#ff6b6b">'+why+'</b>':'')+'</small></div>'+(mine?'<small>Senin</small>':'<button class="btn" data-mkb="'+l.id+'" '+((P.gold<l.pr||!mkOn())?'disabled':'')+' type="button">Al</button>')+'</div>'});
+  return h}
+function mkSell(P){var h=mkHead(P),mine=mkMine();h+='<h4 style="margin:10px 0 4px">İlanlarım ('+mine.length+'/8)</h4>';
+  if(!mine.length)h+='<p class="sub">Aktif ilanın yok.</p>';
+  mine.forEach(function(l){if(!YK.valid(l.k))return;var ref=mkRef(l.k),b=mkBand(l.f),g=mkTag(l.pr,ref);
+    h+='<div class="it"><span>'+YK.ic(l.k)+'</span><div class="t">'+esc(YK.name(l.k))+' '+mkChip(l.pr,ref)+'<br><small>🪙'+l.pr+' · piyasa 🪙'+ref+' · '+mkAge(l.t)+' önce'+(g.lv>0?'<br><b style="color:'+g.c+'">'+g.n+'</b>':'')+'</small><div style="display:flex;gap:6px;margin-top:4px;align-items:center"><input type="number" data-mpr="'+l.id+'" min="'+b[0]+'" max="'+b[1]+'" value="'+l.pr+'" style="width:96px;min-height:34px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;padding:0 8px"><button class="btn alt" data-mkp="'+l.id+'" style="min-height:34px;padding:0 12px" type="button">Fiyatı güncelle</button>'+(g.lv>0?'<button class="btn" data-mkd="'+l.id+'|'+Math.max(b[0],Math.round(ref*1.1))+'" style="min-height:34px;padding:0 12px" type="button">Önerilene indir 🪙'+Math.max(b[0],Math.round(ref*1.1))+'</button>':'')+'</div></div><button class="btn alt" data-mkc="'+l.id+'" type="button">İptal</button></div>'});
+  h+='<h4 style="margin:14px 0 4px">İlan ver</h4>';var it=YK.items(P);
+  if(!it.length)h+='<p class="sub">İlan verilecek kuşanılmamış ekipman ya da yumurta yok.</p>';
+  it.forEach(function(x){var f=mkFair(x.k),ref=mkRef(x.k),b=mkBand(f),sug=Math.max(b[0],Math.min(b[1],Math.round(ref*1.1)));
+    h+='<div class="it"><span>'+YK.ic(x.k)+'</span><div class="t">'+esc(YK.name(x.k))+(x.q>1?' ×'+x.q:'')+'<br><small>Sv '+YK.req(x.k).lv+' · adil değer 🪙'+f+' · piyasa 🪙'+ref+' · izinli 🪙'+b[0]+' – '+b[1]+'</small><div style="display:flex;gap:6px;margin-top:4px;align-items:center;flex-wrap:wrap"><input type="number" data-mnp="'+x.k+'" data-ref="'+ref+'" data-lo="'+b[0]+'" data-hi="'+b[1]+'" min="'+b[0]+'" max="'+b[1]+'" value="'+sug+'" style="width:96px;min-height:34px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;padding:0 8px"><span data-mnc="'+x.k+'">'+mkChip(sug,ref)+'</span><button class="btn" data-mkl="'+x.k+'" style="min-height:34px;padding:0 12px" type="button" '+(mkOn()?'':'disabled')+'>İlan ver</button></div><small data-mnw="'+x.k+'"></small></div></div>'});
+  return h}
+function mkBind(el,redraw){var P=PL();
+  el.querySelectorAll('[data-mnp]').forEach(function(inp){inp.oninput=function(){var k=inp.dataset.mnp,pr=Math.floor(+inp.value||0),ref=+inp.dataset.ref,lo=+inp.dataset.lo,hi=+inp.dataset.hi,c=el.querySelector('[data-mnc="'+k+'"]'),w=el.querySelector('[data-mnw="'+k+'"]'),btn=el.querySelector('[data-mkl="'+k+'"]');mkConf='';btn.textContent='İlan ver';
+    if(pr<lo||pr>hi){c.innerHTML='<b style="color:#ff6b6b">Sınır dışı</b>';w.innerHTML='<b style="color:#ff6b6b">Fiyat 🪙'+lo+' – '+hi+' arasında olmalı.</b>';btn.disabled=true;return}
+    var g=mkTag(pr,ref);c.innerHTML=mkChip(pr,ref);w.innerHTML=g.lv?'<b style="color:'+g.c+'">'+g.n+'</b>':'';btn.disabled=!mkOn()}});
+  el.querySelectorAll('[data-mkl]').forEach(function(b){b.onclick=function(){var k=b.dataset.mkl,inp=el.querySelector('[data-mnp="'+k+'"]'),pr=Math.floor(+inp.value||0),f=mkFair(k),bd=mkBand(f),ref=mkRef(k),g=mkTag(pr,ref);
+    if(!mkOn()||pr<bd[0]||pr>bd[1]||!YK.have(P,k))return;
+    if(g.lv>=2&&mkConf!==k){mkConf=k;b.textContent='Yine de ilan ver';var w=el.querySelector('[data-mnw="'+k+'"]');w.innerHTML='<b style="color:#ff6b6b">⚠ Çok pahalı! Önerilen 🪙'+Math.max(bd[0],Math.round(ref*1.1))+'. Bu fiyata zor satılır; yine de vermek için tekrar bas.</b>';return}
+    mkConf='';YK.take(P,k,1);var q=mkSend({t:'mkl',k:k,f:f,pr:pr});if(!q){YK.put(P,k,1);return}MK.pend[q]={a:'add',k:k};D.saveNow();redraw()}});
+  el.querySelectorAll('[data-mkb]').forEach(function(b){b.onclick=function(){var l=MK.L.filter(function(x){return x.id===b.dataset.mkb})[0];if(!l||P.gold<l.pr||!mkOn()||!YK.canUse(P,l.k))return;P.gold-=l.pr;var q=mkSend({t:'mkb',id:l.id});if(!q){P.gold+=l.pr;return}MK.pend[q]={a:'buy',k:l.k,pr:l.pr};D.saveNow();redraw()}});
+  el.querySelectorAll('[data-mkc]').forEach(function(b){b.onclick=function(){var q=mkSend({t:'mkc',id:b.dataset.mkc});if(q)MK.pend[q]={a:'cancel'}}});
+  el.querySelectorAll('[data-mkp]').forEach(function(b){b.onclick=function(){var inp=el.querySelector('[data-mpr="'+b.dataset.mkp+'"]');var q=mkSend({t:'mkp',id:b.dataset.mkp,pr:Math.floor(+inp.value||0)});if(q)MK.pend[q]={a:'reprice'}}});
+  el.querySelectorAll('[data-mkd]').forEach(function(b){b.onclick=function(){var a=b.dataset.mkd.split('|'),q=mkSend({t:'mkp',id:a[0],pr:+a[1]});if(q)MK.pend[q]={a:'reprice'}}})}
+function mkWarn(){var now=Date.now();mkMine().forEach(function(l){if(!YK.valid(l.k)||now-l.t<9e5)return;var ref=mkRef(l.k),g=mkTag(l.pr,ref),key=l.id+':'+l.pr;if(g.lv<1||MK.warned[key])return;MK.warned[key]=1;
+  var m=YK.name(l.k)+' ilanın '+(g.lv>=2?'çok pahalı':'pahalı')+' (🪙'+l.pr+', piyasa 🪙'+ref+'). Fiyatı indirirsen daha çabuk satılır.';D.say('🏷️ '+m,'sys');if(D.banner)D.banner('Fiyatı indir',esc(m))})}
+function mkApplyD(d){var P=PL();if(!d||!P)return;P.mkc=P.mkc||[];
+  if(P.mkc.indexOf(d.c)<0){var tx=[];if(d.g>0){P.gold+=d.g;tx.push('+🪙'+d.g+(d.n?' ('+d.n+' satış, %5 vergi düşüldü)':''))}(d.it||[]).forEach(function(k){if(YK.valid(k)){YK.put(P,k,1);tx.push(YK.name(k)+' iade')}});
+    P.mkc.push(d.c);if(P.mkc.length>20)P.mkc.shift();D.saveNow();if(tx.length)D.say('🧑 Oyuncu Pazarı: '+tx.join(' · '),'sys');if(d.g>0&&D.banner)D.banner('Satış geliri','+🪙'+d.g)}
+  if(window.YNet)YNet.send({t:'mka',c:d.c})}
+YK.mkHand=function(m){var P=PL();if(!P||!D)return false;
+  if(m.t!=='mkr')return false;
+  if(m.L){MK.L=m.L;MK.H=m.H||{};MK.me=m.me||MK.me;MK.ts=Date.now()}
+  var p=MK.pend[m.q];delete MK.pend[m.q];
+  if(p&&p.a==='add'){if(m.ok){D.say('🧑 İlan verildi: '+YK.name(p.k),'sys')}else{YK.put(P,p.k,1);D.say('🧑 '+(m.e||'İlan verilemedi.'),'sys')}D.saveNow()}
+  else if(p&&p.a==='buy'){if(m.ok){YK.put(P,p.k,1);D.say('🧑 Satın alındı: '+YK.name(p.k)+' −🪙'+p.pr,'sys')}else{P.gold+=p.pr;D.say('🧑 '+(m.e||'Satın alınamadı.'),'sys')}D.saveNow()}
+  else if(p&&p.a==='cancel'){if(m.ok){D.say('🧑 İlan kaldırıldı, eşya iade ediliyor.','sys');mkSend({t:'mkk'},450)}else D.say('🧑 '+(m.e||'İptal edilemedi.'),'sys')}
+  else if(p&&p.a==='reprice'){D.say(m.ok?'🧑 Fiyat güncellendi.':'🧑 '+(m.e||'Fiyat güncellenemedi.'),'sys')}
+  if(m.a==='collect'&&m.d)mkApplyD(m.d);
+  if(m.a==='q')mkWarn();
+  var el=document.getElementById('npc');if(mkRedraw&&mTab>=3&&el&&el.querySelector('[data-mt]')){var ae=document.activeElement;if(!(ae&&ae.tagName==='INPUT'&&el.contains(ae)))mkRedraw()}
+  return true};
+YK.mkPoll=function(){if(mkOn()){mkSend({t:'mkq'});mkSend({t:'mkk'},500)}};
+YK.mkState=MK;
 
 /* ---------- Ticarethane: yumurta pazarı ---------- */
 function eggStock(P){var s=Math.floor(Date.now()/6e5),l=[],pk=Object.keys(Y.PETD).filter(function(x){var p=Y.PETD[x];return !p.boss&&p.r<=3&&p.ml<=P.lv+12&&p.ml>=P.lv-40});
@@ -195,7 +261,7 @@ YK.dgTickFx=function(dt){var G=D.G,dg=G.dg;if(!dg)return;dg.tel=dg.tel||[];
   if(dg.trap){var pr=dg.trapT%4;dg.trapT+=dt;var ph=dg.trapT%4;if(ph>=2.4&&ph<3.3&&!dg.trapHit){var ts=dg.ts;for(var j=0;j<dg.trap.length;j++){var p=dg.trap[j];if(G.px>p.x*ts&&G.px<(p.x+1)*ts&&G.py>p.y*ts&&G.py<(p.y+1)*ts){dg.trapHit=1;D.hurt(dg.trapDmg);D.floatTxt(G.px,G.py-40,'Diken!','#ff5b6e');break}}}if(ph<2)dg.trapHit=0}};
 YK.mkTrap=function(dg,AW,AH,ts){var l=[],i=0,n=0;while(n<16&&i<200){i++;var x=2+Math.floor(Math.random()*(AW-4)),y=2+Math.floor(Math.random()*(AH-7));if(!l.some(function(p){return p.x===x&&p.y===y})){l.push({x:x,y:y});n++}}return l};
 
-YK.init=function(api){D=api;hookMonster();
+YK.init=function(api){D=api;hookMonster();clearInterval(YK._mkT);setTimeout(YK.mkPoll,9000);YK._mkT=setInterval(YK.mkPoll,120000);
   /* yoldaş tablosuna her canavarın yavrusunu ekle */
   if(window.YX2&&YX2.PETS){var PETS=YX2.PETS,q=['Seninleyim!','Büyüyünce çok güçlü olacağım.','Bana yumurtamı hatırlat.','Hadi avlanalım!','Karnım acıktı.'];Object.keys(Y.PETD).forEach(function(k){var p=Y.PETD[k];PETS[p.id]={n:p.n,r:p.r,col:p.col,b:p.b,q:q,ml:p.ml,mx:10+5*p.r,t:k,gen:1}})}};
 YK.hook=hookMonster;

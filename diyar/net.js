@@ -41,6 +41,7 @@ function hand(m){
   else if(m.t==='ban'){live=0;clearTimeout(timer);var bu=m.until?' ('+new Date(m.until).toLocaleString('tr-TR')+' tarihine kadar)':' (süresiz)';D.say('⛔ Hesabın yasaklandı'+bu+(m.m?': '+m.m:'')+'. İtiraz için: yakupt196@gmail.com','sys');try{alert('⛔ Hesabın yasaklandı'+bu+(m.m?'\nSebep: '+m.m:''))}catch(e){}}
   else if(m.t==='sys'){D.say('⚠️ '+m.m,'sys')}
   else if(m.t==='err'){D.say(m.m==='hub'?'Merkez sunucuya ulaşılamadı, biraz sonra /dunya ile tekrar dene.':'Çevrimiçi giriş yapılamadı (hesabına yeniden giriş yap).','sys')}
+  else if(m.t==='mkr'){if(window.YK&&YK.mkHand)YK.mkHand(m)}
   else if(window.YSoc){YSoc.hand(m)}}
 /* yönetici eşyası/ayarı: sunucudan gelir, kayda bir kez uygulanır (P.adm kimlik listesi çift teslimi önler) */
 function applyAdm(q){if(!q||!q.id||!P)return;send({t:'aa',id:q.id});P.adm=P.adm||[];if(P.adm.indexOf(q.id)>=0)return;P.adm.push(q.id);if(P.adm.length>60)P.adm.shift();

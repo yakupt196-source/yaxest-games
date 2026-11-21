@@ -10,7 +10,7 @@ const TTL = { pt: 60e3, tr: 60e3, du: 60e3 }, WEEK = 7 * 864e5;
 /* Ortak veri (profil, klan, takma ad, DM, sıralama) merkezsizdir: her anahtar, adının özetine göre 5 dünyadan birinde tutulur
    (shard). Herhangi bir dünya, sahibi olan dünyaya /kv ile sorar; tek hata noktası ve tek yük merkezi yoktur.
    Eski veri Dünya 1'de duruyorsa okuma bulamayınca oraya da bakar (taşıma gerekmez). Canlı olanlar dünyaya özel kalır. */
-const SHARED = k => /^(u:|c:|nk:|d:|ban:|mt:|adm:|sn:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell' || k === 'bidx' || k === 'alog';
+const SHARED = k => /^(u:|c:|nk:|d:|ban:|mt:|adm:|sn:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell' || k === 'bidx' || k === 'alog' || k === 'mkx';
 const shardOf = k => { let h = 2166136261; for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (h % WORLDS) + 1; };
 const KINDS = ['fr', 'pt', 'tr', 'du', 'cl', 'gf'];
 const WAGERS = [0, 100, 500, 1000, 5000];
@@ -59,7 +59,7 @@ export class World {
   async rd(w, k) { if (w === this.me()) { const v = await this.state.storage.get(k); return v === undefined ? null : v; } return (await (await this.kv(w, { op: 'g', k })).json()).v; }
   async fetch(req) {
     const pn = new URL(req.url).pathname;
-    if (pn === '/kv') { const b = await req.json(); if (!SHARED(String(b.k))) return new Response('no', { status: 400 }); if (b.op === 'g') { const v = await this.state.storage.get(b.k); return new Response(JSON.stringify({ v: v === undefined ? null : v })); } if (b.op === 's') { await this.state.storage.put(b.k, b.v); return new Response('{}'); } if (b.op === 'd') { await this.state.storage.delete(b.k); return new Response('{}'); } return new Response('bad', { status: 400 }); }
+    if (pn === '/kv') { const b = await req.json(); if (!SHARED(String(b.k))) return new Response('no', { status: 400 }); if (b.op === 'g') { const v = await this.state.storage.get(b.k); return new Response(JSON.stringify({ v: v === undefined ? null : v })); } if (b.op === 's') { await this.state.storage.put(b.k, b.v); return new Response('{}'); } if (b.op === 'd') { await this.state.storage.delete(b.k); return new Response('{}'); } if (b.op === 'mk' && b.k === 'mkx') return new Response(JSON.stringify(await this.mkApply(b))); return new Response('bad', { status: 400 }); }
     const wh = +req.headers.get('x-world') || 0; if (wh && wh !== this.wn) { this.wn = wh; await this.state.storage.put('_wn', wh); }
     if (pn === '/who') return new Response(JSON.stringify(this.all().map(w => this.A(w)).filter(a => a.id).map(a => ({ w: this.me(), id: a.id, pk: a.pk, n: a.nick, lv: a.lv, x: Math.round(a.x), y: Math.round(a.y), cg: a.cg || '', ip: a.ip || '', mu: a.mu || 0 }))));
     if (pn === '/live') { const b = await req.json(); let n = 0; for (const w of this.all()) { const a = this.A(w); if (!a.id || (!b.all && a.pk !== b.pk)) continue; n++; if (b.mu !== undefined) this.setA(w, x => { x.mu = b.mu; }); if (b.send) this.snd(w, b.send); if (b.kick) { try { w.close(1008, 'adm'); } catch (e) {} } } return new Response(String(n)); }
@@ -166,6 +166,7 @@ export class World {
       case 'dh': return this.dh(ws, a, now);
       case 'dq': { if (!a.du) return; const ow = this.byId(a.du.o); return this.endDuel(ow, ws); }
       case 'to': case 'tl': case 'tc': case 'tx': return this.tradeAct(ws, a, m);
+      case 'mkq': case 'mkl': case 'mkb': case 'mkc': case 'mkp': case 'mkk': case 'mka': return this.mkt(ws, a, m, now);
       case 'cc': return this.clanCreate(ws, a, m, now);
       case 'cj': return this.clanJoin(ws, a, m, now);
       case 'cm': return this.clanManage(ws, a, m);
@@ -414,6 +415,52 @@ export class World {
     const T = await this.g('tr:' + tid, null); if (!T) return;
     for (const s of ['a', 'b']) { const w = this.byId(T[s].id); if (w) { this.setA(w, x => { x.tr = null; }); this.snd(w, { t: 'tx', m: why || 'Takas iptal edildi.' }); } }
     await this.state.storage.delete('tr:' + tid);
+  }
+  /* ---- Oyuncu pazarı (ikinci el): ilanlar, satış geliri kutusu ve fiyat geçmişi tek anahtarda (mkx) ve sahibi olan dünyada atomik işlenir.
+     Fiyat bandı: adil değerin %30'u – %300'ü. Satışta %5 vergi (altın gideri). İlan 72 saat sürer, dolunca eşya satıcının kutusuna döner. ---- */
+  async mkApply(b) {
+    const now = Date.now(), EXP = 72 * 36e5, st = this.state.storage;
+    const S = (await st.get('mkx')) || { L: [], Q: {}, H: {} };
+    const Qf = pk => S.Q[pk] || (S.Q[pk] = { g: 0, it: [] });
+    S.L = S.L.filter(l => { if (now - l.t < EXP) return true; const q = Qf(l.s); if (q.it.length < 30) q.it.push(l.k); return false; });
+    const pk = String(b.pk || ''), out = { ok: 1, a: b.a, q: b.q };
+    const band = f => [Math.max(1, Math.ceil(f * .3)), Math.floor(f * 3)];
+    if (b.a === 'add') {
+      const k = String(b.ik || ''), f = int(b.f, 1, 5e7), pr = int(b.pr, 1, 2e8), [lo, hi] = band(f);
+      if (!/^[wze]:[\w:]{1,24}$/.test(k)) out.ok = 0, out.e = 'Geçersiz eşya.';
+      else if (pr < lo || pr > hi) out.ok = 0, out.e = 'Fiyat ' + lo + ' – ' + hi + ' arasında olmalı.';
+      else if (S.L.filter(l => l.s === pk).length >= 8) out.ok = 0, out.e = 'En fazla 8 ilanın olabilir.';
+      else if (S.L.length >= 300) out.ok = 0, out.e = 'Pazar şu an dolu, biraz sonra dene.';
+      else S.L.push({ id: rid(6), s: pk, sn: clean(b.sn, 16), k, pr, f, t: now });
+    } else if (b.a === 'buy') {
+      const i = S.L.findIndex(l => l.id === String(b.id || ''));
+      if (i < 0) out.ok = 0, out.e = 'İlan artık yok (satılmış ya da kaldırılmış).';
+      else if (S.L[i].s === pk) out.ok = 0, out.e = 'Kendi ilanını satın alamazsın.';
+      else { const l = S.L[i]; S.L.splice(i, 1); const q = Qf(l.s); q.g += Math.max(1, Math.floor(l.pr * .95)); q.sold = (q.sold || 0) + 1; (S.H[l.k] = S.H[l.k] || []).push(l.pr); if (S.H[l.k].length > 6) S.H[l.k].shift(); out.k = l.k; out.pr = l.pr; }
+    } else if (b.a === 'cancel') {
+      const i = S.L.findIndex(l => l.id === String(b.id || '') && l.s === pk);
+      if (i < 0) out.ok = 0, out.e = 'İlan bulunamadı.'; else { const l = S.L.splice(i, 1)[0], q = Qf(pk); if (q.it.length < 30) q.it.push(l.k); }
+    } else if (b.a === 'reprice') {
+      const l = S.L.find(x => x.id === String(b.id || '') && x.s === pk), pr = int(b.pr, 1, 2e8);
+      if (!l) out.ok = 0, out.e = 'İlan bulunamadı.'; else { const [lo, hi] = band(l.f); if (pr < lo || pr > hi) out.ok = 0, out.e = 'Fiyat ' + lo + ' – ' + hi + ' arasında olmalı.'; else l.pr = pr; }
+    } else if (b.a === 'collect') {
+      const q = S.Q[pk]; if (q && !q.d && (q.g > 0 || q.it.length)) { q.d = { c: rid(8), g: q.g, it: q.it, n: q.sold || 0 }; q.g = 0; q.it = []; q.sold = 0; }
+      if (q && q.d) out.d = q.d;
+    } else if (b.a === 'ack') {
+      const q = S.Q[pk]; if (q && q.d && q.d.c === String(b.c || '')) { delete q.d; if (!q.g && !q.it.length) delete S.Q[pk]; }
+    }
+    await st.put('mkx', S);
+    out.L = S.L.map(l => ({ id: l.id, s: l.s, sn: l.sn, k: l.k, pr: l.pr, f: l.f, t: l.t })); out.H = S.H;
+    return out;
+  }
+  async mkt(ws, a, m, now) {
+    if (!a.pk) return;
+    if (now - (a.mkt || 0) < 350) return this.snd(ws, { t: 'mkr', ok: 0, a: m.t, q: int(m.q, 0, 1e9), e: 'Çok hızlı, bir saniye bekle.' }); this.setA(ws, x => { x.mkt = now; });
+    const map = { mkq: 'q', mkl: 'add', mkb: 'buy', mkc: 'cancel', mkp: 'reprice', mkk: 'collect', mka: 'ack' };
+    const b = { a: map[m.t], pk: a.pk, sn: a.nick, ik: m.k, f: m.f, pr: m.pr, id: m.id, c: m.c, q: int(m.q, 0, 1e9), op: 'mk', k: 'mkx' };
+    if (b.a === 'add' && bad(clean(a.nick, 16))) b.sn = 'Oyuncu';
+    let r; try { const w = shardOf('mkx'); r = w === this.me() ? await this.mkApply(b) : await (await this.kv(w, b)).json(); } catch (e) { return this.snd(ws, { t: 'mkr', ok: 0, a: b.a, q: b.q, e: 'Pazara şu an ulaşılamıyor.' }); }
+    r.t = 'mkr'; r.me = a.pk; this.snd(ws, r);
   }
   async tradeAct(ws, a, m) {
     if (!a.tr) return; if (m.t === 'tx') return this.tradeCancel(a.tr, 'Takas iptal edildi.');
