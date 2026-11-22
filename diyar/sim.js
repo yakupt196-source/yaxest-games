@@ -207,7 +207,8 @@ function regionAt(dx,dy,d){return d<34?'Çimenlik Ovalar':d<56?'Gölge Ormanı':
 function lvMod(pl,ml){var d=ml-pl;return d>0?Math.max(.08,1-.24*d):Math.min(1.4,1+.03*(-d))}
 function lvIn(pl,ml){var d=ml-pl;return d>0?Math.min(4,1+.3*d):Math.max(.45,1+.06*d)}
 function monFor(zone){return zone===0?(Math.random()<.75?'slime':'boar'):zone===1?(Math.random()<.6?'wolf':'boar'):'golem'}
-var ZLV=[[0,3],[21,3],[34,5],[46,8],[56,12],[70,20],[85,32],[100,60],[115,100],[128,140],[142,162]];
+/* 22 Kasım: canavarlar surdan uzakta (24 karo) başlar; 24-54 karo arası her 3 karo, 54-79 arası her 2.5 karo TEK seviye (Sv1 halkası, Sv2 halkası...) */
+var ZLV=[[0,1],[24,1],[54,11],[79,21],[85,32],[100,60],[115,100],[128,140],[142,162]];
 function zoneLv(zone,d){for(var i=1;i<ZLV.length;i++){if(d<=ZLV[i][0]){var a=ZLV[i-1],b=ZLV[i];return Math.max(1,Math.floor(a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])))}}return 162}
 function xpNeed(l){return Math.round(70*l*l+40*l)}
 function lvF(lv){var e=Math.max(0,lv-40);return 1+e*e/1400}
