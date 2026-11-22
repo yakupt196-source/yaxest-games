@@ -3,16 +3,16 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=4;
+var SAYI=5;
 var HABER=[
+ {d:'22 Kasım',k:'Manşet',h:'Kahramanların çantası değişti: alet çubuğu geldi!',s:'Ekranın altında silah, balta, kazma ve olta. Ağaca baltayla, madene kazmayla git. Can iksirleri de artık cebinde.'},
+ {d:'22 Kasım',k:'Sağlık',h:'Şifacı Nine iksir satmaya başladı',s:'Can, güç, taş deri, rüzgâr iksirleri ve kasabaya dönüş parşömeni. Canavarlar da iksir düşürüyor.'},
+ {d:'22 Kasım',k:'Malikâne',h:'Bahçelerde simya kazanları kaynıyor',s:'Kendi ürünlerinden iksir damıt, pazarda sat.'},
  {d:'22 Kasım',k:'Manşet',h:'Evler malikâneye döndü!',s:'Evinin yanında bahçe var: ek, sula, hasat et. Mutfakta yemek pişir, köylülerin siparişlerini teslim et. Yendiğin bosslar evine kupa olarak asılıyor.'},
  {d:'22 Kasım',k:'Av',h:'Canavarlar seviye seviye dizildi',s:'Surdan çıkınca her halka bir seviye. Üstteki çip bulunduğun bölgeyi, haritadaki yeşil halka sana uygun yeri gösteriyor.'},
  {d:'22 Kasım',k:'Kitap',h:'Avcı Defteri yayımlandı',s:'Her canavarı 10, 50 ve 200 kez yen, yıldız topla. Yıldızlar kalıcı güç veriyor.'},
  {d:'22 Kasım',k:'Kısa kısa',h:'Geceler artık gerçekten karanlık',s:'Fenerini unutma. Efekt sevmeyenler Menü\'den azaltabilir.'},
- {d:'22 Kasım',k:'Manşet',h:'Kasaba büyüdü: surların içinde 12 yeni arsa!',s:'Sur genişletildi. Satılık arsalarda tabela yazıyor; alan kişinin adı tabelaya işleniyor. Evine gir, jetonla dekore et, arkadaşını davet et.'},
- {d:'22 Kasım',k:'Kasaba',h:'Yatağı paylaşmak mümkün',s:'Evin iki kişilik yatağında arkadaşınla uyuyabilirsiniz. Birlikte uyuyanlar ekstra dinlenme kazanıyor.'},
- {d:'22 Kasım',k:'Savunma',h:'KUŞATMA UYARISI: Her saat :20\'de surlara saldırı!',s:'Dört kapıdan dalgalar geliyor, son dalgada Kuşatma Titanı var. Kule okçuları yardım ediyor; kapıyı koruyanlar ödül alıyor.'},
- {d:'21 Kasım',k:'Manşet',h:'Kış Şenliği başladı: Diyar kar altında!',s:'Meydana dev bir şenlik ağacı dikildi, fenerler yandı. Şenlik Ustası kahramanları bekliyor.'}
+ {d:'22 Kasım',k:'Manşet',h:'Kasaba büyüdü: surların içinde 12 yeni arsa!',s:'Sur genişletildi. Satılık arsalarda tabela yazıyor; alan kişinin adı tabelaya işleniyor. Evine gir, jetonla dekore et, arkadaşını davet et.'}
 ];
 var KEY='yd-gz-seen',OX=-120,OY=6;
 function seenN(){try{return +localStorage.getItem(KEY)||0}catch(e){return 0}}
