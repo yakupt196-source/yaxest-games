@@ -3,17 +3,16 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=3;
+var SAYI=4;
 var HABER=[
+ {d:'22 Kasım',k:'Manşet',h:'Evler malikâneye döndü!',s:'Evinin yanında bahçe var: ek, sula, hasat et. Mutfakta yemek pişir, köylülerin siparişlerini teslim et. Yendiğin bosslar evine kupa olarak asılıyor.'},
+ {d:'22 Kasım',k:'Av',h:'Canavarlar seviye seviye dizildi',s:'Surdan çıkınca her halka bir seviye. Üstteki çip bulunduğun bölgeyi, haritadaki yeşil halka sana uygun yeri gösteriyor.'},
+ {d:'22 Kasım',k:'Kitap',h:'Avcı Defteri yayımlandı',s:'Her canavarı 10, 50 ve 200 kez yen, yıldız topla. Yıldızlar kalıcı güç veriyor.'},
+ {d:'22 Kasım',k:'Kısa kısa',h:'Geceler artık gerçekten karanlık',s:'Fenerini unutma. Efekt sevmeyenler Menü\'den azaltabilir.'},
  {d:'22 Kasım',k:'Manşet',h:'Kasaba büyüdü: surların içinde 12 yeni arsa!',s:'Sur genişletildi. Satılık arsalarda tabela yazıyor; alan kişinin adı tabelaya işleniyor. Evine gir, jetonla dekore et, arkadaşını davet et.'},
  {d:'22 Kasım',k:'Kasaba',h:'Yatağı paylaşmak mümkün',s:'Evin iki kişilik yatağında arkadaşınla uyuyabilirsiniz. Birlikte uyuyanlar ekstra dinlenme kazanıyor.'},
  {d:'22 Kasım',k:'Savunma',h:'KUŞATMA UYARISI: Her saat :20\'de surlara saldırı!',s:'Dört kapıdan dalgalar geliyor, son dalgada Kuşatma Titanı var. Kule okçuları yardım ediyor; kapıyı koruyanlar ödül alıyor.'},
- {d:'21 Kasım',k:'Manşet',h:'Kış Şenliği başladı: Diyar kar altında!',s:'Meydana dev bir şenlik ağacı dikildi, fenerler yandı. Şenlik Ustası kahramanları bekliyor.'},
- {d:'21 Kasım',k:'Kasaba',h:'Geceleri gökyüzünde yeşil ışıklar',s:'Kutup ışıkları kasabanın üstünde dans ediyor. Saat başı fişek gösterisi var.'},
- {d:'21 Kasım',k:'Ticaret',h:'Kış kostümleri ve Buz Kurdu yavruları',s:'Şenlik Ustası, yıldız getirenlere özel ödüller veriyor.'},
- {d:'21 Kasım',k:'Pazar',h:'Altın artık eskisi kadar kolay bulunmuyor',s:'Tüccarlar kemerleri sıkmış: yollardaki paralar azaldı, sandıklar pahalı.'},
- {d:'21 Kasım',k:'Pazar',h:'Oyuncu Pazarı kapılarını açtı',s:'Kahramanlar eşyalarını kendi fiyatıyla satabiliyor.'},
- {d:'21 Kasım',k:'Kısa kısa',h:'Kılıçlar artık elde dik duruyor',s:'Demirci: "Ucu yere sürtmüyor, şükür."'}
+ {d:'21 Kasım',k:'Manşet',h:'Kış Şenliği başladı: Diyar kar altında!',s:'Meydana dev bir şenlik ağacı dikildi, fenerler yandı. Şenlik Ustası kahramanları bekliyor.'}
 ];
 var KEY='yd-gz-seen',OX=-120,OY=6;
 function seenN(){try{return +localStorage.getItem(KEY)||0}catch(e){return 0}}
@@ -51,7 +50,7 @@ function html(){var top=HABER[0],rest=HABER.slice(1),F='';
   '<div style="padding:10px 0 8px;border-bottom:1px solid #8a7a60"><div style="font-size:.7rem;font-weight:700;letter-spacing:.14em;color:#8a3b2a" class="gk">'+esc(top.k).toUpperCase()+'</div>'+
   '<div style="font-size:1.35rem;font-weight:900;line-height:1.15;margin:2px 0 4px">'+esc(top.h)+'</div><div style="font-size:.9rem;line-height:1.4">'+esc(top.s)+'</div></div>'+
   '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px">';
-  rest.forEach(function(n){h+='<div style="padding:8px 0;border-bottom:1px solid rgba(43,35,24,.25)"><div style="font-size:.64rem;font-weight:700;letter-spacing:.12em;color:#8a3b2a" class="gk">'+esc(n.k).toUpperCase()+'</div><div style="font-size:.95rem;font-weight:800;line-height:1.2;margin:1px 0 2px">'+esc(n.h)+'</div><div style="font-size:.78rem;line-height:1.35;opacity:.85">'+esc(n.s)+'</div></div>'});
+  rest.forEach(function(n){h+='<div style="padding:8px 0;border-bottom:1px solid rgba(43,35,24,.25)"><div style="font-size:.64rem;font-weight:700;letter-spacing:.12em;color:#8a3b2a" class="gk">'+esc(n.k==='Manşet'?'Geçen sayıdan':n.k).toUpperCase()+'</div><div style="font-size:.95rem;font-weight:800;line-height:1.2;margin:1px 0 2px">'+esc(n.h)+'</div><div style="font-size:.78rem;line-height:1.35;opacity:.85">'+esc(n.s)+'</div></div>'});
   return h+'</div><div style="text-align:center;font-size:.7rem;font-style:italic;opacity:.7;margin-top:8px">Haber panosu her güncellemede yenilenir.</div></div>'}
 function seen(){try{localStorage.setItem(KEY,String(SAYI))}catch(e){}}
 window.YGZ={near:near,collect:collect,html:html,seen:seen,unread:unread,title:function(){return'📜 Diyar Gazetesi'}};
