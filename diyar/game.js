@@ -249,8 +249,11 @@ function cast(i){if(G.dead>0)return;if(window.YHB&&!YHB.canCast())return;var c=C
 function nodeNear(){if(G.mode!=='world')return null;var tx0=Math.floor(G.px/TS),ty0=Math.floor(G.py/TS),best=null,bd=70;
   for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var tx=tx0+dx,ty=ty0+dy,n=Y.nodeAt(tx,ty);if(!n)continue;var key=tx+','+ty;if(G.dep[key]>G.t)continue;
     var d=hyp((tx+.5)*TS-G.px,(ty+.5)*TS-G.py);if(d<bd){bd=d;best={kind:n,tx:tx,ty:ty,key:key}}}return best}
+/* balıkçı iskelesi: göletin içinde ve 1.6 karo içinde su varsa balık tutulabilir (YX3'ten bağımsız, her zaman çalışır) */
+function pondFish(){if(G.mode!=='world'||!Y.inPond||!Y.inPond(G.px/TS,G.py/TS,8))return false;for(var i=0;i<12;i++){var a=i*Math.PI/6;for(var r=.6;r<=1.6;r+=.5){if(Y.zoneAt(Math.floor((G.px+Math.cos(a)*TS*r)/TS),Math.floor((G.py+Math.sin(a)*TS*r)/TS))===3)return true}}return false}
 function findNear(){if(G.dead>0)return null;if(G.mode==='dungeon'){var dg=G.dg;if(dg.done&&hyp(dg.ex-G.px,dg.ey-G.py)<80)return{t:'exit'};return null}
   for(var i=0;i<G.npcs.length;i++)if(hyp(G.npcs[i].x-G.px,G.npcs[i].y-G.py)<80)return{t:'npc',o:G.npcs[i]};
+  if(pondFish())return{t:'x',o:{k:'fish'}};
   if(hyp(G.pit.x-G.px,G.pit.y-G.py)<90)return{t:'pit'};
   var gz=window.YGZ&&YGZ.near(G,Y);if(gz)return gz;var e2=window.YEV&&YEV.near(G);if(e2)return e2;var sn=window.YSN&&YSN.near(G,Y);if(sn)return sn;var kn=window.YKN&&YKN.near(G,Y);if(kn)return kn;
   for(var vi=0;vi<G.vill.length;vi++)if(hyp(G.vill[vi].x-G.px,G.vill[vi].y-G.py)<70)return{t:'vill',o:G.vill[vi]};
@@ -261,7 +264,7 @@ function interact(){if(!G||G.paused||document.querySelector('.pan.on'))return;va
   if(n.t==='npc')openNpc(n.o.id);
   else if(n.t==='portal')enterDg(n.o.id);
   else if(n.t==='exit')exitDg();
-  else if(n.t==='x'){if(n.o&&n.o.k==='fish'&&window.YHB&&!YHB.need('rod'))return;YX2.interact(n.o)}
+  else if(n.t==='x'){if(n.o&&n.o.k==='fish'){if(window.YHB&&!YHB.need('rod'))return;if(window.YX3)try{YX3.interact(n.o)}catch(e){console.error(e);say('Balık sahnesi açılamadı: '+e.message,'sys')}return}YX2.interact(n.o)}
   else if(n.t==='kn'){YKN.open(n.id)}else if(n.t==='sn'){openPan('p-npc');$('npt').innerHTML=YSN.title();var rdSn=function(){$('npc').innerHTML=YSN.html();YSN.bind($('npc'),rdSn)};rdSn()}
   else if(n.t==='ev2'){YEV.open('bahce')}
   else if(n.t==='gz'){openPan('p-npc');$('npt').innerHTML=YGZ.title();$('npc').innerHTML=YGZ.html();YGZ.seen()}

@@ -5,7 +5,7 @@
 'use strict';
 var SAYI=7;
 var HABER=[
- {d:'22 Kasım',k:'Manşet',h:'Kasabanın güneyine Balıkçı İskelesi kuruldu',s:'Balık artık tek yerde tutuluyor: kasaba kapısının hemen altındaki gölet. Gölet güvenli bölge, canavar yok. Tabeladaki Günün Balığı ek altın kazandırıyor.'},
+ {d:'22 Kasım',k:'Manşet',h:'Kasabanın güneyine Balıkçı İskelesi kuruldu',s:'Diyarın eski gölleri kurudu; balık artık tek yerde tutuluyor: kasaba kapısının hemen altındaki gölet. Gölet güvenli bölge, canavar yok. Tabeladaki Günün Balığı ek altın kazandırıyor.'},
  {d:'22 Kasım',k:'Manşet',h:'Zindanlar artık ortak: partinle aynı boss\'a gir!',s:'Partiden biri zindana girince diğerlerine davet gider. Aynı canavarlar, aynı kapılar, aynı boss. Düşen arkadaş, ekip odayı geçince dirilir.'},
  {d:'22 Kasım',k:'Manşet',h:'Kahramanların çantası değişti: alet çubuğu geldi!',s:'Ekranın altında silah, balta, kazma ve olta. Ağaca baltayla, madene kazmayla git. Can iksirleri de artık cebinde.'},
  {d:'22 Kasım',k:'Sağlık',h:'Şifacı Nine iksir satmaya başladı',s:'Can, güç, taş deri, rüzgâr iksirleri ve kasabaya dönüş parşömeni. Canavarlar da iksir düşürüyor.'},
