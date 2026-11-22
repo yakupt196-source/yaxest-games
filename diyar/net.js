@@ -42,7 +42,7 @@ function hand(m){
   else if(m.t==='sys'){D.say('⚠️ '+m.m,'sys')}
   else if(m.t==='err'){D.say(m.m==='hub'?'Merkez sunucuya ulaşılamadı, biraz sonra /dunya ile tekrar dene.':'Çevrimiçi giriş yapılamadı (hesabına yeniden giriş yap).','sys')}
   else if(m.t==='evr'){if(window.YKN)YKN.hand(m)}else if(m.t==='mkr'){if(window.YK&&YK.mkHand)YK.mkHand(m)}
-  else if(window.YSoc){YSoc.hand(m)}}
+  else if(m.t==='dgr'){if(window.YDG)try{YDG.hand(m)}catch(e){}}else if(window.YSoc){YSoc.hand(m)}}
 /* yönetici eşyası/ayarı: sunucudan gelir, kayda bir kez uygulanır (P.adm kimlik listesi çift teslimi önler) */
 function applyAdm(q){if(!q||!q.id||!P)return;send({t:'aa',id:q.id});P.adm=P.adm||[];if(P.adm.indexOf(q.id)>=0)return;P.adm.push(q.id);if(P.adm.length>60)P.adm.shift();
   var tx=[],sg=q.k==='take'?-1:1,cl=function(v){return Math.max(0,Math.min(1e9,Math.floor(+v||0)))};

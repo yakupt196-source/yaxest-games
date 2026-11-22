@@ -3,8 +3,9 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=5;
+var SAYI=6;
 var HABER=[
+ {d:'22 Kasım',k:'Manşet',h:'Zindanlar artık ortak: partinle aynı boss\'a gir!',s:'Partiden biri zindana girince diğerlerine davet gider. Aynı canavarlar, aynı kapılar, aynı boss. Düşen arkadaş, ekip odayı geçince dirilir.'},
  {d:'22 Kasım',k:'Manşet',h:'Kahramanların çantası değişti: alet çubuğu geldi!',s:'Ekranın altında silah, balta, kazma ve olta. Ağaca baltayla, madene kazmayla git. Can iksirleri de artık cebinde.'},
  {d:'22 Kasım',k:'Sağlık',h:'Şifacı Nine iksir satmaya başladı',s:'Can, güç, taş deri, rüzgâr iksirleri ve kasabaya dönüş parşömeni. Canavarlar da iksir düşürüyor.'},
  {d:'22 Kasım',k:'Malikâne',h:'Bahçelerde simya kazanları kaynıyor',s:'Kendi ürünlerinden iksir damıt, pazarda sat.'},

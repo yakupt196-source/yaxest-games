@@ -138,10 +138,11 @@ export class World {
     if (typeof msg !== 'string' || msg.length > 5000) return;
     let m; try { m = JSON.parse(msg); } catch (e) { return; }
     if (!m || typeof m !== 'object') return;
-    if (m.t !== 'hi' && msg.length > (m.t === 'sn' ? 4500 : 900)) return;
+    if (m.t !== 'hi' && msg.length > (m.t === 'sn' ? 4500 : m.t === 'dgr' ? 6000 : 900)) return;
     const now = Date.now();
     if (m.t === 'hi') { try { await this.hi(ws, m, now); } catch (e) { this.snd(ws, { t: 'err', m: 'hub' }); } return; }
     const a = this.A(ws); if (!a.id) return;
+    if (m.t === 'dgr') { try { await this.dgr(ws, a, m, now); } catch (e) {} return; }
     if (m.t !== 'p' && now - (a.la || 0) < 90) return;
     if (m.t !== 'p') { a.la = now; ws.serializeAttachment(a); }
     try { await this.route(ws, this.A(ws), m, now); } catch (e) {}
@@ -305,6 +306,7 @@ export class World {
     this.setA(jw, x => { x.pi = pid; }); P.mem.push(this.A(jw).id); await this.s('pt:' + pid, P); await this.partyPush(pid);
   }
   async partyPush(pid) {
+    if (this.ptc) delete this.ptc[pid];
     const P = await this.g('pt:' + pid, null); if (!P) return; const ms = P.mem.map(id => this.byId(id)).filter(Boolean);
     const mem = ms.map(w => { const a = this.A(w); return { id: a.id, n: a.nick, lv: a.lv, k: a.pk }; });
     for (const w of ms) this.snd(w, { t: 'pt', lead: P.lead, mem });
@@ -323,6 +325,16 @@ export class World {
     const a1 = this.A(w1), a2 = this.A(w2);
     this.setA(w1, x => { x.du = { o: a2.id, hp: 300, g, ct: 0, t0: now }; }); this.setA(w2, x => { x.du = { o: a1.id, hp: 300, g, ct: 0, t0: now }; });
     const o = { t: 'ds', a: a1.id, b: a2.id, hp: 300, g, an: a1.nick, bn: a2.nick }; this.snd(w1, o); this.snd(w2, o);
+  }
+  /* ortak zindan aktarması: yalnızca aynı partideki (aynı dünyadaki) üyelere iletir. Oyun mantığı parti liderinin istemcisinde (host). */
+  async dgr(ws, a, m, now) {
+    if (!a.pi) return;
+    this.dgl = this.dgl || new Map(); const last = this.dgl.get(ws) || 0; if (now - last < 40) return; this.dgl.set(ws, now);
+    this.ptc = this.ptc || {}; let c = this.ptc[a.pi];
+    if (!c || now - c.t > 3000) { const P = await this.g('pt:' + a.pi, null); if (!P) { delete this.ptc[a.pi]; return; } c = this.ptc[a.pi] = { mem: P.mem.slice(), t: now }; }
+    if (c.mem.indexOf(a.id) < 0) return;
+    const k = String(m.k || '').slice(0, 4), to = m.to ? String(m.to) : null, o = JSON.stringify({ t: 'dgr', f: a.id, k, d: m.d === undefined ? null : m.d });
+    for (const id of c.mem) { if (id === a.id || (to && id !== to)) continue; const w = this.byId(id); if (w) try { w.send(o); } catch (e) {} }
   }
   async dh(ws, a, now, m) {
     const d = a.du; if (!d) return; const ow = this.byId(d.o); if (!ow) return this.endDuel(ws, null);
