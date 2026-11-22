@@ -15,7 +15,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){retur
 function day(){return Math.floor(Date.now()/864e5)}
 function hm(){return P&&P.hm}
 function L(){var h=hm();return h?LV[h.lv]:null}
-function plotPos(pl){if(pos[pl.id])return pos[pl.id];var TS=Y.TS,r=pl.a*Math.PI/180,tx=Math.round(Y.CX+Math.cos(r)*560/TS),ty=Math.round(Y.CY+Math.sin(r)*560/TS),best=null;
+function plotPos(pl){if(pos[pl.id])return pos[pl.id];var TS=Y.TS,r=pl.a*Math.PI/180,tx=Math.round(Y.CX+Math.cos(r)*820/TS),ty=Math.round(Y.CY+Math.sin(r)*820/TS),best=null;
   for(var q=0;q<9&&!best;q++)for(var dy=-q;dy<=q&&!best;dy++)for(var dx=-q;dx<=q;dx++){var x=tx+dx,y=ty+dy;if(Y.zoneAt(x,y)!==3&&!Y.nodeAt(x,y)){best={x:(x+.5)*TS,y:(y+.5)*TS};break}}
   return pos[pl.id]=best||{x:(tx+.5)*TS,y:(ty+.5)*TS}}
 function price(i,d){return Math.round(PL[i].p*(.85+.4*Y.hash(d==null?day():d,i+1,5)))}

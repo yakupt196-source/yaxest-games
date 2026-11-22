@@ -350,7 +350,7 @@ function botStock(){var slot=Math.floor(Date.now()/6e5),r=function(i){return Y.h
   var rk=Object.keys(RUNES);l.push({k:'r:'+rk[Math.floor(r(30)*rk.length)],q:1});
   var cl=Object.keys(Y.CLASSES),wc=cl[Math.floor(r(31)*cl.length)],wt=Math.min(8,Math.max(1,Math.floor(P.lv/6)+Math.floor(r(32)*3)));l.push({k:'w:'+wc+':'+wt,q:1});return l}
 function trSum(m){var v=0;for(var k in m)v+=itVal(k)*m[k];return v}
-function chipRow(k,have,sel,side){return'<div class="it"><span style="font-size:1.2rem">'+itIc(k)+'</span><div class="t">'+esc(itName(k))+' <small>×'+have+' · 🪙'+itVal(k)+'/adet</small></div><div style="display:flex;gap:4px;align-items:center"><button class="btn alt" style="min-height:30px;padding:0 11px" data-tm="'+side+'|'+k+'" type="button">−</button><b style="min-width:20px;text-align:center">'+sel+'</b><button class="btn alt" style="min-height:30px;padding:0 11px" data-tp="'+side+'|'+k+'|'+have+'" type="button">+</button></div></div>'}
+function chipRow(k,have,sel,side){return'<div class="it"><span style="font-size:1.2rem">'+itIc(k)+'</span><div class="t">'+esc(itName(k))+' <small>×'+have+' · 🪙'+itVal(k)+'/adet</small></div><div style="display:flex;gap:4px;align-items:center"><button class="btn alt" style="min-height:30px;padding:0 8px" data-tm="'+side+'|'+k+'|10" type="button">−10</button><button class="btn alt" style="min-height:30px;padding:0 11px" data-tm="'+side+'|'+k+'" type="button">−</button><b style="min-width:20px;text-align:center">'+sel+'</b><button class="btn alt" style="min-height:30px;padding:0 11px" data-tp="'+side+'|'+k+'|'+have+'" type="button">+</button><button class="btn alt" style="min-height:30px;padding:0 8px" data-tp="'+side+'|'+k+'|'+have+'|10" type="button">+10</button></div></div>'}
 function drawTrade(){var inv=myInv(),stock=botStock(),vo=trSum(TR.o),vw=trSum(TR.w),fair=vw===0?0:vo/vw,ok=vo>0&&vw>0&&vo>=vw*1.15;
   var h='<p class="sub">Altın takasa girmez; değerli madenler, külçeler, rünler ve silahlar takas edilir. Oyuncularla takas için bir oyuncuya dokun → Takas teklif et (altın da dahil). Burada Kervan Takasçısı ile pratik yapabilirsin.</p>';
   h+='<div class="it"><div class="t"><b>Senin teklifin</b> · değer 🪙'+vo+'</div></div>';
@@ -361,8 +361,8 @@ function drawTrade(){var inv=myInv(),stock=botStock(),vo=trSum(TR.o),vw=trSum(TR
   if(TR.msg)h+='<div class="err" style="color:#ffd23f">'+TR.msg+'</div>';
   h+='<div class="row"><button class="btn" id="tgo" '+(ok?'':'disabled')+' type="button">Takası onayla</button><button class="btn alt" id="tclr" type="button">Temizle</button></div>';
   $('npc').innerHTML=h;
-  $('npc').querySelectorAll('[data-tp]').forEach(function(b){b.onclick=function(){var a=b.dataset.tp.split('|'),m=a[0]==='o'?TR.o:TR.w,k=a[1],mx=+a[2];m[k]=Math.min(mx,(m[k]||0)+1);TR.msg='';drawTrade()}});
-  $('npc').querySelectorAll('[data-tm]').forEach(function(b){b.onclick=function(){var a=b.dataset.tm.split('|'),m=a[0]==='o'?TR.o:TR.w,k=a[1];if(m[k]>0){m[k]--;if(!m[k])delete m[k]}TR.msg='';drawTrade()}});
+  $('npc').querySelectorAll('[data-tp]').forEach(function(b){b.onclick=function(){var a=b.dataset.tp.split('|'),m=a[0]==='o'?TR.o:TR.w,k=a[1],mx=+a[2];m[k]=Math.min(mx,(m[k]||0)+(+a[3]||1));TR.msg='';drawTrade()}});
+  $('npc').querySelectorAll('[data-tm]').forEach(function(b){b.onclick=function(){var a=b.dataset.tm.split('|'),m=a[0]==='o'?TR.o:TR.w,k=a[1];if(m[k]>0){m[k]=Math.max(0,m[k]-(+a[2]||1));if(!m[k])delete m[k]}TR.msg='';drawTrade()}});
   $('tclr').onclick=function(){trReset();drawTrade()};
   $('tgo').onclick=function(){var inv2=myInv(),ok2=true;for(var k in TR.o){var f=inv2.filter(function(x){return x.k===k})[0];if(!f||f.q<TR.o[k])ok2=false}
     if(!ok2||trSum(TR.o)<trSum(TR.w)*1.15){TR.msg='Teklif geçersiz.';drawTrade();return}
