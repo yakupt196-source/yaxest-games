@@ -10,7 +10,7 @@ function zoneAt(tx,ty){
   if(tx<0||ty<0||tx>=MW||ty>=MH)return 3;
   var dx=tx-CX,dy=ty-CY,dd0=Math.sqrt(dx*dx+dy*dy);if(dd0<16.9)return 4;var d=dd0+(vn(tx/6,ty/6,3)-.5)*11;
   var edge=Math.min(tx,ty,MW-1-tx,MH-1-ty);
-  if(edge<3||(vn(tx/9,ty/9,11)>.74&&d>16&&d<120))return 3;
+  if(edge<3||(vn(tx/9,ty/9,11)>.74&&d>16&&dd0>30&&d<120))return 3; /* göller kasabadan en az 30 karo uzakta */
   if(d<34)return 0;
   if(d<56)return 1;
   return vn(tx/11,ty/11,21)>.6?1:2}

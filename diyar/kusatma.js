@@ -21,7 +21,7 @@ function say(t){D.say(t,'sys')}
 /* ---- dalga ---- */
 function water(x,y){return Y.zoneAt(Math.floor(x/TS),Math.floor(y/TS))===3}
 function pathClear(x,y,gx,gy){return !water(x,y)}
-function clearSpawn(gi,gp,g){var x=0,y=0;for(var t=0;t<14;t++){var d=t<10?420+Math.random()*220:160+Math.random()*120,pr=(Math.random()-.5)*(t<10?170:60);x=gp.x+g[0]*d-g[1]*pr;y=gp.y+g[1]*d+g[0]*pr;if(pathClear(x,y,gp.x,gp.y))return{x:x,y:y}}return{x:gp.x+g[0]*(420+Math.random()*200),y:gp.y+g[1]*(420+Math.random()*200)}}
+function clearSpawn(gi,gp,g){var x=0,y=0;for(var t=0;t<14;t++){var d=t<10?420+Math.random()*220:160+Math.random()*120,pr=(Math.random()-.5)*(t<10?170:60);x=gp.x+g[0]*d-g[1]*pr;y=gp.y+g[1]*d+g[0]*pr;if(pathClear(x,y,gp.x,gp.y))return{x:x,y:y}}var Y=window.__yd.Y,TS=Y.TS;for(var t2=0;t2<40;t2++){var d2=200+Math.random()*500,p2=(Math.random()-.5)*400,x2=gp.x+g[0]*d2-g[1]*p2,y2=gp.y+g[1]*d2+g[0]*p2,z2=Y.zoneAt(Math.floor(x2/TS),Math.floor(y2/TS));if(z2!==3&&z2!==4)return{x:x2,y:y2}}/* asla suya koyma */return{x:gp.x+g[0]*200,y:gp.y+g[1]*200}}
 function spawnWave(k){var lv=Math.max(3,P.lv),cnt=k>=WAVES?10:4+k*3,ng=Math.min(4,Math.max(1,Math.ceil(k*.75))),idx=[0,1,2,3].sort(function(){return Math.random()-.5}).slice(0,ng),pool=lv<8?['wolf','boar','fox']:lv<18?['wolf','boar','skel','fox']:['skel','boar','golem','wolf'],made=0;
   for(var i=0;i<cnt;i++){var gi=idx[i%ng],g=GATES[gi],gp=gatePt(gi),sp0=clearSpawn(gi,gp,g),x=sp0.x,y=sp0.y,tp=pool[Math.floor(Math.random()*pool.length)];
     if(k===4&&i===0)tp='alpha';var m=window.__yd.mkMon(tp,lv+(k>=4?1:0),x,y,null);m.sg=1;m.gx=gp.x;m.gy=gp.y;m.gi=gi;m.hp=m.max=Math.round(m.max*.8);m.dmg=m.dmg*.7;G.mons.push(m);made++}

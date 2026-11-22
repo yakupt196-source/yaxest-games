@@ -213,7 +213,8 @@ function emailOf(){try{var st=window.YXAcct&&YXAcct.state&&YXAcct.state();return
 function spAb(){if(!window.YO||!P)return null;var r=2;try{var ap=P.ap;if(ap&&ap.body==='svg'){var pk=Object.keys(YL.PRESETS).filter(function(k){return YL.PRESETS[k].ap&&YL.PRESETS[k].ap.sv===ap.sv})[0];if(pk)r=Math.max(2,YX.rar('sp:'+YL.PRESETS[pk].shop)||2)}}catch(e){}return YO.get(P,emailOf(),r)}
 function zig(x1,y1,x2,y2,c,w){var n=6,px=x1,py=y1;for(var i=1;i<=n;i++){var t=i/n,nx=x1+(x2-x1)*t+(i<n?(Math.random()-.5)*46:0),ny=y1+(y2-y1)*t;addFx({k:'line',x1:px,y1:py,x2:nx,y2:ny,c:c,l:.32,w:w});addFx({k:'line',x1:px,y1:py,x2:nx,y2:ny,c:'#fff',l:.2,w:Math.max(2,w*.35)});px=nx;py=ny}}
 function castSp(){if(!G||G.dead>0||G.paused)return;var a=spAb();if(!a||G.spcd>0)return;var st=S(),base=st.dmg*(G.buff>0?(G.bm||1.5):1),list=curMons().filter(function(m){return!m.dead}),used=false,k=a.kind;
-  if(k==='bolt'){var tg=list.filter(function(m){return hyp(m.x-G.px,m.y-G.py)<a.r+m.sz}).sort(function(p,q){return hyp(p.x-G.px,p.y-G.py)-hyp(q.x-G.px,q.y-G.py)}).slice(0,a.n);
+  if(k==='bolt'&&a.m>=1e12&&window.YSoc&&YSoc.duelOn()){/* Kurucunun Gazabı düelloda rakibe de iner: sunucu doğrular, tek vuruş */var op=YSoc.duelSp();if(op){used=true;zig(op.x+(Math.random()-.5)*30,op.y-360,op.x,op.y-20,a.col,18);addFx({k:'ring',x:op.x,y:op.y,r:90,c:a.col,l:.45});if(window.YF){YF.flashW&&YF.flashW();YF.shake(8,.3)}}}
+  else if(k==='bolt'){var tg=list.filter(function(m){return hyp(m.x-G.px,m.y-G.py)<a.r+m.sz}).sort(function(p,q){return hyp(p.x-G.px,p.y-G.py)-hyp(q.x-G.px,q.y-G.py)}).slice(0,a.n);
     if(tg.length){used=true;tg.forEach(function(m,i){setTimeout(function(){if(!G||m.dead)return;zig(m.x+(Math.random()-.5)*30,m.y-m.sz-340,m.x,m.y-m.sz*.4,a.col,16);addFx({k:'ring',x:m.x,y:m.y,r:70,c:a.col,l:.35});dmgMon(m,base*a.m);m.slow=2.5;if(window.YF){YF.hit(m.x,m.y-m.sz*.4,a.col,14,true);YF.shake(5,.2)}},Math.min(i,24)*45)});if(window.YF){YF.flashW&&YF.flashW()}if(window.YSes)try{YSes.play&&YSes.play('bolt')}catch(e){}}}
   else if(k==='aoe'){used=true;addFx({k:'ring',x:G.px,y:G.py,r:a.r,c:a.col,l:.5});addFx({k:'ring',x:G.px,y:G.py,r:a.r*.6,c:'#fff',l:.35});list.forEach(function(m){if(hyp(m.x-G.px,m.y-G.py)<a.r+m.sz){dmgMon(m,base*a.m);if(a.slow)m.slow=a.slow;if(window.YF)YF.hit(m.x,m.y-m.sz*.4,a.col,8)}});if(window.YF)YF.shake(4,.2)}
   else if(k==='heal'){used=true;G.hp=Math.min(st.maxhp,G.hp+st.maxhp*a.amt);G.hot=8;G.hotT=0;addFx({k:'ring',x:G.px,y:G.py,r:120,c:a.col,l:.6});floatTxt(G.px,G.py-52,'+'+Math.round(st.maxhp*a.amt),'#5be39a');if(window.YF)YF.hit(G.px,G.py-20,a.col,16,true)}
@@ -287,14 +288,17 @@ function compUpdate(dt){if(!G.comp)return;var n=G.comp.length;G.comp.forEach(fun
     c.cd-=dt;if(tg&&c.cd<=0){var rg=cs.melee?tg.sz+46:cs.rng;if(hyp(tg.x-c.x,tg.y-c.y)<rg){c.cd=st.aspd*1.45;var dm=st.dmg*.85;if(cs.melee)addFx({k:'swing',x:c.x,y:c.y,fx:(tg.x-c.x),fy:(tg.y-c.y),c:cs.col,l:.14});else addFx({k:'line',x1:c.x,y1:c.y,x2:tg.x,y2:tg.y,c:cs.col,l:.14,w:3});dmgMon(tg,dm)}}
     if(c.cls==='sifaci'){c.hcd-=dt;if(c.hcd<=0&&G.hp<S().maxhp*.75&&G.dead<=0){c.hcd=4;var hv=Math.round(S().maxhp*.12);G.hp=Math.min(S().maxhp,G.hp+hv);floatTxt(G.px,G.py-40,'+'+hv,'#5be39a');addFx({k:'ring',x:c.x,y:c.y,r:60,c:'#5be39a',l:.5})}}
     if(c.cls==='tank'){c.tcd=(c.tcd||0)-dt;if(c.tcd<=0){c.tcd=8;G.mons&&curMons().forEach(function(m){if(!m.dead&&hyp(m.x-c.x,m.y-c.y)<170){m.taunt=2.5;m.hit=2.5}})}}})}
-function enterDgReq(id){var d=Y.DUNGEONS[id],pn=1+P.party.length;
+/* gerçek parti arkadaşları (sosyal parti) zindan gereksinimine sayılır; zindanda yapay zekâ ikizleri olarak yanında savaşır */
+function partyMates(){try{var S0=window.YSoc&&YSoc.dbg.S(),mem=S0&&S0.pt&&S0.pt.mem||[],me=window.YNet&&YNet.myId(),pool=['tank','sifaci','buyucu','suikastci','savasci'].filter(function(c){return c!==P.cls});return mem.filter(function(m){return m&&m.id!==me}).slice(0,4).map(function(m,i){return{n:m.n||'Arkadaş',lv:m.lv||P.lv,cls:pool[i%pool.length]}})}catch(e){return[]}}
+function enterDgReq(id){var d=Y.DUNGEONS[id],pn=Math.min(5,1+P.party.length+partyMates().length);
   if(P.lv<d.lv){say(d.n+': en az seviye '+d.lv+' gerekir.','sys');return false}
   if(Y.rankOf(P.mp)<d.rk){say(d.n+': '+Y.RANKS[d.rk].n+' rütbesi gerekir. Maceracı Evi\'nde görev yapıp rütbe kazan.','sys');return false}
-  if(pn<d.party){say(d.n+': en az '+d.party+' kişilik parti gerekir. Maceracı Evi\'nden parti kur ya da maceracı kirala.','sys');return false}return true}
+  if(pn<d.party){say(d.n+': en az '+d.party+' kişilik parti gerekir (şu an '+pn+'). Arkadaşlarınla parti kur ya da Maceracı Loncası\'ndan maceracı kirala.','sys');return false}return true}
 function enterDg(id){var d=Y.DUNGEONS[id];
   if(!enterDgReq(id))return;
   if(!d.stages.length){say(d.n+' henüz hazır değil.','sys');return}
-  G.saveW={x:G.px,y:G.py};G.mode='dungeon';G.gather=null;G.dg={id:id,pn:1+P.party.length,stage:-1,wave:-1,mons:[],tel:[],chest:null,trap:null,trapT:0,done:false,wait:1.4,aw:AW,ah:AH,ts:TS,lv:d.lv+Math.max(0,Math.floor((P.lv-d.lv)/2)),ex:AW*TS/2,ey:AH*TS/2};
+  var mates=partyMates();G.comp=(G.comp||[]).filter(function(c){return !c.mate});mates.forEach(function(m){if(G.comp.length<4)G.comp.push({cls:m.cls,x:G.px,y:G.py,cd:0,hcd:3,mv:0,look:CLK[m.cls],mate:1,nm:m.n})});if(mates.length)say('🤝 Parti arkadaşların zindanda: '+mates.map(function(m){return m.n}).join(', '),'sys');
+  G.saveW={x:G.px,y:G.py};G.mode='dungeon';G.gather=null;G.dg={id:id,pn:Math.min(5,1+G.comp.length),stage:-1,wave:-1,mons:[],tel:[],chest:null,trap:null,trapT:0,done:false,wait:1.4,aw:AW,ah:AH,ts:TS,lv:d.lv+Math.max(0,Math.floor((P.lv-d.lv)/2)),ex:AW*TS/2,ey:AH*TS/2};
   G.px=AW*TS/2;G.py=(AH-2.5)*TS;G.fx=0;G.fy=-1;G.comp&&G.comp.forEach(function(c,i){c.x=G.px+(i-1)*40;c.y=G.py+20});G.hp=S().maxhp;say(d.n+' başladı! '+d.stages.length+' aşama seni bekliyor.','sys')}
 var PILP=[[],[[.28,.36],[.72,.36],[.28,.66],[.72,.66]],[[.5,.5],[.22,.5],[.78,.5]],[[.2,.42],[.34,.42],[.66,.42],[.8,.42],[.2,.7],[.8,.7]],[[.5,.34],[.5,.66],[.32,.5],[.68,.5],[.38,.4],[.62,.6]]];
 function dgPillars(dg,w){var h=0,s=dg.id+'';for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%97;var pat=(w.k==='chest')?0:(w.k==='boss')?1:1+((dg.stage+h)%4);dg.pil=PILP[pat].map(function(q){return{x:q[0]*AW*TS,y:(3+q[1]*(AH-7))*TS,r:26+((q[0]*10|0)%2)*6}})}
@@ -317,7 +321,7 @@ function dgCheck(){var dg=G.dg;if(!dg||dg.done)return;if(dg.wait>0||(dg.door&&dg
 function dgDone(){var dg=G.dg,d=Y.DUNGEONS[dg.id],r=d.reward;dg.done=true;qProg('dg',dg.id,1);addMP(r.mp||0);if(r.core)P.core+=r.core;P.done[dg.id]=(P.done[dg.id]||0)+1;P.gold+=r.gold;giveXp(Math.round(r.xp*(1+P.lv*.12)));if(r.fang)P.fang+=r.fang;if(r.crystal)P.crystal+=r.crystal;
   var rn='';if(window.YR&&P.lv>=10){rn=giveRune(d.lv>=60?4:d.lv>=30?3:d.lv>=15?2:1);if(rn)rn=' +🔮 '+rn}
   say(d.n+' fethedildi! +🪙'+r.gold+' +'+r.xp+' XP'+(r.fang?' +'+r.fang+' 🦷':'')+(r.crystal?' +'+r.crystal+' 💎':'')+rn,'sys');saveNow()}
-function exitDg(){G.comp&&G.comp.forEach(function(c){c.x=G.saveW.x;c.y=G.saveW.y});G.mode='world';G.px=G.saveW.x;G.py=G.saveW.y;G.dg=null;G.hp=Math.min(S().maxhp,G.hp+Math.round(S().maxhp*.3))}
+function exitDg(){if(G.comp)G.comp=G.comp.filter(function(c){return !c.mate});G.comp&&G.comp.forEach(function(c){c.x=G.saveW.x;c.y=G.saveW.y});G.mode='world';G.px=G.saveW.x;G.py=G.saveW.y;G.dg=null;G.hp=Math.min(S().maxhp,G.hp+Math.round(S().maxhp*.3))}
 
 /* ---------- panel içerikleri ---------- */
 function openPan(id){if(G&&G.keys){for(var kn in G.keys)G.keys[kn]=0;G.hold=false}['p-bag','p-npc','p-chat','p-menu','p-map','p-x','p-soc'].forEach(function(x){var e=$(x);if(e)e.classList.toggle('on',x===id)});if(G)G.paused=!!id}
@@ -502,7 +506,7 @@ function update(dt){G.t+=dt;if(window.YHB)try{YHB.tick(dt)}catch(e){}if(G.mode==
   compUpdate(dt);
   if(G.mode==='world'){worldMons(dt);G.vill.forEach(function(v){v.wt-=dt;if(v.wt<=0){v.wt=1+Math.random()*3;var a=Math.random()*6.28;v.wx=Math.random()<.4?0:Math.cos(a);v.wy=v.wx?Math.sin(a):0}var nx=v.x+v.wx*28*dt,ny=v.y+v.wy*28*dt;if(hyp(nx-v.hx,ny-v.hy)<130){v.x=nx;v.y=ny}})}else dgUpdate(dt);
   var list=curMons();for(var k=0;k<list.length;k++)monAi(list[k],dt);
-  if(G.mode==='world'){var pz=pvpAt(G.px,G.py);if(pz!==G.pz){G.pz=pz;say(pz?'⚔️ '+pz.n+': PvP bölgesi! Kural: yalnızca seviyen +1\'e kadar olan oyunculara saldırabilirsin (Sv 2 → en çok Sv 3). Fetih Kristallerini kır!':'PvP bölgesinden çıktın.','sys')}}
+  if(G.mode==='world'){var pz=pvpAt(G.px,G.py);if(pz!==G.pz){var pz0=G.pz;G.pz=pz;if(pz||pz0)say(pz?'⚔️ '+pz.n+': PvP bölgesi! Kural: yalnızca seviyen +1\'e kadar olan oyunculara saldırabilirsin (Sv 2 → en çok Sv 3). Fetih Kristallerini kır!':'PvP bölgesinden çıktın.','sys')}}
   G.near=findNear();
   for(var f=G.efx.length-1;f>=0;f--){var x=G.efx[f];x.t+=dt;if(x.t>=x.l)G.efx.splice(f,1)}
   for(var q=G.txt.length-1;q>=0;q--){var y=G.txt[q];y.t+=dt;y.y-=28*dt;if(y.t>1)G.txt.splice(q,1)}
@@ -624,7 +628,7 @@ function render(t){var camX=G.px-VW/2,camY=G.py-VH/2;ctx.setTransform(dpr,0,0,dp
     G.portals.forEach(function(p){var d=Y.DUNGEONS[p.id];ents.push({y:p.p.y+40,f:function(){YA.portal(ctx,p.p.x,p.p.y,t,DCOL[p.id],d.n+' · Sv '+d.lv+(d.party>1?' · '+d.party+' kişi':'')+(d.rk?' · '+Y.RANKS[d.rk].n:''),DKEY[p.id])}})});
   }
   else if(G.dg.done){ents.push({y:G.dg.ey,f:function(){ctx.fillStyle='rgba(91,227,154,.35)';ctx.beginPath();ctx.ellipse(G.dg.ex,G.dg.ey,36,42,0,0,6.28);ctx.fill();ctx.strokeStyle='#5be39a';ctx.lineWidth=4;ctx.stroke();ctx.fillStyle='#fff';ctx.font='700 12px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('ÇIKIŞ',G.dg.ex,G.dg.ey-50)}})}
-  (G.comp||[]).forEach(function(c){ents.push({y:c.y,f:function(){YA.person(ctx,c.x,c.y+16,c.look,t,!!c.mv);YA.plate(ctx,c.x,c.y+16-(c.look.hat==='wizard'?86:70),'Kiralık '+Y.CLASSES[c.cls].n,Y.CLASSES[c.cls].col)}})});
+  (G.comp||[]).forEach(function(c){ents.push({y:c.y,f:function(){YA.person(ctx,c.x,c.y+16,c.look,t,!!c.mv);YA.plate(ctx,c.x,c.y+16-(c.look.hat==='wizard'?86:70),c.mate?'🤝 '+c.nm+' · '+Y.CLASSES[c.cls].n:'Kiralık '+Y.CLASSES[c.cls].n,c.mate?'#7be07b':Y.CLASSES[c.cls].col)}})});
   if(dg&&G.dg.pil)G.dg.pil.forEach(function(p){ents.push({y:p.y+p.r,f:function(){drawPillar(ctx,p,t)}})});
   if(dg&&G.dg.stage>0&&!G.dg.done)ents.push({y:(AH-.5)*TS,f:function(){drawSeal(ctx,AW*TS/2,(AH-.55)*TS,t)}});
   if(dg&&G.dg.fountain)ents.push({y:G.dg.fountain.y+30,f:function(){drawFountain(ctx,G.dg.fountain,t)}});

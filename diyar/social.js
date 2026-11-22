@@ -220,6 +220,7 @@ function duelBar(){var d=$('duelbar'),D1=S.duel;if(!D1){d.style.display='none';r
 function duelStart(m){var mine=m.a===S.myId,P=pl();if(m.g)addGold(-m.g);
   S.duel={me:m.hp,op:m.hp,g:m.g,opp:mine?m.b:m.a,mn:P.nick,on:mine?m.bn:m.an};S.view=null;if(panelOn())closeP();duelBar();say('⚔️ Düello başladı! Rakibe yaklaş ve ⚔️ ile vur.');banner('⚔️ Düello: '+S.duel.mn+' VS '+S.duel.on,3500)}
 function duelOn(){return !!S.duel}
+function duelSp(){if(!S.duel)return false;var o=others()[S.duel.opp];if(!o)return false;var G=D.G;if(Math.hypot(o.dx-G.px,o.dy-G.py)>1100){say('Rakip çok uzakta');return false}send({t:'dh',sp:1});return {x:o.dx,y:o.dy}}
 function duelHit(){var o=others()[S.duel.opp];if(!o)return;var G=D.G;if(Math.hypot(o.dx-G.px,o.dy-G.py)>220){say('Rakip uzakta, yaklaş!');return}send({t:'dh'})}
 function duelEnd(m){var D1=S.duel;if(!D1)return;S.duel=null;duelBar();var won=m.w&&m.w===S.myId;
   if(m.w===null||m.w===undefined){if(m.g)addGold(m.g);banner('🤝 Düello berabere bitti'+(m.g?' (bahis iade)':''))}
@@ -283,5 +284,5 @@ function draw(ctx,camX,camY,t,W,H){
     ctx.save();ctx.font='700 11px system-ui';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.strokeStyle='#000';ctx.lineWidth=3;var tx=cx+rx-Math.cos(ang)*26,ty=cy+ry-Math.sin(ang)*26+4;ctx.strokeText(m.n,tx,ty);ctx.fillText(m.n,tx,ty);ctx.restore()})}
 }
 function xpMul(){var v=1;if(S.cl)v+=Math.max(0,(S.cl.lv||1)-1)*.01;if(S.pt&&S.pt.mem){var os=others(),n=S.pt.mem.filter(function(m){return m.id===S.myId||os[m.id]}).length;v+=.05*Math.max(0,n-1)}return v}
-window.YSoc={whisper:whisper,reply:reply,openDepot:openDepot,init:init,leave:leave,onHi:onHi,hand:hand,tick:tick,draw:draw,plate:plate,drawOther:drawOther,xpMul:xpMul,duelOn:duelOn,duelHit:duelHit,blocked:function(k){return !!k&&S.bl.indexOf(k)>=0},inClan:function(){return !!S.cl},myClan:function(){return S.cl?S.cl.tag:''},inParty:function(){return !!(S.pt&&S.pt.mem&&S.pt.mem.length>1)},open:openP,wager:function(v){S.wager=+v||0},dbg:{S:function(){return S}}};
+window.YSoc={whisper:whisper,reply:reply,openDepot:openDepot,init:init,leave:leave,onHi:onHi,hand:hand,tick:tick,draw:draw,plate:plate,drawOther:drawOther,xpMul:xpMul,duelOn:duelOn,duelHit:duelHit,duelSp:duelSp,blocked:function(k){return !!k&&S.bl.indexOf(k)>=0},inClan:function(){return !!S.cl},myClan:function(){return S.cl?S.cl.tag:''},inParty:function(){return !!(S.pt&&S.pt.mem&&S.pt.mem.length>1)},open:openP,wager:function(v){S.wager=+v||0},dbg:{S:function(){return S}}};
 })();

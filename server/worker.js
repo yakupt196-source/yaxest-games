@@ -113,7 +113,7 @@ export class World {
     const prev = this.A(ws); if (prev.id) return;
     if ((prev.hn || 0) >= 3) { try { ws.close(1008, 'many'); } catch (e) {} return; }
     try { ws.serializeAttachment({ ...prev, hn: (prev.hn || 0) + 1 }); } catch (e) {}
-    const uid = await verify(m.tok);
+    const vpl = await verifyPl(m.tok), uid = vpl ? vpl.sub : null, isAdm = isAdminPl(vpl);
     if (!uid) { this.snd(ws, { t: 'err', m: 'auth' }); ws.close(1008, 'auth'); return; }
     const pk = await pkOf(uid);
     const bn = await this.g('ban:' + pk, null);
@@ -125,7 +125,7 @@ export class World {
     const p = await this.prof(pk); p.n = nick; let cg = '';
     if (p.cl) { const C = await this.g('c:' + p.cl, null); if (C && C.mem[pk]) { cg = p.cl; C.mem[pk].n = nick; await this.s('c:' + p.cl, C); } else p.cl = null; }
     await this.saveP(pk, p); await this.s('nk:' + nick.toLocaleLowerCase('tr'), pk);
-    const a = { ip: prev.ip || '', id: rid(8), pk, nick, ap: ap ? JSON.parse(ap) : null, lv: int(m.lv, 1, 99), x: num(m.x, 0, WORLD_PX), y: num(m.y, 0, WORLD_PX), pt: now, ct: 0, cg, w: p.w, l: p.l, mu: mtv > now ? mtv : 0 };
+    const a = { ip: prev.ip || '', id: rid(8), pk, nick, ap: ap ? JSON.parse(ap) : null, lv: int(m.lv, 1, 150), adm: isAdm ? 1 : 0, x: num(m.x, 0, WORLD_PX), y: num(m.y, 0, WORLD_PX), pt: now, ct: 0, cg, w: p.w, l: p.l, mu: mtv > now ? mtv : 0 };
     ws.serializeAttachment(a);
     const roster = this.all().map(w => this.A(w)).filter(x => x.id && x.id !== a.id).map(pub);
     this.snd(ws, { t: 'hi', id: a.id, k: pk, roster });
@@ -163,7 +163,7 @@ export class World {
       case 'pl': return this.partyLeave(ws);
       case 'pk': { const P = a.pi && await this.g('pt:' + a.pi, null); if (!P || P.lead !== a.id) return; const w = this.byId(String(m.id || '')); if (w && w !== ws && this.A(w).pi === a.pi) await this.partyLeave(w); return; }
       case 'pp': { const P = a.pi && await this.g('pt:' + a.pi, null); if (!P || now - (a.ppt || 0) < 1500) return; this.setA(ws, x => { x.ppt = now; }); const o = { t: 'pp', id: a.id, n: a.nick, x: int(m.x, 0, WORLD_PX), y: int(m.y, 0, WORLD_PX) }; for (const id of P.mem) { const w = this.byId(id); if (w) this.snd(w, o); } return; }
-      case 'dh': return this.dh(ws, a, now);
+      case 'dh': return this.dh(ws, a, now, m);
       case 'dq': { if (!a.du) return; const ow = this.byId(a.du.o); return this.endDuel(ow, ws); }
       case 'to': case 'tl': case 'tc': case 'tx': return this.tradeAct(ws, a, m);
       case 'mkq': case 'mkl': case 'mkb': case 'mkc': case 'mkp': case 'mkk': case 'mka': case 'mkv': return this.mkt(ws, a, m, now);
@@ -324,15 +324,18 @@ export class World {
     this.setA(w1, x => { x.du = { o: a2.id, hp: 300, g, ct: 0, t0: now }; }); this.setA(w2, x => { x.du = { o: a1.id, hp: 300, g, ct: 0, t0: now }; });
     const o = { t: 'ds', a: a1.id, b: a2.id, hp: 300, g, an: a1.nick, bn: a2.nick }; this.snd(w1, o); this.snd(w2, o);
   }
-  async dh(ws, a, now) {
+  async dh(ws, a, now, m) {
     const d = a.du; if (!d) return; const ow = this.byId(d.o); if (!ow) return this.endDuel(ws, null);
     const b = this.A(ow); if (!b.du || b.du.o !== a.id) return;
-    if (now - d.ct < 450) return;
-    if (Math.hypot(a.x - b.x, a.y - b.y) > 240) return this.err(ws, 'Rakip menzil dışında.');
-    const crit = Math.random() < .12, dmg = Math.round((16 + Math.min(a.lv, 40) * .6) * (.85 + Math.random() * .3) * (crit ? 1.6 : 1));
+    /* Kurucunun Gazabı: yalnızca sunucuda doğrulanmış kurucu hesabı (ADMINS), 8 sn bekleme, 1100 px menzil, tek vuruş */
+    const sp = !!(m && m.sp && a.adm);
+    if (sp) { if (now - (d.spT || 0) < 8000) return; if (Math.hypot(a.x - b.x, a.y - b.y) > 1100) return this.err(ws, 'Rakip menzil dışında.'); }
+    else { if (now - d.ct < 450) return; if (Math.hypot(a.x - b.x, a.y - b.y) > 240) return this.err(ws, 'Rakip menzil dışında.'); }
+    const crit = !sp && Math.random() < .12, dmg = sp ? b.du.hp : Math.round((16 + Math.min(a.lv, 40) * .6) * (.85 + Math.random() * .3) * (crit ? 1.6 : 1));
+    if (sp) d.spT = now;
     d.ct = now; this.setA(ws, x => { x.du = d; });
     b.du.hp = Math.max(0, b.du.hp - dmg); this.setA(ow, x => { x.du = b.du; });
-    const o = { t: 'dh', f: a.id, to: b.id, d: dmg, c: crit ? 1 : 0, hp: b.du.hp }; this.snd(ws, o); this.snd(ow, o);
+    const o = { t: 'dh', f: a.id, to: b.id, d: dmg, c: crit ? 1 : 0, hp: b.du.hp, sp: sp ? 1 : 0 }; this.snd(ws, o); this.snd(ow, o);
     if (b.du.hp <= 0) await this.endDuel(ws, ow);
   }
   async endDuel(win, lose, d1, d2) {

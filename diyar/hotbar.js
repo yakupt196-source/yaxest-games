@@ -75,7 +75,8 @@ function css(){if(document.getElementById('yhb-css'))return;var s=document.creat
  '@media (pointer:coarse){#yhb .s .kc{display:none}}';document.head.appendChild(s)}
 function mk(){if(EL&&EL.isConnected)return EL;css();EL=document.createElement('div');var host=document.getElementById('hud')||document.body;EL.id='yhb';host.appendChild(EL);FX=document.createElement('div');FX.id='yhbfx';host.appendChild(FX);return EL}
 var hold={i:-1,t:0};
-function draw(){var p=P(),h=st();if(!p||!h||!G()){if(EL)EL.classList.remove('on');return}mk();EL.classList.toggle('on',G().mode==='world'||G().mode==='dungeon');
+function draw(){var p=P(),h=st();if(!p||!h||!G()){if(EL)EL.classList.remove('on');return}mk();var cb=document.getElementById('chbox'),chat=!!(cb&&cb.offsetParent!==null&&cb.getBoundingClientRect().height>60);EL.classList.toggle('on',(G().mode==='world'||G().mode==='dungeon')&&!chat);if(FX)FX.style.display=chat?'none':'';
+  if(cb&&!cb._yhbObs&&window.MutationObserver){cb._yhbObs=1;new MutationObserver(function(){draw()}).observe(cb,{attributes:true,attributeFilter:['class','style']})}
   var html='';SLOTS.forEach(function(s,i){var c=i===0?(D.Y.CLASSES[p.cls]&&D.Y.CLASSES[p.cls].col||'#ffd23f'):i===3?'#7be0ff':TOOLC[(p.tl&&p.tl[s.k])||0];
     html+='<button type="button" class="s'+(h.s===i?' on':'')+'" data-i="'+i+'" aria-label="'+s.n+'" title="'+s.n+'"><span class="kc">'+(i+1)+'</span>'+toolSvg(s.k,c)+'</button>'});
   h.p.forEach(function(k,j){var o=POT[k],n=p[k]||0;html+='<button type="button" class="s pot'+(j===0?' sep':'')+(n?'':' zero')+'" data-p="'+j+'" aria-label="'+o.n+'" title="'+o.n+' (basılı tut: değiştir)"><span class="kc">'+(j+5)+'</span>'+potSvg(o.c)+'<span class="n">'+n+'</span></button>'});
