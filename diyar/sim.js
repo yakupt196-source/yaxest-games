@@ -8,10 +8,9 @@ function vn(x,y,s){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf
 /* kutu türleri: 0 çimen, 1 orman, 2 kayalık, 3 su, 4 kasaba, 6 duvar */
 function zoneAt(tx,ty){
   if(tx<0||ty<0||tx>=MW||ty>=MH)return 3;
-  var dx=tx-CX,dy=ty-CY,d=Math.sqrt(dx*dx+dy*dy)+(vn(tx/6,ty/6,3)-.5)*11;
+  var dx=tx-CX,dy=ty-CY,dd0=Math.sqrt(dx*dx+dy*dy);if(dd0<16.9)return 4;var d=dd0+(vn(tx/6,ty/6,3)-.5)*11;
   var edge=Math.min(tx,ty,MW-1-tx,MH-1-ty);
   if(edge<3||(vn(tx/9,ty/9,11)>.74&&d>16&&d<120))return 3;
-  if(d<11)return 4;
   if(d<34)return 0;
   if(d<56)return 1;
   return vn(tx/11,ty/11,21)>.6?1:2}
@@ -39,7 +38,7 @@ function poiNodeAt(tx,ty){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P
 function poiOf(tx,ty,r){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx*dx+dy*dy<=(r||7)*(r||7))return i}return -1}
 function nodeAt(tx,ty){
   var z=zoneAt(tx,ty);if(z===3||z===4)return null;
-  var dx=tx-CX,dy=ty-CY,dd=Math.sqrt(dx*dx+dy*dy);if(dd<13)return null;
+  var dx=tx-CX,dy=ty-CY,dd=Math.sqrt(dx*dx+dy*dy);if(dd<18)return null;
   var pn=poiNodeAt(tx,ty);if(pn)return pn;
   var r=hash(tx,ty,7);
   if(z===0){if(r<.05)return 'tree';if(r<.065)return 'rock';return null}

@@ -7,7 +7,7 @@ var LV=[null,
  {n:'Ev',cap:400,sh:5,rune:.05,rest:.10,col:'#5d9a6a',w:84,c:{wood:60,stone:40,gold:800}},
  {n:'Konak',cap:900,sh:8,rune:.10,rest:.15,col:'#4d7ea8',w:100,c:{i_iron:12,stone:80,gold:3500}},
  {n:'Saray',cap:2000,sh:12,rune:.15,rest:.20,col:'#ffd23f',w:118,c:{i_silver:10,crystal:6,gold:12000}}];
-var PL=[{id:'p1',n:'Çınar Bahçesi',a:32,p:600},{id:'p2',n:'Değirmen Yanı',a:92,p:900},{id:'p3',n:'Gölge Yamacı',a:152,p:1300},{id:'p4',n:'Pınarbaşı',a:212,p:1800},{id:'p5',n:'Kervan Yolu',a:272,p:2600},{id:'p6',n:'Yıldız Tepesi',a:332,p:4000}];
+var PL=[{id:'p1',n:'Çınar Bahçesi',a:15,p:600},{id:'p2',n:'Değirmen Yanı',a:45,p:750},{id:'p3',n:'Gölge Sokağı',a:75,p:900},{id:'p4',n:'Pınarbaşı',a:105,p:1100},{id:'p5',n:'Kervan Yolu',a:135,p:1400},{id:'p6',n:'Yıldız Meydanı',a:165,p:1800},{id:'p7',n:'Gül Bahçesi',a:195,p:2200},{id:'p8',n:'Kule Dibi',a:225,p:2700},{id:'p9',n:'Çeşme Başı',a:255,p:3300},{id:'p10',n:'Bağ Evleri',a:285,p:4000},{id:'p11',n:'Saray Yolu',a:315,p:5000},{id:'p12',n:'Taç Sokağı',a:345,p:6500}];
 var BUYERS=['Gezgin Hasan','Tüccar Ayşe','Madenci Veli','Avcı Zeynep','Kervancı Murat','Şifacı Elif','Demirci Bekir','Çırak Can'];
 var pos={};
 function $(i){return document.getElementById(i)}
@@ -15,9 +15,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){retur
 function day(){return Math.floor(Date.now()/864e5)}
 function hm(){return P&&P.hm}
 function L(){var h=hm();return h?LV[h.lv]:null}
-function plotPos(pl){if(pos[pl.id])return pos[pl.id];var TS=Y.TS,r=pl.a*Math.PI/180,tx=Math.round(Y.CX+Math.cos(r)*820/TS),ty=Math.round(Y.CY+Math.sin(r)*820/TS),best=null;
-  for(var q=0;q<9&&!best;q++)for(var dy=-q;dy<=q&&!best;dy++)for(var dx=-q;dx<=q;dx++){var x=tx+dx,y=ty+dy;if(Y.zoneAt(x,y)!==3&&!Y.nodeAt(x,y)){best={x:(x+.5)*TS,y:(y+.5)*TS};break}}
-  return pos[pl.id]=best||{x:(tx+.5)*TS,y:(ty+.5)*TS}}
+function plotPos(pl){if(pos[pl.id])return pos[pl.id];var r=pl.a*Math.PI/180,R=14.4*Y.TS;return pos[pl.id]={x:Y.CX*Y.TS+Math.cos(r)*R,y:Y.CY*Y.TS+Math.sin(r)*R*.96}}
 function price(i,d){return Math.round(PL[i].p*(.85+.4*Y.hash(d==null?day():d,i+1,5)))}
 function plotOf(id){for(var i=0;i<PL.length;i++)if(PL[i].id===id)return PL[i]}
 function used(h){var n=0;for(var k in h.dp)n+=h.dp[k];return n}
@@ -35,7 +33,7 @@ function ensure(){var h=hm();if(!h)return;h.dp=h.dp||{};h.vg=h.vg||0;h.sh=h.sh||
 
 /* ---------- dünyada ev ---------- */
 function place(){var G=D.G;if(!G)return;G.npcs=G.npcs.filter(function(o){return o.id!=='home'});G.houses=G.houses.filter(function(o){return!o.mine});
-  var h=hm();if(!h)return;var p=plotPos(plotOf(h.pl)),l=L();G.houses.push({x:p.x,y:p.y,c:l.col,w:l.w,mine:1});G.npcs.push({id:'home',n:'🏠 '+P.nick+' · '+l.n,ic:'🏠',x:p.x,y:p.y+54})}
+  var h=hm();if(!h)return;var p=plotPos(plotOf(h.pl)),l=L();G.houses.push({x:p.x,y:p.y,c:l.col,w:l.w,mine:1,hid:1})}
 function safe(G){var h=hm();if(!h||!G)return false;var p=plotPos(plotOf(h.pl));return Math.hypot(G.px-p.x,G.py-p.y)<170}
 function init(api){D=api;Y=D.Y;P=D.P;clearInterval(tk);var G=D.G,cx=Y.CX*Y.TS,cy=Y.CY*Y.TS;
   if(!G.npcs.some(function(o){return o.id==='realty'}))G.npcs.push({id:'realty',n:'Emlakçı',ic:'🏘',x:cx-110,y:cy+290});
@@ -59,9 +57,9 @@ function draw(){var h=hm();ensure();var el=$('npc'),s='';
   el.innerHTML=s;el.querySelectorAll('[data-h]').forEach(function(b){b.onclick=function(){act(b.dataset.h)}})}
 function reHtml(){var h=hm(),d=day(),s='<p class="sub">Kasaba çevresindeki arsalar. Fiyatlar her gün <b>Mülk Borsası</b>’nda değişir. Arsa alınca üzerinde ilk evin (Kulübe) kurulur: depo, dinlenme, özel mağaza ve rün altarı seninle.</p>';
   s+='<div class="it"><div class="t"><small>Altının: 🪙'+P.gold+'</small></div></div>';
-  PL.forEach(function(pl,i){var pr=price(i),pv=price(i,d-1),tr=pr>pv?'<span style="color:#ff8f8f">▲</span>':pr<pv?'<span style="color:#7dff9b">▼</span>':'▬',own=h&&h.pl===pl.id;
+  PL.forEach(function(pl,i){var pr=price(i),pv=price(i,d-1),tr=pr>pv?'<span style="color:#ff8f8f">▲</span>':pr<pv?'<span style="color:#7dff9b">▼</span>':'▬',own=h&&h.pl===pl.id,tk=window.YKN&&YKN.owner(pl.id);
     var cost=h?Math.max(0,pr-Math.round((h.paid||0)*.6)):pr;
-    s+='<div class="it"><div class="t"><b>'+pl.n+'</b>'+(own?' 🏠 <small>(evin burada)</small>':'')+'<br><small>🪙'+pr+' '+tr+' · dünün fiyatı 🪙'+pv+(h&&!own?' · taşınma farkı 🪙'+cost:'')+'</small></div>'+(own?'':btn(h?'Taşın':'Satın al','buy|'+pl.id,'',P.gold<cost?' disabled':''))+'</div>'});
+    s+='<div class="it"><div class="t"><b>'+pl.n+'</b>'+(own?' 🏠 <small>(evin burada)</small>':tk?' <small>(satıldı)</small>':'')+'<br><small>🪙'+pr+' '+tr+' · dünün fiyatı 🪙'+pv+(h&&!own?' · taşınma farkı 🪙'+cost:'')+'</small></div>'+(own?'':tk?'<small>🔒 '+esc(tk.n)+'</small>':btn(h?'Taşın':'Satın al','buy|'+pl.id,'',P.gold<cost?' disabled':''))+'</div>'});
   if(h){var back=Math.round((h.paid||0)*.6);s+='<div class="it"><div class="t"><small>Evini satarsan 🪙'+back+' alırsın (depo, raf ve kasa boş olmalı).</small></div>'+btn('Evi sat','sell','alt')+'</div>'}
   return s}
 function dpHtml(){var h=hm(),l=L(),u=used(h),inv=D.myInv().filter(function(x){return valid(x.k)});
@@ -94,9 +92,10 @@ function act(a){var p=a.split('|'),k=p[0],h=hm(),l=L();
   if(k==='t'){T=p[1];draw();return}
   if(k==='buy'){var pl=plotOf(p[1]),i=PL.indexOf(pl),pr=price(i),cost=h?Math.max(0,pr-Math.round((h.paid||0)*.6)):pr;if(!pl||P.gold<cost)return;
     if(h&&(used(h)||h.sh.length||h.till)){say('Taşınmadan önce depoyu, rafları ve kasayı boşalt.');return}
+    if(window.YKN&&!act._ok){YKN.claim(pl.id,h?h.lv:1,function(ok,e){if(!ok){say('🏠 '+(e||'Arsa alınamadı.'));draw();return}act._ok=1;act(a);act._ok=0});return}
     var keep=h;P.gold-=cost;P.hm={pl:pl.id,lv:keep?keep.lv:1,paid:pr,dp:{},vg:keep?keep.vg:0,sh:[],till:0,lt:Date.now(),rb:keep?keep.rb:0,rc:0,dg:keep?keep.dg:0,sold:keep?keep.sold:0,lg:[]};
-    place();say('🏠 '+pl.n+' arsasına yerleştin! Kasabanın dışında evine git, kapıda E/✋ ile gir.');save();draw();return}
-  if(k==='sell'){if(!h||used(h)||h.sh.length||h.till||h.vg){say('Önce depoyu, rafları, kasayı ve altın kasasını boşalt.');return}P.gold+=Math.round((h.paid||0)*.6);P.hm=null;place();save();say('Evini sattın.');draw();return}
+    place();say('🏠 '+pl.n+' arsasına yerleştin! Evine git, tabelada adın yazar; E/✋ ile içeri gir.');save();draw();return}
+  if(k==='sell'){if(!h||used(h)||h.sh.length||h.till||h.vg){say('Önce depoyu, rafları, kasayı ve altın kasasını boşalt.');return}P.gold+=Math.round((h.paid||0)*.6);P.hm=null;if(window.YKN)YKN.release();place();save();say('Evini sattın.');draw();return}
   if(!h)return;
   if(k==='pi'){var key=p[1],q=Math.min(+p[2],have(key));if(!valid(key)||q<1||used(h)+q>l.cap){if(q>=1)say('Depo dolu. Evi geliştir!');return}take(key,q);h.dp[key]=(h.dp[key]||0)+q}
   else if(k==='po'){var key2=p[1],q2=Math.min(+p[2],h.dp[key2]||0);if(!valid(key2)||q2<1)return;h.dp[key2]-=q2;if(!h.dp[key2])delete h.dp[key2];put(key2,q2)}
@@ -115,5 +114,5 @@ function act(a){var p=a.split('|'),k=p[0],h=hm(),l=L();
   else if(k==='run'){D.openNpc('rune');return}
   else if(k==='cdep'){if(window.YSoc)YSoc.openDepot();return}
   save();draw()}
-window.YH={init:init,open:open,safe:safe,xpx:xpx,runeMul:runeMul,put:put,take:take,have:have,valid:valid,LV:LV,PL:PL,price:price,simulate:simulate,dbg:function(){return{h:hm(),pos:pos}}};
+window.YH={plotPos:plotPos,LVC:function(){return LV},act:act,hm:hm,init:init,open:open,safe:safe,xpx:xpx,runeMul:runeMul,put:put,take:take,have:have,valid:valid,LV:LV,PL:PL,price:price,simulate:simulate,dbg:function(){return{h:hm(),pos:pos}}};
 })();

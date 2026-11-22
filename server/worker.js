@@ -10,7 +10,7 @@ const TTL = { pt: 60e3, tr: 60e3, du: 60e3 }, WEEK = 7 * 864e5;
 /* Ortak veri (profil, klan, takma ad, DM, sıralama) merkezsizdir: her anahtar, adının özetine göre 5 dünyadan birinde tutulur
    (shard). Herhangi bir dünya, sahibi olan dünyaya /kv ile sorar; tek hata noktası ve tek yük merkezi yoktur.
    Eski veri Dünya 1'de duruyorsa okuma bulamayınca oraya da bakar (taşıma gerekmez). Canlı olanlar dünyaya özel kalır. */
-const SHARED = k => /^(u:|c:|nk:|d:|ban:|mt:|adm:|sn:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell' || k === 'bidx' || k === 'alog' || k === 'mkx';
+const SHARED = k => /^(u:|c:|nk:|d:|ban:|mt:|adm:|sn:)/.test(k) || k === 'cidx' || k === 'lb' || k === 'rp' || k === 'bell' || k === 'bidx' || k === 'alog' || k === 'mkx' || k === 'evx';
 const shardOf = k => { let h = 2166136261; for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (h % WORLDS) + 1; };
 const KINDS = ['fr', 'pt', 'tr', 'du', 'cl', 'gf'];
 const WAGERS = [0, 100, 500, 1000, 5000];
@@ -59,7 +59,7 @@ export class World {
   async rd(w, k) { if (w === this.me()) { const v = await this.state.storage.get(k); return v === undefined ? null : v; } return (await (await this.kv(w, { op: 'g', k })).json()).v; }
   async fetch(req) {
     const pn = new URL(req.url).pathname;
-    if (pn === '/kv') { const b = await req.json(); if (!SHARED(String(b.k))) return new Response('no', { status: 400 }); if (b.op === 'g') { const v = await this.state.storage.get(b.k); return new Response(JSON.stringify({ v: v === undefined ? null : v })); } if (b.op === 's') { await this.state.storage.put(b.k, b.v); return new Response('{}'); } if (b.op === 'd') { await this.state.storage.delete(b.k); return new Response('{}'); } if (b.op === 'mk' && b.k === 'mkx') return new Response(JSON.stringify(await this.mkApply(b))); return new Response('bad', { status: 400 }); }
+    if (pn === '/kv') { const b = await req.json(); if (!SHARED(String(b.k))) return new Response('no', { status: 400 }); if (b.op === 'g') { const v = await this.state.storage.get(b.k); return new Response(JSON.stringify({ v: v === undefined ? null : v })); } if (b.op === 's') { await this.state.storage.put(b.k, b.v); return new Response('{}'); } if (b.op === 'd') { await this.state.storage.delete(b.k); return new Response('{}'); } if (b.op === 'mk' && b.k === 'mkx') return new Response(JSON.stringify(await this.mkApply(b))); if (b.op === 'ev' && b.k === 'evx') return new Response(JSON.stringify(await this.evApply(b))); return new Response('bad', { status: 400 }); }
     const wh = +req.headers.get('x-world') || 0; if (wh && wh !== this.wn) { this.wn = wh; await this.state.storage.put('_wn', wh); }
     if (pn === '/who') return new Response(JSON.stringify(this.all().map(w => this.A(w)).filter(a => a.id).map(a => ({ w: this.me(), id: a.id, pk: a.pk, n: a.nick, lv: a.lv, x: Math.round(a.x), y: Math.round(a.y), cg: a.cg || '', ip: a.ip || '', mu: a.mu || 0 }))));
     if (pn === '/live') { const b = await req.json(); let n = 0; for (const w of this.all()) { const a = this.A(w); if (!a.id || (!b.all && a.pk !== b.pk)) continue; n++; if (b.mu !== undefined) this.setA(w, x => { x.mu = b.mu; }); if (b.send) this.snd(w, b.send); if (b.kick) { try { w.close(1008, 'adm'); } catch (e) {} } } return new Response(String(n)); }
@@ -167,6 +167,7 @@ export class World {
       case 'dq': { if (!a.du) return; const ow = this.byId(a.du.o); return this.endDuel(ow, ws); }
       case 'to': case 'tl': case 'tc': case 'tx': return this.tradeAct(ws, a, m);
       case 'mkq': case 'mkl': case 'mkb': case 'mkc': case 'mkp': case 'mkk': case 'mka': case 'mkv': return this.mkt(ws, a, m, now);
+      case 'evq': case 'evc': case 'evr': case 'evy': case 'evi': case 'evu': case 'evj': case 'evl': case 'evs': return this.evt(ws, a, m, now);
       case 'cc': return this.clanCreate(ws, a, m, now);
       case 'cj': return this.clanJoin(ws, a, m, now);
       case 'cm': return this.clanManage(ws, a, m);
@@ -465,6 +466,52 @@ export class World {
     if (b.a === 'add' && bad(clean(a.nick, 16))) b.sn = 'Oyuncu';
     let r; try { const w = shardOf('mkx'); r = w === this.me() ? await this.mkApply(b) : await (await this.kv(w, b)).json(); } catch (e) { return this.snd(ws, { t: 'mkr', ok: 0, a: b.a, q: b.q, e: 'Pazara şu an ulaşılamıyor.' }); }
     r.t = 'mkr'; r.me = a.pk; this.snd(ws, r);
+  }
+
+  /* ---- Kasaba evleri: 12 arsanın sahipleri, ev içi dekor, davetliler ve yatak tek anahtarda (evx), sahibi olan dünyada atomik işlenir. ---- */
+  async evApply(b) {
+    const now = Date.now(), st = this.state.storage, S = (await st.get('evx')) || { P: {} };
+    const pk = String(b.pk || ''), id = /^p([1-9]|1[0-2])$/.test(String(b.id || '')) ? String(b.id) : '', out = { ok: 1, a: b.a, id };
+    for (const k in S.P) { const g = S.P[k].g || {}; for (const u in g) if (now - g[u].t > 75e3) delete g[u]; if (S.P[k].os && now - S.P[k].os > 75e3) S.P[k].os = 0; if (S.P[k].oi && now - S.P[k].oi > 75e3) S.P[k].oi = 0; }
+    const mine = () => Object.keys(S.P).find(k => S.P[k].u === pk);
+    const decor = d => (Array.isArray(d) ? d : []).slice(0, 30).filter(o => o && /^[a-z0-9]{1,10}$/.test(String(o.i)) ).map(o => ({ i: String(o.i), x: int(o.x, 0, 100), y: int(o.y, 0, 100) }));
+    const ap = x => { try { const t = typeof x === 'string' ? x : JSON.stringify(x || {}); return t.length < 700 ? t : '{}'; } catch (e) { return '{}'; } };
+    if (b.a === 'claim') {
+      if (!id) out.ok = 0, out.e = 'Geçersiz arsa.';
+      else if (S.P[id] && S.P[id].u !== pk) out.ok = 0, out.e = 'Bu arsa az önce başkasına satıldı.';
+      else { const o = mine(), keep = o && o !== id ? S.P[o] : S.P[id]; if (o && o !== id) delete S.P[o]; S.P[id] = { u: pk, n: clean(b.sn, 16), lv: int(b.lv, 1, 5), t: S.P[id] ? S.P[id].t : now, ap: ap(b.ap), d: keep ? keep.d || [] : [], iv: keep ? keep.iv || [] : [], g: {}, os: 0 }; }
+    } else if (b.a === 'release') {
+      const o = mine(); if (o) delete S.P[o];
+    } else if (b.a === 'sync') {
+      const o = mine(); if (!o) out.ok = 0, out.e = 'Evin yok.'; else { const p = S.P[o]; p.n = clean(b.sn, 16) || p.n; p.lv = int(b.lv, 1, 5); p.ap = ap(b.ap); if (b.d) p.d = decor(b.d); if (b.sl !== undefined) p.os = b.sl ? now : 0; if (b.in !== undefined) p.oi = b.in ? now : 0; if (b.hb) { if (p.os) p.os = now; if (p.oi) p.oi = now; } }
+    } else if (b.a === 'invite' || b.a === 'uninvite') {
+      const o = mine(), t = String(b.ipk || '');
+      if (!o) out.ok = 0, out.e = 'Evin yok.'; else if (!/^p[0-9a-f]{14}$/.test(t) || t === pk) out.ok = 0, out.e = 'Oyuncu bulunamadı.'; else { const p = S.P[o]; p.iv = p.iv || []; if (b.a === 'invite') { if (!p.iv.includes(t)) { if (p.iv.length >= 12) p.iv.shift(); p.iv.push(t); } out.inv = t; } else { p.iv = p.iv.filter(x => x !== t); if (p.g) delete p.g[t]; } }
+    } else if (b.a === 'join') {
+      const p = S.P[id]; if (!p) out.ok = 0, out.e = 'Bu arsada ev yok.';
+      else if (p.u !== pk && !(p.iv || []).includes(pk)) out.ok = 0, out.e = 'Bu eve davetli değilsin.';
+      else if (p.u !== pk) { p.g = p.g || {}; if (!p.g[pk] && Object.keys(p.g).length >= 3) out.ok = 0, out.e = 'Evde yer yok (en fazla 3 misafir).'; else p.g[pk] = { n: clean(b.sn, 16), ap: ap(b.ap), t: now, s: p.g[pk] ? p.g[pk].s : 0 }; }
+    } else if (b.a === 'leave') {
+      const p = S.P[id]; if (p && p.g) delete p.g[pk];
+    } else if (b.a === 'sleep') {
+      const p = S.P[id], on = b.on ? 1 : 0;
+      if (!p) out.ok = 0, out.e = 'Ev yok.';
+      else { const cnt = (p.os ? 1 : 0) + Object.keys(p.g || {}).filter(u => p.g[u].s && u !== pk).length;
+        if (on && cnt >= 2) out.ok = 0, out.e = 'Yatak dolu (iki kişilik).';
+        else if (p.u === pk) p.os = on ? now : 0; else if (p.g && p.g[pk]) { p.g[pk].s = on; p.g[pk].t = now; } else out.ok = 0, out.e = 'Evde değilsin.'; }
+    }
+    await st.put('evx', S);
+    const pub = {}; for (const k in S.P) { const p = S.P[k]; pub[k] = { u: p.u, n: p.n, lv: p.lv, d: p.d, ap: p.ap, os: p.os ? 1 : 0, oi: p.oi ? 1 : 0, g: Object.keys(p.g || {}).map(u => ({ u, n: p.g[u].n, ap: p.g[u].ap, s: p.g[u].s ? 1 : 0 })), iv: (p.iv || []).includes(pk) ? 1 : 0 }; }
+    out.P = pub; return out;
+  }
+  async evt(ws, a, m, now) {
+    if (!a.pk) return;
+    if (now - (a.evt || 0) < 300) return this.snd(ws, { t: 'evr', ok: 0, a: m.t, e: 'Çok hızlı.' }); this.setA(ws, x => { x.evt = now; });
+    const map = { evq: 'q', evc: 'claim', evr: 'release', evy: 'sync', evi: 'invite', evu: 'uninvite', evj: 'join', evl: 'leave', evs: 'sleep' };
+    const b = { a: map[m.t], pk: a.pk, sn: bad(clean(a.nick, 16)) ? 'Oyuncu' : clean(a.nick, 16), id: m.id, lv: m.lv, ap: m.ap, d: m.d, sl: m.sl, hb: m.hb, in: m.in, on: m.on, op: 'ev', k: 'evx' };
+    if (b.a === 'invite' || b.a === 'uninvite') { b.ipk = String(m.pk || ''); if (m.n) { const t = await this.g('nk:' + clean(m.n, 16).toLocaleLowerCase('tr'), null); if (t) b.ipk = t; } }
+    let r; try { const w = shardOf('evx'); r = w === this.me() ? await this.evApply(b) : await (await this.kv(w, b)).json(); } catch (e) { return this.snd(ws, { t: 'evr', ok: 0, a: b.a, e: 'Emlak kaydına şu an ulaşılamıyor.' }); }
+    r.t = 'evr'; r.me = a.pk; this.snd(ws, r);
   }
   async tradeAct(ws, a, m) {
     if (!a.tr) return; if (m.t === 'tx') return this.tradeCancel(a.tr, 'Takas iptal edildi.');

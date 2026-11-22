@@ -3,8 +3,11 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=2;
+var SAYI=3;
 var HABER=[
+ {d:'22 Kasım',k:'Manşet',h:'Kasaba büyüdü: surların içinde 12 yeni arsa!',s:'Sur genişletildi. Satılık arsalarda tabela yazıyor; alan kişinin adı tabelaya işleniyor. Evine gir, jetonla dekore et, arkadaşını davet et.'},
+ {d:'22 Kasım',k:'Kasaba',h:'Yatağı paylaşmak mümkün',s:'Evin iki kişilik yatağında arkadaşınla uyuyabilirsiniz. Birlikte uyuyanlar ekstra dinlenme kazanıyor.'},
+ {d:'22 Kasım',k:'Savunma',h:'KUŞATMA UYARISI: Her saat :20\'de surlara saldırı!',s:'Dört kapıdan dalgalar geliyor, son dalgada Kuşatma Titanı var. Kule okçuları yardım ediyor; kapıyı koruyanlar ödül alıyor.'},
  {d:'21 Kasım',k:'Manşet',h:'Kış Şenliği başladı: Diyar kar altında!',s:'Meydana dev bir şenlik ağacı dikildi, fenerler yandı. Şenlik Ustası kahramanları bekliyor.'},
  {d:'21 Kasım',k:'Kasaba',h:'Geceleri gökyüzünde yeşil ışıklar',s:'Kutup ışıkları kasabanın üstünde dans ediyor. Saat başı fişek gösterisi var.'},
  {d:'21 Kasım',k:'Ticaret',h:'Kış kostümleri ve Buz Kurdu yavruları',s:'Şenlik Ustası, yıldız getirenlere özel ödüller veriyor.'},

@@ -230,7 +230,7 @@ function draw(ctx,camX,camY,t,dg){if(!G||!P)return;if(dg){return}if(window.YR)tr
     dc.globalCompositeOperation='destination-out';
     var ls=(dkn>0?1:.5);
     var g1=dc.createRadialGradient(dw/2,dh/2,6,dw/2,dh/2,270*k);g1.addColorStop(0,'rgba(0,0,0,'+Math.min(1,.95*ls)+')');g1.addColorStop(.6,'rgba(0,0,0,'+(.55*ls)+')');g1.addColorStop(1,'rgba(0,0,0,0)');dc.fillStyle=g1;dc.fillRect(0,0,dw,dh);
-    var tx=(Y.CX*TS-(G.px-W/2))*k,ty=(Y.CY*TS-(G.py-H/2))*k,tr=TS*10.5*k;
+    var tx=(Y.CX*TS-(G.px-W/2))*k,ty=(Y.CY*TS-(G.py-H/2))*k,tr=TS*17.5*k;
     if(tx>-tr&&tx<dw+tr&&ty>-tr&&ty<dh+tr){var g2=dc.createRadialGradient(tx,ty,4,tx,ty,tr);g2.addColorStop(0,'rgba(0,0,0,.95)');g2.addColorStop(.7,'rgba(0,0,0,.6)');g2.addColorStop(1,'rgba(0,0,0,0)');dc.fillStyle=g2;dc.fillRect(0,0,dw,dh)}
     ctx.drawImage(dk,0,0,W,H)}
   /* ateşböcekleri */

@@ -1,7 +1,7 @@
 /* Yaxest Diyarı: kasaba suru, kuleler, 4 kapı (YW) */
 (function(){
 'use strict';
-var TS=48,R=11.6*TS,GW=1.9*TS,BAND=.44*TS,CX=100*TS,CY=100*TS,STEP=34;
+var TS=48,R=17.4*TS,GW=1.9*TS,BAND=.44*TS,CX=100*TS,CY=100*TS,STEP=34;
 var GATES=[['Kuzey Kapısı',0,-1],['Doğu Kapısı',1,0],['Güney Kapısı',0,1],['Batı Kapısı',-1,0]];
 function inGate(dx,dy){return(Math.abs(dx)<GW&&Math.abs(dy)>Math.abs(dx))||(Math.abs(dy)<GW&&Math.abs(dx)>Math.abs(dy))}
 function solid(x,y){var dx=x-CX,dy=y-CY,d=Math.sqrt(dx*dx+dy*dy);if(Math.abs(d-R)>BAND)return false;return!inGate(dx,dy)}
