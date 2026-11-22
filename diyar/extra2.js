@@ -122,7 +122,7 @@ function fishById(k){return k==='leviathan'?LEV:FISH.filter(function(x){return x
 function fishLv(){return X.fl.l}
 function fishNeed(l){return 30+l*25}
 function rarOf(f){return f.junk?['Çöp','#9aa3b5']:f.v<15?['Yaygın','#c9ced9']:f.v<100?['Seyrek','#7be07b']:f.v<500?['Nadir','#5cb0ff']:f.v<3000?['Destansı','#c07cff']:['Efsanevi','#ffb02e']}
-function nearWater(){if(!G||G.mode!=='world'||D.inTownF())return false;for(var i=0;i<8;i++){var a=i*Math.PI/4,x=G.px+Math.cos(a)*(TS*1.15),y=G.py+Math.sin(a)*(TS*1.15);if(Y.zoneAt(Math.floor(x/TS),Math.floor(y/TS))===3)return true}return false}
+function nearWater(){if(!G||G.mode!=='world')return false;if(Y.inPond&&!Y.inPond(G.px/TS,G.py/TS,7.5))return false;for(var i=0;i<8;i++){var a=i*Math.PI/4,x=G.px+Math.cos(a)*(TS*1.15),y=G.py+Math.sin(a)*(TS*1.15);if(Y.zoneAt(Math.floor(x/TS),Math.floor(y/TS))===3)return true}return false}
 function pickFish(){var night=A.hourP()<8,w=A.weatherNow(),lv=fishLv(),rain=w==='rain'||w==='storm';
   if(night&&w!=='clear'&&lv>=10&&Math.random()<.012)return LEV;
   var l=FISH.filter(function(f){return f.lv<=lv&&(!f.night||night)&&(!f.storm||w==='storm')}),tot=0,ws=l.map(function(f){var x=f.w*(rain&&f.w<10?1.5:1)*(f.junk&&lv>6?.5:1);tot+=x;return x}),r=Math.random()*tot;
@@ -142,6 +142,7 @@ function catchFish(){var f=F.fish,xp=Math.max(2,Math.round(f.v/6));X.fh[f.id]=(X
   while(X.fl.l<20&&X.fl.x>=fishNeed(X.fl.l)){X.fl.x-=fishNeed(X.fl.l);X.fl.l++;up=true}
   var extra='';if(f.bottle){giveMap(1);extra='İçinden bir define haritası çıktı! 🗺️'}
   if(f.id==='leviathan'){inc('lv');P.gold+=2000;A.giveEgg(2);extra='+2000 altın ve Efsanevi Yumurta!';D.say('🦑 GÖL CANAVARINI YAKALADIN!','sys')}
+  var df=dayFish();if(df&&f.id===df.id){var bg=f.v*2;P.gold+=bg;extra=(extra?extra+' ':'')+'⭐ Günün Balığı! +🪙 '+bg;D.say('⭐ Günün Balığı '+f.n+' yakaladın! +'+bg+' altın','sys')}
   if(f.id==='yaxest')D.say('🐟 Yaxest Balığı yakaladın! Kurucu seninle gurur duyuyor.','sys');
   F.ph='idle';F.msg='';F.res={f:f,xp:xp,up:up,nw:nw,extra:extra};if(window.YSes)YSes.sfx(up?'level':'catch',0);F.resT=3.2;F.fish=null;D.saveNow()}
 /* ---- arayüz ---- */
@@ -164,6 +165,7 @@ function openFish(){if(F.open||!G)return;F.open=1;F.ph='idle';F.msg='';F.res=nul
   el.innerHTML='<div class="fo-sc" id="fosc"><canvas id="focv"></canvas><div class="fo-top"><div class="fo-lv"><b id="folv"></b><div class="fo-bar"><i id="fobar"></i></div></div><span class="fo-chip" id="fowx"></span><span class="fo-chip" id="fogd"></span><button class="fo-x" id="fox" type="button" aria-label="Kapat">✕</button></div><div class="fo-st" id="fost"></div></div>'
   +'<div class="fo-side"><div class="fo-mini"><button id="fobk" type="button">🧺 Sepet</button><button id="fodx" type="button">📖 Rehber</button></div><button class="fo-go" id="fogo" type="button"></button></div>';
   document.body.appendChild(el);
+  /* mobil: açan dokunuşun 'hayalet tıklaması' Sepet düğmesine düşüp sahneyi kapatmasın */el.style.pointerEvents='none';setTimeout(function(){el.style.pointerEvents=''},450);
   fo('fox').onclick=closeFish;fo('fogo').onclick=fishAct;fo('fobk').onclick=function(){sheet('bag')};fo('fodx').onclick=function(){sheet('dex')};
   fo('focv').addEventListener('pointerdown',function(e){if(F.sheet)return;e.preventDefault();if(F.res&&F.resT>0.6){F.res=null}else fishAct()});
   document.addEventListener('keydown',fkey);F.last=performance.now();hud();loop()}
@@ -235,6 +237,18 @@ function chip(){if(!X||!X.tm||!G)return'';var d=hyp(X.tm.x-G.px,X.tm.y-G.py)/TS;
 function draw(ctx,camX,camY,t,W,H){if(!X||!X.tm||!G||G.mode!=='world')return;var tm=X.tm,sx=tm.x-camX,sy=tm.y-camY,gx=G.px,gy=G.py;
   if(sx>-80&&sx<W+80&&sy>-80&&sy<H+80){var pu=.5+.5*Math.sin(t*4);ctx.fillStyle='rgba(255,60,60,'+(.12+.12*pu)+')';ctx.beginPath();ctx.arc(tm.x,tm.y,26+6*pu,0,6.28);ctx.fill();ctx.strokeStyle='#d62d2d';ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tm.x-12,tm.y-12);ctx.lineTo(tm.x+12,tm.y+12);ctx.moveTo(tm.x+12,tm.y-12);ctx.lineTo(tm.x-12,tm.y+12);ctx.stroke();ctx.lineCap='butt'}
   else{var a=Math.atan2(tm.y-G.py,tm.x-G.px),ax=gx+Math.cos(a)*90,ay=gy+Math.sin(a)*90;ctx.save();ctx.translate(ax,ay);ctx.rotate(a);ctx.fillStyle='rgba(255,210,63,.9)';ctx.strokeStyle='#7a5a00';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(14,0);ctx.lineTo(-8,-9);ctx.lineTo(-4,0);ctx.lineTo(-8,9);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}}
-window.YX3={init:init,near:near,interact:interact,chip:chip,draw:draw,shopChests:shopChests,grantChest:grantChest,giveBox:giveBox,bagChests:bagChests,
- tabs:{fish:function(){return'<p class="sub">Balık tutmak için göl kenarında ✋ düğmesine bas.</p>'}},bind:function(){},TIERS:TIERS,dbg:{roll:roll,F:F,FISH:FISH,giveMap:giveMap,dig:dig}};
+function dayFish(){var L=FISH.filter(function(f){return f.lv<=6&&!f.night&&!f.storm&&!f.bottle&&f.v>=7});if(!L.length)return null;return L[Math.floor(Date.now()/864e5)%L.length]}
+/* iskele çizimi: göletin ortasına uzanan tahta iskele, direkler, fener ve tabelalar */
+function pier(c,t,camX,camY){if(!Y||!Y.POND||!G||G.mode!=='world')return;var cx=Y.CX,cy=Y.CY+23,x0=(cx-3)*TS,x1=(cx+4)*TS;if(x1<camX-60||x0>camX+innerWidth+60||(cy+2)*TS<camY-60||(cy-6)*TS>camY+innerHeight+60)return;
+  c.save();var tiles=[];for(var ty=cy-6;ty<=cy;ty++)for(var tx=cx-3;tx<=cx+3;tx++)if(Y.pier(tx,ty)&&Y.inPond(tx+.5,ty+.5,6.5))tiles.push([tx,ty]);
+  tiles.forEach(function(q){var x=q[0]*TS,y=q[1]*TS;c.fillStyle='rgba(10,20,40,.35)';c.fillRect(x+3,y+TS-2,TS,7)});
+  tiles.forEach(function(q){var x=q[0]*TS,y=q[1]*TS;for(var k=0;k<4;k++){c.fillStyle=k%2?'#a8794a':'#b98a55';c.fillRect(x,y+k*12,TS+1,12);c.fillStyle='rgba(60,35,15,.45)';c.fillRect(x,y+k*12+11,TS+1,1.5);c.fillStyle='rgba(60,35,15,.55)';c.fillRect(x+((q[0]+k)%3)*14+6,y+k*12+5,2,2)}});
+  /* direkler */tiles.forEach(function(q){var x=q[0]*TS,y=q[1]*TS;if(Y.zoneAt(q[0],q[1]+1)===3){c.fillStyle='#5a3a22';c.fillRect(x+4,y+TS-2,6,10);c.fillRect(x+TS-10,y+TS-2,6,10)}});
+  /* fener */var lx=(cx+3)*TS+TS-8,ly=(cy-1)*TS+6,fl=.8+Math.sin(t*6)*.08;c.fillStyle='#3a2616';c.fillRect(lx-2,ly-30,4,34);var g=c.createRadialGradient(lx,ly-34,2,lx,ly-34,70*fl);g.addColorStop(0,'rgba(255,214,120,.55)');g.addColorStop(1,'rgba(255,180,80,0)');c.fillStyle=g;c.beginPath();c.arc(lx,ly-34,70*fl,0,6.283);c.fill();c.fillStyle='#ffd27a';c.fillRect(lx-5,ly-40,10,12);c.strokeStyle='#3a2616';c.lineWidth=1.5;c.strokeRect(lx-5,ly-40,10,12);
+  /* tabelalar */var sx=cx*TS+TS/2,sy=(cy-4)*TS-10;c.fillStyle='#5a3a22';c.fillRect(sx-46,sy-6,3,22);c.fillStyle='#8a5a32';c.fillRect(sx-96,sy-30,100,26);c.strokeStyle='#3a2616';c.lineWidth=2;c.strokeRect(sx-96,sy-30,100,26);c.fillStyle='#fff3d6';c.font='800 11px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText('🎣 BALIKÇI İSKELESİ',sx-46,sy-13);
+  var df=dayFish();if(df){var dx=sx+60,dy=sy-6;c.fillStyle='#5a3a22';c.fillRect(dx-2,dy,3,18);c.fillStyle='rgba(20,14,40,.85)';c.fillRect(dx-62,dy-34,124,32);c.strokeStyle='#ffd23f';c.lineWidth=1.5;c.strokeRect(dx-62,dy-34,124,32);c.fillStyle='#ffd23f';c.font='800 10px "Chakra Petch",sans-serif';c.fillText('⭐ GÜNÜN BALIĞI',dx,dy-21);c.fillStyle='#fff';c.font='700 11px "Chakra Petch",sans-serif';c.fillText(df.ic+' '+df.n+' · 3× altın',dx,dy-8)}
+  /* parıltı: balık burada */var pu=(t*.7)%1;c.strokeStyle='rgba(255,255,255,'+(.35*(1-pu))+')';c.lineWidth=2;[[-2.5,1.6],[2.6,1.4],[-3.6,-1.2],[3.4,-1.6]].forEach(function(o){c.beginPath();c.ellipse((cx+.5+o[0])*TS,(cy+.5+o[1])*TS,8+pu*22,4+pu*9,0,0,6.283);c.stroke()});
+  c.restore()}
+window.YX3={pier:pier,dayFish:function(){return dayFish()},init:init,near:near,interact:interact,chip:chip,draw:draw,shopChests:shopChests,grantChest:grantChest,giveBox:giveBox,bagChests:bagChests,
+ tabs:{fish:function(){var df=dayFish();return'<p class="sub">🎣 Balık tutmak için kasabanın hemen güneyindeki <b>Balıkçı İskelesi</b>ne git ve iskelenin ucunda ✋ düğmesine bas. Gölet güvenli bölgedir, canavarlar saldırmaz.</p>'+(df?'<p class="sub">⭐ Bugünün balığı: <b>'+df.ic+' '+df.n+'</b> (yakalayınca 2× değerinde ek altın)</p>':'')}},bind:function(){},TIERS:TIERS,dbg:{roll:roll,F:F,FISH:FISH,giveMap:giveMap,dig:dig}};
 })();

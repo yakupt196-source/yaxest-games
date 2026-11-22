@@ -6,9 +6,15 @@ var TS=48,MW=200,MH=200,CX=MW/2,CY=MH/2;
 function hash(x,y,s){var h=(x*374761393+y*668265263+(s||0)*2147483647)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296}
 function vn(x,y,s){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=hash(xi,yi,s),b=hash(xi+1,yi,s),c=hash(xi,yi+1,s),d=hash(xi+1,yi+1,s);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
 /* kutu türleri: 0 çimen, 1 orman, 2 kayalık, 3 su, 4 kasaba, 6 duvar */
+/* Balıkçı Göleti: kasaba kapısının hemen güneyinde, ortasına uzanan T biçimli iskele. Tüm oyuncular burada balık tutar. */
+var POND={x:CX+.5,y:CY+23.5,rx:6.2,ry:4.4};
+function pondAt(tx,ty){var px=tx+.5-POND.x,py=ty+.5-POND.y;if(px*px/(POND.rx*POND.rx)+py*py/(POND.ry*POND.ry)>1)return -1;if(pier(tx,ty))return 0;return 3}
+function pier(tx,ty){var px=tx-CX,py=ty-(CY+23);return (px===0&&py<=0)||(py>=-1&&py<=0&&Math.abs(px)<=3)}
+function inPond(x,y,r){return Math.hypot(x-POND.x,y-POND.y)<(r||8)}
 function zoneAt(tx,ty){
   if(tx<0||ty<0||tx>=MW||ty>=MH)return 3;
-  var dx=tx-CX,dy=ty-CY,dd0=Math.sqrt(dx*dx+dy*dy);if(dd0<16.9)return 4;var d=dd0+(vn(tx/6,ty/6,3)-.5)*11;
+  var dx=tx-CX,dy=ty-CY,dd0=Math.sqrt(dx*dx+dy*dy);if(dd0<16.9)return 4;
+  var pz=pondAt(tx,ty);if(pz>=0)return pz; /* kasabanın güneyindeki balıkçı göleti + iskele */var d=dd0+(vn(tx/6,ty/6,3)-.5)*11;
   var edge=Math.min(tx,ty,MW-1-tx,MH-1-ty);
   if(edge<3||(vn(tx/9,ty/9,11)>.74&&d>16&&dd0>30&&d<120))return 3; /* göller kasabadan en az 30 karo uzakta */
   if(d<34)return 0;
@@ -37,7 +43,7 @@ function poiPos(){if(poiCache)return poiCache;poiCache=POIS.map(function(p){var 
 function poiNodeAt(tx,ty){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx>5||dx<-5||dy>5||dy<-5)continue;var d2=dx*dx+dy*dy;if(d2<2||d2>20)continue;var n=POIS[i].node;if(hash(tx,ty,31+i)<(POIS[i].id==='kule'?.18:.42))return n}return null}
 function poiOf(tx,ty,r){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx*dx+dy*dy<=(r||7)*(r||7))return i}return -1}
 function nodeAt(tx,ty){
-  var z=zoneAt(tx,ty);if(z===3||z===4)return null;
+  var z=zoneAt(tx,ty);if(z===3||z===4||pondAt(tx,ty)>=0||inPond(tx+.5,ty+.5,7.5))return null;
   var dx=tx-CX,dy=ty-CY,dd=Math.sqrt(dx*dx+dy*dy);if(dd<18)return null;
   var pn=poiNodeAt(tx,ty);if(pn)return pn;
   var r=hash(tx,ty,7);
@@ -222,6 +228,6 @@ var UPI=[0,0,0,0,['i_copper',2],['i_copper',3],['i_iron',2],['i_iron',3],['i_sil
 function upCost(kind,n){var c=kind==='w'?{wood:4+3*n,stone:2+2*n,gold:10+15*n}:{wood:3+2*n,stone:3+3*n,gold:8+12*n},u=UPI[n];c.iron=0;if(u){c.ik=u[0];c.ic=u[1]+(kind==='w'?1:0)}return c}
 var PROF={wood:'Odunculuk',mine:'Madencilik'};
 function profNeed(l){return 8+l*8+l*l}
-root.YD={genWeekly:genWeekly,POIS:POIS,poiPos:poiPos,poiOf:poiOf,TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,quad:quad,regionAt:regionAt,SECT:SECT,SECN:SECN,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,PETD:PETD,EGGMIN:EGGMIN,eggChance:eggChance,eggPrice:eggPrice,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:150,lvF:lvF,effT:effT,ARMOR:ARMOR,ZT:ZT,WT:WT,WLV:WLV};
+root.YD={genWeekly:genWeekly,POIS:POIS,poiPos:poiPos,poiOf:poiOf,TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,POND:POND,pier:pier,inPond:inPond,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,quad:quad,regionAt:regionAt,SECT:SECT,SECN:SECN,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,PETD:PETD,EGGMIN:EGGMIN,eggChance:eggChance,eggPrice:eggPrice,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:150,lvF:lvF,effT:effT,ARMOR:ARMOR,ZT:ZT,WT:WT,WLV:WLV};
 if(typeof module!=='undefined')module.exports=root.YD;
 })(typeof window!=='undefined'?window:globalThis);
