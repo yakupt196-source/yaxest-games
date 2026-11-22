@@ -53,7 +53,7 @@ function drop(m){var p=P();if(!p||!m)return;var boss=m.boss||m.elite||m.el,ch=bo
   p[k]=(p[k]||0)+1;if(D.floatTxt)D.floatTxt(m.x,m.y-(m.sz||20)-46,'⚗ '+POT[k].n,POT[k].c);draw()}
 /* ---------- alet kuralları ---------- */
 function need(kind){var h=st();if(!h)return true;var want=kind==='ax'?1:kind==='pk'?2:3;if(h.s===want)return true;
-  if(h.a){setSel(want);return true}D.say(SLOTS[want].n+' seç ('+(want+1)+' tuşu ya da alttaki çubuk)','sys');pulse(want);return false}
+  if(h.a){setSel(want,true);return true}D.say(SLOTS[want].n+' seç ('+(want+1)+' tuşu ya da alttaki çubuk)','sys');pulse(want);return false}
 function atk(){var h=st();if(!h||h.s===0)return true;if(h.a){setSel(0,true);return true}return true}
 function canCast(){var h=st();if(!h||h.s===0)return true;if(h.a){setSel(0,true);return true}D.say('Yetenekler için silahını seç (1)','sys');pulse(0);return false}
 function swing(sw){var g=G(),h=held();if(g&&g.gather&&h&&h.k!=='rod'){var ph=((g.t||0)*2.2)%1;return .95-1.9*Math.min(1,ph*1.6)}return sw}

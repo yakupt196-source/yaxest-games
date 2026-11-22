@@ -594,10 +594,10 @@ function tileCol(tx,ty,z){var h=Y.hash(tx,ty,5);if(G.mode==='dungeon'){return wi
 function shade(hex,d){var n=parseInt(hex.slice(1),16),r=(n>>16)+d,g=(n>>8&255)+d,b=(n&255)+d;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return'rgb('+r+','+g+','+b+')'}
 function drawNode(kind,x,y){YA.node(ctx,kind,x,y,Y.NODE)}
 function drawMon(m,t){YA.monster(ctx,m,t,G.px,G.py);var top=m.type==='metin'?m.y-m.sz*1.7-8:m.y-m.sz-14,w=m.type==='metin'?76:Math.max(36,m.sz*2.2);ctx.fillStyle='rgba(10,6,24,.7)';ctx.fillRect(m.x-w/2-1,top-1,w+2,7);ctx.fillStyle=m.type==='metin'?'#b57bff':m.boss?'#ff9d3d':'#ff5b6e';ctx.fillRect(m.x-w/2,top,w*Math.max(0,m.hp/m.max),5);YA.plate(ctx,m.x,top-10,m.n+' '+m.lv,m.boss?'#ff9d3d':null)}
-function drawHero(t){var x=G.px,y=G.py,c=C(),mv=!!(G.jx||G.jy||G.keys.u||G.keys.d||G.keys.l||G.keys.r),ang=Math.atan2(G.fy,G.fx),sw=G.swT>0?(G.swT/.18-.5)*1.9:0,tl=window.YHB?YHB.held():null;if(tl)sw=YHB.swing(sw);
+function drawHero(t){var x=G.px,y=G.py,c=C(),mv=!!(G.jx||G.jy||G.keys.u||G.keys.d||G.keys.l||G.keys.r),ang=Math.atan2(G.fy,G.fx),sw=G.swT>0?(G.swT/.18-.5)*1.9:0,tl=window.YHB?YHB.held():null,chop=!!(tl&&G.gather&&tl.k!=='rod');if(tl)sw=YHB.swing(sw);if(chop)ang=G.fx>=0?-.1:Math.PI+.1;
   ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(x,y+22,20,8,0,0,6.28);ctx.fill();
   var gl=ctx.createRadialGradient(x,y+20,2,x,y+20,34);gl.addColorStop(0,c.col);gl.addColorStop(1,'rgba(0,0,0,0)');ctx.globalAlpha=.55;ctx.fillStyle=gl;ctx.beginPath();ctx.ellipse(x,y+20,34,13,0,0,6.28);ctx.fill();ctx.globalAlpha=G.evade>0?.4:1;
-  var wBk=G.fy<-.3||(Math.abs(sw)<1e-4&&(P.cls!=='tank'||tl));if(wBk)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv,P.ap,tl);
+  var wBk=!chop&&(G.fy<-.3||(Math.abs(sw)<1e-4&&(P.cls!=='tank'||tl)));if(wBk)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv,P.ap,tl);
   YL.hero(ctx,x,y+21,P.ap,t,mv,1)
   if(!wBk)YA.weapon(ctx,P.cls,x,y-2,ang,sw,t,P.wt||0,P.ap&&P.ap.sk,P.ap&&P.ap.tc,mv,P.ap,tl);
   ctx.globalAlpha=1;
