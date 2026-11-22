@@ -87,13 +87,14 @@ function overlay(ctx,camX,camY,t,W,H){
   var dt=Math.min(.1,Math.max(0,t-lt));lt=t;
   var dkn=night();
   /* kutup ışığı */
-  if(dkn>.15){ctx.save();ctx.globalCompositeOperation='lighter';
-    [[.0,'80,255,170',46,0],[.5,'90,200,255',34,2.1],[1,'190,120,255',28,4.3]].forEach(function(r,ri){var g=ctx.createLinearGradient(0,0,0,H*.42);g.addColorStop(0,'rgba('+r[1]+',0)');g.addColorStop(.35,'rgba('+r[1]+','+(.2*dkn)+')');g.addColorStop(1,'rgba('+r[1]+',0)');
-      ctx.fillStyle=g;ctx.beginPath();var base=H*(.1+ri*.07),amp=r[2],ph=r[3];ctx.moveTo(0,0);for(var x=0;x<=W+20;x+=20){ctx.lineTo(x,base+Math.sin(x*.008+t*.35+ph)*amp+Math.sin(x*.021+t*.6+ph)*amp*.4)}ctx.lineTo(W,0);ctx.closePath();ctx.fill()});ctx.restore()}
+  var lowfx=!!window.YD_LOWFX;
+  if(dkn>.15&&!lowfx){ctx.save();ctx.globalCompositeOperation='lighter';
+    [[.0,'80,255,170',46,0],[.5,'90,200,255',34,2.1],[1,'190,120,255',28,4.3]].forEach(function(r,ri){var g=ctx.createLinearGradient(0,0,0,H*.26);g.addColorStop(0,'rgba('+r[1]+','+(.07*dkn)+')');g.addColorStop(.45,'rgba('+r[1]+','+(.06*dkn)+')');g.addColorStop(1,'rgba('+r[1]+',0)');
+      ctx.fillStyle=g;ctx.beginPath();var base=H*(.05+ri*.04),amp=r[2]*.6,ph=r[3];ctx.moveTo(0,0);for(var x=0;x<=W+20;x+=20){ctx.lineTo(x,base+Math.sin(x*.008+t*.35+ph)*amp+Math.sin(x*.021+t*.6+ph)*amp*.4)}ctx.lineTo(W,0);ctx.closePath();ctx.fill()});ctx.restore()}
   /* kırağı kenar */
   var vg=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.45,W/2,H/2,Math.max(W,H)*.78);vg.addColorStop(0,'rgba(190,225,255,0)');vg.addColorStop(1,'rgba(190,225,255,'+(.13+.08*(1-dkn))+')');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
   /* kar taneleri */
-  var N=W<700?70:130;if(flk.length!==N){flk=[];for(var i=0;i<N;i++)flk.push({x:Math.random()*W,y:Math.random()*H,z:Math.random(),p:Math.random()*6})}
+  var N=lowfx?(W<700?18:30):(W<700?55:110);if(flk.length!==N){flk=[];for(var i=0;i<N;i++)flk.push({x:Math.random()*W,y:Math.random()*H,z:Math.random(),p:Math.random()*6})}
   ctx.fillStyle='rgba(255,255,255,.88)';ctx.beginPath();
   for(var j=0;j<N;j++){var f=flk[j],sp=22+f.z*52;f.y+=sp*dt;f.x+=(Math.sin(t*.8+f.p)*14+8)*dt*(.4+f.z);if(f.y>H+4){f.y=-4;f.x=Math.random()*W}if(f.x>W+4)f.x=-4;var r=.9+f.z*1.9;ctx.moveTo(f.x+r,f.y);ctx.arc(f.x,f.y,r,0,6.3)}
   ctx.fill();

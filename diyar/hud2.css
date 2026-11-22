@@ -23,3 +23,15 @@
 .ski{display:inline-block;width:46px;height:46px;flex:none;--c:var(--cc,#ffd23f)}.ski .yb{width:100%;height:100%;display:block}
 
 #bz{right:196px;bottom:70px;width:62px;height:62px;--c:#ffe28a}#bz .yi{position:absolute;inset:0;margin:auto;width:60%;height:60%}#bz .spt{position:absolute;left:50%;top:-18px;transform:translateX(-50%);white-space:nowrap;font:800 10px 'Chakra Petch',sans-serif;color:#ffe28a;text-shadow:0 1px 3px #000;pointer-events:none}#bz.sp{border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,226,138,.28),rgba(20,12,48,.9));box-shadow:0 0 0 2.5px #ffe28a,0 0 18px rgba(255,226,138,.55)}#bz.cdn{filter:saturate(.5)}
+
+/* 22 Kasım: alçak yatay telefon ekranı (≤430px yükseklik): profil kartı küçük, savaş düğmeleri arası açık */
+@media (max-height:430px){
+  .top{padding:3px 9px 4px 3px!important;gap:6px!important;border-radius:12px!important;max-width:46vw!important}
+  .rg{width:50px!important;height:50px!important}.rg .av{width:26px!important;height:26px!important}
+  .top #hn{font-size:.8rem!important}.top .gr,.top small{font-size:.6rem!important}
+  #mm{width:84px!important;height:84px!important}
+  #b0{width:92px;height:92px}
+  #b1{right:120px;bottom:2px;width:64px;height:64px}#b2{right:104px;bottom:96px;width:64px;height:64px}#b3{right:4px;bottom:116px;width:64px;height:64px}
+  #b4{right:196px;bottom:0;width:56px;height:56px}#bz{right:200px;bottom:68px;width:56px;height:56px}
+}
+body.lowfx #atm,body.lowfx #grade{display:none!important}

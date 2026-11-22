@@ -165,7 +165,10 @@ function el(ctx,x,y,rx,ry,f){ctx.fillStyle=f;ctx.beginPath();ctx.ellipse(x,y,rx,
 function ol(ctx){ctx.strokeStyle='#1b1530';ctx.lineWidth=1.6;ctx.stroke()}
 function shade(hex,d){var n=parseInt(hex.slice(1),16),r=(n>>16)+d,g=(n>>8&255)+d,b=(n&255)+d;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return'rgb('+r+','+g+','+b+')'}
 YA.shade=shade;
-YA.plate=function(ctx,x,y,txt,col){ctx.font='700 11px "Chakra Petch",sans-serif';var w=ctx.measureText(txt).width+14;ctx.fillStyle='rgba(14,10,32,.72)';rr(ctx,x-w/2,y-9,w,17,8);ctx.fill();if(col){ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.stroke()}ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(txt,x,y+3.5)};
+/* HUD altında kalan dünya etiketleri soluklaşır (pusula, mini harita, joystick, savaş düğmeleri) */
+var HR=[],HRt=0;function hudRects(){var n=Date.now();if(n-HRt<700)return HR;HRt=n;HR=[];['.top','#mm','#trdg','#joy','#acts','#ibag','#chbox','#dkrow'].forEach(function(s){var e=document.querySelector(s);if(e&&e.offsetParent!==null){var r=e.getBoundingClientRect();if(r.width>0)HR.push(r)}});return HR}
+function underHud(ctx,x,y){try{var m=ctx.getTransform(),d=window.devicePixelRatio||1,sx=(m.a*x+m.c*y+m.e)/d,sy=(m.b*x+m.d*y+m.f)/d,R=hudRects();for(var i=0;i<R.length;i++){var r=R[i];if(sx>r.left-30&&sx<r.right+30&&sy>r.top-10&&sy<r.bottom+10)return true}}catch(e){}return false}
+YA.plate=function(ctx,x,y,txt,col){var _ua=underHud(ctx,x,y);if(_ua){ctx.save();ctx.globalAlpha*=.22}ctx.font='700 11px "Chakra Petch",sans-serif';var w=ctx.measureText(txt).width+14;ctx.fillStyle='rgba(14,10,32,.72)';rr(ctx,x-w/2,y-9,w,17,8);ctx.fill();if(col){ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.stroke()}ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(txt,x,y+3.5);if(_ua)ctx.restore()};
 
 /* ---- insan karakter ---- */
 YA.person=function(ctx,x,y,o,t,mv){
