@@ -483,14 +483,14 @@ export class World {
     } else if (b.a === 'release') {
       const o = mine(); if (o) delete S.P[o];
     } else if (b.a === 'sync') {
-      const o = mine(); if (!o) out.ok = 0, out.e = 'Evin yok.'; else { const p = S.P[o]; p.n = clean(b.sn, 16) || p.n; p.lv = int(b.lv, 1, 5); p.ap = ap(b.ap); if (b.d) p.d = decor(b.d); if (b.sl !== undefined) p.os = b.sl ? now : 0; if (b.in !== undefined) p.oi = b.in ? now : 0; if (b.hb) { if (p.os) p.os = now; if (p.oi) p.oi = now; } }
+      const o = mine(); if (!o) out.ok = 0, out.e = 'Evin yok.'; else { const p = S.P[o]; p.n = clean(b.sn, 16) || p.n; p.lv = int(b.lv, 1, 5); p.ap = ap(b.ap); if (b.d) p.d = decor(b.d); if (b.sl !== undefined) p.os = b.sl ? now : 0; if (b.in !== undefined) p.oi = b.in ? now : 0; if (b.x !== undefined) { p.ox = int(b.x, 0, 600); p.oy = int(b.y, 0, 420); } if (b.hb) { if (p.os) p.os = now; if (p.oi) p.oi = now; } }
     } else if (b.a === 'invite' || b.a === 'uninvite') {
       const o = mine(), t = String(b.ipk || '');
       if (!o) out.ok = 0, out.e = 'Evin yok.'; else if (!/^p[0-9a-f]{14}$/.test(t) || t === pk) out.ok = 0, out.e = 'Oyuncu bulunamadı.'; else { const p = S.P[o]; p.iv = p.iv || []; if (b.a === 'invite') { if (!p.iv.includes(t)) { if (p.iv.length >= 12) p.iv.shift(); p.iv.push(t); } out.inv = t; } else { p.iv = p.iv.filter(x => x !== t); if (p.g) delete p.g[t]; } }
     } else if (b.a === 'join') {
       const p = S.P[id]; if (!p) out.ok = 0, out.e = 'Bu arsada ev yok.';
       else if (p.u !== pk && !(p.iv || []).includes(pk)) out.ok = 0, out.e = 'Bu eve davetli değilsin.';
-      else if (p.u !== pk) { p.g = p.g || {}; if (!p.g[pk] && Object.keys(p.g).length >= 3) out.ok = 0, out.e = 'Evde yer yok (en fazla 3 misafir).'; else p.g[pk] = { n: clean(b.sn, 16), ap: ap(b.ap), t: now, s: p.g[pk] ? p.g[pk].s : 0 }; }
+      else if (p.u !== pk) { p.g = p.g || {}; if (!p.g[pk] && Object.keys(p.g).length >= 3) out.ok = 0, out.e = 'Evde yer yok (en fazla 3 misafir).'; else p.g[pk] = { n: clean(b.sn, 16), ap: ap(b.ap), t: now, s: p.g[pk] ? p.g[pk].s : 0, x: int(b.x, 0, 600), y: int(b.y, 0, 420) }; }
     } else if (b.a === 'leave') {
       const p = S.P[id]; if (p && p.g) delete p.g[pk];
     } else if (b.a === 'sleep') {
@@ -501,14 +501,14 @@ export class World {
         else if (p.u === pk) p.os = on ? now : 0; else if (p.g && p.g[pk]) { p.g[pk].s = on; p.g[pk].t = now; } else out.ok = 0, out.e = 'Evde değilsin.'; }
     }
     await st.put('evx', S);
-    const pub = {}; for (const k in S.P) { const p = S.P[k]; pub[k] = { u: p.u, n: p.n, lv: p.lv, d: p.d, ap: p.ap, os: p.os ? 1 : 0, oi: p.oi ? 1 : 0, g: Object.keys(p.g || {}).map(u => ({ u, n: p.g[u].n, ap: p.g[u].ap, s: p.g[u].s ? 1 : 0 })), iv: (p.iv || []).includes(pk) ? 1 : 0 }; }
+    const pub = {}; for (const k in S.P) { const p = S.P[k]; pub[k] = { u: p.u, n: p.n, lv: p.lv, d: p.d, ap: p.ap, os: p.os ? 1 : 0, oi: p.oi ? 1 : 0, ox: p.ox || 0, oy: p.oy || 0, g: Object.keys(p.g || {}).map(u => ({ u, n: p.g[u].n, ap: p.g[u].ap, s: p.g[u].s ? 1 : 0, x: p.g[u].x || 0, y: p.g[u].y || 0 })), iv: (p.iv || []).includes(pk) ? 1 : 0 }; }
     out.P = pub; return out;
   }
   async evt(ws, a, m, now) {
     if (!a.pk) return;
     if (now - (a.evt || 0) < 300) return this.snd(ws, { t: 'evr', ok: 0, a: m.t, e: 'Çok hızlı.' }); this.setA(ws, x => { x.evt = now; });
     const map = { evq: 'q', evc: 'claim', evr: 'release', evy: 'sync', evi: 'invite', evu: 'uninvite', evj: 'join', evl: 'leave', evs: 'sleep' };
-    const b = { a: map[m.t], pk: a.pk, sn: bad(clean(a.nick, 16)) ? 'Oyuncu' : clean(a.nick, 16), id: m.id, lv: m.lv, ap: m.ap, d: m.d, sl: m.sl, hb: m.hb, in: m.in, on: m.on, op: 'ev', k: 'evx' };
+    const b = { a: map[m.t], pk: a.pk, sn: bad(clean(a.nick, 16)) ? 'Oyuncu' : clean(a.nick, 16), id: m.id, lv: m.lv, ap: m.ap, d: m.d, sl: m.sl, hb: m.hb, in: m.in, x: m.x, y: m.y, on: m.on, op: 'ev', k: 'evx' };
     if (b.a === 'invite' || b.a === 'uninvite') { b.ipk = String(m.pk || ''); if (m.n) { const t = await this.g('nk:' + clean(m.n, 16).toLocaleLowerCase('tr'), null); if (t) b.ipk = t; } }
     let r; try { const w = shardOf('evx'); r = w === this.me() ? await this.evApply(b) : await (await this.kv(w, b)).json(); } catch (e) { return this.snd(ws, { t: 'evr', ok: 0, a: b.a, e: 'Emlak kaydına şu an ulaşılamıyor.' }); }
     r.t = 'evr'; r.me = a.pk; this.snd(ws, r);

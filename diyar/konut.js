@@ -84,17 +84,25 @@ function bindSign(pl,rd){var el=$('npc'),m=function(t){var q=$('knmsg');if(q)q.t
     else if(k==='depo'){YH.open('home')}}})}
 function closePan(){try{D.openPan&&document.querySelector('.pan.on')&&document.querySelector('.pan.on').classList.remove('on')}catch(e){}}
 /* ---- ev içi ---- */
-var CW=640,CH=400;
+var TW=40,COLS=14,ROWS=10,CW=560,CH=400,BED={x:40,y:88,w:160,h:72};
+var FP={rug:[2,1,0],plant:[1,1,1],lamp:[1,1,1],fire:[2,1,1],piano:[2,1,1],aqua:[1,1,1],cat:[1,1,0],tree:[1,1,1],cup:[1,1,1],chest:[1,1,1],globe:[1,1,1],desk:[2,1,1],paint:[1,1,0],shelf:[2,1,0],clock:[1,1,0],flag:[1,1,0],sword:[1,1,0]};
+function norm(o){var x=o.x,y=o.y,d=DEC[o.i]||{f:1};if(x>13||y>9){x=Math.round(x/100*COLS);y=Math.round(y/100*ROWS)}x=Math.max(0,Math.min(COLS-(FP[o.i]?FP[o.i][0]:1),x));y=d.f?Math.max(2,Math.min(8,y)):Math.max(0,Math.min(1,y));return{i:o.i,x:x,y:y}}
+function rects(items){return items.filter(function(o){return DEC[o.i]&&DEC[o.i].f&&FP[o.i]&&FP[o.i][2]}).map(function(o){var f=FP[o.i];return{x:o.x*TW+4,y:o.y*TW+8,w:f[0]*TW-8,h:f[1]*TW-8}})}
+function hitR(rs,x,y,r){for(var i=0;i<rs.length;i++){var q=rs[i];if(x+r>q.x&&x-r<q.x+q.w&&y>q.y&&y-10<q.y+q.h)return true}return false}
+function doorX(x){return x>=6*TW&&x<=8*TW}
 function enter(id,guest){if(room)return;var e=entry(id);if(!e&&!guest){D.say('Bu evde kimse yok.','sys');return}
-  G=D.G;G.paused=true;room={id:id,guest:guest,sel:null,tab:0,sl:0,slT:0,ev:0,gcd:0,msg:'',t0:Date.now(),hbT:0,qT:0};
-  var d=document.createElement('div');d.id='knroom';d.style.cssText='position:fixed;inset:0;z-index:4;background:rgba(6,4,18,.92);display:flex;flex-direction:column;align-items:center;overflow:auto;padding:8px;color:#fff;font-family:inherit';
-  d.innerHTML='<div style="width:min(98vw,760px)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><b id="knh" style="flex:1;font-size:1.02rem"></b><button class="btn alt" id="knx" type="button" style="min-height:34px">🚪 Çık</button></div><canvas id="knc" width="'+CW+'" height="'+CH+'" style="width:100%;border-radius:14px;border:2px solid #3b2a5a;background:#1a1230;touch-action:none"></canvas><div id="knb" style="margin-top:6px"></div></div>';
+  G=D.G;G.paused=true;room={id:id,guest:guest,sel:null,tab:0,sl:0,slT:0,ev:0,gcd:0,msg:'',t0:Date.now(),hbT:0,qT:0,px:7*TW,py:CH-30,tx:null,ty:null,keys:{},mv:0,fl:1,ov:{},tt:0};
+  var d=document.createElement('div');d.id='knroom';d.style.cssText='position:fixed;inset:0;z-index:4;background:rgba(6,4,18,.94);display:flex;flex-direction:column;align-items:center;overflow:auto;padding:8px;color:#fff;font-family:inherit';
+  d.innerHTML='<div style="width:min(98vw,760px)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><b id="knh" style="flex:1;font-size:1.02rem"></b><button class="btn alt" id="knx" type="button" style="min-height:34px">🚪 Çık</button></div><canvas id="knc" width="'+CW+'" height="'+CH+'" style="width:100%;border-radius:14px;border:2px solid #3b2a5a;background:#1a1230;touch-action:none;image-rendering:auto"></canvas><div style="font-size:.72rem;opacity:.7;margin:3px 2px">WASD / ok tuşları ya da dokunarak yürü · E ya da eşyaya dokun: kullan · Alt kapıdan çık</div><div id="knb" style="margin-top:4px"></div></div>';
   document.body.appendChild(d);room.el=d;room.cv=$('knc');room.cx=room.cv.getContext('2d');
   $('knx').onclick=leave;room.cv.addEventListener('pointerdown',cvTap);
-  if(guest)send({t:'evj',id:id,ap:apS()});else syncMine({in:1,hb:1});
-  send({t:'evq'});room.raf=requestAnimationFrame(loop);room.iv=setInterval(beat,6000);roomRefresh()}
-function leave(){if(!room)return;var id=room.id;if(room.sl)sleep(false,true);if(room.guest)send({t:'evl',id:id});else syncMine({in:0,sl:0});cancelAnimationFrame(room.raf);clearInterval(room.iv);try{room.el.remove()}catch(e){}room=null;if(G)G.paused=false;if(D)D.saveNow()}
-function beat(){if(!room)return;if(room.guest)send({t:'evj',id:room.id,ap:apS()});else syncMine({hb:1,in:1});send({t:'evq'})}
+  room.kd=function(ev){if(!room)return;var k=ev.key.toLowerCase(),m={arrowup:'u',w:'u',arrowdown:'d',s:'d',arrowleft:'l',a:'l',arrowright:'r','d':'r'}[k];if(m){room.keys[m]=1;room.tx=null;if(ev.key.indexOf('Arrow')===0)ev.preventDefault()}else if(k==='e'||k===' '){ev.preventDefault();useNear()}};
+  room.ku=function(ev){if(!room)return;var k=ev.key.toLowerCase(),m={arrowup:'u',w:'u',arrowdown:'d',s:'d',arrowleft:'l',a:'l',arrowright:'r','d':'r'}[k];if(m)delete room.keys[m]};
+  window.addEventListener('keydown',room.kd);window.addEventListener('keyup',room.ku);
+  if(guest)send({t:'evj',id:id,ap:apS(),x:room.px,y:room.py});else syncMine({in:1,hb:1,x:room.px,y:room.py});
+  send({t:'evq'});room.raf=requestAnimationFrame(loop);room.iv=setInterval(beat,3000);roomRefresh()}
+function leave(){if(!room)return;var id=room.id;if(room.sl)sleep(false,true);if(room.guest)send({t:'evl',id:id});else syncMine({in:0,sl:0});cancelAnimationFrame(room.raf);clearInterval(room.iv);window.removeEventListener('keydown',room.kd);window.removeEventListener('keyup',room.ku);try{room.el.remove()}catch(e){}room=null;if(G)G.paused=false;if(D)D.saveNow()}
+function beat(){if(!room)return;if(room.guest)send({t:'evj',id:room.id,ap:apS(),x:Math.round(room.px),y:Math.round(room.py)});else syncMine({hb:1,in:1,x:Math.round(room.px),y:Math.round(room.py)});send({t:'evq'})}
 function sleep(on,quiet){if(!room)return;var now=Date.now();
   if(on){if(room.guest&&now<room.gcd){room.msg='Biraz önce uyudun, '+Math.ceil((room.gcd-now)/1000)+' sn sonra tekrar uyuyabilirsin.';roomRefresh();return}
     if(!room.guest){var h=hm();if(h&&now<(h.rc||0)){room.msg='Dinlenme beklemede ('+Math.ceil((h.rc-now)/1000)+' sn). Yine de yatabilirsin ama ödül vermez.'}}
@@ -140,11 +148,33 @@ function bindRoom(b){var h=hm(),own=!room.guest;
     else if(spendC(d.p)){h.dc[k]=(h.dc[k]|0)+1;room.sel=k;room.msg=d.n+' alındı. Odada bir yere dokun.';D.saveNow()}else room.msg='Jetonun yetmiyor (🪙 '+d.p+'). Jetonlar Yaxest Games oyunlarından kazanılır.';roomRefresh()}});
   b.querySelectorAll('[data-rw]').forEach(function(x){x.onclick=function(){var i=+x.dataset.rw;h.dc=h.dc||{};if(i&&!h.dc['wp'+i]){if(!spendC(2+i)){room.msg='Jetonun yetmiyor.';roomRefresh();return}h.dc['wp'+i]=1}h.wp=i;D.saveNow();syncMine();roomRefresh()}});
   b.querySelectorAll('[data-rb]').forEach(function(x){x.onclick=function(){var i=+x.dataset.rb;h.dc=h.dc||{};if(i&&!h.dc['bd'+i]){if(!spendC(BEDS[i].p)){room.msg='Jetonun yetmiyor.';roomRefresh();return}h.dc['bd'+i]=1}h.bd=i;D.saveNow();syncMine();roomRefresh()}})}
-function cvTap(ev){if(!room||room.guest||room.tab!==1)return;var r=room.cv.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*CW,y=(ev.clientY-r.top)/r.height*CH,h=hm();
-  if(room.sel){var d=DEC[room.sel],ny=d.f?Math.max(190,Math.min(385,y)):Math.max(40,Math.min(150,y));h.lay=h.lay||[];h.lay.push({i:room.sel,x:Math.round(Math.max(20,Math.min(620,x))/CW*100),y:Math.round(ny/CH*100)});
-    var pl=h.lay.filter(function(o){return o.i===room.sel}).length;if((h.dc[room.sel]|0)-pl<=0)room.sel=null;D.saveNow();syncMine();roomRefresh();return}
-  var L=lay(),bi=-1,bd=44;for(var i=L.length-1;i>=0;i--){var d2=Math.hypot(L[i].x/100*CW-x,L[i].y/100*CH-y-18);if(d2<bd){bd=d2;bi=i}}
-  if(bi>=0){L.splice(bi,1);D.saveNow();syncMine();room.msg='Eşya kaldırıldı (envanterinde duruyor).';roomRefresh()}}
+function allItems(){var e=entry(room.id)||{d:[]};return theme(e.d).it.map(norm)}
+function useAt(kind,x,y){var a=room;
+  if(kind==='bed'){if(Math.hypot(a.px-(BED.x+BED.w/2),a.py-(BED.y+BED.h+16))>150){a.msg='Yatağa biraz yaklaş.';roomRefresh();return}sleep(!a.sl);return}
+  if(kind==='piano'){var n=[262,294,330,349,392,440,494,523][Math.floor(Math.random()*8)];a.ov.note=1.2;try{if(window.YSes&&YSes.sfx)YSes.sfx('click',n/4)}catch(e){}return}
+  if(kind==='chest'){if(!a.guest)YH.open('home');else{a.msg='Bu sandık ev sahibinin.';roomRefresh()}return}
+  if(kind==='cat'){a.ov.cat=1.6;return}
+  if(kind==='aqua'){a.ov.fish=1.6;return}
+  if(kind==='fire'){a.ov.warm=1.6;return}
+  if(kind==='tree'){a.ov.star=1.6;return}}
+function nearThing(x,y,r){var its=allItems(),best=null,bd=r;
+  if(Math.hypot(x-(BED.x+BED.w/2),y-(BED.y+BED.h+10))<Math.max(r,90)){best={k:'bed'};bd=0}
+  its.forEach(function(o){if(!DEC[o.i]||!FP[o.i])return;var f=FP[o.i],cx=(o.x+f[0]/2)*TW,cy=(o.y+f[1])*TW;if(!DEC[o.i].f)return;var d=Math.hypot(x-cx,y-cy);if(d<bd&&['piano','chest','cat','aqua','fire','tree'].indexOf(o.i)>=0){bd=d;best={k:o.i}}});return best}
+function useNear(){if(!room||room.tab===1)return;var t=nearThing(room.px,room.py,80);if(t)useAt(t.k)}
+function cvTap(ev){if(!room)return;var r=room.cv.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*CW,y=(ev.clientY-r.top)/r.height*CH,h=hm();
+  if(room.tab===1&&!room.guest){/* düzenleme modu */
+    var tx=Math.floor(x/TW),ty=Math.floor(y/TW);
+    if(room.sel){var d=DEC[room.sel],f=FP[room.sel];if(tx+f[0]>COLS)tx=COLS-f[0];if(d.f){ty=Math.max(2,Math.min(8,ty))}else ty=Math.max(0,Math.min(1,ty));
+      var all=allItems(),ok=true;all.forEach(function(o){var g=FP[o.i];if(!g||(DEC[o.i].f!==d.f))return;if(FP[room.sel][2]!==g[2]&&d.f)return;if(tx<o.x+g[0]&&tx+f[0]>o.x&&ty<o.y+g[1]&&ty+f[1]>o.y)ok=false});
+      if(d.f&&f[2]&&tx*TW<BED.x+BED.w&&(tx+f[0])*TW>BED.x&&ty*TW<BED.y+BED.h&&(ty+1)*TW>BED.y)ok=false;
+      if(d.f&&ty>=8&&tx<=8&&tx+f[0]>=6)ok=false;
+      if(!ok){room.msg='Buraya konmaz (başka eşya ya da yatak/kapı var).';roomRefresh();return}
+      h.lay=h.lay||[];h.lay.push({i:room.sel,x:tx,y:ty});var pl=h.lay.filter(function(o){return o.i===room.sel}).length;if((h.dc[room.sel]|0)-pl<=0)room.sel=null;room.msg='';D.saveNow();syncMine();roomRefresh();return}
+    var L=lay(),bi=-1;for(var i=L.length-1;i>=0;i--){var o=norm(L[i]),g=FP[o.i]||[1,1];if(tx>=o.x&&tx<o.x+g[0]&&ty>=o.y&&ty<o.y+g[1]){bi=i;break}}
+    if(bi>=0){L.splice(bi,1);D.saveNow();syncMine();room.msg='Eşya kaldırıldı (envanterinde duruyor).';roomRefresh()}return}
+  /* yürüme modu: eşyaya dokun = kullan, değilse oraya yürü */
+  var t=nearThing(x,y,34);if(t){var cx=t.k==='bed'?BED.x+BED.w/2:x,cy=t.k==='bed'?BED.y+BED.h+16:y;room.pend=t.k;room.tx=cx;room.ty=Math.min(CH-14,cy+18);return}
+  room.pend=null;room.tx=Math.max(14,Math.min(CW-14,x));room.ty=Math.max(BED.y+4,Math.min(CH-6,y))}
 /* ---- çizim ---- */
 function ico(c,k,x,y,t){var d=DEC[k];
   if(k==='rug'){c.fillStyle='#b0453d';c.beginPath();c.ellipse(x,y+10,58,16,0,0,6.3);c.fill();c.strokeStyle='#ffd980';c.lineWidth=3;c.beginPath();c.ellipse(x,y+10,44,11,0,0,6.3);c.stroke();return}
@@ -166,45 +196,66 @@ function ico(c,k,x,y,t){var d=DEC[k];
   if(k==='sword'){c.strokeStyle='#cfd6e6';c.lineWidth=5;c.beginPath();c.moveTo(x-26,y-22);c.lineTo(x+26,y+22);c.moveTo(x+26,y-22);c.lineTo(x-26,y+22);c.stroke();c.fillStyle='#ffd23f';c.fillRect(x-4,y-4,8,8);return}}
 function drawSleeper(c,ap,x,y,sc,t){c.save();c.translate(x,y);c.rotate(-Math.PI/2);try{YL.hero(c,0,0,ap,t,false,sc)}catch(e){}c.restore()}
 function drawStand(c,ap,x,y,t,name){try{YL.hero(c,x,y,ap,t,false,1.05)}catch(e){}if(name){c.font='700 11px "Chakra Petch",sans-serif';c.textAlign='center';c.fillStyle='rgba(14,10,32,.75)';var w=c.measureText(name).width+12;c.fillRect(x-w/2,y+4,w,15);c.fillStyle='#fff';c.fillText(name,x,y+15)}}
-function loop(){if(!room)return;var c=room.cx,t=(Date.now()-room.t0)/1000,e=entry(room.id)||{d:[],g:[],lv:1},th=theme(e.d),own=!room.guest;
-  var hr=3;try{hr=YX2.dbg.hourP()}catch(er){}var night=(typeof hr==='number'&&(hr>=19||hr<6))||false;
+function drawItemsSorted(c,items,t,extra){var list=items.filter(function(o){return DEC[o.i]&&DEC[o.i].f}).map(function(o){var f=FP[o.i];return{y:(o.y+f[1])*TW,o:o,f:f}}),i;
+  list.concat(extra).sort(function(a,b){return a.y-b.y}).forEach(function(q){if(q.fn)q.fn();else{var f=q.f;ico(c,q.o.i,(q.o.x+f[0]/2)*TW,(q.o.y+f[1])*TW-18,t)}})}
+function charFn(c,ap,x,y,t,mv,name,fl){return{y:y,fn:function(){c.save();if(fl<0){c.translate(x,0);c.scale(-1,1);c.translate(-x,0)}try{YL.hero(c,x,y,ap,t,mv,1.0)}catch(e){}c.restore();if(name){c.font='700 10px "Chakra Petch",sans-serif';c.textAlign='center';var w=c.measureText(name).width+10;c.fillStyle='rgba(14,10,32,.75)';c.fillRect(x-w/2,y-62,w,14);c.fillStyle='#fff';c.fillText(name,x,y-52)}}}}
+function step(dt){var a=room,sp=118*dt,dx=0,dy=0;if(a.sl)return;
+  if(a.keys.u)dy-=1;if(a.keys.d)dy+=1;if(a.keys.l)dx-=1;if(a.keys.r)dx+=1;
+  if(!dx&&!dy&&a.tx!=null){var ux=a.tx-a.px,uy=a.ty-a.py,d=Math.hypot(ux,uy);if(d<6){a.tx=null;if(a.pend){var k=a.pend;a.pend=null;useAt(k)}}else{dx=ux/d;dy=uy/d}}
+  var m=Math.hypot(dx,dy);a.mv=m?1:0;if(!m)return;dx/=m;dy/=m;if(dx)a.fl=dx<0?-1:1;
+  var rs=rects(allItems()),nx=a.px+dx*sp,ny=a.py+dy*sp;
+  var bedR={x:BED.x,y:BED.y,w:BED.w,h:BED.h-6};
+  var blockedF=function(x,y){return hitR(rs,x,y,10)||hitR([bedR],x,y,10)};
+  if(!blockedF(nx,a.py))a.px=Math.max(14,Math.min(CW-14,nx));if(!blockedF(a.px,ny))a.py=Math.max(BED.y+TW*2+6,Math.min(CH+8,ny));
+  if(a.py>=CH+4&&doorX(a.px)){leave()}}
+function loop(){if(!room)return;var c=room.cx,now=Date.now(),t=(now-room.t0)/1000,dt=Math.min(.05,Math.max(0,t-room.tt));room.tt=t;step(dt);if(!room)return;
+  var e=entry(room.id)||{d:[],g:[],lv:1},th=theme(e.d),own=!room.guest;
+  var hr=3;try{hr=YX2.dbg.hourP()}catch(er){}var night=(typeof hr==='number'&&(hr>=19||hr<6));
   c.clearRect(0,0,CW,CH);
-  /* duvar & zemin */
-  c.fillStyle=WALLS[th.wp]||WALLS[0];c.fillRect(0,0,CW,170);c.fillStyle='rgba(0,0,0,.06)';for(var i=0;i<CW;i+=32)c.fillRect(i,0,2,170);
-  c.fillStyle='#6b4a2b';c.fillRect(0,164,CW,10);
-  var fg=c.createLinearGradient(0,174,0,CH);fg.addColorStop(0,'#b88a55');fg.addColorStop(1,'#8f6638');c.fillStyle=fg;c.fillRect(0,174,CW,CH-174);c.strokeStyle='rgba(60,35,15,.25)';c.lineWidth=1.5;for(var j=0;j<9;j++){c.beginPath();c.moveTo(0,190+j*24);c.lineTo(CW,190+j*24);c.stroke()}
+  /* duvar */
+  var wc=WALLS[th.wp]||WALLS[0];c.fillStyle=wc;c.fillRect(0,0,CW,80);c.fillStyle='rgba(0,0,0,.07)';for(var i=0;i<CW;i+=28)c.fillRect(i,0,2,80);
+  c.fillStyle='rgba(0,0,0,.18)';c.fillRect(0,70,CW,10);c.fillStyle='#6b4a2b';c.fillRect(0,78,CW,6);
+  /* zemin: dama tahta parke */
+  for(var ry=2;ry<ROWS;ry++)for(var rx=0;rx<COLS;rx++){c.fillStyle=(rx+ry)%2?'#b88a55':'#c19561';c.fillRect(rx*TW,ry*TW+4,TW,TW)}
+  c.strokeStyle='rgba(60,35,15,.18)';c.lineWidth=1;for(var gy=0;gy<ROWS;gy++){c.beginPath();c.moveTo(0,gy*TW+4);c.lineTo(CW,gy*TW+4);c.stroke()}
   /* pencere */
-  c.fillStyle='#4a3524';c.fillRect(268,28,104,102);c.fillStyle=night?'#162044':'#8fd3ff';c.fillRect(274,34,92,90);
-  if(night){c.fillStyle='#fff';for(var s=0;s<9;s++){c.globalAlpha=.4+.6*Math.abs(Math.sin(t+s));c.fillRect(280+(s*37)%80,40+(s*23)%70,2,2)}c.globalAlpha=1;c.fillStyle='#fff7c2';c.beginPath();c.arc(340,56,9,0,6.3);c.fill()}else{c.fillStyle='#ffd23f';c.beginPath();c.arc(344,54,10,0,6.3);c.fill();c.fillStyle='rgba(255,255,255,.8)';c.beginPath();c.ellipse(300+Math.sin(t*.3)*10,70,16,6,0,0,6.3);c.fill()}
-  c.fillStyle='#4a3524';c.fillRect(318,34,4,90);c.fillRect(274,76,92,4);
-  /* kapı */
-  c.fillStyle='#5a3a22';c.fillRect(570,60,56,114);c.fillStyle='#ffd23f';c.beginPath();c.arc(582,120,3,0,6.3);c.fill();
-  /* yatak */
-  var bd=BEDS[th.bd]||BEDS[0],bx=40,by=208;
-  c.fillStyle='#5a3a22';c.fillRect(bx-8,by-48,14,128);c.fillStyle=bd.c;c.fillRect(bx-4,by-40,6,16);
-  c.fillStyle='#6b4a2b';c.fillRect(bx,by+56,230,10);c.fillRect(bx,by+10,6,56);c.fillRect(bx+224,by+30,6,36);
-  c.fillStyle=bd.c2;c.fillRect(bx+6,by+18,218,44);
-  /* nesneler + yatak sıralı çizim */
-  var items=th.it.map(function(o){return{o:o,y:o.y/100*CH+(DEC[o.i]&&DEC[o.i].f?0:-999)}});
-  items.sort(function(a,b){return a.y-b.y});
-  items.forEach(function(q){if(!DEC[q.o.i])return;ico(c,q.o.i,q.o.x/100*CW,q.o.y/100*CH,t)});
+  c.fillStyle='#4a3524';c.fillRect(236,10,88,62);c.fillStyle=night?'#162044':'#8fd3ff';c.fillRect(241,15,78,52);
+  if(night){c.fillStyle='#fff';for(var s=0;s<7;s++){c.globalAlpha=.4+.6*Math.abs(Math.sin(t+s));c.fillRect(246+(s*31)%68,20+(s*17)%40,2,2)}c.globalAlpha=1;c.fillStyle='#fff7c2';c.beginPath();c.arc(298,32,7,0,6.3);c.fill()}else{c.fillStyle='#ffd23f';c.beginPath();c.arc(302,32,8,0,6.3);c.fill();c.fillStyle='rgba(255,255,255,.85)';c.beginPath();c.ellipse(268+Math.sin(t*.3)*8,46,13,5,0,0,6.3);c.fill()}
+  c.fillStyle='#4a3524';c.fillRect(278,15,4,52);c.fillRect(241,39,78,3);
+  var items=allItems();
+  /* halılar (en altta) ve duvar eşyaları */
+  items.forEach(function(o){if(o.i==='rug'){var f=FP.rug;ico(c,'rug',(o.x+f[0]/2)*TW,(o.y+f[1])*TW-18,t)}});
+  items.forEach(function(o){if(DEC[o.i]&&!DEC[o.i].f){var f=FP[o.i];ico(c,o.i,(o.x+f[0]/2)*TW,(o.y+1)*TW-16,t)}});
+  /* yatak (üstten) */
+  var bd=BEDS[th.bd]||BEDS[0];
+  c.fillStyle='#5a3a22';c.fillRect(BED.x-6,BED.y-6,BED.w+12,BED.h+14);c.fillStyle=bd.c2;c.fillRect(BED.x,BED.y,BED.w,BED.h);
+  c.fillStyle='#fff';c.beginPath();c.ellipse(BED.x+26,BED.y+20,20,11,0,0,6.3);c.ellipse(BED.x+26,BED.y+52,20,11,0,0,6.3);c.fill();
+  c.fillStyle='rgba(255,255,255,.35)';c.fillRect(BED.x,BED.y,6,BED.h);
   /* uyuyanlar */
-  var sl=[];var ownerSleeping=own?room.sl:!!e.os;var myAp=apP(apS());
-  var ownerAp=own?myAp:apP(e.ap||'{}');
-  if(ownerSleeping)sl.push({ap:ownerAp});
-  (e.g||[]).forEach(function(g){if(g.s&&!(room.guest&&g.u===myPk()))sl.push({ap:apP(g.ap)})});
-  if(room.guest&&room.sl)sl.push({ap:myAp});
-  sl.slice(0,2).forEach(function(q,i){var oy=by+26+i*18;c.fillStyle='#fff';c.beginPath();c.ellipse(bx+92,oy+8,24,11,0,0,6.3);c.fill();drawSleeper(c,q.ap,bx+198,oy+12,1.45,t);
-    c.fillStyle=bd.c;c.globalAlpha=.95;c.beginPath();c.roundRect?c.roundRect(bx+146,oy-2,80,30,8):c.rect(bx+146,oy-2,80,30);c.fill();c.globalAlpha=1;c.strokeStyle='rgba(255,255,255,.4)';c.lineWidth=2;c.beginPath();c.moveTo(bx+152,oy+8);c.lineTo(bx+220,oy+8);c.stroke()});
-  if(!sl.length){c.fillStyle='#fff';c.beginPath();c.ellipse(bx+40,by+38,20,10,0,0,6.3);c.ellipse(bx+40,by+56,20,10,0,0,6.3);c.fill();c.fillStyle=bd.c;c.fillRect(bx+70,by+26,154,38)}
-  if(sl.length){c.font='800 '+(15+Math.sin(t*2)*2)+'px "Chakra Petch",sans-serif';c.fillStyle='#bfe3ff';c.textAlign='left';c.fillText('Z',bx+90,by-6-((t*14)%20));c.fillText('z',bx+110,by-22-((t*10)%16));if(sl.length>1){c.fillStyle='#ffb3d9';c.fillText('♥',bx+160,by-14-Math.sin(t*3)*3)}}
-  /* ayakta duranlar */
-  var stand=[];if(own){if(!room.sl)stand.push({ap:myAp,n:P.nick})}else{if(e.oi&&!e.os)stand.push({ap:ownerAp,n:e.n});if(!room.sl)stand.push({ap:myAp,n:P.nick+' (sen)'})}
-  (e.g||[]).forEach(function(g){if(!g.s&&!(room.guest&&g.u===myPk()))stand.push({ap:apP(g.ap),n:g.n})});
-  stand.slice(0,5).forEach(function(q,i){drawStand(c,q.ap,330+i*58,345+((i%2)*8),t,q.n)});
-  /* seçili eşya ipucu */
-  if(room.sel&&own){c.fillStyle='rgba(255,255,255,.12)';c.fillRect(0,DEC[room.sel].f?190:40,CW,DEC[room.sel].f?200:112);c.fillStyle='#fff';c.font='700 12px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText('Yerleştirmek için dokun: '+DEC[room.sel].n,CW/2,DEC[room.sel].f?380:162)}
-  if(room.sl&&Date.now()-room.slT>=8000){c.fillStyle='#7dff9b';c.font='800 13px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText('Dinlendin! Kalkabilirsin.',CW/2,24)}
+  var ownerSleeping=own?room.sl:!!e.os,myAp=apP(apS()),ownerAp=own?myAp:apP(e.ap||'{}'),sl=[];
+  if(ownerSleeping)sl.push({ap:ownerAp});(e.g||[]).forEach(function(g){if(g.s&&!(room.guest&&g.u===myPk()))sl.push({ap:apP(g.ap)})});if(room.guest&&room.sl)sl.push({ap:myAp});
+  sl.slice(0,2).forEach(function(q,i){var oy=BED.y+24+i*32;drawSleeper(c,q.ap,BED.x+104,oy+10,1.0,t);c.fillStyle=bd.c;c.globalAlpha=.95;c.beginPath();c.roundRect?c.roundRect(BED.x+66,oy-10,BED.w-68,34,8):c.rect(BED.x+66,oy-10,BED.w-68,34);c.fill();c.globalAlpha=1;c.strokeStyle='rgba(255,255,255,.4)';c.lineWidth=2;c.beginPath();c.moveTo(BED.x+72,oy+2);c.lineTo(BED.x+BED.w-6,oy+2);c.stroke()});
+  if(!sl.length){c.fillStyle=bd.c;c.fillRect(BED.x+56,BED.y+4,BED.w-60,BED.h-8)}
+  if(sl.length){c.font='800 '+(14+Math.sin(t*2)*2)+'px "Chakra Petch",sans-serif';c.fillStyle='#bfe3ff';c.textAlign='left';c.fillText('Z',BED.x+60,BED.y-8-((t*14)%16));c.fillText('z',BED.x+78,BED.y-22-((t*10)%12));if(sl.length>1){c.fillStyle='#ffb3d9';c.fillText('♥',BED.x+120,BED.y-12-Math.sin(t*3)*3)}}
+  /* ayakta duranlar + eşyalar (derinlik sıralı) */
+  var ex=[];
+  var ownerPos=own?null:{x:e.ox||7*TW,y:e.oy||CH-40};
+  if(own){if(!room.sl)ex.push(charFn(c,myAp,room.px,room.py,t,room.mv,P.nick,room.fl))}
+  else{if(e.oi&&!e.os)ex.push(charFn(c,ownerAp,ownerPos.x,ownerPos.y,t,0,e.n,1));if(!room.sl)ex.push(charFn(c,myAp,room.px,room.py,t,room.mv,P.nick,room.fl))}
+  (e.g||[]).forEach(function(g){if(g.s||(room.guest&&g.u===myPk()))return;var o=room.ov['g'+g.u]=room.ov['g'+g.u]||{x:g.x||7*TW,y:g.y||CH-40};o.x+=((g.x||o.x)-o.x)*.12;o.y+=((g.y||o.y)-o.y)*.12;ex.push(charFn(c,apP(g.ap),o.x,o.y,t,0,g.n,1))});
+  drawItemsSorted(c,items,t,ex);
+  /* kapı paspası */
+  c.fillStyle='#5a3a22';c.fillRect(6*TW,CH-6,3*TW,6);c.fillStyle='rgba(255,217,128,.5)';c.fillRect(6*TW+6,CH-20,3*TW-12,10);c.fillStyle='#fff';c.font='700 9px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText('ÇIKIŞ ▼',7.5*TW,CH-12);
+  /* etkileşim ipuçları */
+  if(room.ov.note>0){room.ov.note-=.016;c.fillStyle='#ffd23f';c.font='800 18px sans-serif';c.fillText('♪ ♫',room.px+20,room.py-70-(1.2-room.ov.note)*20)}
+  if(room.ov.cat>0){room.ov.cat-=.016;c.fillStyle='#fff';c.font='700 12px "Chakra Petch",sans-serif';c.fillText('Miyav! 🐾',room.px,room.py-72)}
+  if(room.ov.fish>0){room.ov.fish-=.016;c.fillStyle='#fff';c.font='700 12px "Chakra Petch",sans-serif';c.fillText('Balıklar mutlu 🐠',room.px,room.py-72)}
+  if(room.ov.warm>0){room.ov.warm-=.016;c.fillStyle='#ffb27a';c.font='700 12px "Chakra Petch",sans-serif';c.fillText('Ne kadar sıcak 🔥',room.px,room.py-72)}
+  if(room.ov.star>0){room.ov.star-=.016;c.fillStyle='#ffd23f';c.font='700 12px "Chakra Petch",sans-serif';c.fillText('✨ Süsler parlıyor',room.px,room.py-72)}
+  if(!room.sl&&room.tab!==1&&nearThing(room.px,room.py,80)){c.fillStyle='rgba(255,255,255,.9)';c.font='800 11px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText('E: kullan',room.px,room.py+16)}
+  /* düzenleme modu: ızgara */
+  if(room.tab===1&&!room.guest){c.strokeStyle='rgba(255,255,255,.22)';c.lineWidth=1;for(var gx=0;gx<=COLS;gx++){c.beginPath();c.moveTo(gx*TW,0);c.lineTo(gx*TW,CH);c.stroke()}c.fillStyle='rgba(255,255,255,.85)';c.font='800 12px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText(room.sel?'Yerleştirmek için kareye dokun: '+DEC[room.sel].n:'Kaldırmak için eşyaya dokun',CW/2,CH-8)}
+  if(room.sl&&Date.now()-room.slT>=8000){c.fillStyle='#7dff9b';c.font='800 13px "Chakra Petch",sans-serif';c.textAlign='center';c.fillText('Dinlendin! Kalkabilirsin.',CW/2,72)}
   room.raf=requestAnimationFrame(loop)}
 window.YKN={init:function(api){D=api;Y=D.Y;P=D.P;G=D.G;clearInterval(TICK);var go=function(){if(!online())return;ensureClaim();send({t:'evq'});if(hm())syncMine()};setTimeout(go,9000);TICK=setInterval(function(){if(!room)go()},45000)},
  near:near,collect:collect,open:openSign,hand:hand,claim:claim,release:release,owner:function(id){var e=entry(id);return e&&e.u!==myPk()&&!(hm()&&hm().pl===id)?e:null},online:online,syncMine:syncMine,dbg:function(){return{R:R,room:room}}};
