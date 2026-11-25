@@ -136,7 +136,7 @@ function bar(){const b=$('bar');if(!sel){b.hidden=true;return}
   const it=C.ITEMS[sel],p=price(sel),s=S(),short=Math.max(0,p-s.c);
   b.hidden=false;$('bn').textContent=T(it.name||'Renk');
   $('bs').textContent=short?(short+' '+T('jeton eksik')):'';$('bav').innerHTML=YX.av(eqv(),'h');
-  const bb=$('bb');bb.innerHTML=T('Satın al')+' <b>🪙 '+p+'</b>';bb.disabled=short>0}
+  const bb=$('bb');bb.innerHTML=T('Satın al')+' <b>🪙 '+p+'</b>';bb.disabled=short>0;if(YX.locked&&YX.locked(sel)){bb.innerHTML='🔒 '+T('Yalnızca kurucunun izniyle');bb.disabled=true;$('bs').textContent=T('Eşsiz karakter · kimse satın alamaz');}}
 function card(slot,val,name,isOpt){
   const id=slot+':'+val,it=ITEM(slot,val),own=!val||YX.owns(id),on=S().eq[slot]===val,pvOn=pv&&pv[slot]===val&&!own;
   const cfg=Object.assign({},S().eq);cfg[slot]=val;
@@ -221,6 +221,7 @@ function paint(){const sp=C.SP[idx],id='sp:'+sp[0],own=!sp[0]||YX.owns(id)||sp[2
   $('vd').textContent=own?(eq?T('Takılı'):T('Sahipsin')):'🪙 '+pr;
   const a=$('va');a.hidden=false;a.disabled=false;
   if(own){a.textContent=eq?T('Takılı'):T('Tak');a.disabled=eq;a.onclick=()=>{YX.equip('sp',sp[0]);jump();draw();paint()}}
+  else if(YX.locked&&YX.locked(id)){a.textContent='🔒 '+T('Yalnızca kurucunun izniyle');a.disabled=true}
   else{a.textContent=T('Satın al')+' 🪙 '+pr;a.disabled=S().c<pr;a.onclick=()=>{const r=YX.buy(id);if(r&&r.ok){YX.equip('sp',sp[0]);jump();draw()}paint()}}
   vp.style.transform='rotateY('+ry+'deg)'}
 function open(i){idx=Math.max(0,i);vm='n';ry=0;vw.classList.add('on');paint();clearInterval(auto)}

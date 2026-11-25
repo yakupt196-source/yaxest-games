@@ -8,7 +8,7 @@ var cur=parts.pop()||'';
 var GL=window.YAXEST_GAMES||[];var isGame=GL.some(function(g){return g.id===cur});
 
 /* ---------- katalog ---------- */
-var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170],['cemile','★ Cemile',28000],['almin','★ Almin',30000],['ninja','★ Siber Ninja',2600],['cadi','★ Ateş Cadısı',2800],['samuray','★ Neon Samuray',3000],['prenses','★ Kozmik Prenses',3400],['buz','★ Buz Kraliçesi',3900],['sultan','★ Altın Sultan',6500],['zilan','★ Zilan-chan (Gözlüklü)',26000],['zilanng','★ Zilan-chan (Gözlüksüz)',26000],['atacan','★ Atacan',24000],['suayb','★ Şuayb',24000],['defne','Farmer Daisy',300],['elif','Student Yuna',350],['murat','Fisher Marco',400],['can','Sporty Jake',450],['selin','Explorer Nora',900],['ayse','Healer Lilia',1100],['kerem','Archer Robin',1000],['burak','Smith Bruno',1300],['selen','Moon Priestess Luna',2600],['ceren','Pirate Scarlett',3000],['tarik','Shadow Hunter Kage',2800],['emre','Engineer Axel',3400],['nehir','Forest Fairy Sylva',6200],['nox','Night Queen Nyx',7800],['aras','Wind Knight Aeron',6800],['kaan','Flame Master Ignis',8200],['arya','Sun Goddess Solara',14000],['zehra','Dragon Queen Drakena',16500],['atlas','Time Mage Chronos',15000],['kaya','Titan King Goliath',17000]];
+var SP=[['blob','Pıtık',0],['cat','Miyav',60],['robo','Robo',90],['ghost','Hayalet',110],['alien','Uzaylı',140],['dragon','Ejder',200],['elf','Elf',160],['hana','Hana',150],['mika','Mika',150],['yuki','Yuki',180],['ren','Ren',150],['sora','Sora',150],['taro','Taro',180],['vael','Vael',170],['vaela','Vaela',170],['cemile','★ Cemile',28000],['almin','★ Almin',30000],['ninja','★ Siber Ninja',2600],['cadi','★ Ateş Cadısı',2800],['samuray','★ Neon Samuray',3000],['prenses','★ Kozmik Prenses',3400],['buz','★ Buz Kraliçesi',3900],['sultan','★ Altın Sultan',6500],['zilan','★ Zilan-chan (Gözlüklü)',26000],['zilanng','★ Zilan-chan (Gözlüksüz)',26000],['atacan','★ Atacan',24000],['suayb','★ Şuayb',24000],['defne','Farmer Daisy',300],['elif','Student Yuna',350],['murat','Fisher Marco',400],['can','Sporty Jake',450],['selin','Explorer Nora',900],['ayse','Healer Lilia',1100],['kerem','Archer Robin',1000],['burak','Smith Bruno',1300],['selen','Moon Priestess Luna',2600],['ceren','Pirate Scarlett',3000],['tarik','Shadow Hunter Kage',2800],['emre','Engineer Axel',3400],['nehir','Forest Fairy Sylva',6200],['nox','Night Queen Nyx',7800],['aras','Wind Knight Aeron',6800],['kaan','Flame Master Ignis',8200],['arya','Sun Goddess Solara',14000],['zehra','Dragon Queen Drakena',16500],['atlas','Time Mage Chronos',15000],['kaya','Titan King Goliath',17000],['beyazkalp','🤍 Beyaz Kalp',999999]];
 var COL=[['#ffd23f',0],['#ff5c8a',0],['#3ddbb0',0],['#6aa8ff',12],['#b388ff',12],['#ff9f43',12],['#3df0ff',20],['#f1f1f1',20],['#c3cde0',25]];
 var HAT=[['cap','Kep',20],['party','Parti Şapkası',30],['head','Kulaklık',40],['top','Silindir',50],['wiz','Büyücü Şapkası',70],['crown','Taç',120]];
 var FACE=[['glasses','Gözlük',20],['mustache','Bıyık',25],['mask','Maske',35],['shades','Güneş Gözlüğü',45],['star','Yıldız Gözlük',60]];
@@ -45,28 +45,38 @@ function emit(k,x){refresh();try{window.dispatchEvent(new CustomEvent('yx-eco',{
 addEventListener('storage',function(e){if(e.key===KEY){S=load();applyTheme(S.eq.th);emit('sync')}});
 
 var ALI={'sp:zilan':'sp:zilanng','sp:zilanng':'sp:zilan'};
-function owns(id){var it=ITEMS[id];return !!it&&(it.price===0||!!S.own[id]||!!(ALI[id]&&S.own[ALI[id]]))}
+/* ---------- kilitli (eşsiz) eşyalar: yalnızca kurucu ve kurucunun izin verdiği hesaplar alabilir ----------
+   İzin listesi e-postanın SHA-256 özetidir (küçük harf, boşluksuz); e-postalar kodda açık görünmez. */
+var LOCK={'sp:beyazkalp':1},LOCK_OK=[/* izinli hesapların e-posta SHA-256 özetleri */],FOUNDER_H='',lockMe=null,lockEm='';
+function acctEmail(){try{var st=window.YXAcct&&YXAcct.state&&YXAcct.state();return((st&&st.email)||'').trim().toLowerCase()}catch(e){return''}}
+function isFounderE(){return acctEmail()==='yakupt196@gmail.com'}
+function lockCheck(){var em=acctEmail();if(em===lockEm&&lockMe!==null)return;lockEm=em;lockMe=false;if(!em)return;if(isFounderE()){lockMe=true;return}
+  try{crypto.subtle.digest('SHA-256',new TextEncoder().encode(em)).then(function(b){var h=Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('');if(acctEmail()===em){lockMe=LOCK_OK.indexOf(h)>=0;emit('lock')}})}catch(e){}}
+function lockAllowed(){lockCheck();return !!lockMe}
+function locked(id){return !!LOCK[id]&&!lockAllowed()}
+setInterval(lockCheck,4000);
+function owns(id){var it=ITEMS[id];if(it&&LOCK[id]&&isFounderE())return true;return !!it&&(it.price===0||!!S.own[id]||!!(ALI[id]&&S.own[ALI[id]]))}
 function price(p){return p<=0?0:Math.max(1,Math.round(p*(1-S.pk.tuccar*.05)))}
 function mult(){return(1+S.pk.sans*.1)*(S.boost>Date.now()?2:1)}
 function level(){return 1+Math.floor(Math.sqrt(S.t/12))}
 function lvInfo(){var l=level(),a=(l-1)*(l-1)*12,b=l*l*12;return{l:l,p:Math.min(1,(S.t-a)/(b-a)),next:b-S.t}}
 function earn(n,why,raw){var v=raw?n:n*mult()+S.fr,a=Math.floor(v);S.fr=raw?S.fr:v-a;if(a<=0){save();return 0}S.c+=a;S.t+=a;save();emit('earn',{n:a,why:why});return a}
 function spend(n){n=Math.round(n);if(n<=0)return true;if(S.c<n)return false;S.c-=n;save();emit('spend',{n:n});return true}
-function buy(id){var it=ITEMS[id];if(!it)return{ok:false,r:'x'};if(owns(id))return{ok:true,r:'own'};var p=price(it.price);if(S.c<p)return{ok:false,r:'coin',need:p-S.c};
+function buy(id){var it=ITEMS[id];if(!it)return{ok:false,r:'x'};if(owns(id))return{ok:true,r:'own'};if(LOCK[id]&&!lockAllowed())return{ok:false,r:'lock'};var p=price(it.price);if(S.c<p)return{ok:false,r:'coin',need:p-S.c};
   S.c-=p;S.own[id]=1;save();emit('buy',{id:id});return{ok:true,r:'bought',p:p}}
 function equip(slot,val){if(val&&!owns(slot+':'+val))return false;S.eq[slot]=val;save();if(slot==='th')applyTheme(val);emit('equip',{slot:slot,val:val});return true}
 function perkBuy(id){var p=PERK.filter(function(k){return k.id===id})[0];if(!p)return{ok:false};var l=S.pk[id];if(l>=p.max)return{ok:false,r:'max'};var c=p.cost[l];if(S.c<c)return{ok:false,r:'coin',need:c-S.c};S.c-=c;S.pk[id]=l+1;save();emit('perk',{id:id});return{ok:true,p:c}}
 function boostBuy(){var c=price(25);if(S.c<c)return{ok:false,r:'coin',need:c-S.c};S.c-=c;S.boost=Math.max(Date.now(),S.boost)+15*60000;save();emit('boost');return{ok:true,p:c}}
 function cepBuy(){if(S.cep>=CEP.length)return{ok:false,r:'max'};var c=price(CEP[S.cep]);if(S.c<c)return{ok:false,r:'coin',need:c-S.c};S.c-=c;S.cep++;save();emit('cep');return{ok:true,p:c}}
 function boxBuy(){var c=price(35);if(S.c<c)return{ok:false,r:'coin',need:c-S.c};
-  var pool=Object.keys(ITEMS).filter(function(k){var i=ITEMS[k];return i.price>0&&!S.own[k]&&i.slot!=='th'});
+  var pool=Object.keys(ITEMS).filter(function(k){var i=ITEMS[k];return i.price>0&&!S.own[k]&&i.slot!=='th'&&!LOCK[k]});
   if(!pool.length)return{ok:false,r:'all'};var id=pool[Math.floor(Math.random()*pool.length)];S.c-=c;S.own[id]=1;save();emit('buy',{id:id});return{ok:true,id:id,p:c}}
 
 /* ---------- sandıklar (jeton) ---------- */
 var RN=['Sıradan','Ender','Nadir','Mistik','Efsanevi'],RCOL=['#c9ced9','#7be07b','#5cb0ff','#c07cff','#ffb02e'];
 var CHEST={char:{n:'Karakter Sandığı',ic:['📦','🎁','💠','🔮','👑'],p:[100,300,800,2200,6000]},item:{n:'Eşya Sandığı',ic:['📦','🎁','💠','🔮','👑'],p:[25,70,160,380,900]}};
 function rar(id){var it=ITEMS[id];if(!it)return 0;var p=it.price;if(it.slot==='sp')return p>=20000?5:p>=10000?4:p>=4500?3:p>=2000?2:p>=500?1:0;return p<=20?0:p<=35?1:p<=60?2:p<=90?3:4}
-function chestPool(kind,r){return Object.keys(ITEMS).filter(function(k){var i=ITEMS[k];if(i.price<=0||owns(k)||i.slot==='th')return false;if(kind==='char'?i.slot!=='sp':i.slot==='sp')return false;return rar(k)===r})}
+function chestPool(kind,r){return Object.keys(ITEMS).filter(function(k){var i=ITEMS[k];if(i.price<=0||owns(k)||i.slot==='th'||LOCK[k])return false;if(kind==='char'?i.slot!=='sp':i.slot==='sp')return false;return rar(k)===r})}
 function chestBuy(kind,t){var C=CHEST[kind];if(!C||t<0||t>4)return{ok:false,r:'x'};var c=price(C.p[t]);if(S.c<c)return{ok:false,r:'coin',need:c-S.c};
   var x=Math.random(),r=x<.55?t:x<.8?t-1:x<.9?t-2:t+1;r=Math.max(0,Math.min(4,r));
   var order=[r];for(var d=1;d<5;d++){if(r-d>=0)order.push(r-d);if(r+d<=4)order.push(r+d)}
@@ -320,6 +330,28 @@ function aura(a){if(!a)return'';var s='';
  if(a==='snow'){[[12,10,0],[30,4,.6],[70,8,1.2],[88,14,.3],[20,40,1.5],[84,44,.9]].forEach(function(p){s+='<circle class="yx-d" style="animation-delay:'+p[2]+'s" cx="'+p[0]+'" cy="'+p[1]+'" r="2.4" fill="#dff6ff"/>'})}
  if(a==='fire'){[[8,70],[92,70]].forEach(function(p,i){s+='<path class="yx-f" style="animation-delay:'+(i*.4)+'s" d="M'+p[0]+' 90C'+(p[0]-12)+' 76 '+(p[0]-2)+' 68 '+p[0]+' 54C'+(p[0]+4)+' 66 '+(p[0]+14)+' 74 '+p[0]+' 90Z" fill="#ff7a2e"/><path class="yx-f" style="animation-delay:'+(i*.4+.2)+'s" d="M'+p[0]+' 90C'+(p[0]-5)+' 82 '+p[0]+' 78 '+p[0]+' 70C'+(p[0]+3)+' 78 '+(p[0]+7)+' 84 '+p[0]+' 90Z" fill="#ffd23f"/>'})}
  return s}
+/* ---------- 🤍 Beyaz Kalp: ela-esmer (açık buğday) tenli, düz uzun kumral-kahve saçlı, kahverengi gözlü zarif kız ---------- */
+function HRT(x,y,s,f,st){return'<path d="M'+x+' '+(y+s*.95)+'C'+(x-s*1.7)+' '+(y-s*.05)+' '+(x-s*1)+' '+(y-s*1.25)+' '+x+' '+(y-s*.42)+'C'+(x+s*1)+' '+(y-s*1.25)+' '+(x+s*1.7)+' '+(y-s*.05)+' '+x+' '+(y+s*.95)+'Z" fill="'+f+'"'+(st?' stroke="'+st+'" stroke-width=".8"':'')+'/>'}
+BODY.beyazkalp=(function(){var SKN='#e3b08b',SKD='#c98f69',H1='#5a3524',H2='#2b1810',HL='#8a5a3e',DR='#fdfaf5',TR='#e9c7a0',RO='#f2c4cc';
+ var base=human({out:DR,iris:'#6a3b1c',skin:SKN,
+  back:function(){return'<defs><linearGradient id="bkh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+H1+'"/><stop offset=".55" stop-color="#3e2416"/><stop offset="1" stop-color="'+H2+'"/></linearGradient><radialGradient id="bkg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>'+
+   '<circle cx="50" cy="52" r="47" fill="url(#bkg)" opacity=".35"/>'+
+   '<path d="M23 44Q19 9 50 9Q81 9 77 44L80 95Q73 99 66 94L65 62L35 62L34 94Q27 99 20 95Z" fill="url(#bkh)"/>'+
+   Sk('M27 60L25 92M73 60L75 92',HL,1.4).replace('stroke-linecap="round"','stroke-linecap="round" opacity=".55"')+Sk('M31 64L30 90M69 64L70 90','#1e110b',1).replace('stroke-linecap="round"','stroke-linecap="round" opacity=".5"')},
+  outx:function(){return Pp('M40 70Q50 80 60 70Q55 71.5 50 72.6Q45 71.5 40 70Z',SKN)+Sk('M40 70Q50 80.5 60 70',TR,1.3)+
+   Sk('M41 71.5Q50 79 59 71.5','#d9b27a',.7)+HRT(50,79.2,3.1,'#ffffff','#e3cfb4')+'<circle cx="48.8" cy="77.8" r=".8" fill="#fff"/>'+
+   Pp('M33.6 84.5H66.4V87H33.6Z',RO)+HRT(50,85.6,2.2,'#fff','#e8a7b4')+Sk('M38 89L36 93M45 89.5L44.4 93M55 89.5L55.6 93M62 89L64 93','#eadfd2',.9)},
+  front:function(){return Pp('M24.5 45Q21 12 51 11Q80 12 76.5 42Q73 27 60 22.5Q47 21 39 29Q32.5 35.5 30 50Q25.6 50.5 24.5 45Z',H1)+
+   Sk('M35 19Q46 13.6 60 15.4',HL,3)+
+   Pp('M25.5 42Q22 64 26.5 86L31.8 86Q28.6 64 30.6 46Z',H1)+Pp('M74.5 40Q78 64 73.5 86L68.2 86Q71.4 64 69.4 44Z','#4a2b1d')+
+   HRT(71,27,3.3,'#ffffff','#d8c3b0')+'<circle cx="69.8" cy="25.6" r=".9" fill="#fff"/>'+
+   Sk('M32 35.6Q38.5 33 45 35.2','#5a3626',1.15)+Sk('M68 35.6Q61.5 33 55 35.2','#5a3626',1.15)+
+   [39,61].map(function(x){var d=x<50?-1:1;return Sk('M'+(x+d*6.6)+' 42.4L'+(x+d*8.8)+' 40.6','#24130c',1.3)+Sk('M'+(x+d*4.6)+' 39.4L'+(x+d*5.8)+' 37.6','#24130c',.9)+
+     '<ellipse cx="'+x+'" cy="48" rx="3.3" ry="4.3" fill="none" stroke="#b5763c" stroke-width="1.1" opacity=".55"/>'+'<circle cx="'+(x-1.8)+'" cy="43.8" r="1.7" fill="#fff"/>'}).join('')+
+   Sk('M49 51.6Q50 53.4 51.3 51.8',SKD,1.1)+'<ellipse cx="31.5" cy="54.5" rx="4.4" ry="2.4" fill="#e98a8a" opacity=".32"/><ellipse cx="68.5" cy="54.5" rx="4.4" ry="2.4" fill="#e98a8a" opacity=".32"/>'+
+   HRT(13,20,2.4,'#fff')+HRT(88,30,2,'#fff')+HRT(10,70,1.7,'#fff')+spk(86,62,2.6,'#fff')+spk(18,40,2,'#ffe9f0')}});
+ return function(c,d,l,m){var o=base(c,d,l,m==='h'?'h':'n');if(m!=='h')o+=Pp('M45.4 57.2Q47.8 55.6 50 56.7Q52.2 55.6 54.6 57.2Q50 61.2 45.4 57.2Z','#c9606e')+Pp('M46.6 58.2Q50 60.2 53.4 58.2Q50 59.4 46.6 58.2Z','#e48b95');if(m==='s')o+=Sk('M33 36L44 38.6M67 36L56 38.6','#3b2418',1.6);return o}})();
+POS.beyazkalp={T:12,E:46,N:69,dx:11};
 var FULL={};SP.slice(SP.map(function(x){return x[0]}).indexOf('cemile')).forEach(function(x){FULL[x[0]]=1});
 function av(c,mood){c=c||S.eq;var sp=BODY[c.sp]?c.sp:'blob',col=c.col||'#ffd23f',d=shade(col,-.3),l=shade(col,.35),P=POS[sp],m=mood||'n',o='';
  o+=aura(c.aura)+'<ellipse cx="50" cy="93" rx="27" ry="4" fill="rgba(0,0,0,.28)"/><g class="yx-b">';
@@ -418,7 +450,7 @@ function daily(){var d=new Date(),k=function(x){return x.getFullYear()+'-'+(x.ge
 function wrapBg(){var g=window.G;if(!g||!g.bg||g.__yxbg)return;g.__yxbg=1;var o=g.bg;g.bg=function(a,b){o(a,b);if(window.YX&&YX.tint){g.x.fillStyle=YX.tint;g.x.fillRect(0,0,g.W,g.H)}}}
 
 /* ---------- API ---------- */
-window.YX={S:function(){return S},coins:function(){return S.c},earn:earn,spend:spend,price:price,buy:buy,equip:equip,owns:owns,perkBuy:perkBuy,boostBuy:boostBuy,cepBuy:cepBuy,boxBuy:boxBuy,chestBuy:chestBuy,rar:rar,RN:RN,RCOL:RCOL,CHEST:CHEST,tubeCost:tubeCost,hintCost:hintCost,
+window.YX={locked:locked,LOCK:LOCK,S:function(){return S},coins:function(){return S.c},earn:earn,spend:spend,price:price,buy:buy,equip:equip,owns:owns,perkBuy:perkBuy,boostBuy:boostBuy,cepBuy:cepBuy,boxBuy:boxBuy,chestBuy:chestBuy,rar:rar,RN:RN,RCOL:RCOL,CHEST:CHEST,tubeCost:tubeCost,hintCost:hintCost,
  av:av,level:level,lvInfo:lvInfo,mult:mult,toast:toast,say:say,applyTheme:applyTheme,
  cat:{SP:SP,COL:COL,HAT:HAT,FACE:FACE,NECK:NECK,AURA:AURA,PERK:PERK,CEP:CEP,TH:TH,ITEMS:ITEMS},tint:null,
  setName:function(n){S.name=String(n||'').slice(0,14);save();emit('name')},reset:function(){S=def();save();applyTheme('neon');emit('sync')}};

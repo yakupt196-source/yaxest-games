@@ -38,6 +38,7 @@ var PRESETS={
  basic:{n:'Standart',d:'Sade, herkesin başlangıç görünümü.',ap:{g:'m',bd:1,ht:1,es:0,br:0,mo:0,fd:0,body:'human',sk:'#f0c39a',h:'short',hc:'#5b3a1e',ey:'#4a3020',t:'tee',tc:'#4a90d9',b:'jeans',bc:'#262636',sh:'sneaker',shc:'#f2f2f2',hat:'none',htc:'#3d4a63',fc:'none',nk:'none',nkc:'#ffd23f',mk:'none',bk:'none',bkc:'#c0392b'}},
  zilan:{shop:'zilan',n:'Zilan-chan (Gözlüklü)',d:'Turuncu kısa saçlı, elf kulaklı gözlüklü peri.',ap:{body:'svg',sv:'zilan'}},
  zilan2:{shop:'zilan',n:'Zilan-chan (Gözlüksüz)',d:'Aynı peri, gözlüğü çıkarmış hali.',ap:{body:'svg',sv:'zilanng'}},
+ beyazkalp:{shop:'beyazkalp',n:'🤍 Beyaz Kalp',d:'Eşsiz: ela-esmer tenli, düz kumral saçlı, kahverengi gözlü zarif kız. Yalnızca kurucunun izniyle.',ap:{body:'svg',sv:'beyazkalp'}},
  atacan:{shop:'atacan',n:'Atacan',d:'Esmer, uzun boylu, kaslı ve yakışıklı.',ap:{body:'svg',sv:'atacan'}},
  suayb:{shop:'suayb',n:'Şuayb',d:'Tombul, sarı dalgalı saçlı, renkli gözlü yakışıklı.',ap:{body:'svg',sv:'suayb'}},
  ninja:{shop:'ninja',n:'Siber Ninja',d:'Neon vizörlü gölge savaşçı.',ap:{body:'svg',sv:'ninja'}},

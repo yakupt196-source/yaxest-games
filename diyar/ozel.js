@@ -13,7 +13,7 @@ var T={
  star:{name:'Yıldız Yağmuru',ic:'star',kind:'bolt',r:420,n:6,m:3.6,col:'#ffe28a',d:'Gökten yıldızlar düşürür: 6 hedefe hasar.'},
  burst:{name:'Kahraman Gücü',ic:'core',kind:'aoe',r:150,m:2.8,col:'#ffd23f',slow:0,d:'Çevrene enerji dalgası yayar.'}};
 var MAP={cadi:'fire',kaan:'fire',zehra:'fire',samuray:'dash',ninja:'dash',tarik:'dash',kerem:'dash',ceren:'dash',
- buz:'frost',nox:'frost',ayse:'heal',nehir:'heal',selen:'heal',arya:'heal',aras:'guard',kaya:'guard',burak:'guard',atacan:'guard',
+ beyazkalp:'heal', buz:'frost',nox:'frost',ayse:'heal',nehir:'heal',selen:'heal',arya:'heal',aras:'guard',kaya:'guard',burak:'guard',atacan:'guard',
  atlas:'time',prenses:'star',sultan:'star',suayb:'burst',zilan:'burst',zilanng:'burst',defne:'heal',elif:'burst',murat:'burst',can:'dash',selin:'burst',emre:'burst'};
 /* nadirlik derecesine göre güç ve bekleme */
 function get(P,email,rar){
