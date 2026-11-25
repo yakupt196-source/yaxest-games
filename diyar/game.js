@@ -176,7 +176,8 @@ function renderLog(){$('log').innerHTML=G.log.map(function(l){return'<div style=
 function floatTxt(x,y,s,c){G.txt.push({x:x,y:y,s:YA.plain(s),c:c||'#fff',t:0})}
 function addFx(o){o.t=0;G.efx.push(o)}
 function blocked(x,y){var tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(G.mode==='dungeon')return tx<1||ty<1||tx>=AW-1||ty>=AH-1||pilHit(x,y,14);if(window.YW&&YW.solid(x,y))return true;return Y.zoneAt(tx,ty)===3}
-function moveH(dx,dy){if(!blocked(G.px+dx,G.py))G.px+=dx;if(!blocked(G.px,G.py+dy))G.py+=dy}
+function moveH(dx,dy){/* katı bir şeyin içinde kaldıysa (ışınlanma, atılma, duvar değişimi) serbestçe çıkabilsin */if(blocked(G.px,G.py)){G.px+=dx;G.py+=dy;return}if(!blocked(G.px+dx,G.py))G.px+=dx;else if(dx&&!dy){var sy=blocked(G.px+dx,G.py-10)?(blocked(G.px+dx,G.py+10)?0:1):-1;if(sy&&!blocked(G.px,G.py+sy*Math.abs(dx)))G.py+=sy*Math.abs(dx)*.7}
+  if(!blocked(G.px,G.py+dy))G.py+=dy;else if(dy&&!dx){var sx=blocked(G.px-10,G.py+dy)?(blocked(G.px+10,G.py+dy)?0:1):-1;if(sx&&!blocked(G.px+sx*Math.abs(dy),G.py))G.px+=sx*Math.abs(dy)*.7}}
 function moveE(e,dx,dy){if(!blocked(e.x+dx,e.y))e.x+=dx;if(!blocked(e.x,e.y+dy))e.y+=dy}
 function curMons(){return G.mode==='dungeon'?G.dg.mons:G.mons}
 function nearest(range,from){var best=null,bd=1e9,list=curMons();for(var i=0;i<list.length;i++){var m=list[i];if(m.dead)continue;var d=hyp(m.x-(from?from.x:G.px),m.y-(from?from.y:G.py))-m.sz;if(d<range&&d<bd){bd=d;best=m}}return best}
@@ -470,10 +471,15 @@ function drawChat(){var tabs=['Sistem','Dünya','Yerel','Klan','Parti'];$('ctabs
 
 /* ---------- girdi ---------- */
 var keyMap={w:'u',arrowup:'u',s:'d',arrowdown:'d',a:'l',arrowleft:'l',d:'r',arrowright:'r'};
-addEventListener('keydown',function(e){if(G&&e.key.toLowerCase()==='m'){if($('p-map').classList.contains('on'))closePan();else if(G.mode==='world'&&!G.paused){drawMap();openPan('p-map')}return}if(!G||G.paused&&e.key!=='Escape')return;var k=e.key.toLowerCase();
+var CODEK={KeyW:'w',KeyA:'a',KeyS:'s',KeyD:'d',KeyQ:'q',KeyE:'e',KeyF:'f',KeyX:'x',KeyR:'r',KeyG:'g',KeyI:'i',KeyK:'k',KeyM:'m',KeyV:'v',KeyC:'c'};
+/* yazı alanındayken (sohbet, arama, ad) oyun tuşları çalışmasın; klavye düzeni ne olursa olsun WASD fiziksel tuştan okunur */
+function typing(e){var t=e.target;return !!t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable)}
+function kname(e){var k=(e.key||'').toLocaleLowerCase('tr');if(k==='ı')k='i';if(CODEK[e.code]&&!/^[a-z]$/.test(k))k=CODEK[e.code];return k}
+addEventListener('focusin',function(e){if(typing(e))keyReset()});
+addEventListener('keydown',function(e){if((typing(e)&&e.key!=='Escape')||e.ctrlKey||e.metaKey||e.altKey)return;if(G&&kname(e)==='m'){if($('p-map').classList.contains('on'))closePan();else if(G.mode==='world'&&!G.paused){drawMap();openPan('p-map')}return}if(!G||G.paused&&e.key!=='Escape')return;var k=kname(e);if(e.repeat&&keyMap[k])return;
   if(k==='shift'){G.keys.sh=1}else if(keyMap[k]){G.keys[keyMap[k]]=1;e.preventDefault()}else if(k===' '){G.hold=true;e.preventDefault()}else if(window.YHB&&/^[1-7]$/.test(k)){YHB.key(+k)}else if(k==='q')cast(0);else if(k==='e')cast(1);else if(k==='f')cast(2);else if(k==='x')cast(3);else if(k==='k'){drawSkills();openPan('p-npc')}else if(k==='v'||k==='c')castSp();else if(k==='r'||k==='g')interact();
   else if(k==='i'){drawBag();openPan('p-bag')}else if(k==='enter'){drawChat();openPan('p-chat')}else if(k==='escape'){G.paused?closePan():openPan('p-menu')}});
-addEventListener('keyup',function(e){if(!G)return;var k=e.key.toLowerCase();if(k==='shift')G.keys.sh=0;if(keyMap[k])G.keys[keyMap[k]]=0;if(k===' ')G.hold=false});
+addEventListener('keyup',function(e){if(!G)return;var k=kname(e);if(k==='shift')G.keys.sh=0;if(keyMap[k])G.keys[keyMap[k]]=0;var kc=CODEK[e.code];if(kc&&keyMap[kc])G.keys[keyMap[kc]]=0;if(k===' ')G.hold=false});
 var KEYS=['Q','E','F','X'];
 function skBtn(s,k){return(s&&window.YI&&YI.has(s.id)?YI.btn(s.id):'')+'<i class="cdo"></i><i class="cdt"></i><span class="kc">'+k+'</span>'}
 function refreshBar(){ensureSl();var z=$('bz'),za=spAb();if(z){if(za){z.style.display='';z.dataset.k=za.id;z.innerHTML=YA.ico(za.ic)+'<i class="cdo"></i><i class="cdt"></i><span class="kc">V</span><span class="spt">'+za.name+'</span>';z.title=za.name+': '+za.d;z.classList.add('sp')}else z.style.display='none'}var a=$('acts');if(a)a.style.setProperty('--cc',C().col);[1,2,3,4].forEach(function(n){var s=skAt(n-1),b=$('b'+n);b.innerHTML=skBtn(s,KEYS[n-1]);b.classList.toggle('off',!s);b.style.display=s?'':'none'})}

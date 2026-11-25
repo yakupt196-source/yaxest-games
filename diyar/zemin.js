@@ -2,7 +2,17 @@
    Parçalara (8x8 karo) bölünüp bir kez çizilir ve önbelleğe alınır; sonra her karede tek drawImage. */
 (function(){
 'use strict';
-var CH=8,TS=48,PS=CH*TS,HC=PS/2,cache=new Map(),Y=null,budget=0,T0=null;
+var CH=8,TS=48,PS=CH*TS,HC=PS/2,cache=new Map(),Y=null,budget=0,T0=null,hadAll=false,view=null,idleOn=false,lastC=null;
+function now(){try{return new Event('t').timeStamp}catch(e){return Date.now()}}
+/* eksik parça yerine bölgenin ortalama rengi (yeşil kare yerine) */
+function fillFor(c,r){try{var z=Y.zoneAt(c*CH+4,r*CH+4),l=LO[z],h=HI[z];return 'rgb('+((l[0]+h[0])>>1)+','+((l[1]+h[1])>>1)+','+((l[2]+h[2])>>1)+')'}catch(e){return '#4a9a55'}}
+/* boşta önden çizim: görünen alanın bir halka dışı + hareket yönünde iki halka */
+function schedule(){if(idleOn||!view)return;idleOn=true;var ric=window.requestIdleCallback||function(f){return setTimeout(function(){f({timeRemaining:function(){return 8}})},40)};
+  ric(function(dl){idleOn=false;if(!view||!Y)return;var v=view,dc=lastC?Math.sign(v.c0-lastC.c0):0,dr=lastC?Math.sign(v.r0-lastC.r0):0;lastC=v;
+    var cand=[];for(var r=v.r0-1-(dr<0?1:0);r<=v.r1+1+(dr>0?1:0);r++)for(var c=v.c0-1-(dc<0?1:0);c<=v.c1+1+(dc>0?1:0);c++){if(c<0||r<0||c*PS>=Y.MW*TS||r*PS>=Y.MH*TS)continue;if(!cache.has(c+','+r))cand.push([c,r])}
+    var cx=(v.c0+v.c1)/2+dc*2,cy=(v.r0+v.r1)/2+dr*2;cand.sort(function(a,b){return Math.hypot(a[0]-cx,a[1]-cy)-Math.hypot(b[0]-cx,b[1]-cy)});
+    for(var i=0;i<cand.length;i++){if(dl.timeRemaining()<6&&i>0)break;try{cache.set(cand[i][0]+','+cand[i][1],{c:build(cand[i][0],cand[i][1]),u:v.t})}catch(e){break}}
+    if(cand.length>1)schedule()},{timeout:400})}
 /* z: 0 çayır, 1 orman, 2 kaya, 3 su, 4 kasaba */
 var LO=[[74,160,84],[38,118,66],[122,128,150],[40,110,176],[214,190,138]],HI=[[98,184,98],[52,142,82],[150,156,176],[72,160,222],[232,212,160]];
 /* değer gürültüsü (dikişsiz tablo) */
@@ -56,11 +66,13 @@ function detail(g,tx,ty,z){var X=tx*TS,Yp=ty*TS,h=hs(tx,ty,31),h2=hs(tx,ty,32),h
 function draw(ctx,camX,camY,VW,VH,t,Yo){
   if(!Yo)return false;Y=Yo;TS=Y.TS;if(PS!==CH*TS){return false}
   var c0=Math.max(0,Math.floor(camX/PS)),r0=Math.max(0,Math.floor(camY/PS)),c1=Math.min(Math.ceil(Y.MW*TS/PS)-1,Math.floor((camX+VW)/PS)),r1=Math.min(Math.ceil(Y.MH*TS/PS)-1,Math.floor((camY+VH)/PS));
-  ctx.fillStyle='#1d5a9a';ctx.fillRect(camX-2,camY-2,VW+4,VH+4);budget=3;var miss=0;
+  ctx.fillStyle='#1d5a9a';ctx.fillRect(camX-2,camY-2,VW+4,VH+4);var miss=0,tb=now(),lim=hadAll?6:24;
+  /* takılma önlemi: karede zaman bütçesi (ilk açılışta 24 ms, sonra 6 ms); kalan parçalar boşta önceden çizilir */
   for(var r=r0;r<=r1;r++)for(var c=c0;c<=c1;c++){var k=c+','+r,e=cache.get(k);
-    if(!e){if(budget>0){budget--;try{e={c:build(c,r),u:0}}catch(er){return false}cache.set(k,e)}else{miss++;ctx.fillStyle='#4a9a55';ctx.fillRect(c*PS,r*PS,PS,PS);continue}}
+    if(!e){if(now()-tb<lim){try{e={c:build(c,r),u:0}}catch(er){return false}cache.set(k,e)}else{miss++;ctx.fillStyle=fillFor(c,r);ctx.fillRect(c*PS,r*PS,PS,PS);continue}}
     e.u=t;ctx.drawImage(e.c,c*PS,r*PS)}
-  if(cache.size>90){var arr=[...cache.entries()].sort(function(a,b){return a[1].u-b[1].u});for(var i=0;i<arr.length-70;i++)cache.delete(arr[i][0])}
+  hadAll=miss===0;view={c0:c0,r0:r0,c1:c1,r1:r1,t:t};schedule();
+  if(cache.size>160){var arr=[...cache.entries()].sort(function(a,b){return a[1].u-b[1].u});for(var i=0;i<arr.length-70;i++)cache.delete(arr[i][0])}
   /* hareketli su: dalga çizgileri */
   var x0=Math.max(0,Math.floor(camX/TS)-1),y0=Math.max(0,Math.floor(camY/TS)-1),x1=Math.min(Y.MW,Math.ceil((camX+VW)/TS)+1),y1=Math.min(Y.MH,Math.ceil((camY+VH)/TS)+1);
   ctx.lineWidth=2;ctx.lineCap='round';
@@ -68,5 +80,5 @@ function draw(ctx,camX,camY,VW,VH,t,Yo){
     var ph=t*.9+h*20,bx=tx*TS+4+h2*14,by=ty*TS+10+h*60%30,a=.1+.16*(.5+.5*Math.sin(ph));ctx.strokeStyle='rgba(255,255,255,'+a.toFixed(3)+')';ctx.beginPath();ctx.moveTo(bx,by);for(var q=1;q<=6;q++)ctx.lineTo(bx+q*5,by+Math.sin(ph+q*.9)*2.2);ctx.stroke();
     if(h<.05){var sp=.5+.5*Math.sin(t*3+h*90);ctx.fillStyle='rgba(255,255,255,'+(sp*.7).toFixed(2)+')';ctx.fillRect(tx*TS+10+h2*20,ty*TS+8+h*300%28,2.4,2.4)}}
   return true}
-window.YG={draw:draw,clear:function(){cache.clear()}};
+window.YG={draw:draw,clear:function(){cache.clear();hadAll=false}};
 })();
