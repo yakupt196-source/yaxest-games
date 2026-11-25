@@ -14,6 +14,7 @@ function draw(G,camX,camY,VW,VH,dg){var c=el();if(!c)return;var n=0;if(!dg&&wind
   L(G.px,G.py-20,250,'255,214,140',.35);
   if(Y){L(Y.CX*TS,Y.CY*TS,330,'255,170,80',.13);
     if(Y.POND)L((Y.CX+3)*TS+TS-8,(Y.CY+22)*TS-28,120,'255,200,110',.55+Math.sin(t*6)*.05)}
+  (G.houses||[]).forEach(function(o,i){if(o.hid)return;L(o.x,o.y+4,115,'255,196,105',.4+Math.sin(t*4.3+i*2.3)*.05)});
   (G.npcs||[]).forEach(function(p,i){L(p.x,p.y-30,120,'255,180,90',.42+Math.sin(t*5+i*1.7)*.04)});
   (G.portals||[]).forEach(function(p,i){if(p.p)L(p.p.x,p.p.y-40,160,'170,110,255',.45+Math.sin(t*2+i)*.08)});
   try{var o=window.YNet&&YNet.others();if(o)for(var k in o){var q=o[k];if(q&&q.x!=null)L(q.x,q.y-20,95,'255,210,150',.3)}}catch(e){}
