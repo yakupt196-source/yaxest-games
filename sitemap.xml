@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://yaxestgames.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+<url><loc>https://yaxestgames.com/moda/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/kafe/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/maden/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/studyo/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -46,6 +47,7 @@
 <url><loc>https://yaxestgames.com/hesap/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/gizlilik.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/rehber/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+<url><loc>https://yaxestgames.com/rehber/moda/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/rehber/kafe/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/rehber/maden/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/rehber/studyo/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -87,5 +89,4 @@
 <url><loc>https://yaxestgames.com/rehber/hafiza/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/rehber/birlestir/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 <url><loc>https://yaxestgames.com/rehber/kostebek/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-<url><loc>https://yaxestgames.com/diyar/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
 </urlset>
