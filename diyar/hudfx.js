@@ -27,5 +27,12 @@ function boss(){var y=window.__yd;if(!y||!y.G)return;var G=y.G,L=G.mode==='dunge
 /* ---------- ölüm ekranı: dünya solar, dirilişte altın ışık ---------- */
 var wasDead=false;function death(){var y=window.__yd;if(!y||!y.G)return;var d=y.G.dead>0;document.body.classList.toggle('yh3dead',d);if(wasDead&&!d){document.body.classList.remove('yh3rise');void document.body.offsetWidth;document.body.classList.add('yh3rise');setTimeout(function(){document.body.classList.remove('yh3rise')},1200)}wasDead=d}
 setInterval(function(){try{boss()}catch(e){}try{death()}catch(e){}},90);
+/* ---------- panel satırları: nadirlik etiketi ve dokunmatik olmayan cihazda bilgi kutusu ---------- */
+var RAR=['Sıradan','Seçkin','Nadir','Destansı','Efsanevi','Mitik','Ezeli'],RC=['#c9ced9','#7be07b','#5cb0ff','#c07cff','#ffb02e','#ff5b6e','#7df9ff'];
+function tagRows(root){var rows=root.querySelectorAll('.it:not([data-rt])');for(var i=0;i<rows.length;i++){var r=rows[i],t=r.textContent;r.setAttribute('data-rt','1');for(var k=RAR.length-1;k>=0;k--){if(t.indexOf('('+RAR[k]+')')>=0||t.indexOf(RAR[k]+' ·')===0){r.setAttribute('data-r',k+1);r.style.setProperty('--rc',RC[k]);break}}if(/gerekir|Seviye \d+ gerek/.test(t))r.classList.add('dim')}}
+var mo=new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var t=ms[i].target;if(t.closest&&t.closest('.pan'))tagRows(t.closest('.pan'))}});
+function watchPans(){document.querySelectorAll('.pan').forEach(function(p){if(p._yh3)return;p._yh3=1;mo.observe(p,{childList:true,subtree:true});tagRows(p)})}
+setInterval(watchPans,1500);watchPans();
+var tip=null;if(matchMedia('(pointer:fine)').matches){document.addEventListener('mouseover',function(e){var r=e.target.closest&&e.target.closest('.pan .it[data-r]');if(!tip){tip=document.createElement('div');tip.id='yh3tip';document.body.appendChild(tip)}if(!r){tip.classList.remove('on');return}var k=+r.getAttribute('data-r')-1,b=r.querySelector('b'),sm=r.querySelector('small');tip.innerHTML='<b style="color:'+RC[k]+'">'+(b?b.textContent:'')+'</b>'+RAR[k]+(sm?'<br>'+sm.textContent:'');var R=r.getBoundingClientRect();tip.style.left=Math.min(innerWidth-270,R.right+10)+'px';tip.style.top=Math.max(8,R.top)+'px';tip.classList.add('on')})}
 setInterval(tick,110);
 })();

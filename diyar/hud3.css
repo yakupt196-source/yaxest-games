@@ -163,3 +163,24 @@ body.yh3rise::after{content:"";position:fixed;inset:0;z-index:30;pointer-events:
 @keyframes yh3die{0%{transform:scale(1.6);opacity:0;filter:blur(6px)}60%{transform:scale(.96);opacity:1;filter:none}100%{transform:none}}
 @keyframes yh3rise{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
 body.lowfx #bossbar,body.lowfx #bossbar *{animation:none!important}body.lowfx.yh3dead #cv{filter:none}
+
+/* ---------- panel içleri: deri kartlı satırlar, nadirlik ışıltısı, sırayla giriş ---------- */
+html body .pan .it{position:relative;margin:6px 0;padding:9px 12px!important;border:1px solid rgba(217,164,65,.16)!important;border-radius:12px;background:linear-gradient(180deg,rgba(255,236,190,.045),rgba(0,0,0,.18));transition:border-color .2s,background .2s,transform .15s}
+html body .pan .it:hover{border-color:rgba(247,220,138,.45)!important;background:linear-gradient(180deg,rgba(255,236,190,.08),rgba(0,0,0,.14))}
+html body .pan .it small{color:#bfa987!important}
+html body .pan .it>span:first-child .yi,html body .pan .it>.yi:first-child,html body .pan .it .t>b>.yi:first-child{filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+html body .pan.on .it{animation:yh3row .38s cubic-bezier(.2,.9,.3,1.1) both}
+html body .pan.on .it:nth-child(2){animation-delay:.03s}html body .pan.on .it:nth-child(3){animation-delay:.06s}html body .pan.on .it:nth-child(4){animation-delay:.09s}html body .pan.on .it:nth-child(5){animation-delay:.12s}html body .pan.on .it:nth-child(6){animation-delay:.15s}html body .pan.on .it:nth-child(7){animation-delay:.18s}html body .pan.on .it:nth-child(8){animation-delay:.21s}html body .pan.on .it:nth-child(n+9){animation-delay:.24s}
+html body .pan .it[data-r]::before{content:"";position:absolute;left:-1px;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--rc);box-shadow:0 0 10px var(--rc)}
+html body .pan .it[data-r="4"],html body .pan .it[data-r="5"],html body .pan .it[data-r="6"],html body .pan .it[data-r="7"]{background:linear-gradient(90deg,color-mix(in srgb,var(--rc) 14%,transparent),rgba(0,0,0,.16) 60%)}
+html body .pan .it[data-r="6"] b:first-of-type,html body .pan .it[data-r="7"] b:first-of-type{animation:yh3glint 2.6s ease-in-out infinite}
+html body .pan .it.dim{filter:saturate(.55) brightness(.78)}
+html body .pan .tabs button,html body .pan .gtab{font-family:var(--fh);border:1px solid rgba(217,164,65,.35)!important;background:linear-gradient(180deg,#3a2818,#1f150d)!important;color:#e8d3aa!important;border-radius:10px!important}
+html body .pan .tabs button[aria-pressed=true],html body .pan .tabs button.on,html body .pan .gtab.on{background:linear-gradient(180deg,#ffe08a,#c98a26)!important;color:#2a1608!important;border-color:#6b4314!important}
+html body .pan .card::-webkit-scrollbar{width:9px}html body .pan .card::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#d9a441,#8a5a1c);border-radius:8px;border:2px solid #1b120a}html body .pan .card::-webkit-scrollbar-track{background:rgba(0,0,0,.25);border-radius:8px}
+html body .pan .card{scrollbar-color:#b07f2c rgba(0,0,0,.25)}
+#yh3tip{position:fixed;z-index:40;pointer-events:none;max-width:260px;padding:8px 11px;border-radius:10px;border:1.5px solid transparent;background:var(--wood) padding-box,var(--goldb) border-box;color:#f3e2bd;font:600 .74rem "Chakra Petch",sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.6);opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
+#yh3tip.on{opacity:1;transform:none}#yh3tip b{display:block;font-family:var(--fh);font-size:.82rem;margin-bottom:2px}
+@keyframes yh3row{0%{opacity:0;transform:translateX(-10px)}100%{opacity:1;transform:none}}
+@keyframes yh3glint{50%{text-shadow:0 0 12px currentColor,0 0 2px #fff}}
+body.lowfx .pan .it{animation:none!important}
