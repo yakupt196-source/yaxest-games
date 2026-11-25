@@ -16,5 +16,16 @@ function tick(){var y=window.__yd;if(!y||!y.G||!y.P)return;var G=y.G,P=y.P,top=q
   var zn=q('#zn');if(zn){var tx=zn.textContent;if(tx&&tx!==last.zn&&last.zn)re(zn,'chg');last.zn=tx}
   var on=q('#yhb .s.on');if(on&&on!==last.sel){if(last.sel)re(on,'pick');last.sel=on}
   var abs=document.querySelectorAll('#acts .ab');for(var i=0;i<abs.length;i++){var a=abs[i],c=a.classList.contains('cdn');if(c&&!cd[a.id])re(a,'cast');cd[a.id]=c}}
+/* ---------- boss can barı: yakındaki boss/elit için ekranın üstünde ---------- */
+var bb=null,bbM=null,bbTr=1;
+function bossEl(){if(bb)return bb;bb=document.createElement('div');bb.id='bossbar';bb.innerHTML='<div class="bn"><span class="bi">☠</span><b></b><small></small></div><div class="bt"><i class="tr"></i><i class="hp"></i><i class="ph" style="left:75%"></i><i class="ph" style="left:50%"></i><i class="ph" style="left:25%"></i></div>';document.body.appendChild(bb);return bb}
+function boss(){var y=window.__yd;if(!y||!y.G)return;var G=y.G,L=G.mode==='dungeon'&&G.dg?G.dg.mons:G.mons,best=null,bd=760;
+  if(L&&G.mode!=='house')for(var i=0;i<L.length;i++){var m=L[i];if(m.dead||!(m.boss||m.elite)||m.hp<=0)continue;var d=Math.hypot(m.x-G.px,m.y-G.py);if(d<bd&&(m.hit>0||d<520||m===bbM)){bd=d;best=m}}
+  var e=bossEl();if(!best){e.classList.remove('on');bbM=null;return}
+  if(best!==bbM){bbM=best;bbTr=best.hp/best.max;e.querySelector('b').textContent=best.n||'Boss';e.querySelector('small').textContent='Sv '+best.lv+(best.elite&&!best.boss?' · Elit':'');e.classList.toggle('el',!best.boss);re(e,'in')}
+  var f=Math.max(0,Math.min(1,best.hp/best.max));if(f<bbTr)bbTr=Math.max(f,bbTr-.012);else bbTr=f;e.querySelector('.hp').style.width=(f*100).toFixed(1)+'%';e.querySelector('.tr').style.width=(bbTr*100).toFixed(1)+'%';e.classList.toggle('low',f<.25);e.classList.add('on')}
+/* ---------- ölüm ekranı: dünya solar, dirilişte altın ışık ---------- */
+var wasDead=false;function death(){var y=window.__yd;if(!y||!y.G)return;var d=y.G.dead>0;document.body.classList.toggle('yh3dead',d);if(wasDead&&!d){document.body.classList.remove('yh3rise');void document.body.offsetWidth;document.body.classList.add('yh3rise');setTimeout(function(){document.body.classList.remove('yh3rise')},1200)}wasDead=d}
+setInterval(function(){try{boss()}catch(e){}try{death()}catch(e){}},90);
 setInterval(tick,110);
 })();

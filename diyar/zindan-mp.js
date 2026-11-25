@@ -26,7 +26,7 @@ function snap(){var g=G(),dg=g.dg,P=D().P;
   var o={s:dg.stage,w:dg.wv||1,wn:dg.wvn||1,m:ms,pl:pl,dr:dg.door?(dg.door.open?1:0):-1,ch:dg.chest?(dg.chest.open?1:0):-1,sv:dg.surv?Math.ceil(dg.surv.left):-1,dn:dg.done?1:0,tr:dg.trans?1:0,h:hq,pn:dg.pn};hq={};return o}
 function revive(){var g=G(),y=D();if(!(g.dead>0))return;g.dead=0;g.hp=Math.round(y.S().maxhp*.5);var e=document.getElementById('p-dead');if(e)e.classList.remove('on');y.floatTxt(g.px,g.py-60,'Ekip seni diriltti!','#7be07b');y.say('🤝 Ekip odayı geçti, dirildin!','sys')}
 function deadNote(){var e=document.getElementById('dmsg');if(e&&!/Ekip/.test(e.innerHTML))e.innerHTML+='<br><small style="color:#7be07b">🤝 Ekip sonraki odaya geçince dirileceksin. Bekleyebilirsin.</small>'}
-function alive(){var g=G(),dg=g&&g.dg;if(!dg)return false;if(g.dead>0)deadNote();if(dg.cl)return true;for(var id in rp)if(!rp[id].dead)return true;return false}
+function alive(){var g=G(),dg=g&&g.dg;if(!dg)return false;var sh=!!dg.cl||Object.keys(rp).length>0;if(!sh)return false;if(g.dead>0)deadNote();if(dg.cl)return true;for(var id in rp)if(!rp[id].dead)return true;return false}
 var hStage=null;function hTick(dt){var g=G(),dg=g.dg;if(!dg||dg.cl||!on())return;if(hStage!==dg.stage){if(hStage!==null&&Object.keys(rp).length)revive();hStage=dg.stage}if(inv){inv.t+=dt;if(inv.t>12&&!dg.done&&curS!==dg.stage){curS=dg.stage;inv.t=0;if(mates().some(function(m){return!rp[m.id]}))send('inv',{id:dg.id,n:D().Y.DUNGEONS[dg.id].n,lv:dg.lv})}}
   var n=0;for(var id in rp){n++;if(performance.now()-rp[id].t>9000){delete rp[id];D().say('🤝 '+(ro[id]&&ro[id].n||'Arkadaşın')+' zindandan koptu.','sys')}}
   if(!n)return;snT+=dt;if(snT<.12)return;snT=0;send('sn',snap())}

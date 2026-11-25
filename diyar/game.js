@@ -173,7 +173,7 @@ var LGC={'Odun':'#d9a066','Taş':'#aab4cc','Bakır':'#f0904a','Demir':'#c9cfdb',
 function logCol(l){if(/Seviye|seviye|beceri puan/.test(l))return'#ffd23f';if(/Yenildin|öldü|düştü|başarısız|yandı/.test(l))return'#ff8f8f';if(/gerekir|yetersiz|alınamaz|dolu/.test(l))return'#ffab5c';if(/Görev|ödül|Ödül|Rütbe|rütbe|Takas/.test(l))return'#ffd9a0';if(/^\+|toplandı|dövüldü|yapıldı|kuşanıldı|eritildi|Külçe/.test(l))return'#8df0b0';if(/PvP|Fetih|çağırıyor|Kasaba|bölge/.test(l))return'#c9a6ff';if(/hoş geldin|Harita|Yürü|Kristal Mağara|İni|Kale|Mezarlığı/.test(l))return'#9fdcff';return'#d8d3ff'}
 function logHtml(l){var h=esc(l);Object.keys(LGC).forEach(function(k){h=h.replace(new RegExp(k+'(?= |\\)|$|,|\\.|!)','g'),function(m){return'<span style="color:'+LGC[k]+';font-weight:700">'+m+'</span>'})});return h}
 function renderLog(){$('log').innerHTML=G.log.map(function(l){return'<div style="color:'+logCol(l)+'">'+logHtml(l)+'</div>'}).join('')}
-function floatTxt(x,y,s,c){G.txt.push({x:x,y:y,s:YA.plain(s),c:c||'#fff',t:0})}
+function floatTxt(x,y,s,c){var str=YA.plain(s),cr=/^✦/.test(str),num=/^[✦\-+]?\d/.test(str);if(cr&&window.YF)try{YF.shake(3,.12)}catch(e){}if(G.txt.length>60)G.txt.shift();G.txt.push({x:x+(num?(Math.random()-.5)*18:0),y:y,s:cr?str.slice(1):str,c:c||'#fff',t:0,cr:cr,num:num,vx:num?(Math.random()-.5)*36:0})}
 function addFx(o){o.t=0;G.efx.push(o)}
 function blocked(x,y){var tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(G.mode==='dungeon')return tx<1||ty<1||tx>=AW-1||ty>=AH-1||pilHit(x,y,14);if(window.YW&&YW.solid(x,y))return true;return Y.zoneAt(tx,ty)===3}
 function moveH(dx,dy){/* katı bir şeyin içinde kaldıysa (ışınlanma, atılma, duvar değişimi) serbestçe çıkabilsin */if(blocked(G.px,G.py)){G.px+=dx;G.py+=dy;return}if(!blocked(G.px+dx,G.py))G.px+=dx;else if(dx&&!dy){var sy=blocked(G.px+dx,G.py-10)?(blocked(G.px+dx,G.py+10)?0:1):-1;if(sy&&!blocked(G.px,G.py+sy*Math.abs(dx)))G.py+=sy*Math.abs(dx)*.7}
@@ -518,7 +518,7 @@ function update(dt){G.t+=dt;if(window.YHB)try{YHB.tick(dt)}catch(e){}if(G.mode==
   if(G.mode==='world'){var pz=pvpAt(G.px,G.py);if(pz!==G.pz){var pz0=G.pz;G.pz=pz;if(pz||pz0)say(pz?'⚔️ '+pz.n+': PvP bölgesi! Kural: yalnızca seviyen +1\'e kadar olan oyunculara saldırabilirsin (Sv 2 → en çok Sv 3). Fetih Kristallerini kır!':'PvP bölgesinden çıktın.','sys')}}
   G.near=findNear();
   for(var f=G.efx.length-1;f>=0;f--){var x=G.efx[f];x.t+=dt;if(x.t>=x.l)G.efx.splice(f,1)}
-  for(var q=G.txt.length-1;q>=0;q--){var y=G.txt[q];y.t+=dt;y.y-=28*dt;if(y.t>1)G.txt.splice(q,1)}
+  for(var q=G.txt.length-1;q>=0;q--){var y=G.txt[q];y.t+=dt;y.y-=(y.num?42-y.t*40:28)*dt;y.x+=(y.vx||0)*dt;if(y.t>1)G.txt.splice(q,1)}
   saveT+=dt;if(saveT>10){saveT=0;saveNow()}}
 function worldMons(dt){for(var i=0;i<G.spawns.length;i++){var s=G.spawns[i],d=hyp(s.x-G.px,s.y-G.py);
   if(s.m){if(d>1500){var j=G.mons.indexOf(s.m);if(j>=0)G.mons.splice(j,1);s.m=null}}
@@ -655,7 +655,10 @@ function render(t){var camX=G.px-VW/2,camY=G.py-VH/2;ctx.setTransform(dpr,0,0,dp
     else if(f.k==='line'){ctx.lineWidth=f.w||4;ctx.beginPath();ctx.moveTo(f.x1,f.y1);ctx.lineTo(f.x2,f.y2);ctx.stroke()}
     else if(f.k==='swing'){var an=Math.atan2(f.fy,f.fx);ctx.lineWidth=6;ctx.beginPath();ctx.arc(f.x,f.y,44,an-.9,an+.9);ctx.stroke()}ctx.globalAlpha=1});
   if(window.YF)try{YF.parts(ctx)}catch(e){}
-  G.txt.forEach(function(f){ctx.globalAlpha=Math.max(0,1-f.t);ctx.fillStyle=f.c;ctx.font='800 14px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.strokeStyle='rgba(0,0,0,.7)';ctx.lineWidth=3;ctx.strokeText(f.s,f.x,f.y);ctx.fillText(f.s,f.x,f.y);ctx.globalAlpha=1});
+  G.txt.forEach(function(f){/* vuruş sayıları: patlayarak büyür, kavisle süzülür; kritik altın, büyük ve parlak */var a=Math.max(0,1-Math.max(0,f.t-.45)/.55),pk=f.t<.12?1+(f.cr?1.1:.55)*(1-f.t/.12):1,fs=(f.cr?22:f.num?16:14)*pk;ctx.save();ctx.globalAlpha=a;ctx.translate(f.x,f.y);ctx.textAlign='center';ctx.font='900 '+fs.toFixed(1)+'px "Chakra Petch",sans-serif';ctx.lineJoin='round';
+  if(f.cr&&!window.YD_LOWFX){ctx.shadowColor='rgba(255,170,40,.95)';ctx.shadowBlur=14}ctx.strokeStyle=f.cr?'#3a1a00':'rgba(0,0,0,.75)';ctx.lineWidth=f.cr?5:3.5;ctx.strokeText(f.s,0,0);ctx.shadowBlur=0;
+  if(f.cr){var gr=ctx.createLinearGradient(0,-fs,0,2);gr.addColorStop(0,'#fff7c2');gr.addColorStop(.5,'#ffd23f');gr.addColorStop(1,'#ff8a1f');ctx.fillStyle=gr}else ctx.fillStyle=f.c;ctx.fillText(f.s,0,0);
+  if(f.cr){ctx.font='900 9px "Chakra Petch",sans-serif';ctx.lineWidth=3;ctx.strokeStyle='#3a1a00';ctx.strokeText('KRİTİK',0,-fs*.85);ctx.fillStyle='#ffe9a8';ctx.fillText('KRİTİK',0,-fs*.85)}ctx.restore()});
   if(window.YNet&&!dg)try{YNet.draw(ctx,camX,camY,t,VW,VH)}catch(e){}if(window.YX2)try{YX2.draw(ctx,camX,camY,t,dg)}catch(e){}
   if(window.YSN)YSN.draw(ctx,camX,camY,t,dg,VW,VH);if(window.YKU)YKU.draw(ctx,camX,camY,t,dg,VW,VH);
   if(window.YF)try{ctx.__dpr=dpr;YF.overlay(ctx,VW,VH,G.px,G.py,camX,camY,dg)}catch(e){}
