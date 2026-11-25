@@ -3,8 +3,9 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=8;
+var SAYI=9;
 var HABER=[
+ {d:'25 Kasım',k:'Manşet',h:'Geceler artık gerçekten karanlık: fenerler yandı',s:'Gece çökünce esnaf fenerleri, zindan kapıları ve iskele feneri karanlığı deliyor; gölette ateş böcekleri dolaşıyor. Ağaçlar rüzgârda salınıyor, boss can barı ve kritik vuruşlar da yenilendi.'},
  {d:'25 Kasım',k:'Manşet',h:'Diyar yeni kıyafetini giydi: altın çerçeveli arayüz',s:'Oyuncu kartı, beceriler, alet çubuğu ve paneller yenilendi. Vuruşta kart sarsılıyor, altın kazanınca parlıyor, seviye atlayınca halka patlıyor. PC\'deki takılmalar da giderildi.'},
  {d:'22 Kasım',k:'Manşet',h:'Kasabanın güneyine Balıkçı İskelesi kuruldu',s:'Diyarın eski gölleri kurudu; balık artık tek yerde tutuluyor: kasaba kapısının hemen altındaki gölet. Gölet güvenli bölge, canavar yok. Tabeladaki Günün Balığı ek altın kazandırıyor.'},
  {d:'22 Kasım',k:'Manşet',h:'Zindanlar artık ortak: partinle aynı boss\'a gir!',s:'Partiden biri zindana girince diğerlerine davet gider. Aynı canavarlar, aynı kapılar, aynı boss. Düşen arkadaş, ekip odayı geçince dirilir.'},

@@ -661,7 +661,7 @@ function render(t){var camX=G.px-VW/2,camY=G.py-VH/2;ctx.setTransform(dpr,0,0,dp
   if(f.cr){ctx.font='900 9px "Chakra Petch",sans-serif';ctx.lineWidth=3;ctx.strokeStyle='#3a1a00';ctx.strokeText('KRİTİK',0,-fs*.85);ctx.fillStyle='#ffe9a8';ctx.fillText('KRİTİK',0,-fs*.85)}ctx.restore()});
   if(window.YNet&&!dg)try{YNet.draw(ctx,camX,camY,t,VW,VH)}catch(e){}if(window.YX2)try{YX2.draw(ctx,camX,camY,t,dg)}catch(e){}
   if(window.YSN)YSN.draw(ctx,camX,camY,t,dg,VW,VH);if(window.YKU)YKU.draw(ctx,camX,camY,t,dg,VW,VH);
-  if(window.YF)try{ctx.__dpr=dpr;YF.overlay(ctx,VW,VH,G.px,G.py,camX,camY,dg)}catch(e){}
+  if(window.YF)try{ctx.__dpr=dpr;YF.overlay(ctx,VW,VH,G.px,G.py,camX,camY,dg);if(window.YLT)try{YLT.draw(G,camX,camY,VW,VH,dg)}catch(e){}}catch(e){}
   if(G.dgFade>0){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='rgba(0,0,0,'+Math.min(1,G.dgFade)+')';ctx.fillRect(0,0,VW,VH);G.dgFade-=.03}
   if(G.dead>0){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='rgba(120,0,20,.45)';ctx.fillRect(0,0,VW,VH);ctx.fillStyle='#fff';ctx.font='800 28px "Chakra Petch",sans-serif';ctx.textAlign='center';ctx.fillText('YENİLDİN',VW/2,VH/2)}}
 var MZC=['#4fae5a','#2a7a3f','#8d93aa','#2f7fd0','#e0c58a'],MS=128;

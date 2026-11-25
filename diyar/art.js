@@ -286,10 +286,13 @@ YA.portal=function(ctx,x,y,t,col,lab,key){var pu=1+Math.sin(t*3)*.07;ctx.save();
   var g=ctx.createRadialGradient(0,-8,4,0,-8,40);g.addColorStop(0,'#f2e4ff');g.addColorStop(.5,col||'#9b5cff');g.addColorStop(1,'rgba(60,20,140,.1)');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(0,-8,24*pu,46*pu,0,0,6.3);ctx.fill();
   ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=2;for(var i=0;i<3;i++){ctx.beginPath();ctx.ellipse(0,-8,(8+i*7)*pu,(18+i*10)*pu,t*(i%2?1:-1)*.5,0,4.2);ctx.stroke()}
   ctx.restore();YA.draw(ctx,key,x,y-80,26);YA.plate(ctx,x,y-100,lab,col)};
+var TPAL=[['#2f9e57','#2a8f4f','#3fbf6c'],['#23806a','#1d6e5c','#35a487'],['#5aa63e','#4d9435','#7cc24f'],['#c8782a','#b0611f','#e39a3c']];
 YA.node=function(ctx,kind,x,y,NODE){
   if(kind==='tree'||kind==='oldtree'){var OT=kind==='oldtree';if(OT){var gg0=ctx.createRadialGradient(x,y-14,6,x,y-14,40);gg0.addColorStop(0,'rgba(255,214,120,.45)');gg0.addColorStop(1,'rgba(255,214,120,0)');ctx.fillStyle=gg0;ctx.beginPath();ctx.arc(x,y-14,40,0,6.3);ctx.fill();ctx.save();ctx.translate(x,y+14);ctx.scale(1.35,1.35);ctx.translate(-x,-(y+14))}el(ctx,x,y+13,20,7,'rgba(0,0,0,.28)');ctx.fillStyle='#6b4a2b';ctx.fillRect(x-4.5,y-4,9,18);ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(x+1,y-4,3.5,18);
-    [[0,-14,19,'#2a8f4f'],[-9,-8,13,'#2f9e57'],[9,-8,13,'#2f9e57'],[-3,-21,12,'#3fbf6c']].forEach(function(c){ctx.fillStyle=c[3];ctx.beginPath();ctx.arc(x+c[0],y+c[1],c[2],0,6.3);ctx.fill()});
-    ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.arc(x-6,y-24,6,0,6.3);ctx.fill();if(OT)ctx.restore();return}
+    /* ağaç çeşitliliği (konuma göre sabit renk ailesi) + rüzgârda tepe salınımı */
+    var th=((Math.floor(x)*73856093)^(Math.floor(y)*19349663))>>>0,TP=TPAL[OT?0:(th%11<6?0:th%11<8?1:th%11<10?2:3)],sw=window.YD_LOWFX?0:Math.sin(performance.now()/1000*1.3+x*.021+y*.013)*1.9;
+    [[0,-14,19,1],[-9,-8,13,0],[9,-8,13,0],[-3,-21,12,2]].forEach(function(c){var k=-c[1]/21;ctx.fillStyle=TP[c[3]];ctx.beginPath();ctx.arc(x+c[0]+sw*k,y+c[1],c[2],0,6.3);ctx.fill()});
+    ctx.fillStyle='rgba(255,255,255,.22)';ctx.beginPath();ctx.arc(x-6+sw,y-24,6,0,6.3);ctx.fill();if(OT)ctx.restore();return}
   var d=NODE[kind];el(ctx,x+2,y+13,20,6,'rgba(0,0,0,.28)');
   ctx.fillStyle=d.col;ctx.beginPath();ctx.moveTo(x-17,y+11);ctx.lineTo(x-11,y-10);ctx.lineTo(x+6,y-15);ctx.lineTo(x+18,y+2);ctx.lineTo(x+13,y+12);ctx.closePath();ctx.fill();ol(ctx);
   ctx.fillStyle='rgba(255,255,255,.2)';ctx.beginPath();ctx.moveTo(x-11,y-10);ctx.lineTo(x+6,y-15);ctx.lineTo(x+2,y-4);ctx.lineTo(x-8,y-2);ctx.closePath();ctx.fill();
