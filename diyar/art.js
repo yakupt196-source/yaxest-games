@@ -162,7 +162,9 @@ YA.draw=function(ctx,k,x,y,s){var im=YA.img(k);if(im.complete&&im.naturalWidth)c
 /* ================= TUVAL ÇİZİMLERİ ================= */
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function el(ctx,x,y,rx,ry,f){ctx.fillStyle=f;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,6.2832);ctx.fill()}
-function ol(ctx){ctx.strokeStyle='#1b1530';ctx.lineWidth=1.6;ctx.stroke()}
+/* renkli çizgi: kontur, dolgunun koyu tonundan (düz lacivert yerine) — daha yumuşak, resimli kitap görünümü */
+function ol(ctx){var f=ctx.fillStyle;ctx.strokeStyle=(typeof f==='string'&&f.charAt(0)==='#'&&f.length===7)?olMix(f):'#1b1530';ctx.lineWidth=1.6;ctx.stroke()}
+var OLC={};function olMix(a){var r=OLC[a];if(r)return r;var x=parseInt(a.slice(1),16),y=0x1b1530,k=.7;function ch(s){return Math.round(((x>>s)&255)*(1-k)+((y>>s)&255)*k)}return OLC[a]='rgb('+ch(16)+','+ch(8)+','+ch(0)+')'}
 function shade(hex,d){var n=parseInt(hex.slice(1),16),r=(n>>16)+d,g=(n>>8&255)+d,b=(n&255)+d;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return'rgb('+r+','+g+','+b+')'}
 YA.shade=shade;
 /* HUD altında kalan dünya etiketleri soluklaşır (pusula, mini harita, joystick, savaş düğmeleri) */
