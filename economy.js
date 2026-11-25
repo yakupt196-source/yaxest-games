@@ -467,4 +467,30 @@ setTimeout(function(){try{var t=+localStorage.getItem('yx-bkt')||0,rm=+localStor
 
 /* hesap: giriş yapılmışsa bulut eşitleme betiğini yükle */
 try{if(localStorage.getItem('yx-acct')&&!window.YXAcct){var es=document.querySelector('script[src$="economy.js"]');if(es){var base=es.getAttribute('src').replace('economy.js','');['account-config.js','backup.js','account.js'].reduce(function(p,f){return p.then(function(){return new Promise(function(r){var s=document.createElement('script');s.src=base+f;s.onload=s.onerror=r;document.head.appendChild(s)})})},Promise.resolve())}}}catch(e){}
+/* ---- site geneli hediye bildirimi: yönetici hediyesi hangi sayfada olursa olsun ekranda çıkar ---- */
+try{(function(){if(!localStorage.getItem('yx-acct'))return;
+function ls(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v.slice(-80)))}catch(e){}}
+function jetOnly(it){var ks=Object.keys(it||{}).filter(function(k){return Math.floor(+it[k]||0)>0});return ks.length>0&&ks.every(function(k){return k==='jeton'})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function nm(k){return k==='gold'?'🪙 altın':k==='jeton'?'🪙 jeton':k.indexOf('cos.')===0?'👗 kostüm':'🎒 '+k}
+function pop(list){if(!list.length||!document.body)return;var o=document.getElementById('yx-gift');if(o)o.remove();
+ if(!document.getElementById('yx-gift-css')){var st=document.createElement('style');st.id='yx-gift-css';st.textContent='#yx-gift{position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;background:rgba(15,10,40,.62);padding:16px;font-family:"Bricolage Grotesque",system-ui,sans-serif;animation:yxg .3s}#yx-gift .b{background:#1f1a42;color:#fff;border:2px solid #ffd23f;border-radius:20px;padding:20px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.5)}#yx-gift h3{margin:0 0 8px;font-size:1.35rem;color:#ffd23f}#yx-gift .r{background:rgba(255,255,255,.09);border-radius:12px;padding:8px 10px;margin:6px 0;text-align:left;font-weight:700}#yx-gift small{display:block;font-weight:600;opacity:.85;margin-top:2px}#yx-gift button,#yx-gift a{display:inline-block;margin:10px 4px 0;padding:10px 18px;border-radius:999px;border:0;background:#ffd23f;color:#1f1a42;font:800 .95rem inherit;cursor:pointer;text-decoration:none}#yx-gift a{background:#7c5cff;color:#fff}@keyframes yxg{from{opacity:0}to{opacity:1}}';document.head.appendChild(st)}
+ var h='<div class="b" role="dialog" aria-live="polite"><div style="font-size:2.6rem">🎁</div><h3>Hediye geldi!</h3>',dz=0;
+ list.forEach(function(g){h+='<div class="r">'+esc(g.msg||'Yaxest\'ten hediye!')+'<small>'+esc(g.tx)+'</small></div>';if(g.diyar)dz=1});
+ if(dz)h+='<small>Eşyalar/altınlar için Yaxest Diyarı\'nı aç, hediye kutusundan otomatik alınır.</small>';
+ h+='<div>'+(dz?'<a href="'+(window.YX_ROOT||'/')+'diyar/">Diyar\'a git</a>':'')+'<button type="button" id="yx-gift-ok">Teşekkürler</button></div></div>';
+ var d=document.createElement('div');d.id='yx-gift';d.innerHTML=h;document.body.appendChild(d);document.getElementById('yx-gift-ok').onclick=function(){d.remove()}}
+function tick(){if(!window.YXAcct||!YXAcct.myGifts||!window.YX||document.hidden)return;
+ YXAcct.myGifts().then(function(l){var seen=ls('yx-gbs',null),first=seen===null;seen=seen||[];var note=ls('yx-gnote',[]),out=[],ch=0,now=Date.now();
+  l.forEach(function(g){var all=g.uid==='*',done=all?seen.indexOf(g.id)>=0:g.claimed;if(done)return;var it=g.items||{};
+   if(jetOnly(it)){if(first&&all&&now-(+g.t||0)>2*864e5){seen.push(g.id);ch=1;return}
+    var n=Math.max(0,Math.min(1e6,Math.floor(+it.jeton||0)));if(!n)return;
+    var fin=function(){YX.earn(n,'gift',true);out.push({msg:g.msg,tx:'+'+n+' 🪙 site jetonu'});if(all){seen.push(g.id);ch=1}};
+    if(all){fin()}else{YXAcct.claimGift(g).then(function(ok){if(ok){fin();sv('yx-gbs',seen);pop(out)}});}
+   }else if(note.indexOf(g.id)<0){note.push(g.id);ch=2;if(/\/diyar\//.test(location.pathname))return;out.push({msg:g.msg,diyar:1,tx:Object.keys(it).filter(function(k){return +it[k]>0}).map(function(k){return nm(k)+' ×'+Math.floor(+it[k])}).join(' · ')})}});
+  if(first||ch===1)sv('yx-gbs',seen);if(ch===2)sv('yx-gnote',note);
+  if(out.length)pop(out)}).catch(function(){})}
+var n=0,iv=setInterval(function(){if(window.YXAcct&&window.YX){clearInterval(iv);tick();setInterval(tick,120000);document.addEventListener('visibilitychange',function(){if(!document.hidden)tick()})}else if(++n>40)clearInterval(iv)},500);
+})()}catch(e){}
 })();
