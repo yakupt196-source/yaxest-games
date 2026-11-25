@@ -11,7 +11,7 @@
 }
 
 /* ---------- ortak altın çerçeve ---------- */
-html body #hud .top,html body #hud .tr .ib,html body #dkbar button,html body #yhb,html body #zn,html body .pan .card{
+html body #hud .top,html body #hud .tr .ib,html body #dkbar button,html body #yhb,html body #zn,html body .pan .card,html body .scr>.card{
   border:2px solid transparent!important;
   background:var(--wood) padding-box,var(--goldb) border-box!important;
   box-shadow:0 8px 22px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,225,150,.18),inset 0 0 0 1px rgba(0,0,0,.55)!important;
@@ -184,3 +184,32 @@ html body .pan .card{scrollbar-color:#b07f2c rgba(0,0,0,.25)}
 @keyframes yh3row{0%{opacity:0;transform:translateX(-10px)}100%{opacity:1;transform:none}}
 @keyframes yh3glint{50%{text-shadow:0 0 12px currentColor,0 0 2px #fff}}
 body.lowfx .pan .it{animation:none!important}
+
+/* ---------- giriş / karakter ekranları: gece gökyüzü, kale silueti, kıvılcımlar ---------- */
+html body .scr{background:radial-gradient(ellipse at 50% 110%,rgba(255,140,40,.28),transparent 55%),radial-gradient(ellipse at 50% -10%,#2b1c55 0,#120b2a 45%,#07040f 100%)!important}
+html body .scr::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(1.4px 1.4px at 12% 18%,#fff8,transparent),radial-gradient(1.2px 1.2px at 32% 8%,#fff9,transparent),radial-gradient(1.6px 1.6px at 58% 22%,#fffb,transparent),radial-gradient(1px 1px at 76% 12%,#fff8,transparent),radial-gradient(1.3px 1.3px at 88% 30%,#fffa,transparent),radial-gradient(1px 1px at 22% 36%,#fff6,transparent),radial-gradient(1.5px 1.5px at 66% 40%,#fff7,transparent),radial-gradient(1px 1px at 44% 28%,#fff8,transparent);animation:yh3tw 5s ease-in-out infinite alternate}
+html body .scr::after{content:"";position:fixed;left:0;right:0;bottom:0;height:34vh;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'><path fill='%23160c2c' d='M0 300V210l90-40 80 30 120-70 100 50 70-20 60 30V120h18v-26h14v26h20V70l26-30 26 30v50h20V94h14v26h18v70l60-30 90 40 110-80 140 70 90-30 120 50 100-40 110 50v80z'/><path fill='%230a0614' d='M0 300v-60l140-30 160 40 200-50 220 50 180-40 240 50 200-30 260 40v30z'/><g fill='%23ffcf6a' opacity='.8'><rect x='752' y='132' width='5' height='8'/><rect x='790' y='112' width='5' height='8'/><rect x='770' y='160' width='5' height='8'/></g></svg>") bottom/100% 100% no-repeat;opacity:.95}
+html body .scr>.card,html body .scr>.wd{position:relative;z-index:1}
+html body .scr>.card{border-radius:20px!important;animation:yh3card .5s cubic-bezier(.2,.9,.3,1.1) both}
+html body .scr h1{font-family:var(--fh)!important;letter-spacing:.05em;background:linear-gradient(180deg,#fff3c4,#f2c35e 45%,#b07a22);-webkit-background-clip:text;background-clip:text;color:transparent!important;filter:drop-shadow(0 2px 0 #3a2410) drop-shadow(0 0 18px rgba(255,190,80,.35))}
+html body .scr h1 b{color:inherit!important;background:inherit;-webkit-background-clip:text;background-clip:text}
+html body .scr label{font-family:var(--fh);color:#e8d3aa;letter-spacing:.03em}
+html body .scr input{background:rgba(10,6,4,.55)!important;border:1.5px solid rgba(217,164,65,.45)!important;color:#fff3d6!important;border-radius:12px!important}
+html body .scr input:focus{outline:none;border-color:#f7dc8a!important;box-shadow:0 0 0 3px rgba(247,220,138,.2),0 0 14px rgba(255,190,80,.35)}
+html body .cprev{border:1px solid rgba(217,164,65,.3)!important;background:radial-gradient(ellipse at 50% 85%,rgba(255,180,70,.18),transparent 60%),rgba(0,0,0,.2)!important}
+html body .cprev canvas,html body #s-char .cprev>div:first-child canvas{background:radial-gradient(ellipse at 50% 92%,rgba(255,200,90,.55) 0,rgba(255,170,60,.12) 22%,transparent 40%),radial-gradient(circle at 50% 60%,#3a2a5a,#140c24)!important;box-shadow:0 0 0 2px #2a1c12,0 0 0 3.5px #d9a441,0 10px 24px rgba(0,0,0,.6);animation:yh3bob 3.2s ease-in-out infinite}
+html body .cls{gap:10px!important}
+html body .cls button{position:relative;overflow:hidden;border:1.5px solid rgba(217,164,65,.28)!important;background:linear-gradient(180deg,rgba(60,42,26,.9),rgba(20,13,8,.95))!important;border-radius:14px!important;transition:transform .18s cubic-bezier(.2,.9,.3,1.4),border-color .2s,box-shadow .2s}
+html body .cls button:hover{transform:translateY(-4px);border-color:rgba(247,220,138,.7)!important;box-shadow:0 10px 20px rgba(0,0,0,.5)}
+html body .cls button[aria-pressed=true]{border-color:#f7dc8a!important;background:linear-gradient(180deg,rgba(120,84,34,.95),rgba(40,26,12,.95))!important;box-shadow:0 0 0 2px rgba(247,220,138,.3),0 0 22px rgba(255,190,80,.45)!important;transform:translateY(-4px)}
+html body .cls button[aria-pressed=true]::before{content:"";position:absolute;left:50%;top:38%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:conic-gradient(from 0deg,transparent,rgba(255,220,130,.35),transparent 30%,rgba(255,220,130,.3),transparent 60%);animation:yh3spin 4s linear infinite;pointer-events:none}
+html body .cls button>*{position:relative}
+html body .cls button b,html body .cls button strong{font-family:var(--fh)}
+html body .cls .ic{filter:drop-shadow(0 3px 6px rgba(0,0,0,.6));transition:transform .25s}
+html body .cls button:hover .ic,html body .cls button[aria-pressed=true] .ic{transform:scale(1.18) rotate(-6deg)}
+html body .det{border:1px solid rgba(217,164,65,.22)!important;background:rgba(0,0,0,.25)!important;border-radius:14px!important}
+.yh3ember{position:fixed;bottom:-10px;width:4px;height:4px;border-radius:50%;background:#ffcf6a;box-shadow:0 0 8px 2px rgba(255,170,60,.8);pointer-events:none;z-index:0;animation:yh3emb linear forwards}
+@keyframes yh3tw{0%{opacity:.55}100%{opacity:1}}
+@keyframes yh3bob{50%{transform:translateY(-5px)}}
+@keyframes yh3emb{0%{transform:translate(0,0);opacity:0}10%{opacity:1}100%{transform:translate(var(--dx),-80vh);opacity:0}}
+body.lowfx .scr::before,body.lowfx .cprev canvas,body.lowfx .cls button::before{animation:none!important}

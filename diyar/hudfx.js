@@ -34,5 +34,7 @@ var mo=new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var t=ms[i
 function watchPans(){document.querySelectorAll('.pan').forEach(function(p){if(p._yh3)return;p._yh3=1;mo.observe(p,{childList:true,subtree:true});tagRows(p)})}
 setInterval(watchPans,1500);watchPans();
 var tip=null;if(matchMedia('(pointer:fine)').matches){document.addEventListener('mouseover',function(e){var r=e.target.closest&&e.target.closest('.pan .it[data-r]');if(!tip){tip=document.createElement('div');tip.id='yh3tip';document.body.appendChild(tip)}if(!r){tip.classList.remove('on');return}var k=+r.getAttribute('data-r')-1,b=r.querySelector('b'),sm=r.querySelector('small');tip.innerHTML='<b style="color:'+RC[k]+'">'+(b?b.textContent:'')+'</b>'+RAR[k]+(sm?'<br>'+sm.textContent:'');var R=r.getBoundingClientRect();tip.style.left=Math.min(innerWidth-270,R.right+10)+'px';tip.style.top=Math.max(8,R.top)+'px';tip.classList.add('on')})}
+/* giriş ekranlarında yükselen kıvılcımlar */
+setInterval(function(){if(document.body.classList.contains('lowfx')||matchMedia('(prefers-reduced-motion:reduce)').matches)return;if(!document.querySelector('.scr.on')||document.querySelectorAll('.yh3ember').length>26)return;var e=document.createElement('i');e.className='yh3ember';var d=6+Math.random()*6;e.style.left=(Math.random()*100)+'vw';e.style.setProperty('--dx',((Math.random()-.5)*160)+'px');e.style.animationDuration=d+'s';var sz=2+Math.random()*3;e.style.width=e.style.height=sz+'px';document.body.appendChild(e);setTimeout(function(){e.remove()},d*1000)},260);
 setInterval(tick,110);
 })();
