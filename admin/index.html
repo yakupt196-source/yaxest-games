@@ -41,6 +41,7 @@ button{background:var(--y);color:#241a00;border:0;font-weight:700;cursor:pointer
  <div class="items" id="items"></div>
  <p class="mute" style="margin:12px 0 6px">Kostüm hediyesi (isteğe bağlı)</p>
  <select id="cosel"><option value="">Kostüm yok</option></select>
+ <select id="petsel"><option value="">Yoldaş (pet) yok</option></select>
  <p class="mute" style="margin:12px 0 6px">Mesaj (oyuncuya gösterilir)</p>
  <input id="msg" maxlength="140" placeholder="Yaxest'ten hediye! 🎁">
  <div class="row" style="margin-top:12px"><button id="send" type="button">Hediyeyi gönder</button><button id="clr" class="alt" type="button">Temizle</button></div>
@@ -58,7 +59,8 @@ var PRE={'Başlangıç':{gold:500,wood:50,stone:50,copper:20},'Madenci':{iron:30
 $('pre').innerHTML=Object.keys(PRE).map(function(n){return'<button class="alt" data-p="'+n+'" type="button">'+n+'</button>'}).join('');
 document.querySelectorAll('[data-p]').forEach(function(b){b.onclick=function(){clr();var p=PRE[b.dataset.p];Object.keys(p).forEach(function(k){var e=document.querySelector('[data-k="'+k+'"]');if(e)e.value=p[k]})}});
 (function(){var o='';Object.keys(YL.CAT).forEach(function(sl){YL.CAT[sl].forEach(function(x){if(x.p>0)o+='<option value="cos.'+sl+'.'+x.id+'">'+esc(x.n)+' ('+sl+', 🪙'+x.p+')</option>'})});$('cosel').insertAdjacentHTML('beforeend',o)})();
-function clr(){document.querySelectorAll('[data-k]').forEach(function(e){e.value=''});$('cosel').value=''}$('clr').onclick=clr;
+(function(){var P={pitik:['Pıtık',0],miyav:['Miyav',0],baykus:['Bilge Baykuş',1],robo:['Mini Robo',1],cemile:['Cemile',2],peri:['Ateş Perisi',2],hayalet:['Hayalet Boo',2],ejder:['Mini Ejder',3],altin:['Altın Kaplumbağa',4]},R=['Sıradan','Seçkin','Nadir','Epik','Efsanevi'],o='';Object.keys(P).forEach(function(k){o+='<option value="pet.'+k+'">🐾 '+P[k][0]+' ('+R[P[k][1]]+')</option>'});$('petsel').insertAdjacentHTML('beforeend',o)})();
+function clr(){document.querySelectorAll('[data-k]').forEach(function(e){e.value=''});$('cosel').value='';$('petsel').value=''}$('clr').onclick=clr;
 function isAdm(){var s=A.state();return s&&ADMIN.indexOf((s.email||'').toLowerCase())>=0}
 function view(){var s=A.state();$('login').hidden=!!s;$('panel').hidden=$('hist').hidden=$('srv').hidden=$('pl').hidden=$('an').hidden=$('bl').hidden=$('lg').hidden=!(s&&isAdm());
   $('who').innerHTML=s?(isAdm()?'Giriş: <b>'+esc(s.email)+'</b> · yönetici <button class="alt" id="so" type="button" style="padding:4px 12px;min-height:30px">Çıkış</button>':'<span class="er">'+esc(s.email)+' yönetici değil. Bu sayfa yalnızca yönetici hesabıyla çalışır.</span> <button class="alt" id="so" type="button" style="padding:4px 12px;min-height:30px">Çıkış</button>'):'Yönetici hesabıyla giriş yap.';
@@ -66,11 +68,11 @@ function view(){var s=A.state();$('login').hidden=!!s;$('panel').hidden=$('hist'
 $('go').onclick=function(){$('le').textContent='';A.signIn($('em').value.trim(),$('pw').value).then(view).catch(function(e){$('le').textContent=e.msg||'Giriş başarısız'})};
 $('all').onchange=function(){$('to').disabled=$('all').checked};
 $('send').onclick=function(){var items={},n=0;document.querySelectorAll('[data-k]').forEach(function(e){var v=Math.floor(+e.value);if(v>0){items[e.dataset.k]=Math.min(v,1e6);n++}});
-  if($('cosel').value){items[$('cosel').value]=1;n++}var all=$('all').checked,nick=$('to').value.trim();if(!n){$('st').innerHTML='<span class="er">En az bir kalem gir.</span>';return}if(!all&&!nick){$('st').innerHTML='<span class="er">Oyuncu adı gir ya da “Herkese”yi seç.</span>';return}
+  if($('cosel').value){items[$('cosel').value]=1;n++}if($('petsel').value){items[$('petsel').value]=1;n++}var all=$('all').checked,nick=$('to').value.trim();if(!n){$('st').innerHTML='<span class="er">En az bir kalem gir.</span>';return}if(!all&&!nick){$('st').innerHTML='<span class="er">Oyuncu adı gir ya da “Herkese”yi seç.</span>';return}
   if(all&&!confirm('Hediye TÜM oyunculara gidecek. Emin misin?'))return;$('send').disabled=true;$('st').textContent='Gönderiliyor…';
   A.sendGift({nick:all?'*':nick,items:items,msg:$('msg').value.trim()||'Yaxest\'ten hediye! 🎁'}).then(function(){$('st').innerHTML='<span class="ok">Gönderildi → '+(all?'herkes':esc(nick))+'. Oyuncu oyuna girince alır.</span>';clr();hist()}).catch(function(e){var m=e.message;$('st').innerHTML='<span class="er">'+(m==='NONICK'?'Bu takma adda oyuncu bulunamadı (adın kilitli olması gerekir).':m==='DENIED'?'İzin yok: Firestore kuralına gifts bölümü eklenmemiş olabilir.':'Gönderilemedi.')+(e.detail?'<br><small>Ayrıntı: '+esc(e.detail)+'</small>':'')+'</span>'}).then(function(){$('send').disabled=false})};
 function hist(){A.listGifts().then(function(l){if(!l.length){$('tb').textContent='Henüz hediye yok.';return}
-  $('tb').innerHTML='<table><tr><th>Kime</th><th>İçerik</th><th>Durum</th><th></th></tr>'+l.map(function(g){var it=Object.keys(g.items||{}).map(function(k){var m=Y.MATS[k];return(g.items[k])+'× '+(k==='gold'?'Diyar altını':k==='jeton'?'Jeton':k==='gem'?'Elmas':m?m.n:k.indexOf('cos.')===0?'Kostüm '+k.split('.')[2]:k)}).join(', ');
+  $('tb').innerHTML='<table><tr><th>Kime</th><th>İçerik</th><th>Durum</th><th></th></tr>'+l.map(function(g){var it=Object.keys(g.items||{}).map(function(k){var m=Y.MATS[k];return(g.items[k])+'× '+(k==='gold'?'Diyar altını':k==='jeton'?'Jeton':k==='gem'?'Elmas':k.indexOf('pet.')===0?'Yoldaş: '+k.slice(4):m?m.n:k.indexOf('cos.')===0?'Kostüm '+k.split('.')[2]:k)}).join(', ');
    return'<tr><td>'+esc(g.nick)+'</td><td>'+esc(it)+'<br><span class="mute">'+esc(g.msg||'')+'</span></td><td>'+(g.uid==='*'?'Herkes':g.claimed?'<span class="ok">Alındı</span>':'Bekliyor')+'</td><td>'+(!g.claimed?'<button class="alt" data-d="'+g.id+'" type="button" style="padding:4px 10px;min-height:30px">Sil</button>':'')+'</td></tr>'}).join('')+'</table>';
   document.querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){A.delGift(b.dataset.d).then(hist)}})}).catch(function(e){$('tb').innerHTML='<span class="er">Liste okunamadı'+(e.detail?': '+esc(e.detail):' (kural eklenmemiş olabilir)')+'</span>'})}
 /* ===== Sunucu yönetimi (Worker /adm) ===== */

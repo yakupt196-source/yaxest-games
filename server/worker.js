@@ -410,7 +410,7 @@ export class World {
     if (op === 'msg') { const m = clean(b.m, 140); if (!m) return this.js({ err: 'Boş mesaj' }); await this.alog({ by, op: 'mesaj', pk, n: nick, d: m }); return this.js({ pk, live: { pk, send: { t: 'sys', m: '📩 Yönetici: ' + m } } }); }
     if (op === 'give' || op === 'take' || op === 'setlv') {
       const q = { id: rid(8), k: op === 'setlv' ? 'lv' : op, at: now };
-      if (op === 'setlv') q.v = int(b.v, 1, 150); else { q.g = int(b.g, 0, 1e9); q.it = {}; let n = 0; if (b.it && typeof b.it === 'object') for (const k of Object.keys(b.it)) { if (n >= 20) break; if (!/^(m|r|w|z|e):[\w:]{1,24}$/.test(k) && !/^cos\.\w+\.\w+$/.test(k) && k !== 'jeton' && k !== 'gem') continue; const v = int(b.it[k], 0, 1e6); if (v > 0) { q.it[k] = v; n++; } } if (!q.g && !n) return this.js({ err: 'Boş içerik' }); }
+      if (op === 'setlv') q.v = int(b.v, 1, 150); else { q.g = int(b.g, 0, 1e9); q.it = {}; let n = 0; if (b.it && typeof b.it === 'object') for (const k of Object.keys(b.it)) { if (n >= 20) break; if (!/^(m|r|w|z|e):[\w:]{1,24}$/.test(k) && !/^cos\.\w+\.\w+$/.test(k) && !/^pet\.\w{1,16}$/.test(k) && k !== 'jeton' && k !== 'gem') continue; const v = int(b.it[k], 0, 1e6); if (v > 0) { q.it[k] = v; n++; } } if (!q.g && !n) return this.js({ err: 'Boş içerik' }); }
       q.msg = clean(b.msg, 100);
       const L = await this.g('adm:' + pk, []); L.push(q); await this.s('adm:' + pk, L.slice(-30)); await this.alog({ by, op, pk, n: nick, d: JSON.stringify(q.v ?? { g: q.g, it: q.it }).slice(0, 200) });
       return this.js({ pk, live: { pk, send: { t: 'adm', q } } });
