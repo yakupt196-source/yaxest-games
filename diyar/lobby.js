@@ -66,7 +66,7 @@ function open(){var a=api();if(!a||!a.P())return;build();var P=a.P(),Y=a.Y,c=Y.C
   L.querySelectorAll('#lbcls button').forEach(function(b){b.onclick=function(){a.switchCls(b.dataset.k);a.save();open()}});
   try{var pc=$('#lbpt').getContext('2d');pc.clearRect(0,0,44,44);pc.save();pc.beginPath();pc.arc(22,22,21,0,6.3);pc.clip();YL.hero(pc,22,66,P.ap,0,false,.78);pc.restore()}catch(e){}
   var nb=$('#lbn3');try{nb.classList.toggle('dot',!!(window.YGZ&&YGZ.unread&&YGZ.unread()))}catch(e){}
-  L.classList.add('on');cancelAnimationFrame(raf);var t0=performance.now();(function loop(){raf=requestAnimationFrame(loop);draw((performance.now()-t0)/1000)})()}
+  L.classList.add('on');cancelAnimationFrame(raf);var t0=performance.now();var lt=0;(function loop(){raf=requestAnimationFrame(loop);var n=performance.now();if(document.hidden||n-lt<40)return;lt=n;draw((n-t0)/1000)})()}
 function fmt(n){n=Math.round(n);return n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e4?Math.round(n/1e3)+'B':String(n)}
 function draw(t){var cv=$('#lbhero');if(!cv)return;var c=cv.getContext('2d'),P=api().P();if(!P)return;c.clearRect(0,0,cv.width,cv.height);c.imageSmoothingEnabled=false;
   /* yavaşça dönen kahraman: önce bize bakar, sonra iki yana döner, ara ara yürür */var ph=(t%8)/8,fx=ph<.5?0:ph<.75?1:-1,mv=(ph>.5&&ph<.62)||(ph>.75&&ph<.87);
