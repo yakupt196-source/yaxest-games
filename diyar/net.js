@@ -80,10 +80,11 @@ function draw(ctx,camX,camY,t,W,H){if(!on()||G.mode!=='world')return;camX0=camX;
   for(var id in others){var o=others[id],sx=o.dx,sy=o.dy,cx=o.dx-camX,cy=o.dy-camY;if(cx<-80||cy<-90||cx>W+80||cy>H+80)continue;
     var mv=Math.abs(o.x-o.dx)+Math.abs(o.y-o.dy)>3;
     ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(sx,sy+22,20,8,0,0,6.28);ctx.fill();
-    var oc=o.ap&&CLK[o.ap.cl]?o.ap.cl:'savasci',vap=(o.ap&&o.ap.body!=='svg'&&o.ap.body!=='hamster')?o.ap:null;if(mv)o.fa=Math.atan2(o.y-o.dy,o.x-o.dx);var fa=o.fa||0,wb=vap&&(Math.sin(fa)<-.3||oc!=='tank');
+    var oc=o.ap&&CLK[o.ap.cl]?o.ap.cl:'savasci',vap=(o.ap&&o.ap.body!=='svg'&&o.ap.body!=='hamster')?o.ap:null;if(mv)o.fa=Math.atan2(o.y-o.dy,o.x-o.dx);var fa=o.fa||0,wb=vap&&Math.sin(fa)<-.3;
+    if(window.YPX&&YPX.on()&&YPX.hero(ctx,sx,sy+21,{cls:oc,ap:o.ap,founder:o.ap&&o.ap.fd,fx:Math.cos(fa),fy:Math.sin(fa),mv:mv,t:t})){}else{
     try{if(wb)YA.weapon(ctx,oc,sx,sy-2,fa,0,t,0,vap.sk,vap.tc,mv,vap)}catch(e){}
     try{YL.hero(ctx,sx,sy+21,o.ap||YL.def(),t,mv,1)}catch(e){}
-    try{if(vap&&!wb)YA.weapon(ctx,oc,sx,sy-2,fa,0,t,0,vap.sk,vap.tc,mv,vap)}catch(e){}
+    try{if(vap&&!wb)YA.weapon(ctx,oc,sx,sy-2,fa,0,t,0,vap.sk,vap.tc,mv,vap)}catch(e){}}
     try{var pl=window.YSoc?YSoc.plate(o):null;YA.plate(ctx,sx,sy+15+YL.topY(o.ap||YL.def()),pl?pl.t:o.n+' · Sv'+o.lv,pl?pl.c:'#8fd6ff')}catch(e){}
     if(window.YSoc)try{YSoc.drawOther(ctx,o,sx,sy+15+YL.topY(o.ap||YL.def()))}catch(e){}
     try{bubble(ctx,id,sx,sy+15+YL.topY(o.ap||YL.def())-24)}catch(e){}}
