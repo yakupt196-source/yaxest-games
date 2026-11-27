@@ -51,7 +51,7 @@ function applyAdm(q){if(!q||!q.id||!P)return;send({t:'aa',id:q.id});P.adm=P.adm|
   else if(q.k==='give'||q.k==='take'){
     if(q.g){var g=cl(q.g);P.gold=Math.max(0,(P.gold||0)+sg*g);tx.push('🪙 '+(sg>0?'+':'−')+g)}
     Object.keys(q.it||{}).forEach(function(k){var n=Math.max(0,Math.min(1e6,Math.floor(+q.it[k]||0)));if(!n)return;var a=k.split(':'),nm=k;
-      try{if(k==='jeton'){if(sg>0&&window.YX&&YX.earn){YX.earn(n,'gift',true);tx.push('🎟️ '+n+' jeton')}else if(window.YX&&YX.spend){YX.spend(n);tx.push('🎟️ −'+n+' jeton')}}
+      try{if(k==='gem'){P.gem=Math.max(0,(P.gem|0)+sg*n);tx.push('💎 '+(sg>0?'+':'−')+n+' elmas')}else if(k==='jeton'){if(sg>0&&window.YX&&YX.earn){YX.earn(n,'gift',true);tx.push('🎟️ '+n+' jeton')}else if(window.YX&&YX.spend){YX.spend(n);tx.push('🎟️ −'+n+' jeton')}}
       else if(k.indexOf('cos.')===0){var c=k.split('.');P.cs=P.cs||{};if(window.YL&&YL.CAT[c[1]]){if(sg>0)P.cs[c[1]+':'+c[2]]=1;else delete P.cs[c[1]+':'+c[2]];tx.push('👗 '+(sg>0?'+':'−')+'kostüm')}}
       else if(a[0]==='m'&&Y.MATS[a[1]]){P[a[1]]=Math.max(0,(P[a[1]]||0)+sg*n);tx.push((sg>0?'+':'−')+n+' '+Y.MATS[a[1]].n)}
       else if(a[0]==='r'&&window.YR&&YR.R[a[1]]){P.rn=P.rn||{};P.rn[a[1]]=Math.max(0,(P.rn[a[1]]||0)+sg*n);tx.push((sg>0?'+':'−')+n+' '+YR.R[a[1]].n)}
