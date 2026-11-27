@@ -11,7 +11,7 @@ function blit(c,key,col,row,x,y,sc,alpha,flash){var r=META.S[key];if(!r||!ok)ret
   if(flash){c.globalCompositeOperation='lighter';c.globalAlpha*=flash;c.drawImage(img,sx,sy,16,16,dx,dy,w,w)}c.restore();return true}
 function chKey(cls,ap,founder){if(founder)return META.CH.yaxest;var f=ap&&ap.g==='f';return META.CH[(cls||'def')+(f?'_f':'')]||META.CH[cls]||META.CH.def}
 /* kahraman: ayak noktası (x,y) */
-function hero(c,x,y,o){var k=chKey(o.cls,o.ap,o.founder),d=dirOf(o.fx||0,o.fy||1),row=o.atk?4:(o.mv?Math.floor(o.t*9)%4:0);
+function hero(c,x,y,o){/* mağazadan alınan özel karakterler (svg gövde) kendi çizimiyle kalır */if(o.ap&&o.ap.body==='svg')return false;var k=chKey(o.cls,o.ap,o.founder),d=dirOf(o.fx||0,o.fy||1),row=o.atk?4:(o.mv?Math.floor(o.t*9)%4:0);
   c.save();c.fillStyle='rgba(0,0,0,.32)';c.beginPath();c.ellipse(x,y-2,15,5,0,0,6.283);c.fill();c.restore();
   return blit(c,k,d,row,x,y+2,4,o.alpha,o.flash)}
 /* canavar: konumu ve hareketi izlenir, yön hareketten (durunca oyuncuya doğru) */
