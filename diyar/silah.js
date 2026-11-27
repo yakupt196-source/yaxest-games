@@ -76,5 +76,5 @@ function mk(cls,t){
  return'<defs>'+d+'</defs>'+o+'<g>'+body+'</g>'+fx}
 function svg(cls,t,px){px=px||64;return'<svg class="yw'+(t>=19?' yh':'')+'" viewBox="0 0 64 64" width="'+px+'" height="'+px+'" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+mk(cls,t)+'</svg>'}
 if(!document.getElementById('yw-css')){var s=document.createElement('style');s.id='yw-css';s.textContent='.yw{display:block;overflow:visible;filter:drop-shadow(0 4px 6px rgba(0,0,0,.65))}.yw.yh{animation:ywh 5s linear infinite}@keyframes ywh{to{filter:drop-shadow(0 4px 6px rgba(0,0,0,.65)) hue-rotate(360deg)}}@media (prefers-reduced-motion:reduce){.yw.yh{animation:none}}';document.head.appendChild(s)}
-window.YW={svg:svg};
+window.YWP={svg:svg};
 })();
