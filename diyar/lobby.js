@@ -106,5 +106,7 @@ function settings(){var a=api(),pix=!(window.YPX)||YPX.want(),pk=window.YPX?YPX.
 window.YLB={open:open,close:close};
 /* oyun bu dosyadan önce karakter ekranını açtıysa lobiyi şimdi aç */
 function late(){try{var sc=document.getElementById('s-char'),co=document.getElementById('cold'),a=api();if(sc&&sc.classList.contains('on')&&co&&co.style.display!=='none'&&a&&a.P()&&!a.P().nickBad)open()}catch(e){}}
+function on(id){var e=document.getElementById(id);return e&&e.classList.contains('on')}
+setInterval(function(){try{if(L&&L.classList.contains('on'))return;if(on('s-wd')||on('hud')||document.getElementById('yshop')&&on('yshop'))return;late()}catch(e){}},700);
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',late);else setTimeout(late,0);
 })();

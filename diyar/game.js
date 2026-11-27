@@ -105,7 +105,7 @@ function drawWd(){var ap=W.ap,hm=ap.body==='hamster',sv=ap.body==='svg',tabs=WTA
   if($('wbuy'))$('wbuy').onclick=function(){var q=lockedList()[0];if(!q||W.gold<q.p)return;W.gold-=q.p;W.owned[q.sl+':'+q.id]=1;drawWd()}}
 function wdClose(save){clearInterval(wdT);$('s-wd').classList.remove('on');if(!W)return;var w=W;W=null;
   if(save){if(w.ingame){P.ap=w.ap;P.cs=w.owned;P.gold=w.gold;saveNow();setAv()}else{selAp=w.ap;selCs=w.owned;selGold=w.gold;drawNewPrev()}}
-  if(w.ingame&&G)G.paused=false}
+  if(w.ingame&&G)G.paused=false;if(!G&&P&&!P.nickBad&&window.YLB)try{YLB.open()}catch(e){}}
 var NKW={taken:'Bu takma ad alınmış. Örn: ekine rakam ekle (Ad1).',reserved:'Bu ad ayrılmış (yönetim/marka). Başka bir ad seç.',net:'Takma ad doğrulanamadı: bağlantını kontrol edip tekrar dene.'};
 function nickOk(n){return/^[A-Za-z0-9_ğüşöçıİĞÜŞÖÇ]{3,16}$/.test(n)}
 function mkChar(){var n=$('nick').value.trim(),er=$('cerr');er.textContent='';
