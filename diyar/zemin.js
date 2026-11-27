@@ -43,6 +43,7 @@ function build(cx,cy){
   for(var ty=ty0;ty<ty0+CH;ty++)for(var tx=tx0;tx<tx0+CH;tx++){if(tx<0||ty<0||tx>=Y.MW||ty>=Y.MH)continue;var z=Y.zoneAt(tx,ty);if(z===3)continue;
     var near=false;for(var dy=-1;dy<=1&&!near;dy++)for(var dx=-1;dx<=1;dx++)if(zat(tx+dx,ty+dy)===3){near=true;break}if(near)continue;
     detail(g,tx,ty,z)}
+  /* piksel dünya: parça 1/3 çözünürlüğe indirilir, çizerken keskin büyütülür */if(window.YPX&&YPX.want()){var sc=document.createElement('canvas');sc.width=sc.height=PS/3;var sg=sc.getContext('2d');sg.imageSmoothingEnabled=true;sg.drawImage(c,0,0,PS/3,PS/3);sc.px=1;return sc}
   return c}
 function blade(g,x,y,h,lean,col){g.strokeStyle=col;g.lineWidth=1.7;g.lineCap='round';g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(x+lean*.4,y-h*.6,x+lean,y-h);g.stroke()}
 function detail(g,tx,ty,z){var X=tx*TS,Yp=ty*TS,h=hs(tx,ty,31),h2=hs(tx,ty,32),h3=hs(tx,ty,33),h4=hs(tx,ty,34);
@@ -70,7 +71,7 @@ function draw(ctx,camX,camY,VW,VH,t,Yo){
   /* takılma önlemi: karede zaman bütçesi (ilk açılışta 24 ms, sonra 6 ms); kalan parçalar boşta önceden çizilir */
   for(var r=r0;r<=r1;r++)for(var c=c0;c<=c1;c++){var k=c+','+r,e=cache.get(k);
     if(!e){if(now()-tb<lim){try{e={c:build(c,r),u:0}}catch(er){return false}cache.set(k,e)}else{miss++;ctx.fillStyle=fillFor(c,r);ctx.fillRect(c*PS,r*PS,PS,PS);continue}}
-    e.u=t;ctx.drawImage(e.c,c*PS,r*PS)}
+    e.u=t;if(e.c.px){var ism=ctx.imageSmoothingEnabled;ctx.imageSmoothingEnabled=false;ctx.drawImage(e.c,c*PS,r*PS,PS,PS);ctx.imageSmoothingEnabled=ism}else ctx.drawImage(e.c,c*PS,r*PS)}
   hadAll=miss===0;view={c0:c0,r0:r0,c1:c1,r1:r1,t:t};schedule();
   if(cache.size>160){var arr=[...cache.entries()].sort(function(a,b){return a[1].u-b[1].u});for(var i=0;i<arr.length-70;i++)cache.delete(arr[i][0])}
   /* hareketli su: dalga çizgileri */
