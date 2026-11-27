@@ -352,5 +352,5 @@ function achCheck(){achT++;if(achT%60)return;ACH.forEach(function(a){if(X.ac[a.i
   if(ok){X.ac[a.id]=1;D.say('🏆 Başarım: '+a.n+' · Yeni unvan: '+a.t,'sys');D.floatTxt(G.px,G.py-90,'🏆 '+a.n,'#ffd23f');if(!X.tt)X.tt=a.t;D.saveNow()}})}
 function plate(ctx,x,y){if(!X||!X.tt)return;try{window.YA.plate(ctx,x,y,'« '+X.tt+' »','#ffd23f')}catch(e){}}
 
-window.YX2={init:init,tick:tick,draw:draw,kill:kill,gather:gather,died:died,near:near,interact:interact,plate:plate,PETS:PETS,dbg:{hourP:hourP,weatherNow:weatherNow,redMoonOn:redMoonOn,traderOn:traderOn,goldRainOn:goldRainOn,rm:function(){return rm},X:function(){return X},openPanel:openPanel,PAGES:function(){return PAGES}}};
+window.YX2={drawPet:drawPet,pet:function(){return X&&X.act&&PETS[X.act]?X.act:''},init:init,tick:tick,draw:draw,kill:kill,gather:gather,died:died,near:near,interact:interact,plate:plate,PETS:PETS,dbg:{hourP:hourP,weatherNow:weatherNow,redMoonOn:redMoonOn,traderOn:traderOn,goldRainOn:goldRainOn,rm:function(){return rm},X:function(){return X},openPanel:openPanel,PAGES:function(){return PAGES}}};
 })();
