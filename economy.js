@@ -450,7 +450,8 @@ function daily(){var d=new Date(),k=function(x){return x.getFullYear()+'-'+(x.ge
 function wrapBg(){var g=window.G;if(!g||!g.bg||g.__yxbg)return;g.__yxbg=1;var o=g.bg;g.bg=function(a,b){o(a,b);if(window.YX&&YX.tint){g.x.fillStyle=YX.tint;g.x.fillRect(0,0,g.W,g.H)}}}
 
 /* ---------- API ---------- */
-window.YX={locked:locked,LOCK:LOCK,S:function(){return S},coins:function(){return S.c},earn:earn,spend:spend,price:price,buy:buy,equip:equip,owns:owns,perkBuy:perkBuy,boostBuy:boostBuy,cepBuy:cepBuy,boxBuy:boxBuy,chestBuy:chestBuy,rar:rar,RN:RN,RCOL:RCOL,CHEST:CHEST,tubeCost:tubeCost,hintCost:hintCost,
+function grant(id){var it=ITEMS[id];if(!it||LOCK[id]&&!lockAllowed())return false;S.own[id]=1;save();emit('buy',{id:id});return true}
+window.YX={grant:grant,locked:locked,LOCK:LOCK,S:function(){return S},coins:function(){return S.c},earn:earn,spend:spend,price:price,buy:buy,equip:equip,owns:owns,perkBuy:perkBuy,boostBuy:boostBuy,cepBuy:cepBuy,boxBuy:boxBuy,chestBuy:chestBuy,rar:rar,RN:RN,RCOL:RCOL,CHEST:CHEST,tubeCost:tubeCost,hintCost:hintCost,
  av:av,level:level,lvInfo:lvInfo,mult:mult,toast:toast,say:say,applyTheme:applyTheme,
  cat:{SP:SP,COL:COL,HAT:HAT,FACE:FACE,NECK:NECK,AURA:AURA,PERK:PERK,CEP:CEP,TH:TH,ITEMS:ITEMS},tint:null,
  setName:function(n){S.name=String(n||'').slice(0,14);save();emit('name')},reset:function(){S=def();save();applyTheme('neon');emit('sync')}};

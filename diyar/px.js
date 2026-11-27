@@ -40,5 +40,6 @@ function cached(c,key,x,y,bx,by,bw,bh,draw){var e=pixelize(key,bx,by,bw,bh,3,dra
 /* NPC ve köylüler (YA.person) de pikselleşir: duruşta 4, yürürken 4 kare */
 if(window.YA&&YA.person&&!YA.person.__px){var OP=YA.person;YA.person=function(ctx,x,y,o,t,mv){if(!on||ctx.__px)return OP.apply(this,arguments);var k;try{k=JSON.stringify(o)}catch(e){return OP.apply(this,arguments)}var fr=mv?Math.floor(t*9)%4:Math.floor(t*1.6)%4,tt=mv?fr*.1745:fr*.62;
   cached(ctx,'p|'+k+'|'+(mv?1:0)+'|'+fr,x,y,-42,-104,84,124,function(g){g.__px=1;OP.call(YA,g,0,0,o,tt,mv)})};YA.person.__px=1}
+/* svg karakter resmi sonradan yüklenirse boş piksel kopyaları at */addEventListener('yl-img',function(){PXC.forEach(function(v,k){if(k.charAt(0)==='h')PXC.delete(k)})});
 window.YPX={cached:cached,pk:function(v){if(v){pk=v;try{localStorage.setItem('yd-pixk',v)}catch(e){}}return pk},clear:function(){PXC.clear()},on:function(){return on&&ok},want:function(){return on},set:set,hero:hero,mon:mon,ready:function(){return ok}};
 })();

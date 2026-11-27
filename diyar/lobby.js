@@ -57,11 +57,11 @@ function build(){if(L)return L;var st=document.createElement('style');st.textCon
    '<div class="sheet" id="lbsheet"><div class="sh" id="lbsh"></div></div>';
   document.body.appendChild(L);
   $('#lbplay').onclick=play;$('#lbw').onclick=worlds;$('#lbset').onclick=settings;$('#lbn5').onclick=settings;
-  $('#lbn1').onclick=function(){close();api().wardrobe()};$('#lbn2').onclick=classes;$('#lbn3').onclick=news;$('#lbn4').onclick=function(){location.href='../magaza/'};
+  $('#lbn1').onclick=function(){close();api().wardrobe()};$('#lbn2').onclick=classes;$('#lbn3').onclick=news;$('#lbn4').onclick=function(){if(window.YSH)YSH.open('hot')};
   $('#lbsheet').onclick=function(e){if(e.target.id==='lbsheet')hide()};return L}
 function open(){var a=api();if(!a||!a.P())return;build();var P=a.P(),Y=a.Y,c=Y.CLASSES[P.cls];
   $('#lbn').textContent=P.nick||'Kahraman';$('#lbc').textContent=(c?c.ic+' '+c.n:'')+' · Sv '+P.lv;$('#lbg').textContent='🪙 '+fmt(P.gold||0);
-  var j=0;try{j=YX.coins()}catch(e){}$('#lbj').textContent='💎 '+fmt(j);$('#lbwn').textContent='Dünya: '+wname(curW());
+  var j=0;try{j=YX.coins()}catch(e){}$('#lbj').textContent='💎 '+fmt(P.gem|0);$('#lbj').title='Elmas';$('#lbj').onclick=function(){if(window.YSH)YSH.open('gem')};$('#lbg').onclick=function(){if(window.YSH)YSH.open('hot')};$('#lbwn').textContent='Dünya: '+wname(curW());
   $('#lbcls').innerHTML=Object.keys(Y.CLASSES).map(function(k){var q=Y.CLASSES[k];return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===P.cls)+'" title="'+esc(q.n)+'">'+q.ic+'</button>'}).join('');
   L.querySelectorAll('#lbcls button').forEach(function(b){b.onclick=function(){a.switchCls(b.dataset.k);a.save();open()}});
   try{var pc=$('#lbpt').getContext('2d');pc.clearRect(0,0,44,44);pc.save();pc.beginPath();pc.arc(22,22,21,0,6.3);pc.clip();YL.hero(pc,22,66,P.ap,0,false,.78);pc.restore()}catch(e){}

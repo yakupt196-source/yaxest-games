@@ -3,8 +3,9 @@
    Yeni haber eklemek: HABER dizisinin EN BAŞINA bir satır ekle ve SAYI'yı 1 artır. */
 (function(){
 'use strict';
-var SAYI=11;
+var SAYI=12;
 var HABER=[
+ {d:'27 Kasım',k:'Manşet',h:'Diyar Mağazası açıldı',s:'Sandıklar, rünler, silahlar ve karakterler artık oyunun içinde. Yeni para birimi 💎 Elmas: her gün 5 elmas ücretsiz, her seviye atlayışta 2 elmas. Günün fırsatları her gece yenileniyor.'},
  {d:'27 Kasım',k:'Manşet',h:'Canavarlar kamplarına çekildi',s:'Diyar artık kamp kamp: her bölgede tek tür canavar, tek seviye; girişte tabela seviyeyi ve tehlikeyi gösteriyor. Kamptan çok uzağa kovalamıyorlar, kaçarsan evlerine dönüp iyileşiyorlar. Girişte yeni oyun lobisi: OYNA, dünya seç, görünüm, sınıf, ayarlar.'},
  {d:'27 Kasım',k:'Manşet',h:'Diyar artık piksel sanat!',s:'Kahramanın kendi tasarımınla pikselleşti; zemin, ağaçlar, evler, esnaf ve 60\'tan fazla canavar piksel (canavarlar: Ninja Adventure, Pixel-boy & AAA). Telefonda Uygulamayı yükle ile ana ekrana ekle. Eski görünüm menüde: Görünüm: Klasik.'},
  {d:'25 Kasım',k:'Manşet',h:'Geceler artık gerçekten karanlık: fenerler yandı',s:'Gece çökünce esnaf fenerleri, zindan kapıları ve iskele feneri karanlığı deliyor; gölette ateş böcekleri dolaşıyor. Evlerin pencereleri sokağı aydınlatıyor, bacalardan duman tütüyor. Yenilen canavarlar devrilip ruhuyla göğe süzülüyor, bosslar altın ışık sütunuyla gidiyor.'},
