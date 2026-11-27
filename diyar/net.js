@@ -7,6 +7,7 @@ function url(){var b=window.YD_NET||'';return b&&wn?b+(b.indexOf('?')<0?'?':'&')
 function wUrl(){return(window.YD_NET||'').replace(/^wss:/,'https:').replace(/^ws:/,'http:').replace(/\/ws.*$/,'/worlds')}
 /* dünya seçici: girmeden önce bir dünya seç */
 function pickWorld(first){if(!G)return;var old=0;try{old=+localStorage.getItem('yx-world')||0}catch(e){}
+  /* lobiden dünya seçildiyse doğrudan bağlan */if(first&&window.YD_WAUTO!=null){var wa=window.YD_WAUTO;window.YD_WAUTO=null;if(wa>0){wn=wa;try{localStorage.setItem('yx-world',wa)}catch(e){}live=1;retry=0;connect()}else{wn=0;live=0;D.say('🌐 Çevrimdışı oynuyorsun. /dunya yazarak istediğin an dünya seçebilirsin.','sys')}return}
   var el=document.getElementById('wpick');if(!el){el=document.createElement('div');el.id='wpick';el.style.cssText='position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(5,3,15,.88)';document.body.appendChild(el)}
   G.paused=true;el.style.display='flex';
   function draw(list){var h='<div style="width:min(94vw,560px);max-height:92vh;overflow:auto;background:#161232;border:1.5px solid #ffc450;border-radius:16px;padding:12px;color:#fff"><h2 style="margin:0 0 4px;color:#ffd98a">🌍 Dünya Seç</h2><p style="margin:0 0 10px;font-size:.82rem;color:#b9b4d8">Karakterin, klanın ve arkadaşların her dünyada aynıdır. Dünya sadece kiminle aynı yerde oynayacağını belirler: arkadaşlarınla aynı dünyaya gir.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px">';
@@ -140,5 +141,5 @@ function leave(){if(window.YSoc)try{YSoc.leave()}catch(e){}live=0;clearTimeout(t
 function unreadOf(k){return unread[k]||0}
 function pick(cx,cy){var wx=cx+Math.round(camX0),wy=cy+Math.round(camY0),b=null,bd=52;for(var id in others){var o=others[id],d=Math.hypot(o.dx-wx,o.dy-wy+8);if(d<bd){bd=d;b=o}}return b}
 function seed(k,list){if(msgs[k]&&!msgs[k].length)msgs[k]=list.map(function(x){return{n:x.n,m:x.m,me:false}})}
-window.YNet={applyAdm:applyAdm,pickWorld:pickWorld,world:function(){return wn},sendChat:sendChat,curCh:function(){return ch},cycleCh:cycleCh,setCh:setCh,chUi:chUi,unread:unreadOf,send:send,others:function(){return others},myId:function(){return me},myPk:function(){return myPk},bub:bub,pick:pick,seed:seed,refresh:refresh,init:init,tick:tick,draw:draw,on:on,chatTab:chatTab,chatBind:chatBind,leave:leave,count:function(){return Object.keys(others).length+(on()?1:0)}};
+window.YNet={WNAMES:WNAMES,wUrl:wUrl,applyAdm:applyAdm,pickWorld:pickWorld,world:function(){return wn},sendChat:sendChat,curCh:function(){return ch},cycleCh:cycleCh,setCh:setCh,chUi:chUi,unread:unreadOf,send:send,others:function(){return others},myId:function(){return me},myPk:function(){return myPk},bub:bub,pick:pick,seed:seed,refresh:refresh,init:init,tick:tick,draw:draw,on:on,chatTab:chatTab,chatBind:chatBind,leave:leave,count:function(){return Object.keys(others).length+(on()?1:0)}};
 })();

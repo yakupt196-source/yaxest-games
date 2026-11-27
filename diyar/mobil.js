@@ -17,7 +17,7 @@ addEventListener('appinstalled',function(){var b=btn();if(b)b.hidden=true;deferr
 /* iPhone/iPad Safari: yükleme istemi yok, bir kez ipucu */
 var ios=/iP(hone|ad|od)/.test(navigator.userAgent)&&!window.MSStream;if(ios&&!app){var s0=0;try{s0=+localStorage.getItem('yd-ios')||0}catch(e){}if(Date.now()-s0>5*864e5){setTimeout(function(){try{localStorage.setItem('yd-ios',Date.now())}catch(e){}toast('<span style="font-size:1.4rem">📲</span><span>Uygulama gibi oynamak için: <b>Paylaş</b> ⬆️ → <b>Ana Ekrana Ekle</b></span>',11000)},4000)}}
 /* titreşim */
-var lastV=0,lastHp=null,lastLv=null;function vib(p){if(!touch||!navigator.vibrate)return;var n=Date.now();if(n-lastV<180)return;lastV=n;try{navigator.vibrate(p)}catch(e){}}
+var lastV=0,lastHp=null,lastLv=null;function vib(p){if(!touch||!navigator.vibrate)return;try{if(localStorage.getItem('yd-vib')==='0')return}catch(e){}var n=Date.now();if(n-lastV<180)return;lastV=n;try{navigator.vibrate(p)}catch(e){}}
 setInterval(function(){var y=window.__yd;if(!y||!y.G||!y.P)return;var G=y.G,P=y.P;if(lastHp!=null&&G.hp<lastHp-1&&G.mode!=='house')vib(G.dead>0?[60,40,120]:22);lastHp=G.hp;if(lastLv!=null&&P.lv>lastLv)vib([30,40,30,40,80]);lastLv=P.lv},120);
 setInterval(btn,2000);
 })();
