@@ -38,7 +38,7 @@ var hudT=0;
 function hud(dt){hudT-=dt;if(hudT>0)return;hudT=.08;
  setT('pname',(S.oath?'☠ ':'')+S.nick+(S.title?' · '+S.title:''));setT('plv','Sv '+S.lv+(S.prof?' · '+PROF[S.prof].n:''));setW('hpi',pl.hp/pl.mhp*100);setT('hpt',Math.ceil(pl.hp)+' / '+pl.mhp);setW('sti',pl.st/pl.mst*100);$('sti').style.background=pl.stFlash>0?'#ff5050':'';setW('mpi',pl.mp);setW('xpi',S.xp/mxp(S.lv)*100);
  setT('gd',S.gold);setT('po',S.pot);
- if(WORLD==='floor'){setW('seali',FL.seal/FL.need*100);var sub='Önerilen Sv '+Math.round(RLf(FL.n))+' · Mühür '+FL.seal+'/'+FL.need+(FL.open?' (açık)':'');setT('fsub',sub)}else setT('fsub','Güvenli bölge · '+NET.status());
+ if(WORLD==='floor'){setW('seali',FL.seal/FL.need*100);var sub='Önerilen Sv '+Math.round(RLf(FL.n))+' · Mühür '+FL.seal+'/'+FL.need+(FL.open?' (açık)':'');setT('fsub',sub)}else setT('fsub','Güvenli bölge · '+(roomOn()?'🔑 Oda '+S.room.n+' · '+Math.max(1,Math.ceil((S.room.exp-Date.now())/60000))+' dk':NET.status()));
  var b=FL.boss,bb=$('bossb');if(WORLD==='floor'&&b&&b.eng&&b.dead<=0){bb.style.display='block';setT('bn',b.d.n);setW('bi',b.hp/b.mhp*100);setT('bt',Math.ceil(b.hp)+' / '+b.mhp)}else bb.style.display='none';
  var cd=[pl.sk[0],pl.sk[1],pl.sk[2]],ids=['s1','s2','s3'];for(var i=0;i<3;i++){var el=$(ids[i]).querySelector('.cd'),v=i===2?(pl.mp<100?Math.floor(pl.mp)+'%':(cd[i]>0?Math.ceil(cd[i]):'')):(cd[i]>0?Math.ceil(cd[i]):(i===1&&S.lv<4?'🔒':''));
   var lock=(i===1&&S.lv<4)||(i===2&&S.lv<8);el.style.display=(v!==''||lock)?'flex':'none';el.textContent=lock?'🔒':v}
