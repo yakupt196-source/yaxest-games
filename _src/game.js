@@ -36,7 +36,8 @@ function CLS(){return CL[S.cls]||CL.warrior}
 function RB(){var r=typeof RACES!=='undefined'&&RACES[(S.app&&S.app.race)||'human'];return(r&&r.b)||{}}
 function PHP(){return Math.round((maxHP(S.lv)*profMul('hp')*CLS().hp*(1+(RB().hp||0))+S.arm*8)*(1+.02*(S.rein|0)))}
 function PST(){return Math.round(100+S.lv*.6)}
-function PDM(){return dm0f(S.lv,S.tier)*profMul('dmg')*CLS().dm*(1+(RB().dm||0))*(1+.02*(S.hone|0))}
+function feastOn(){return !!(S.feast&&S.feast>Date.now())}
+function PDM(){return dm0f(S.lv,S.tier)*profMul('dmg')*CLS().dm*(1+(RB().dm||0))*(1+.02*(S.hone|0))*(feastOn()?1.12:1)}
 function honeCost(n){return Math.round(300*Math.pow(1.3,n)*profMul('smith'))}
 function armorRed(){return Math.min(.6,S.arm*.045+CLS().dr+(RB().dr||0))}
 function wpName(t){return['Demir Kılıç','Çelik Kılıç','Gümüş Kılıç','Mavi Kılıç','Zümrüt Kılıç','Altın Kılıç','Kızıl Kılıç','Gece Kılıcı','Alev Kılıcı','Fırtına Kılıcı','Kristal Kılıç','Yıldız Kılıcı','Ejder Kılıcı','Gölge Kılıcı','Güneş Kılıcı','Ay Kılıcı','Mühür Kılıcı','Kadim Kılıç','Efsane Kılıç','Yaxest Kılıcı','Ezeli Kılıç'][Math.min(20,t)]}
