@@ -1,8 +1,8 @@
 /* ===================== YÜZ MÜHÜR: dünya, temalar, katlar ===================== */
 var WP={amp:2.2,r0:26,r1:46,bowl:70,bs:.09,gm:1,ga:[.12,.28,.08],gb:[.34,.55,.18],lim:78};
-function H(x,z){var r=Math.sqrt(x*x+z*z),f=sstep(WP.r0,WP.r1,r),k=WP.amp/2.2;
+function H(x,z){var r=Math.sqrt(x*x+z*z),UP=0;if(window.__upY&&window.__hotelH){var hh=window.__hotelH();if(hh){var c_=Math.cos(hh[5]),s_=Math.sin(hh[5]),dx_=x-hh[0],dz_=z-hh[1];if(Math.abs(dx_*c_-dz_*s_)<7.3&&Math.abs(dx_*s_+dz_*c_)<4.3)UP=window.__upY}}var f=sstep(WP.r0,WP.r1,r),k=WP.amp/2.2;
  var h=Math.sin(x*.07+1.3)*Math.cos(z*.06)*WP.amp+(Math.sin(x*.19+z*.13)*.55+Math.sin(z*.23-x*.11)*.35)*k;
- return h*f+Math.max(0,r-WP.bowl)*WP.bs}
+ return h*f+Math.max(0,r-WP.bowl)*WP.bs+UP}
 var HG='uniform vec4 uHP;uniform float uBS;uniform float uGM;uniform vec3 uGA;uniform vec3 uGB;uniform vec3 uHs[8];bool hh(vec2 w){for(int i=0;i<8;i++){if(uHs[i].z>0.&&length(w-uHs[i].xy)<uHs[i].z)return true;}return false;}\nfloat H(vec2 p){float r=length(p);float f=smoothstep(uHP.y,uHP.z,r);float k=uHP.x/2.2;float h=sin(p.x*.07+1.3)*cos(p.y*.06)*uHP.x+(sin(p.x*.19+p.y*.13)*.55+sin(p.y*.23-p.x*.11)*.35)*k;return h*f+max(0.,r-uHP.w)*uBS;}';
 function rng(seed){var s=(seed>>>0)||1;return function(){s^=s<<13;s>>>=0;s^=s>>>17;s^=s<<5;s>>>=0;return s/4294967296}}
 var colliders=[],lamps=[],vb=gl.createBuffer(),NV=0,barrier=[],IA=[],NPCL=[];
@@ -88,7 +88,7 @@ function inArena(x,z){return x*x+(z-ARENA[1])*(z-ARENA[1])<17*17}
 function uploadWorld(){var n=P.length/3,b=new Float32Array(n*10);
  for(var i=0;i<n;i++){b[i*10]=P[i*3];b[i*10+1]=P[i*3+1];b[i*10+2]=P[i*3+2];b[i*10+3]=N[i*3];b[i*10+4]=N[i*3+1];b[i*10+5]=N[i*3+2];b[i*10+6]=C[i*3];b[i*10+7]=C[i*3+1];b[i*10+8]=C[i*3+2];b[i*10+9]=M[i]}
  gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,b,gl.STATIC_DRAW);NV=n;P=[];N=[];C=[];M=[]}
-function resetWorld(){P=[];N=[];C=[];M=[];colliders=[];lamps=[];barrier=[];IA=[];NPCL=[]}
+function resetWorld(){window.__upY=0;if(typeof pl!=='undefined')pl.up=0;P=[];N=[];C=[];M=[];colliders=[];lamps=[];barrier=[];IA=[];NPCL=[]}
 function terrain(R,colf){for(var gx=-R;gx<R;gx++)for(var gz=-R;gz<R;gz++){var cx=gx+.5,cz=gz+.5;if(cx*cx+cz*cz>R*R)continue;
   var x0=gx,x1=gx+1,z0=gz,z1=gz+1,a=[x0,H(x0,z0),z0],b=[x1,H(x1,z0),z0],c=[x1,H(x1,z1),z1],d=[x0,H(x0,z1),z1],cc=colf(cx,cz,(a[1]+c[1])/2);quad(a,d,c,b,cc[0],cc[1])}}
 
@@ -151,6 +151,19 @@ function hotel(h){var yaw=h[5],y0=H(h[0],h[1]),rn=roomOn()?S.room.n:0;
  put('Table_Large',-2.4,0.4,.8,0,1.1);put('Bench',-2.4,-.5,.7,0);put('Mug',-2.2,.4,1,.64);put('Chalice',-2.7,.5,.5,.64);
  put('Table_Large',3.8,3.0,.8,0,1.1);put('Bench',3.8,3.9,.7,0);put('Mug',4.0,3.0,1,.64);put('Bookcase_2',-7.0,3.2,1,0,.7,1.57);
  put('torch_mounted',-1.2,4.4,1,1.9);put('torch_mounted',6.0,4.4,1,1.9);put('torch_mounted',-7.0,.2,1,1.9,0,1.57);
+
+ var hy=y0-.15+3-.05;function slab(x0,x1,z0,z1){var p=hin(h,(x0+x1)/2,(z0+z1)/2);box(p[0],hy,p[1],x1-x0,.3,z1-z0,[.5,.34,.2],5,yaw)}
+ slab(-7.45,7.45,-4.45,1.0);slab(-5.2,7.45,1.0,4.45);slab(-7.45,-7.0,1.0,4.45);
+ for(var si=0;si<8;si++){var sp=hin(h,-6.1,3.9-si*.4);box(sp[0],y0,sp[1],1.7,(si+1)*.4,.4,[.55,.38,.22],5,yaw)}
+ var sg=hin(h,-6.1,4.0);IA.push({k:'up',x:sg[0],z:sg[1],r:2.0,lb:'⬆ Üst kata çık'});
+ var sg2=hin(h,-6.1,2.2);IA.push({k:'down',x:sg2[0],z:sg2[1],r:1.7,lb:'⬇ Aşağı in',lvl:1});
+ for(var wx=-7.4;wx<=7.4;wx+=.8){[-4.4,4.4].forEach(function(lz){var q=hin(h,wx,lz);colliders.push([q[0],q[1],.55,1])})}
+ for(var wz=-4.4;wz<=4.4;wz+=.8){[-7.4,7.4].forEach(function(lx){var q=hin(h,lx,wz);colliders.push([q[0],q[1],.55,1])})}
+ for(var bx=-6;bx<=6;bx+=3){var bq=hin(h,bx,-3.6);dadd('Bed_Twin1',bq[0],bq[1],yaw,.9,null,3,.9);colliders.push([bq[0],bq[1],1.1,1]);var cq=hin(h,bx+1.1,-3.4);dadd('Chest_Closed',cq[0],cq[1],yaw,.7,null,3,.5)}
+ [[2,1.6],[-1,2.8]].forEach(function(t){var tq=hin(h,t[0],t[1]);dadd('Table_Large',tq[0],tq[1],yaw,.9,null,3,1.2);colliders.push([tq[0],tq[1],1.1,1])});
+ [[6.6,.8],[6.6,2.6]].forEach(function(t){var tq=hin(h,t[0],t[1]);dadd('Barrel',tq[0],tq[1],yaw,1,null,3,.5);colliders.push([tq[0],tq[1],.6,1])});
+ [-5,0,5].forEach(function(lx){var tq=hin(h,lx,4.2);dadd('torch_mounted',tq[0],tq[1],yaw,1,null,4.8)});
+ lamps.push([h[0],y0+5.5,h[1]]);lamps.push(hin(h,-4,0).concat([0]).length?[hin(h,-4,0)[0],y0+5.5,hin(h,-4,0)[1]]:[h[0],y0+5.5,h[1]]);
  lamps.push([h[0],y0+2.4,h[1]])}
 function furnish(h,kind){var yaw=h[5],cx=h[0],cz=h[1];
  if(kind==='inn'){hotel(h);return}

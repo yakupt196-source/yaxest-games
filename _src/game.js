@@ -140,9 +140,11 @@ function doRoll(){if(pl.dead>0||paused||pl.roll>0||pl.atk>0&&pl.atk<.45)return;i
 function usePotion(){if(pl.dead>0||pl.potCd>0)return;if(S.pot<=0){toast('İksirin kalmadı. Tüccardan al.','#ff9a9a');return}if(pl.hp>=pl.mhp-1){toast('Canın zaten dolu','#ffd98a');return}
  S.pot--;pl.potCd=2.5;var h=Math.round(pl.mhp*.45*profMul('heal'));pl.hp=Math.min(pl.mhp,pl.hp+h);fl(pl.x,H(pl.x,pl.z)+2.2,pl.z,'+'+h,'#7affc0',1.2);snd('pot')}
 /* ---- etkileşim ---- */
-function nearIA(){var best=null,bd=1e9;IA.forEach(function(a){if(a.lock&&!FL.bossDead)return;var d=Math.hypot(a.x-pl.x,a.z-pl.z);if(d<a.r&&d<bd){bd=d;best=a}});return best}
+function nearIA(){var best=null,bd=1e9;IA.forEach(function(a){if(a.lock&&!FL.bossDead)return;if((a.lvl|0)!==(window.__upY?1:0)&&(a.k==='up'||a.k==='down'||a.k==='bed'))return;var d=Math.hypot(a.x-pl.x,a.z-pl.z);if(d<a.r&&d<bd){bd=d;best=a}});return best}
 function doInteract(){if(pl.dead>0||paused)return;var a=nearIA();if(!a)return;
  if(a.k==='npc'){var m={merchant:'shop',smith:'smith',guild:'guild',inn:'inn',quest:'quest',guard:'gate'}[a.id];if(a.id==='guard'&&WORLD==='town'){openPanel('gate');return}openPanel(m)}
+ else if(a.k==='up'){window.__upY=3.15;pl.x=a.x;pl.z=a.z;var qq=hin(window.__hotelH(),-6.1,.3);pl.x=qq[0];pl.z=qq[1];toast('⬆ Üst kat: salon ve ortak yatakhane','#ffd98a')}
+ else if(a.k==='down'){window.__upY=0;var q2=hin(window.__hotelH(),-6.1,3.2);pl.x=q2[0];pl.z=q2[1]}
  else if(a.k==='bed'){if(roomOn()&&S.room.n===a.n){pl.hp=pl.mhp;pl.st=pl.mst;S.pot=Math.max(S.pot,3);toast('🛏 İyi dinlendin. Can ve dayanıklılık doldu.','#ffd98a');snd('pick');save()}else toast('Bu oda senin değil. Han Sahibi’nden kirala.','#ff9a9a')}
  else if(a.k==='fire'){pl.hp=pl.mhp;pl.st=pl.mst;pl.mp=Math.max(pl.mp,0);S.pot=Math.max(S.pot,3);toast('🔥 Dinlendin. Can ve dayanıklılık doldu.','#ffd98a');save()}
  else if(a.k==='town'){startTown(true)}
@@ -151,7 +153,7 @@ function startChannel(){if(pl.chan>0)return;pl.chan=5;toast('Şehre ışınlanı
 /* ---- dünya geçişleri ---- */
 var WORLD='town';
 function placeCam(){cam.x=pl.x;cam.z=pl.z}
-function startTown(fromTower){WORLD='town';FL.n=0;buildTown();pl.x=0;pl.z=fromTower?-42:9;pl.yaw=fromTower?Math.PI:0;cam.yaw=fromTower?Math.PI:0;cam.pit=-.1;mobs=[];tels=[];projs=[];fx=[];pl.hp=Math.max(pl.hp,pl.mhp*.5);
+function startTown(fromTower){WORLD='town';window.__upY=0;FL.n=0;buildTown();pl.x=0;pl.z=fromTower?-42:9;pl.yaw=fromTower?Math.PI:0;cam.yaw=fromTower?Math.PI:0;cam.pit=-.1;mobs=[];tels=[];projs=[];fx=[];pl.hp=Math.max(pl.hp,pl.mhp*.5);
  $('fname').textContent='Başlangıç Şehri';$('fsub').textContent='Güvenli bölge · Kule Kapısı kuzeyde';$('seal').style.display='none';$('bossb').style.display='none';if(window.NET)NET.setLoc();save()}
 function enterFloor(f){f=Math.max(1,Math.min(f,S.maxF));if(f>S.maxF)return;WORLD='floor';buildFloor(f);spawnFloor();pl.x=SPAWNP[0];pl.z=SPAWNP[1]-5;pl.yaw=0;cam.yaw=0;cam.pit=-.12;pl.chan=0;pl.hp=Math.max(pl.hp,pl.mhp*.6);
  var R=FL.realm;$('fname').textContent='Kat '+f+' · '+R.n;$('fsub').textContent=(f%10===0?'⚠ Büyük Mühür katı':'Her katta bir muhafız')+' · Önerilen Sv '+Math.round(RLf(f));$('seal').style.display='block';
@@ -172,7 +174,7 @@ function stepPlayer(dt){
  if(pl.roll>0){pl.roll-=dt;pl.x+=pl.rdx*11*dt;pl.z+=pl.rdz*11*dt;mvv=1;pl.iframe=Math.max(pl.iframe-dt,0)}else{pl.x+=wx*spd*dt;pl.z+=wz*spd*dt;pl.iframe=Math.max(0,pl.iframe-dt)}
  if(mvv>.05&&pl.roll<=0){var ta=Math.atan2(wx,-wz),da=ta-pl.yaw;da=Math.atan2(Math.sin(da),Math.cos(da));pl.yaw+=da*Math.min(1,dt*12)}
  if(pl.atk>0&&pl.skill===0&&WORLD==='floor'){var best=null,bd=4;mobs.forEach(function(m){if(m.dead>0)return;var d=Math.hypot(m.x-pl.x,m.z-pl.z);if(d<bd){bd=d;best=m}});if(best&&pl.atk<.3){var ta2=Math.atan2(best.x-pl.x,-(best.z-pl.z)),d2=Math.atan2(Math.sin(ta2-pl.yaw),Math.cos(ta2-pl.yaw));pl.yaw+=d2*Math.min(1,dt*18)}}
- for(var i=0;i<colliders.length;i++){var q=colliders[i],dx=pl.x-q[0],dz=pl.z-q[1],ll=Math.hypot(dx,dz),r=q[2]+.4;if(ll<r&&ll>1e-4){pl.x=q[0]+dx/ll*r;pl.z=q[1]+dz/ll*r}}
+ for(var i=0;i<colliders.length;i++){var q=colliders[i];if((q[3]|0)!==(window.__upY?1:0))continue;var dx=pl.x-q[0],dz=pl.z-q[1],ll=Math.hypot(dx,dz),r=q[2]+.4;if(ll<r&&ll>1e-4){pl.x=q[0]+dx/ll*r;pl.z=q[1]+dz/ll*r}}
  var lim=WP.lim,l2=Math.hypot(pl.x,pl.z);if(l2>lim){pl.x*=lim/l2;pl.z*=lim/l2}
  pl.mv+=(mvv-pl.mv)*Math.min(1,dt*10);pl.ph+=dt*8*pl.mv;
  pl.atkCd=Math.max(0,pl.atkCd-dt);pl.hurt=Math.max(0,pl.hurt-dt);pl.potCd=Math.max(0,pl.potCd-dt);pl.stT=Math.max(0,pl.stT-dt);pl.stFlash=Math.max(0,(pl.stFlash||0)-dt);for(var k=0;k<3;k++)pl.sk[k]=Math.max(0,pl.sk[k]-dt);
@@ -210,7 +212,7 @@ function stepMobs(dt){var safe=safeFor();
  for(var i=tels.length-1;i>=0;i--){var t=tels[i];t.t+=dt;if(t.t>=t.dur){tickTel(t);tels.splice(i,1)}}
  /* arka plan: skor/ekran */
 }
-function mobCollide(m){for(var i=0;i<colliders.length;i++){var q=colliders[i],dx=m.x-q[0],dz=m.z-q[1],ll=Math.hypot(dx,dz),r=q[2]+.5*m.s;if(ll<r&&ll>1e-4){m.x=q[0]+dx/ll*r;m.z=q[1]+dz/ll*r}}}
+function mobCollide(m){for(var i=0;i<colliders.length;i++){var q=colliders[i];if(q[3])continue;dx=m.x-q[0],dz=m.z-q[1],ll=Math.hypot(dx,dz),r=q[2]+.5*m.s;if(ll<r&&ll>1e-4){m.x=q[0]+dx/ll*r;m.z=q[1]+dz/ll*r}}}
 /* ---- boss ---- */
 function bossAbil(f){var a=['slam','charge'];if(f>=6)a.push('nova');if(f>=15)a.push('summon');if(f>=30)a.push('meteor');if(f%10===0){['nova','summon','meteor'].forEach(function(k){if(a.indexOf(k)<0)a.push(k)})}return a}
 function bossAI(m,dt,dx,dz,d,safe){
