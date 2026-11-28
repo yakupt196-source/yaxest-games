@@ -419,7 +419,7 @@ var worldF=COMMON+UNI+NOISE+'in vec3 vP;in vec3 vN;in vec3 vC;in float vM;out ve
 ' if(m<7.5){/*pencere/lamba ışığı*/emis=1.;return base;}\n'+
 ' if(m<8.5){/*yaprak*/float f=vn(p.xz*3.+p.y*3.);return base*(.75+f*.5);}\n'+
 ' if(m>9.5){emis=2.;return base;}\n emis=0.;rough=.1;return base;}\n'+
-'void main(){vec3 n=normalize(vN);float rough,emis;vec3 alb=pat(vC,vM,rough,emis);\n'+
+'void main(){vec3 n=normalize(vN);float rough,emis;vec3 alb=pat(vC,vM,rough,emis);if(vM<.5&&emis<.5){float mt=vn(vec2(vP.x*.8+vP.z*.8,vP.y*1.6)*2.2)*.55+vn(vec2(vP.x-vP.z,vP.y*2.)*7.)*.45;alb*=.84+.32*mt;}\n'+
 ' float wet=uWet;alb*=mix(1.,.68,wet*step(vM,3.5)*(1.-step(vM,.5)));\n'+
 ' vec3 V=normalize(uCam-vP);float d=length(uCam-vP);\n'+
 ' float ndl=max(dot(n,uSunD),0.);vec3 hemi=mix(uGnd,uSky,n.y*.5+.5);\n'+

@@ -12,6 +12,9 @@ old="if(rr<11.5||(abs(w.y)<2.9&&abs(w.x)<62.)||(abs(w.x)<2.9&&abs(w.y)<62.)){"
 new="if(uGM<.5||(uGM<1.5&&(rr<11.5||(abs(w.y)<2.9&&abs(w.x)<62.)||(abs(w.x)<2.9&&abs(w.y)<62.)))||(uGM>1.5&&(dot(w-vec2(0.,44.),w-vec2(0.,44.))<81.||dot(w-vec2(0.,-47.),w-vec2(0.,-47.))<289.))){"
 new=new.replace('if(uGM<.5||','if(uGM<.5||hh(w)||',1)
 assert old in sh; sh=sh.replace(old,new,1)
+old="vec3 alb=pat(vC,vM,rough,emis);\\n'+"
+assert old in sh
+sh=sh.replace(old,"vec3 alb=pat(vC,vM,rough,emis);if(vM<.5&&emis<.5){float mt=vn(vec2(vP.x*.8+vP.z*.8,vP.y*1.6)*2.2)*.55+vn(vec2(vP.x-vP.z,vP.y*2.)*7.)*.45;alb*=.84+.32*mt;}\\n'+",1)
 old="mix(vec3(.12,.28,.08),vec3(.34,.55,.18),h(fi*5.))"; assert old in sh; sh=sh.replace(old,"mix(uGA,uGB,h(fi*5.))",1)
 parts.append(sh)
 parts.append(L(236,242))
