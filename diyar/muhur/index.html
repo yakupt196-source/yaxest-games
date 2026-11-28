@@ -662,7 +662,8 @@ function CLS(){return CL[S.cls]||CL.warrior}
 function RB(){var r=typeof RACES!=='undefined'&&RACES[(S.app&&S.app.race)||'human'];return(r&&r.b)||{}}
 function PHP(){return Math.round((maxHP(S.lv)*profMul('hp')*CLS().hp*(1+(RB().hp||0))+S.arm*8)*(1+.02*(S.rein|0)))}
 function PST(){return Math.round(100+S.lv*.6)}
-function PDM(){return dm0f(S.lv,S.tier)*profMul('dmg')*CLS().dm*(1+(RB().dm||0))*(1+.02*(S.hone|0))}
+function feastOn(){return !!(S.feast&&S.feast>Date.now())}
+function PDM(){return dm0f(S.lv,S.tier)*profMul('dmg')*CLS().dm*(1+(RB().dm||0))*(1+.02*(S.hone|0))*(feastOn()?1.12:1)}
 function honeCost(n){return Math.round(300*Math.pow(1.3,n)*profMul('smith'))}
 function armorRed(){return Math.min(.6,S.arm*.045+CLS().dr+(RB().dr||0))}
 function wpName(t){return['Demir Kılıç','Çelik Kılıç','Gümüş Kılıç','Mavi Kılıç','Zümrüt Kılıç','Altın Kılıç','Kızıl Kılıç','Gece Kılıcı','Alev Kılıcı','Fırtına Kılıcı','Kristal Kılıç','Yıldız Kılıcı','Ejder Kılıcı','Gölge Kılıcı','Güneş Kılıcı','Ay Kılıcı','Mühür Kılıcı','Kadim Kılıç','Efsane Kılıç','Yaxest Kılıcı','Ezeli Kılıç'][Math.min(20,t)]}
@@ -1032,6 +1033,7 @@ PV.inn=function(){var h='';
  if(PN.tab==='rest'){h+=R('🛏','Dinlen','Canını ve dayanıklılığını doldur, iksirini 3’e tamamla.','<div>'+B('rest','','Dinlen')+'</div>')+R('🗼','Işınlanma','Kayıtlı kata hızlı dönüş yok: Kule Kapısı’ndan gir.','')}
  else if(PN.tab==='rooms'){var on=roomOn(),left=on?Math.ceil((S.room.exp-Date.now())/60000):0;
   h+='<p><small>🏨 Han artık bir otel: 5 özel oda, yatak, sandık ve kapı. Kiraladığın odada dinlenirsen canın dolar, kira boyunca tecrübe kazancın %10 artar. Süre dolunca odadan çıkarılırsın.</small></p>';
+  h+=R('🍖','Han Ziyafeti','+%12 hasar, 20 dk'+(feastOn()?' · aktif: '+Math.ceil((S.feast-Date.now())/60000)+' dk':''),B('feast','',Math.round(120+S.lv*25)+' 🪙','',S.gold<Math.round(120+S.lv*25)));
   if(on)h+=R('🔑','Oda '+S.room.n+' senin','Kalan süre: '+left+' dk. Han’ın içinde, koridorun arkasındaki kapı artık açık.','');
   [[60,80],[360,300],[1440,700]].forEach(function(o){h+=R('🛏',(o[0]<120?o[0]+' dakika':o[0]/60+' saat')+(on?' (uzat)':''),'Özel oda, yatak ve sandık',B('rent',o[0]+':'+o[1],o[1]+' 🪙','',S.gold<o[1]))});}
  else if(PN.tab==='cls'){h+='<p><small>Sınıfın hamlelerini, silahını ve oyun tarzını belirler. İlk seçim ücretsiz, değiştirmek 300 🪙.</small></p>';Object.keys(CL).forEach(function(k){var c=CL[k],on=(S.cls||'warrior')===k;h+=R(on?'✅':c.i,c.n,c.d+'<br>Q: '+c.q[2]+' · E: '+c.e[2]+' · R: '+c.r[2],'<div>'+(on?'':B('cls',k,S.clsPick?'300 🪙':'Seç'))+'</div>')})}
@@ -1073,6 +1075,7 @@ function act(a,v){var ch=true;
  else if(a==='rest'){pl.hp=pl.mhp;pl.st=pl.mst;S.pot=Math.max(S.pot,3);toast('Dinlendin','#7affc0')}
  else if(a==='prof'){if(S.prof&&S.gold<500)return;if(S.prof)S.gold-=500;S.prof=v;recalc();toast('Meslek: '+PROF[v].n,'#7affc0')}
  else if(a==='cls'){var cost=S.clsPick?300:0;if(S.gold<cost){toast('Yetersiz altın','#ff9a9a')}else{S.gold-=cost;S.cls=v;S.clsPick=1;recalc();save();toast(CL[v].n+' oldun','#ffd98a')}}else if(a==='race'){S.race=v;save()}else if(a==='look'){if(v==='diyar'){S.lookMode='diyar'}else{S.lookMode='';S.look=+v}recalc()}
+ else if(a==='feast'){var fp=Math.round(120+S.lv*25);if(S.gold<fp){toast('Yeterli altının yok','#ff9a9a');ch=false}else{S.gold-=fp;S.feast=Math.max(Date.now(),S.feast||0)+20*60000;snd('pick');toast('🍖 Ziyafet: +%12 hasar 20 dk','#ffd98a');save()}}
  else if(a==='rent'){var p=String(v).split(':'),mn=+p[0],pr=+p[1];if(S.gold<pr){toast('Yeterli altının yok','#ff9a9a');ch=false}else{S.gold-=pr;var base=roomOn()?S.room.exp:Date.now();S.room={n:roomOn()?S.room.n:1+Math.floor(Math.random()*5),exp:base+mn*60000};S.roomX=0;snd('pick');toast('🔑 Oda '+S.room.n+' kiralandı','#ffd98a');if(WORLD==='town')buildTown();save()}}
  else if(a==='oath'){if(!act._o){act._o=1;setTimeout(function(){act._o=0},3500);toast(S.oath?'Yemini bozmak için tekrar bas':'Yemin etmek için tekrar bas','#ffd98a');ch=false}else{act._o=0;S.oath=S.oath?0:1;recalc();toast(S.oath?'☠ Yemin edildi':'Yemin bozuldu','#ffd98a')}}
  else if(a==='pnew'){NET.create();if(!NET.up())toast('Çevrimiçi değilsin: Ayarlar’dan aç','#ff9a9a')}
