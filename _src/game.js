@@ -76,7 +76,7 @@ function spawnFloor(){mobs=[];tels=[];projs=[];fx=[];var f=FL.n,R=FL.realm,rn=rn
  var bid=bossDef(f),B=MON[bid],rr=rng(f*911+3),nm=ADJ[Math.floor(rr()*ADJ.length)]+' '+B.n,rb=f%10===0;
  var bm=mkMob(bid,ARENA[0],ARENA[1]-6,{f:f,boss:1,name:(rb?'Büyük Mühür: ':'Kat '+f+' Muhafızı: ')+nm,col:recolor(B.c,f)});mobs.push(bm);FL.boss=bm;
  mobs.forEach(function(m,i){m.idx=i});FL.bossIdx=bm.idx}
-function killReward(m,shared){var rl=m.rl,mul=S.oath?1.5:1,pb=1+.1*Math.max(0,(window.__partyN?window.__partyN():1)-1);
+function killReward(m,shared){var rl=m.rl,mul=(S.oath?1.5:1)*(roomOn()?1.1:1),pb=1+.1*Math.max(0,(window.__partyN?window.__partyN():1)-1);
  var K=Math.min(22,6+rl*1.1),xp=Math.max(1,Math.round(mxp(Math.round(rl))/K*(m.xv/1.7)*mul*pb)),g=Math.max(1,Math.round(m.gv*(3+rl*.8)*.7*(.7+Math.random()*.6)*mul));
  S.xp+=xp;S.gold+=g;S.kills++;S.q&&(S.q.k++);fl(m.x,H(m.x,m.z)+2.4,m.z,'+'+g+'🪙',  '#ffd23f',1);toast('+'+g+' 🪙  +'+xp+' XP','#ffd98a');
  var lc=m.boss?1:m.elite?.7:.14;if(Math.random()<lc){var n=m.boss?4:1;S.loot+=n;S.lootV+=Math.round(n*(3+rl*1.5)*(1+Math.random())*(m.boss?3:1))}
@@ -143,6 +143,7 @@ function usePotion(){if(pl.dead>0||pl.potCd>0)return;if(S.pot<=0){toast('İksiri
 function nearIA(){var best=null,bd=1e9;IA.forEach(function(a){if(a.lock&&!FL.bossDead)return;var d=Math.hypot(a.x-pl.x,a.z-pl.z);if(d<a.r&&d<bd){bd=d;best=a}});return best}
 function doInteract(){if(pl.dead>0||paused)return;var a=nearIA();if(!a)return;
  if(a.k==='npc'){var m={merchant:'shop',smith:'smith',guild:'guild',inn:'inn',quest:'quest',guard:'gate'}[a.id];if(a.id==='guard'&&WORLD==='town'){openPanel('gate');return}openPanel(m)}
+ else if(a.k==='bed'){if(roomOn()&&S.room.n===a.n){pl.hp=pl.mhp;pl.st=pl.mst;S.pot=Math.max(S.pot,3);toast('🛏 İyi dinlendin. Can ve dayanıklılık doldu.','#ffd98a');snd('pick');save()}else toast('Bu oda senin değil. Han Sahibi’nden kirala.','#ff9a9a')}
  else if(a.k==='fire'){pl.hp=pl.mhp;pl.st=pl.mst;pl.mp=Math.max(pl.mp,0);S.pot=Math.max(S.pot,3);toast('🔥 Dinlendin. Can ve dayanıklılık doldu.','#ffd98a');save()}
  else if(a.k==='town'){startTown(true)}
  else if(a.k==='next'){enterFloor(FL.n+1)}}
@@ -242,3 +243,6 @@ function tickTel(t){var hit=false;if(t.k==='c'){hit=Math.hypot(pl.x-t.x,pl.z-t.z
  else{var ax=t.x2-t.x,az=t.z2-t.z,L=Math.hypot(ax,az)||1,u=((pl.x-t.x)*ax+(pl.z-t.z)*az)/(L*L);u=Math.max(0,Math.min(1,u));hit=Math.hypot(pl.x-(t.x+ax*u),pl.z-(t.z+az*u))<t.w}
  fx.push({x:t.x,z:t.z,t:0,k:t.k==='c'?'boom':'dash',l:.35,r:t.r||3});if(t.k==='c')shake=Math.max(shake,.2);
  if(hit&&!safeFor())dmgPlayer(t.dmg)}
+setInterval(function(){try{if(S.room&&!roomOn()&&!S.roomX){S.roomX=1;if(typeof HP!=='undefined'&&0){}
+ if(WORLD==='town'){var hh=window.__hotelH&&window.__hotelH();if(hh){var dx=pl.x-hh[0],dz=pl.z-hh[1],c=Math.cos(hh[5]),s=Math.sin(hh[5]),lx=dx*c-dz*s,lz=dx*s+dz*c;if(Math.abs(lx)<7.5&&lz<-1.5&&lz>-4.5){var q=hin(hh,0,3.6);pl.x=q[0];pl.z=q[1]}}buildTown()}
+ toast('🔑 Oda kiran bitti.','#ffd98a');save()}}catch(e){}},1500);

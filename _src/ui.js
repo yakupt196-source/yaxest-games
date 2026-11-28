@@ -52,7 +52,7 @@ window.refreshPanel=function(){if(PN.open)renderPanel()};
 $('pnx').onclick=closePanel;$('pnw').addEventListener('mousedown',function(e){if(e.target===$('pnw'))closePanel()});
 function B(a,v,l,cls,dis){return '<button type="button" data-a="'+a+'" data-v="'+esc(v==null?'':v)+'"'+(cls?' class="'+cls+'"':'')+(dis?' disabled':'')+'>'+l+'</button>'}
 function R(ic,t,sub,right){return '<div class="row"><span class="ic">'+ic+'</span><div class="t"><b>'+t+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div>'+(right||'')+'</div>'}
-var TABS={shop:[['buy','Satın Al'],['sell','Sat']],guild:[['party','Parti'],['clan','Lonca'],['trade','Takas']],menu:[['char','Karakter'],['skills','Hamleler'],['set','Ayarlar']],inn:[['rest','Han'],['cls','Sınıf'],['prof','Meslek'],['look','Görünüm'],['oath','Yemin']]};
+var TABS={shop:[['buy','Satın Al'],['sell','Sat']],guild:[['party','Parti'],['clan','Lonca'],['trade','Takas']],menu:[['char','Karakter'],['skills','Hamleler'],['set','Ayarlar']],inn:[['rest','Han'],['rooms','Odalar'],['cls','Sınıf'],['prof','Meslek'],['look','Görünüm'],['oath','Yemin']]};
 var TITLES={shop:'🛒 Tüccar Hasan',smith:'⚒ Demirci Ayten',guild:'🏰 Lonca Memuru',inn:'🛏 Han Sahibi Nuri',quest:'📜 Haberci Elif',gate:'🗼 Kule Kapısı',menu:'☰ Menü'};
 function renderPanel(){var k=PN.open;if(!k)return;$('pnti').textContent=TITLES[k]||'';var tabs=TABS[k]||[];if(tabs.length&&!PN.tab)PN.tab=tabs[0][0];
  $('pnt').innerHTML=tabs.map(function(t){return '<button type="button" data-a="tab" data-v="'+t[0]+'"'+(PN.tab===t[0]?' class="on"':'')+'>'+t[1]+'</button>'}).join('');
@@ -75,6 +75,10 @@ PV.quest=function(){ensureQ();var h='<p><small>Her gün yenilenir. Haberci Elif 
  h+='<h4>Kule Hakkında</h4><p><small>Kadim Kule denizden yükseldiğinde yüz mühürle kapatıldı. Her mühürün bir muhafızı var. Yüzüncü mührün ardında Ezeli Muhafız bekliyor. Kuleden çıkış yok: yalnızca yukarı. Ama şehir her zaman güvenli.</small></p>';return h};
 PV.inn=function(){var h='';
  if(PN.tab==='rest'){h+=R('🛏','Dinlen','Canını ve dayanıklılığını doldur, iksirini 3’e tamamla.','<div>'+B('rest','','Dinlen')+'</div>')+R('🗼','Işınlanma','Kayıtlı kata hızlı dönüş yok: Kule Kapısı’ndan gir.','')}
+ else if(PN.tab==='rooms'){var on=roomOn(),left=on?Math.ceil((S.room.exp-Date.now())/60000):0;
+  h+='<p><small>🏨 Han artık bir otel: 5 özel oda, yatak, sandık ve kapı. Kiraladığın odada dinlenirsen canın dolar, kira boyunca tecrübe kazancın %10 artar. Süre dolunca odadan çıkarılırsın.</small></p>';
+  if(on)h+=R('🔑','Oda '+S.room.n+' senin','Kalan süre: '+left+' dk. Han’ın içinde, koridorun arkasındaki kapı artık açık.','');
+  [[60,80],[360,300],[1440,700]].forEach(function(o){h+=R('🛏',(o[0]<120?o[0]+' dakika':o[0]/60+' saat')+(on?' (uzat)':''),'Özel oda, yatak ve sandık',B('rent',o[0]+':'+o[1],o[1]+' 🪙','',S.gold<o[1]))});}
  else if(PN.tab==='cls'){h+='<p><small>Sınıfın hamlelerini, silahını ve oyun tarzını belirler. İlk seçim ücretsiz, değiştirmek 300 🪙.</small></p>';Object.keys(CL).forEach(function(k){var c=CL[k],on=(S.cls||'warrior')===k;h+=R(on?'✅':c.i,c.n,c.d+'<br>Q: '+c.q[2]+' · E: '+c.e[2]+' · R: '+c.r[2],'<div>'+(on?'':B('cls',k,S.clsPick?'300 🪙':'Seç'))+'</div>')})}
  else if(PN.tab==='prof'){h+='<p><small>Mesleğin oyun tarzını belirler. İlk seçim ücretsiz, değiştirmek 500 🪙.</small></p>';Object.keys(PROF).forEach(function(k){h+=R(S.prof===k?'✅':'🔸',PROF[k].n,PROF[k].d,'<div>'+B('prof',k,S.prof===k?'Seçili':(S.prof?'500 🪙':'Seç'),'',S.prof===k||(S.prof&&S.gold<500))+'</div>')})}
  else if(PN.tab==='look'){h+='<p><small>Görünümünü seç. Giriş yaptıysan Diyar karakterini de kullanabilirsin.</small></p><div class="grid">';LOOKS.forEach(function(l,i){h+=B('look',i,'Görünüm '+(i+1),S.look===i&&S.lookMode!=='diyar'?'ok':'')});h+='</div>';if(S.dap)h+='<div class="row">'+B('look','diyar','Diyar karakterim','',0)+'</div>'}
@@ -114,6 +118,7 @@ function act(a,v){var ch=true;
  else if(a==='rest'){pl.hp=pl.mhp;pl.st=pl.mst;S.pot=Math.max(S.pot,3);toast('Dinlendin','#7affc0')}
  else if(a==='prof'){if(S.prof&&S.gold<500)return;if(S.prof)S.gold-=500;S.prof=v;recalc();toast('Meslek: '+PROF[v].n,'#7affc0')}
  else if(a==='cls'){var cost=S.clsPick?300:0;if(S.gold<cost){toast('Yetersiz altın','#ff9a9a')}else{S.gold-=cost;S.cls=v;S.clsPick=1;recalc();save();toast(CL[v].n+' oldun','#ffd98a')}}else if(a==='race'){S.race=v;save()}else if(a==='look'){if(v==='diyar'){S.lookMode='diyar'}else{S.lookMode='';S.look=+v}recalc()}
+ else if(a==='rent'){var p=String(v).split(':'),mn=+p[0],pr=+p[1];if(S.gold<pr){toast('Yeterli altının yok','#ff9a9a');ch=false}else{S.gold-=pr;var base=roomOn()?S.room.exp:Date.now();S.room={n:roomOn()?S.room.n:1+Math.floor(Math.random()*5),exp:base+mn*60000};S.roomX=0;snd('pick');toast('🔑 Oda '+S.room.n+' kiralandı','#ffd98a');if(WORLD==='town')buildTown();save()}}
  else if(a==='oath'){if(!act._o){act._o=1;setTimeout(function(){act._o=0},3500);toast(S.oath?'Yemini bozmak için tekrar bas':'Yemin etmek için tekrar bas','#ffd98a');ch=false}else{act._o=0;S.oath=S.oath?0:1;recalc();toast(S.oath?'☠ Yemin edildi':'Yemin bozuldu','#ffd98a')}}
  else if(a==='pnew'){NET.create();if(!NET.up())toast('Çevrimiçi değilsin: Ayarlar’dan aç','#ff9a9a')}
  else if(a==='pjoin'){var c=($('pj')&&$('pj').value)||'';if(!NET.join(c))toast('Kod 5 karakter olmalı','#ff9a9a')}

@@ -133,7 +133,27 @@ function khouse(cx,cz,W,D,F,yaw,o){o=o||{};var s=3,y0=H(cx,cz)-.15,doorI=o.door=
 var HSL=[];
 function inHouse(x,z){for(var i=0;i<HSL.length;i++){var h=HSL[i],c=Math.cos(h[4]),s=Math.sin(h[4]),dx=x-h[0],dz=z-h[1],lx=dx*c-dz*s,lz=dx*s+dz*c;if(Math.abs(lx)<h[2]&&Math.abs(lz)<h[3])return true}return false}
 function hin(h,lx,lz){var p=lw(lx,lz,h[5]);return[h[0]+p[0],h[1]+p[1]]}
+var ROOMX=[-6,-3,0,3,6];
+function roomOn(){return !!(S&&S.room&&S.room.exp>Date.now())}
+function hotel(h){var yaw=h[5],y0=H(h[0],h[1]),rn=roomOn()?S.room.n:0;
+ function put(n,lx,lz,s,dy,col,ry){var p=hin(h,lx,lz);dadd(n,p[0],p[1],yaw+(ry||0),s,null,dy||0,col)}
+ function wallX(a,b,lz){var p=hin(h,(a+b)/2,lz);box(p[0],y0,p[1],Math.abs(b-a),3,.28,[.8,.58,.34],5,yaw);for(var x=a+.3;x<=b-.3;x+=.8){var q=hin(h,x,lz);colliders.push([q[0],q[1],.5])}}
+ function wallZ(lx,a,b){var p=hin(h,lx,(a+b)/2);box(p[0],y0,p[1],.28,3,Math.abs(b-a),[.8,.58,.34],5,yaw);for(var z=a+.3;z<=b-.3;z+=.8){var q=hin(h,lx,z);colliders.push([q[0],q[1],.5])}}
+ var ZW=-1.5,ed=-7.4;ROOMX.forEach(function(c){wallX(ed,c-.6,ZW);ed=c+.6});wallX(ed,7.4,ZW);
+ [-4.5,-1.5,1.5,4.5].forEach(function(x){wallZ(x,-4.4,ZW)});
+ ROOMX.forEach(function(c,i){var n=i+1,mine=rn===n,dp=hin(h,c,ZW);
+  if(!mine){var q=hin(h,c,ZW);box(q[0],y0,q[1],1.2,2.3,.12,[.42,.27,.14],5,yaw);colliders.push([q[0],q[1],.75])}
+  put('Bed_Twin1',c-.2,-3.6,.9,0,.9,0);put('Chest_Closed',c+1.0,-2.1,.8,0,.5,-.4);put('Candle_1',c-1.0,-2.0,1,0);
+  var bp=hin(h,c-.2,-3.2);IA.push({k:'bed',n:n,x:bp[0],z:bp[1],r:2.4,lb:'🛏 Oda '+n+': yat ve dinlen'});
+  put('torch_mounted',c,-4.35,1,1.8)});
+ put('Table_Large',3.4,.7,.9,0,1.3,1.2);put('Mug',3.0,.7,1,.64);put('Chalice',3.8,.5,.5,.64);put('Barrel',6.8,.4,1,0,.5);put('Barrel',6.8,1.5,1,0,.5);put('Cabinet',6.9,-.7,.9,0,.6,1.57);
+ put('Table_Large',-5.5,2.4,.8,0,1.1);put('Bench',-5.5,3.4,.7,0);put('Bench',-5.5,1.4,.7,0);put('Mug',-5.2,2.4,1,.64);put('ChickenLeg',-5.8,2.5,.6,.64,0,.8);
+ put('Table_Large',-2.4,0.4,.8,0,1.1);put('Bench',-2.4,-.5,.7,0);put('Mug',-2.2,.4,1,.64);put('Chalice',-2.7,.5,.5,.64);
+ put('Table_Large',3.8,3.0,.8,0,1.1);put('Bench',3.8,3.9,.7,0);put('Mug',4.0,3.0,1,.64);put('Bookcase_2',-7.0,3.2,1,0,.7,1.57);
+ put('torch_mounted',-1.2,4.4,1,1.9);put('torch_mounted',6.0,4.4,1,1.9);put('torch_mounted',-7.0,.2,1,1.9,0,1.57);
+ lamps.push([h[0],y0+2.4,h[1]])}
 function furnish(h,kind){var yaw=h[5],cx=h[0],cz=h[1];
+ if(kind==='inn'){hotel(h);return}
  function put(n,lx,lz,s,dy,col,ry){var p=hin(h,lx,lz);dadd(n,p[0],p[1],yaw+(ry||0),s,null,dy||0,col)}
  put('torch_mounted',-1.4,-D2(h)+.1,1,1.9);put('torch_mounted',1.4,-D2(h)+.1,1,1.9);
  var T=!!PK;
@@ -145,7 +165,7 @@ function furnish(h,kind){var yaw=h[5],cx=h[0],cz=h[1];
 function D2(h){return 2.7}
 function npcIn(h,lx,lz){var p=hin(h,lx,lz);return[p[0],p[1],Math.PI-h[5]]}
 function kdecor(){
- if(PK){padd('Stall_Cart_Empty',-9,-14,.3,1.1);padd('Stall_Empty',22,-6,-1.3,1.2);padd('Dummy',5,-15,.4,1,.5);padd('Dummy',8,-16,-.3,1,.5);padd('Barrel',-5,-14,0,1,.5);padd('Crate_Wooden',-4,-15.3,.5,1,.6);padd('Barrel',20,-9,0,1,.5);padd('Crate_Wooden',21.3,-8.5,.4,1,.6);padd('Bench',-4,7,1.57,1,.0);padd('Bench',5,-3,0,1,0);padd('Barrel',12,4,0,1,.5);padd('Prop_Wagon',-17,-14,1.1,1,1.2);for(var q=0;q<5;q++){padd('Prop_MetalFence_Simple',-8+q*2,26,0,1);padd('Prop_MetalFence_Simple',2+q*2,26,0,1)}}
+ if(PK){padd('Stall_Cart_Empty',-3.6,-17,.3,1.1);padd('Stall_Empty',22,-6,-1.3,1.2);padd('Dummy',5,-15,.4,1,.5);padd('Dummy',8,-16,-.3,1,.5);padd('Barrel',-5,-14,0,1,.5);padd('Crate_Wooden',-4,-15.3,.5,1,.6);padd('Barrel',20,-9,0,1,.5);padd('Crate_Wooden',21.3,-8.5,.4,1,.6);padd('Bench',-4,7,1.57,1,.0);padd('Bench',5,-3,0,1,0);padd('Barrel',12,4,0,1,.5);padd('Prop_Wagon',-17,-14,1.1,1,1.2);for(var q=0;q<5;q++){padd('Prop_MetalFence_Simple',-8+q*2,26,0,1);padd('Prop_MetalFence_Simple',2+q*2,26,0,1)}}
  if(!PK){kadd('stall-red',-9,H(-9,-14)-.1,-14,.3,2.4);kadd('stall-green',22,H(22,-6)-.1,-6,-1.3,2.4)}kadd('cart',4,H(4,-8)-.1,-8,.8,2.6);kadd('cart-high',-16,H(-16,-4)-.1,-4,2.2,2.4);
  kadd('banner-red',-3.4,H(-3.4,-44)+1.5,-44,Math.PI,3);kadd('banner-green',3.4,H(3.4,-44)+1.5,-44,Math.PI,3);
  for(var i=0;i<6;i++){var x=-24+i*3;kadd('fence',x,H(x,12)-.05,12,0,3);}
@@ -175,8 +195,9 @@ function buildTown(){resetWorld();WP.amp=2.2;WP.r0=26;WP.r1=46;WP.bowl=70;WP.bs=
   if(az<2.2+Math.sin(x*.15)*.8&&ax<60)return true;if(ax<2.2+Math.cos(z*.17)*.8&&az<48)return true;return false}
  terrain(86,function(x,z,y){var g=hash(Math.floor(x*.5),Math.floor(z*.5)),path=isPath(x,z);if(path)return[[.5,.5,.52],3];
   var c=[.22+g*.07,.40+g*.1,.15+g*.04];if(y>3.2){var k=Math.min(1,(y-3.2)*.5);c=[c[0]+.1*k,c[1]-.04*k,c[2]+.05*k]}return[c,4]});
- var HS=[[-14,-9,2,2,1,.25,0,'inn'],[14,-13,3,2,1,-.3,1,'shop'],[-19,8,2,2,1,-.2,1,'smith'],[17,12,2,2,1,.6,0,'guild'],[-26,-2,2,2,2,-1.5,0],[27,-3,2,2,2,1.8,1],[-8,20,3,2,1,3.3,0,'quest']],RC=[[.55,.22,.16],[.28,.3,.42],[.5,.3,.18],[.5,.18,.15],[.3,.28,.32],[.55,.25,.17],[.28,.34,.2]],HP={};HSL=[];
- HS.forEach(function(h,i){if(KB){khouse(h[0],h[1],h[2],h[3],h[4],h[5],{wood:h[6],roofc:RC[i],door:h[2]>2?1:1,chimney:i%2==0});h[7]=h[7]||0;if(h[7]){h[8]=2.7;HP[h[7]]=h}}else house(h[0],h[1],h[2]*3+1,h[3]*3,h[4]*3.4,h[5],[.68,.66,.6],RC[i])});
+ var HS=[[-13.5,-9,5,3,2,.25,0,'inn'],[14,-13,3,2,1,-.3,1,'shop'],[-19,8,2,2,1,-.2,1,'smith'],[17,12,2,2,1,.6,0,'guild'],[-26,-2,2,2,2,-1.5,0],[27,-3,2,2,2,1.8,1],[-8,20,3,2,1,3.3,0,'quest']],RC=[[.55,.22,.16],[.28,.3,.42],[.5,.3,.18],[.5,.18,.15],[.3,.28,.32],[.55,.25,.17],[.28,.34,.2]],HP={};HSL=[];
+ window.__hotelH=function(){return HP.inn};
+ HS.forEach(function(h,i){if(KB){khouse(h[0],h[1],h[2],h[3],h[4],h[5],{wood:h[6],roofc:RC[i],door:h[7]==='inn'?2:1,chimney:i%2==0});h[7]=h[7]||0;if(h[7]){h[8]=2.7;HP[h[7]]=h}}else house(h[0],h[1],h[2]*3+1,h[3]*3,h[4]*3.4,h[5],[.68,.66,.6],RC[i])});
  if(KB&&DK)HS.forEach(function(h){if(h[7])furnish(h,h[7])});
  if(KB){kdecor()}
  if(!KB)well(0,0);tent(8,6,1.1);tent(-7,7,.95);stall(-13,-16,0,[.8,.2,.2]);stall(18,-1,1.57,[.2,.5,.3]);
@@ -192,7 +213,7 @@ function buildTown(){resetWorld();WP.amp=2.2;WP.r0=26;WP.r1=46;WP.bowl=70;WP.bs=
   {id:'inn',n:'Han Sahibi Nuri',role:'🛏 Han',x:-11,z:-4,yaw:.6,ap:{h:'bald',hc:'#222',t:'tee',tc:'#d8c8a0',b:'trousers',bc:'#5a4a30',sh:'sneaker',shc:'#3a2a1a',hat:'none',mk:'goatee',fd:1}},
   {id:'quest',n:'Haberci Elif',role:'📜 Görevler',x:3.4,z:-9.2,yaw:3.1,ap:{h:'twin',hc:'#c9923e',t:'blouse',tc:'#e8718d',b:'skirt',bc:'#3f6fd0',sh:'boots',shc:'#4a3020',hat:'none',g:'f'}},
   {id:'guard',n:'Kule Bekçisi',role:'🗼 Kule Kapısı',x:0,z:-44.6,yaw:0,ap:{h:'short',hc:'#222',t:'armor',tc:'#8e9aaf',b:'trousers',bc:'#3a3f55',sh:'boots',shc:'#2a2a30',hat:'helmet',htc:'#aab3c2',bk:'cape',bkc:'#c0392b'}}];
- NP.forEach(function(n){n.ap=Object.assign({},PRES.basic.ap,n.ap);if(KB){var _h={merchant:HP.shop,smith:HP.smith,guild:HP.guild,inn:HP.inn,quest:HP.quest}[n.id],_o={merchant:[0,-1.7],smith:[-.9,-1.6],guild:[0,-1.6],inn:[.4,-1.8],quest:[.4,-1.6]}[n.id];if(_h){var q=npcIn(_h,_o[0],_o[1]);n.x=q[0];n.z=q[1];n.yaw=q[2]}}NPCL.push(n);colliders.push([n.x,n.z,.55]);IA.push({k:'npc',id:n.id,x:n.x,z:n.z,r:3.4,lb:n.role})});
+ NP.forEach(function(n){n.ap=Object.assign({},PRES.basic.ap,n.ap);if(KB){var _h={merchant:HP.shop,smith:HP.smith,guild:HP.guild,inn:HP.inn,quest:HP.quest}[n.id],_o={merchant:[0,-1.7],smith:[-.9,-1.6],guild:[0,-1.6],inn:[3.4,-.5],quest:[.4,-1.6]}[n.id];if(_h){var q=npcIn(_h,_o[0],_o[1]);n.x=q[0];n.z=q[1];n.yaw=q[2]}}NPCL.push(n);colliders.push([n.x,n.z,.55]);IA.push({k:'npc',id:n.id,x:n.x,z:n.z,r:3.4,lb:n.role})});
  NPCL[5].big=1;uploadWorld()}
 /* ---- kat kur ---- */
 function bossDef(f){var R=realmOf(f),rr=rng(f*104729+7),id=(f%10===0)?R.rb:R.bp[Math.floor(rr()*R.bp.length)];if(f>=100&&f%100===0)id='yaxest';return id}
