@@ -310,11 +310,11 @@ function furnish(h,kind){var yaw=h[5],cx=h[0],cz=h[1];
  function put(n,lx,lz,s,dy,col,ry){var p=hin(h,lx,lz);dadd(n,p[0],p[1],yaw+(ry||0),s,null,dy||0,col)}
  put('torch_mounted',-1.4,-D2(h)+.1,1,1.9);put('torch_mounted',1.4,-D2(h)+.1,1,1.9);
  var T=!!PK;
- if(kind==='inn'){put(T?'Bed_Twin1':'bed_floor',-1.7,-1.1,T?1:.85,0,1.2);put(T?'Table_Large':'table_medium',1.4,.9,T?.8:.8,0,1.1);put(T?'Bench':'stool',1.4,1.9,T?.7:1,0);put('Mug',1.1,.9,1,.64);put('Barrel',2.2,-2.1,1,0,.5);put('Cabinet',.4,-2.55,.9,0,.7)}
- if(kind==='shop'){put('Table_Large',0,-.3,1,0,1.3);put('Coin_Pile',-.6,-.3,1,.8);put('Bag',.9,-.4,1,.8);put('Bookcase_2',-3.2,-2.5,1,0,.7);put('Crate_Wooden',3.4,-2.1,1,0,.5);put('Barrel',3.5,1.6,1,0,.5);put('Chest_Wood',-3.2,1.4,1,0,.7);put('Shelf_Arch',3.2,-1.5,1,0,.5)}
- if(kind==='smith'){put('Anvil',1.4,.6,1,0,.6);put('Workbench',-1.9,-2.1,1,0,.9);put('WeaponStand',2.0,-2.0,1,0,.7);put('Dummy',-2.1,1.6,1,0,.5);put('Whetstone',.2,1.7,.8,0);put('Barrel',-2.3,.5,1,0,.5)}
- if(kind==='guild'){put('Banner_1',-1.9,-D2(h)+.1,1,.3);put('Banner_2',1.9,-D2(h)+.1,1,.3);put('Table_Large',0,.9,.9,0,1.2);put('Bench',0,1.9,.7);put('Chest_Wood',2.0,-2.0,1,0,.7);put('Shield_Wooden',-.2,-D2(h)+.2,1,1.4)}
- if(kind==='quest'){put('Bookcase_2',-2.9,-2.5,1,0,.7);put('Table_Large',.4,.9,.85,0,1.2);put('Chair_1',-1.3,.9,1,0,.4);put('BookGroup_Medium_1',.5,.9,1,.65);put('Scroll_1',1.2,.9,1,.65);put('Candle_1',-.4,.9,1,.65);put('Chest_Wood',3.0,-1.8,.9,0,.7)}}
+ if(kind==='inn'){put(T?'Bed_Twin1':'bed_floor',-1.7,-1.1,T?1:.85,0,1.2);put(T?'Table_Large':'table_medium',1.4,.9,T?.8:.8,0,1.1);put(T?'Bench':'stool',1.4,1.9,T?.7:1,0);put('Mug',1.1,.9,1,.64);put('Chalice',1.7,.7,.5,.64);put('ChickenLeg',1.6,1.2,.6,.64,0,.8);put('Barrel',2.2,-2.1,1,0,.5);put('Cabinet',.4,-2.55,.9,0,.7)}
+ if(kind==='shop'){put('Table_Large',0,-.3,1,0,1.3);put('Potion1_Filled',.6,-.5,.35,.82);put('Potion2_Filled',-.1,.2,.3,.82);put('Gold_Ingots',.9,.1,.5,.82,0,.5);put('Crystal3',-.9,.3,.5,.82);put('Chest_Closed',3.0,.5,1,0,0,-.7);put('Pouch',-.3,-.9,.8,.82);put('Armor_Leather',-2.4,-2.6,.6,.0,0,.2);put('Coin_Pile',-.6,-.3,1,.8);put('Bag',.9,-.4,1,.8);put('Bookcase_2',-3.2,-2.5,1,0,.7);put('Crate_Wooden',3.4,-2.1,1,0,.5);put('Barrel',3.5,1.6,1,0,.5);put('Chest_Wood',-3.2,1.4,1,0,.7);put('Shelf_Arch',3.2,-1.5,1,0,.5)}
+ if(kind==='smith'){put('Anvil',1.4,.6,1,0,.6);put('Workbench',-1.9,-2.1,1,0,.9);put('WeaponStand',2.0,-2.0,1,0,.7);put('Dummy',-2.1,1.6,1,0,.5);put('Whetstone',.2,1.7,.8,0);put('Barrel',-2.3,.5,1,0,.5);put('Armor_Metal',-1.9,-2.1,.7,.92,0,.3);put('Sword_big',-1.2,-2.4,.55,.9,0,.4);put('Axe_small',-2.5,-2.3,.6,.9,0,1);put('Armor_Golden',2.0,-2.0,.5,.95,0,-.4);put('Hammer_Double',1.0,-2.5,.5,0,0,.2);put('Crystal1',.3,1.8,.6,.2,0,0)}
+ if(kind==='guild'){put('Banner_1',-1.9,-D2(h)+.1,1,.3);put('Banner_2',1.9,-D2(h)+.1,1,.3);put('Table_Large',0,.9,.9,0,1.2);put('Bench',0,1.9,.7);put('Chest_Wood',2.0,-2.0,1,0,.7);put('Shield_Wooden',-.2,-D2(h)+.2,1,1.4);put('Crown',.2,.8,.5,.7);put('Skull',-.6,1.0,.6,.7);put('Hammer_Double',-2.4,-2.2,.55,0,0,.3);put('Chest_Closed',2.8,-.6,.9,0,0,-.5)}
+ if(kind==='quest'){put('Bookcase_2',-2.9,-2.5,1,0,.7);put('Table_Large',.4,.9,.85,0,1.2);put('Chair_1',-1.3,.9,1,0,.4);put('BookGroup_Medium_1',.5,.9,1,.65);put('Scroll_1',1.2,.9,1,.65);put('Candle_1',-.4,.9,1,.65);put('Book3_Open',.0,1.2,.5,.65);put('Key1',.9,.6,.6,.65);put('Mineral',-2.6,1.2,.6,0);put('Chest_Wood',3.0,-1.8,.9,0,.7)}}
 function D2(h){return 2.7}
 function npcIn(h,lx,lz){var p=hin(h,lx,lz);return[p[0],p[1],Math.PI-h[5]]}
 function kdecor(){
@@ -326,11 +326,12 @@ function kdecor(){
  [[-30,12],[31,8],[-34,-16],[33,-18],[-22,26],[24,28]].forEach(function(p,i){kadd(i%2?'rock-wide':'rock-large',p[0],H(p[0],p[1])-.1,p[1],i*1.3,2.2,[1.15,1,.8]);colliders.push([p[0],p[1],2])});
  kadd('windmill',-42,H(-42,34)+4.7,34,.6,3);colliders.push([-42,34,3.5]);
  [[-6,24],[6,24],[-4,-22],[4,-22]].forEach(function(p){kadd('hedge-large',p[0],H(p[0],p[1])-.05,p[1],0,3)});
- kadd('fountain-round',0,H(0,0)-.1,0,0,2.2);colliders.push([0,0,2.4]);
+ kadd('fountain-round',0,H(0,0)-.1,0,0,2.2);if(IT){padd('Chest_Closed',6,-6,.6,1.3,.8);padd('Crystal5',-6,6,.5,1.6);padd('Crystal1',-6.8,6.4,1,1.2);padd('Crystal3',-5.6,6.8,2,1.4);padd('Sword_big',3.2,-1.5,0,.9);padd('Armor_Golden',-3.2,-1.4,.4,1.0)}colliders.push([0,0,2.4]);
 }
 var PK=null;try{fetch('assets/props2.json').then(function(r){return r.json()}).then(function(j){PK=j;if(window.__onKB)window.__onKB()}).catch(function(e){console.warn('props2',e)})}catch(e){}
+var IT=null;try{fetch('assets/items.json').then(function(r){return r.json()}).then(function(j){IT=j;if(window.__onKB)window.__onKB()}).catch(function(e){console.warn('items',e)})}catch(e){}
 var DK=null;try{fetch('assets/dungeon.json').then(function(r){return r.json()}).then(function(j){DK=j;if(window.__onKB)window.__onKB()}).catch(function(e){console.warn('dungeon',e)})}catch(e){}
-function dadd(n,x,z,ry,s,tint,dy,col){var m=(PK&&PK[n])||(DK&&DK[n]);if(!m)return false;s=s||1;var y=H(x,z)+(dy||0),c=Math.cos(ry),sn=Math.sin(ry),k=m.p.length/3;tint=tint||[1,1,1];
+function dadd(n,x,z,ry,s,tint,dy,col){var m=(PK&&PK[n])||(DK&&DK[n])||(IT&&IT[n]);if(!m)return false;s=s||1;var y=H(x,z)+(dy||0),c=Math.cos(ry),sn=Math.sin(ry),k=m.p.length/3;tint=tint||[1,1,1];
  for(var i=0;i<k;i++){var px=m.p[i*3]*s,py=m.p[i*3+1]*s,pz=m.p[i*3+2]*s;P.push(x+px*c+pz*sn,y+py,z-px*sn+pz*c);var nx=m.n[i*3],ny=m.n[i*3+1],nz=m.n[i*3+2];N.push(nx*c+nz*sn,ny,-nx*sn+nz*c);
   C.push(Math.pow(m.c[i*3]/255,1.5)*tint[0],Math.pow(m.c[i*3+1]/255,1.5)*tint[1],Math.pow(m.c[i*3+2]/255,1.5)*tint[2]);M.push(0)}if(col)colliders.push([x,z,col]);return true}
 function padd(n,x,z,ry,s,col){return dadd(n,x,z,ry,s,null,0,col)}
