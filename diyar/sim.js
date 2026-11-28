@@ -42,7 +42,9 @@ function poiPos(){if(poiCache)return poiCache;poiCache=POIS.map(function(p){var 
   best=best||{tx:tx,ty:ty};return{id:p.id,tx:best.tx,ty:best.ty}});return poiCache}
 function poiNodeAt(tx,ty){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx>5||dx<-5||dy>5||dy<-5)continue;var d2=dx*dx+dy*dy;if(d2<2||d2>20)continue;var n=POIS[i].node;if(hash(tx,ty,31+i)<(POIS[i].id==='kule'?.18:.42))return n}return null}
 function poiOf(tx,ty,r){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx*dx+dy*dy<=(r||7)*(r||7))return i}return -1}
+var OUTT=[[26,100],[174,100],[100,174],[30,30],[170,30]];
 function nodeAt(tx,ty){
+  for(var oi=0;oi<OUTT.length;oi++)if(Math.hypot(tx-OUTT[oi][0],ty-OUTT[oi][1])<8.5)return null;
   var z=zoneAt(tx,ty);if(z===3||z===4||pondAt(tx,ty)>=0||inPond(tx+.5,ty+.5,7.5))return null;
   var dx=tx-CX,dy=ty-CY,dd=Math.sqrt(dx*dx+dy*dy);if(dd<18)return null;
   var pn=poiNodeAt(tx,ty);if(pn)return pn;
