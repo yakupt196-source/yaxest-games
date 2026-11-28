@@ -56,7 +56,6 @@
     kostebek:{score:'s',scoreName:'pop',msg:'w'},yilan:{score:'s',msg:'',canvasOver:1},
     hafiza:{msg:'w',match:1,tap:'#g',tapName:'tap'},birlestir:{msg:'w',score:'s',tap:'#g',tapName:'tap'},isik:{msg:'msg',tap:'#grid',tapName:'tap'},
     moda:{},
-    kasaba:{},
     sallan:{ov:1},
     kaydir:{ov:1},
     damla:{ov:1},

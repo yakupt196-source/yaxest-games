@@ -3,7 +3,6 @@
 document.documentElement.innerHTML='<body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#0b0820;color:#fff;font-family:system-ui;text-align:center;padding:24px"><div><div style="font-size:3rem">🎮</div><h1>Yaxest Games</h1><p>Bu kopya yetkili değil. Resmî site:</p><p><a style="color:#ffd23f;font-weight:800" href="https://yaxestgames.com/">yakupt196-source.github.io/yaxest-games</a></p></div></body>';throw 0}catch(e){if(e===0)throw e}})();
 // Tüm oyunların tek listesi. Yeni oyun eklemek için buraya bir satır ekle (ve klasörünü aç).
 window.YAXEST_GAMES=[
-{id:'kasaba',n:'Yaxest Kasaba 3D',i:'🏰',c:'#4fc3ff',k:'Arcade',d:'Yağmurlu 3D kasabada gez, canavarlarla savaş. Yaxest Diyarı\'nın 3D deneme sürümü (beta): telefonda yatay oynanır.',new:1},
 {id:'moda',n:'Yaxest Moda',i:'👗',c:'#ff5c8a',k:'Giydirme',d:'Karakterini giydir, saçını ve makyajını yap, Moda Şovu\'nda jüriyi etkile. 60+ kıyafet, 10 sahne, fotoğraf ve gardırop.',new:1},
 {id:'kafe',n:'Yaxest Kafe',i:'☕',c:'#ff9f43',k:'Tycoon',d:'Çay ocağından dünya zincirine: kafeni büyüt, çevrimdışıyken de kazan, yeniden doğ.',new:1},
 {id:'maden',n:'Yaxest Maden',i:'⛏️',c:'#8d6e63',k:'Tycoon',d:'Kürekle başla, yeraltı şehrine kadar kaz. Elmaslar seni bekliyor.',new:1},
