@@ -18,7 +18,7 @@ function loadModel(name){init();return Promise.all([jget(AB+name+'.json'),bget(A
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,12,me.po);gl.enableVertexAttribArray(1);gl.vertexAttribPointer(1,3,gl.FLOAT,false,12,me.no);gl.enableVertexAttribArray(2);gl.vertexAttribPointer(2,2,gl.FLOAT,false,8,me.uo);
   gl.enableVertexAttribArray(3);gl.vertexAttribIPointer(3,4,gl.UNSIGNED_BYTE,4,me.jo);gl.enableVertexAttribArray(4);gl.vertexAttribPointer(4,4,gl.UNSIGNED_BYTE,true,4,me.wo);
   var ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(bin,me.io,me.ni),gl.STATIC_DRAW);gl.bindVertexArray(null);
-  m.meshes.push({n:me.name,vao:vao,ni:me.ni,tex:loadTex(me.tex),em:loadTex(me.em),alpha:me.alpha});});
+  m.meshes.push({n:me.name,vao:vao,ni:me.ni,tex:loadTex(me.tex),em:loadTex(me.em),nm:/Body$/.test(me.name)?loadTex(name+'_n.jpg'):null,alpha:me.alpha});});
  MODELS[name]=m;return m})}
 function loadAnims(){return Promise.all([jget(AB+'anim.json'),bget(AB+'anim.bin')]).then(function(r){ANIM=r[0];ANIM.buf=r[1];ANIM.names=ANIM._names;ANIM.map={};ANIM.names.forEach(function(n,i){ANIM.map[n]=i});
  Object.keys(ANIM).forEach(function(k){var a=ANIM[k];if(a&&a.qo!==undefined){a.Q=new Int16Array(ANIM.buf,a.qo,a.n*ANIM.names.length*4);a.P=new Float32Array(ANIM.buf,a.po,a.n*3)}})})}
