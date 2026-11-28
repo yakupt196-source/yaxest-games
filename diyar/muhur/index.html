@@ -571,10 +571,11 @@ function die(){if(pl.dead>0)return;pl.dead=.001;var lost=Math.floor(S.gold*(S.oa
  $('die2').textContent=tx;$('die').style.display='flex';save();if(window.NET)NET.say('sys','💀 '+S.nick+' '+(FL.n?FL.n+'. katta':'')+' yenildi.')}
 function respawn(){pl.dead=0;pl.hp=pl.mhp;pl.st=pl.mst;pl.mp=0;$('die').style.display='none';mobs.forEach(function(m){if(m.dead<=0&&!m.add){m.st=0;if(m.boss)bossReset(m)}});tels=[];projs=[];
  if(FL.n>0&&WORLD==='floor'){pl.x=SPAWNP[0];pl.z=SPAWNP[1]-4;cam.yaw=0;pl.yaw=0}else{pl.x=0;pl.z=9}}
+function sparks(x,y,z,n,c){for(var i=0;i<n;i++){var a=Math.random()*6.283,s=2+Math.random()*4;fx.push({k:'sp',x:x,y:y,z:z,vx:Math.cos(a)*s,vy:2+Math.random()*3,vz:Math.sin(a)*s,t:0,l:.45+Math.random()*.2,c:c})}}
 function dmgMob(m,dm,crit,own){if(m.dead>0||m.hp<=0)return;if(m.boss&&!m.eng){bossWake(m)}
- m.hp-=dm;m.hurt=.16;fl(m.x,H(m.x,m.z)+1.4*m.s+.5,m.z,''+dm,crit?'#ffd23f':'#fff',crit?1.5:1);var dx=m.x-pl.x,dz=m.z-pl.z,l=Math.hypot(dx,dz)||1;if(!m.boss){m.x+=dx/l*.3;m.z+=dz/l*.3}m.st=1;
+ m.hp-=dm;m.hurt=.16;sparks(m.x,H(m.x,m.z)+1.1*m.s,m.z,crit?14:7,crit?[1,.85,.25]:[1,.55,.3]);fl(m.x,H(m.x,m.z)+1.4*m.s+.5,m.z,''+dm,crit?'#ffd23f':'#fff',crit?1.5:1);var dx=m.x-pl.x,dz=m.z-pl.z,l=Math.hypot(dx,dz)||1;if(!m.boss){m.x+=dx/l*.3;m.z+=dz/l*.3}m.st=1;
  if(own&&window.NET)NET.mobHit(m.idx,dm);alertMates(m);
- if(m.hp<=0){m.dead=.001;m.res=0;killReward(m,!own);if(m.boss)bossDown(m)}}
+ if(m.hp<=0){sparks(m.x,H(m.x,m.z)+1,m.z,m.boss?60:22,[.8,.8,1]);if(m.boss)shake=.6;m.dead=.001;m.res=0;killReward(m,!own);if(m.boss)bossDown(m)}}
 function alertMates(m){if(m.camp<0)return;mobs.forEach(function(a){if(a.camp===m.camp&&a.dead<=0&&a.st===0)a.st=1})}
 function bossDown(m){FL.bossDead=1;tels=[];projs=[];mobs.forEach(function(a){if(a.add&&a.dead<=0)a.dead=.001});var f=FL.n,first=!S.clr[f];S.clr[f]=1;S.q&&(S.q.b++,S.q.c++);
  S.maxF=Math.max(S.maxF,f+1);var bg=Math.round(60*RLf(f)*(first?1.5:.5)*(S.oath?1.5:1));S.gold+=bg;
@@ -649,7 +650,7 @@ function stepPlayer(dt){
  if(pl.chan>0&&pl.dead<=0){pl.chan-=dt;if(pl.chan<=0){pl.chan=0;startTown(false)}}
  if(WORLD==='floor')stepMobs(dt);
  for(var i=floats.length-1;i>=0;i--){var f=floats[i];f.l-=dt;f.y+=dt*1.1;if(f.l<=0)floats.splice(i,1)}
- for(var i=fx.length-1;i>=0;i--){fx[i].t+=dt;if(fx[i].t>fx[i].l)fx.splice(i,1)}shake=Math.max(0,shake-dt*1.6)}
+ for(var i=fx.length-1;i>=0;i--){var q=fx[i];if(q.k==='sp'){q.x+=q.vx*dt;q.z+=q.vz*dt;q.y+=q.vy*dt;q.vy-=12*dt}fx[i].t+=dt;if(fx[i].t>fx[i].l)fx.splice(i,1)}shake=Math.max(0,shake-dt*1.6)}
 function safeFor(){return inSafe(pl.x,pl.z)||pl.dead>0}
 function stepMobs(dt){var safe=safeFor();
  mobs.forEach(function(m){
@@ -951,7 +952,7 @@ function drawEntities(){gl.bindVertexArray(evao);gl.uniform1f(uUl,1);var pulse=.
  mobs.forEach(function(m){if(Math.hypot(m.x-cam.x,m.z-cam.z)<95){drawMob(m);if(m.dead<=0&&m.elite&&!m.boss){var y=H(m.x,m.z)+2.5*m.s+.6;part('coneG',ch(tr(m.x,y+Math.sin(T*3)*.1,m.z),rX(3.14),sca(.25,.5,.25)),[1,.82,.2])}}});
  /* mermiler / efektler */
  projs.forEach(function(p){part('ballG',ch(tr(p.x,H(p.x,p.z)+1.1,p.z),sca(.32,.32,.32)),[p.c[0]*1.3+.2,p.c[1]*1.3+.2,p.c[2]*1.3+.2])});
- fx.forEach(function(e){var u=e.t/e.l,y=H(e.x,e.z)+.12;if(e.k==='nova')part('ballG',ch(tr(e.x,y,e.z),sca(9*u+.5,.07,9*u+.5)),[.8*(1-u)+.2,.55*(1-u)+.1,1]);else if(e.k==='spin')part('ballG',ch(tr(e.x,y,e.z),sca(4.8*u+.4,.06,4.8*u+.4)),[1,.95,.7]);else if(e.k==='boom')part('ballG',ch(tr(e.x,y,e.z),sca(e.r*(.6+.4*u),.09,e.r*(.6+.4*u))),[1,.45*(1-u)+.1,.1])});
+ fx.forEach(function(e){var u=e.t/e.l,y=H(e.x,e.z)+.12;if(e.k==='sp'){var z=.12*(1-u)+.02;part('ballG',ch(tr(e.x,e.y,e.z),sca(z,z,z)),e.c);return}if(e.k==='nova')part('ballG',ch(tr(e.x,y,e.z),sca(9*u+.5,.07,9*u+.5)),[.8*(1-u)+.2,.55*(1-u)+.1,1]);else if(e.k==='spin')part('ballG',ch(tr(e.x,y,e.z),sca(4.8*u+.4,.06,4.8*u+.4)),[1,.95,.7]);else if(e.k==='boom')part('ballG',ch(tr(e.x,y,e.z),sca(e.r*(.6+.4*u),.09,e.r*(.6+.4*u))),[1,.45*(1-u)+.1,.1])});
  /* kapılar / ateş */
  if(WORLD==='town'){var gy=H(0,-49);part('boxG',ch(tr(0,gy+3,-48.9),sca(5.4,6,.25)),[.55*pulse+.1,.45*pulse+.1,1])}
  else{
