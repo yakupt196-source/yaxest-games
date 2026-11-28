@@ -94,4 +94,3 @@ window.__entApi={render:render,get step(){return E.step},set step(v){E.step=v;re
 })();
 window.__onKB=function(){if(WORLD==='town')buildTown()};if(window.__kbReady)window.__onKB();
 
-window.__skdbg=function(){try{return String(skPlayer(.016))+' '+JSON.stringify(Object.keys(SKN.models))}catch(x){return x.stack}};

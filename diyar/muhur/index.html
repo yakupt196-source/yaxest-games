@@ -352,7 +352,6 @@ function buildTown(){resetWorld();WP.amp=2.2;WP.r0=26;WP.r1=46;WP.bowl=70;WP.bs=
  HS.forEach(function(h,i){if(KB){khouse(h[0],h[1],h[2],h[3],h[4],h[5],{wood:h[6],roofc:RC[i],door:h[2]>2?1:1,chimney:i%2==0});h[7]=h[7]||0;if(h[7]){h[8]=2.7;HP[h[7]]=h}}else house(h[0],h[1],h[2]*3+1,h[3]*3,h[4]*3.4,h[5],[.68,.66,.6],RC[i])});
  if(KB&&DK)HS.forEach(function(h){if(h[7])furnish(h,h[7])});
  if(KB){kdecor()}
- if(KB&&/[?&]kd=/.test(location.search)){var kdm=+location.search.match(/kd=(\d)/)[1],nm=['wall','wall-door','wall-window-glass','wall-window-shutters','wall-window-small','roof','roof-corner','roof-gable','roof-high','roof-flat','chimney','wall-corner'];nm.forEach(function(n,i){if(kdm===1)kadd(n,0,0,-18+i*3,0,3);else kadd(n,-18+i*3,0,-6,0,3)})}
  if(!KB)well(0,0);tent(8,6,1.1);tent(-7,7,.95);stall(-13,-16,0,[.8,.2,.2]);stall(18,-1,1.57,[.2,.5,.3]);
  [[5,-6],[-5,-6],[10,2],[-11,1],[4,9],[-3,-12],[6,-30],[-6,-30],[7,-40],[-7,-40]].forEach(function(p){lamp(p[0],p[1])});
  for(var i=0;i<80;i++){var a=hash(i,1)*6.283,rr=34+hash(i,2)*36,x=Math.cos(a)*rr,z=Math.sin(a)*rr;if(Math.abs(x)<5&&z<0)continue;(hash(i,3)<.55?pine:oak)(x,z,.9+hash(i,4)*.9)}
@@ -1397,7 +1396,6 @@ window.__entApi={render:render,get step(){return E.step},set step(v){E.step=v;re
 })();
 window.__onKB=function(){if(WORLD==='town')buildTown()};if(window.__kbReady)window.__onKB();
 
-window.__skdbg=function(){try{return String(skPlayer(.016))+' '+JSON.stringify(Object.keys(SKN.models))}catch(x){return x.stack}};
 
 /* mobil: tam ekran + yatay kilit + dikeyde döndür uyarısı (Diyar mantığı) */
 (function(){
