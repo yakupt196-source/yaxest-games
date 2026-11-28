@@ -36,9 +36,9 @@ reg('sp',SP,1);reg('col',COL,0);reg('hat',HAT,1);reg('face',FACE,1);reg('neck',N
 Object.keys(TH).forEach(function(k){ITEMS['th:'+k]={id:'th:'+k,slot:'th',val:k,name:TH[k].n,price:TH[k].p}});
 
 /* ---------- durum ---------- */
-function def(){return{c:0,t:0,fr:0,own:{},eq:{sp:'blob',col:'#ffd23f',hat:'',face:'',neck:'',aura:'',th:'neon'},pk:{sans:0,enerji:0,tuccar:0,seri:0},name:'',boost:0,cep:0,daily:'',streak:0,seen:{}}}
+function def(){return{c:0,t:0,fr:0,own:{},eq:{sp:'blob',col:'#ffd23f',hat:'',face:'',neck:'',aura:'',th:'neon'},pk:{sans:0,enerji:0,tuccar:0,seri:0},name:'',boost:0,cep:0,daily:'',streak:0,seen:{},tr:0,ps:{s:-1,x:0,f:{},p:{},prem:0}}}
 function load(){var d=def();try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){
-  d.c=+s.c||0;d.t=+s.t||0;d.fr=+s.fr||0;d.own=s.own||{};Object.assign(d.eq,s.eq||{});Object.assign(d.pk,s.pk||{});d.name=String(s.name||'').slice(0,14);d.boost=+s.boost||0;d.cep=+s.cep||0;d.daily=s.daily||'';d.streak=+s.streak||0;d.seen=s.seen||{}}}catch(e){}return d}
+  d.c=+s.c||0;d.t=+s.t||0;d.fr=+s.fr||0;d.own=s.own||{};Object.assign(d.eq,s.eq||{});Object.assign(d.pk,s.pk||{});d.name=String(s.name||'').slice(0,14);d.boost=+s.boost||0;d.cep=+s.cep||0;d.daily=s.daily||'';d.streak=+s.streak||0;d.seen=s.seen||{};d.tr=Math.max(0,+s.tr||0);if(s.ps&&typeof s.ps==='object')d.ps={s:+s.ps.s,x:+s.ps.x||0,f:s.ps.f||{},p:s.ps.p||{},prem:s.ps.prem?1:0}}}catch(e){}return d}
 var S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function emit(k,x){refresh();try{window.dispatchEvent(new CustomEvent('yx-eco',{detail:{k:k,x:x}}))}catch(e){}}
@@ -60,7 +60,7 @@ function price(p){return p<=0?0:Math.max(1,Math.round(p*(1-S.pk.tuccar*.05)))}
 function mult(){return(1+S.pk.sans*.1)*(S.boost>Date.now()?2:1)}
 function level(){return 1+Math.floor(Math.sqrt(S.t/12))}
 function lvInfo(){var l=level(),a=(l-1)*(l-1)*12,b=l*l*12;return{l:l,p:Math.min(1,(S.t-a)/(b-a)),next:b-S.t}}
-function earn(n,why,raw){var v=raw?n:n*mult()+S.fr,a=Math.floor(v);S.fr=raw?S.fr:v-a;if(a<=0){save();return 0}S.c+=a;S.t+=a;save();emit('earn',{n:a,why:why});return a}
+function earn(n,why,raw){var v=raw?n:n*mult()+S.fr,a=Math.floor(v);S.fr=raw?S.fr:v-a;if(a<=0){save();return 0}S.c+=a;S.t+=a;try{passGain(a,why)}catch(_e){}save();emit('earn',{n:a,why:why});return a}
 function spend(n){n=Math.round(n);if(n<=0)return true;if(S.c<n)return false;S.c-=n;save();emit('spend',{n:n});return true}
 function buy(id){var it=ITEMS[id];if(!it)return{ok:false,r:'x'};if(owns(id))return{ok:true,r:'own'};if(LOCK[id]&&!lockAllowed())return{ok:false,r:'lock'};var p=price(it.price);if(S.c<p)return{ok:false,r:'coin',need:p-S.c};
   S.c-=p;S.own[id]=1;save();emit('buy',{id:id});return{ok:true,r:'bought',p:p}}
@@ -404,8 +404,8 @@ function say(txt,kind,ms,wide){if(!ch)return;var b=ch.lastChild;b.textContent=tx
  if(kind){mood=kind==='sad'?'s':'h';render();ch.classList.remove('jump','sad');void ch.offsetWidth;ch.classList.add(kind==='sad'?'sad':'jump');clearTimeout(moodTo);moodTo=setTimeout(function(){mood='n';render();ch.classList.remove('jump','sad')},1800)}}
 function mountChar(){if(!isGame||ch)return;ch=document.createElement('div');ch.id='ych';ch.innerHTML='<div class="yxs"></div><div class="yxp"></div>';document.body.appendChild(ch);render()}
 function chip(){var h=document.querySelector('header');if(!isGame||!h||h.querySelector('[data-yx=coins]'))return;var s=document.createElement('span');s.className='yx-chip';s.innerHTML='🪙 <b data-yx="coins">0</b>';var st=h.querySelector('.st');h.insertBefore(s,st||null);refresh()}
-function menuLink(){var p=document.getElementById('ymp');if(!p||p.querySelector('.yx-shop'))return;var home=p.querySelector('.home');if(!home)return;var a=document.createElement('a');a.className='home yx-shop';a.href='../magaza/';a.style.cssText='background:#2b2559;color:#fff;margin-top:10px';a.innerHTML='🛍️ <span>Mağaza</span> · 🪙 <b data-yx="coins">0</b>';home.parentNode.insertBefore(a,home.nextSibling);var b=document.createElement('a');b.className='home yx-acc';b.href='../hesap/';b.style.cssText='background:#2b2559;color:#fff;margin-top:10px';b.innerHTML='👤 <span>Hesap</span>';a.parentNode.insertBefore(b,a.nextSibling);refresh()}
-function refresh(){var els=document.querySelectorAll('[data-yx=coins]');for(var i=0;i<els.length;i++)els[i].textContent=S.c;
+function menuLink(){var p=document.getElementById('ymp');if(!p||p.querySelector('.yx-shop'))return;var home=p.querySelector('.home');if(!home)return;var a=document.createElement('a');a.className='home yx-shop';a.href='../magaza/';a.style.cssText='background:#2b2559;color:#fff;margin-top:10px';a.innerHTML='🛍️ <span>Mağaza</span> · 🪙 <b data-yx="coins">0</b>';home.parentNode.insertBefore(a,home.nextSibling);var pa=document.createElement('a');pa.className='home yx-pass';pa.href='../pass/';pa.style.cssText='background:#2b2559;color:#fff;margin-top:10px';pa.innerHTML='🎖️ <span>Yaxest Pass</span> · 🏆 <b data-yx="tr">0</b>';home.parentNode.insertBefore(pa,a.nextSibling);var b=document.createElement('a');b.className='home yx-acc';b.href='../hesap/';b.style.cssText='background:#2b2559;color:#fff;margin-top:10px';b.innerHTML='👤 <span>Hesap</span>';a.parentNode.insertBefore(b,a.nextSibling);refresh()}
+function refresh(){var els=document.querySelectorAll('[data-yx=coins]');for(var i=0;i<els.length;i++)els[i].textContent=S.c;var tre=document.querySelectorAll('[data-yx=tr]');for(var j=0;j<tre.length;j++)tre[j].textContent=S.tr;
  var b=S.boost>Date.now(),cs=document.querySelectorAll('.yx-chip');for(var j=0;j<cs.length;j++)cs[j].classList.toggle('bst',b);
  var lv=document.querySelectorAll('[data-yx=level]');for(var k=0;k<lv.length;k++)lv[k].textContent=level();
  if(ch)render()}
@@ -451,12 +451,27 @@ function wrapBg(){var g=window.G;if(!g||!g.bg||g.__yxbg)return;g.__yxbg=1;var o=
 
 /* ---------- API ---------- */
 function grant(id){var it=ITEMS[id];if(!it||LOCK[id]&&!lockAllowed())return false;S.own[id]=1;save();emit('buy',{id:id});return true}
-window.YX={grant:grant,locked:locked,LOCK:LOCK,S:function(){return S},coins:function(){return S.c},earn:earn,spend:spend,price:price,buy:buy,equip:equip,owns:owns,perkBuy:perkBuy,boostBuy:boostBuy,cepBuy:cepBuy,boxBuy:boxBuy,chestBuy:chestBuy,rar:rar,RN:RN,RCOL:RCOL,CHEST:CHEST,tubeCost:tubeCost,hintCost:hintCost,
+window.YX={league:league,trophy:function(){return S.tr},trophyAdd:trophyAdd,LEAGUES:LEAGUES,pass:{info:passInfo,claim:passClaim,can:passCan,reward:pReward,MAX:PMAX,XPL:PXL},grant:grant,locked:locked,LOCK:LOCK,S:function(){return S},coins:function(){return S.c},earn:earn,spend:spend,price:price,buy:buy,equip:equip,owns:owns,perkBuy:perkBuy,boostBuy:boostBuy,cepBuy:cepBuy,boxBuy:boxBuy,chestBuy:chestBuy,rar:rar,RN:RN,RCOL:RCOL,CHEST:CHEST,tubeCost:tubeCost,hintCost:hintCost,
  av:av,level:level,lvInfo:lvInfo,mult:mult,toast:toast,say:say,applyTheme:applyTheme,
  cat:{SP:SP,COL:COL,HAT:HAT,FACE:FACE,NECK:NECK,AURA:AURA,PERK:PERK,CEP:CEP,TH:TH,ITEMS:ITEMS},tint:null,
  setName:function(n){S.name=String(n||'').slice(0,14);save();emit('name')},reset:function(){S=def();save();applyTheme('neon');emit('sync')}};
 
 applyTheme(S.eq.th);
+
+/* ---- Kupa + Lig ve Yaxest Pass ---- */
+var LEAGUES=[['Bronz',0,'#cd7f32'],['Gümüş',300,'#c3cde0'],['Altın',700,'#ffd23f'],['Elmas',1300,'#3df0ff'],['Efsane',2200,'#ff5c8a']];try{window.YX.LEAGUES=LEAGUES}catch(_e){}
+function league(t){t=t==null?S.tr:t;var i=0;for(var k=0;k<LEAGUES.length;k++)if(t>=LEAGUES[k][1])i=k;var nx=LEAGUES[i+1];return{i:i,n:LEAGUES[i][0],min:LEAGUES[i][1],col:LEAGUES[i][2],next:nx?nx[1]:null,nn:nx?nx[0]:null}}
+function trophyAdd(d){var before=league().i;S.tr=Math.max(0,S.tr+d);var L=league();save();emit('trophy',{d:d});try{toast((d>=0?'+':'')+d+' 🏆 · '+L.n+' ('+S.tr+')');if(L.i>before)setTimeout(function(){toast('🎉 Yeni lig: '+L.n+'!')},2700)}catch(e){}return S.tr}
+var PEPOCH=Date.UTC(2026,10,28),PSD=30*864e5,PXL=100,PMAX=30;
+function pSeason(){return Math.floor((Date.now()-PEPOCH)/PSD)}
+function pRoll(){var s=pSeason();if(S.ps.s!==s){S.ps={s:s,x:0,f:{},p:S.ps.prem&&S.ps.s===s?1:0};save()}}
+var PFI={5:'hat:cap',10:'face:glasses',15:'neck:bow',20:'aura:spark',25:'col:#c3cde0',30:'hat:wiz'},PPI={5:'neck:scarf',10:'aura:heart',15:'hat:crown',20:'aura:fire',25:'th:retro',30:'th:gold'};
+function pReward(l,prem){var it=(prem?PPI:PFI)[l];return{c:prem?30+l*6:15+l*3,it:it||null}}
+function pLevel(){pRoll();return Math.min(PMAX,Math.floor(S.ps.x/PXL))}
+function passGain(a,why){if(why==='pot'||why==='refund'||why==='gift'||why==='tc')return;pRoll();var g=why==='daily'?40:Math.max(1,Math.round(a*2));var b=pLevel();S.ps.x=Math.min(PMAX*PXL,S.ps.x+g);if(pLevel()>b)setTimeout(function(){try{toast('🎖 Pass seviye '+pLevel()+'!')}catch(e){}},1500)}
+function passCan(l,prem){pRoll();if(l<1||l>PMAX||pLevel()<l)return false;if(prem&&!(S.ps.prem||isFounderE()))return false;return !(prem?S.ps.p:S.ps.f)[l]}
+function passClaim(l,prem){if(!passCan(l,prem))return false;var r=pReward(l,prem);(prem?S.ps.p:S.ps.f)[l]=1;var cn=r.c;if(r.it){if(owns(r.it))cn+=30;else grant(r.it)}earn(cn,'tc',1);save();emit('pass',{l:l});try{toast('🎖 Pass ödülü: +'+cn+' 🪙'+(r.it&&!owns(r.it)?'':'')+(r.it?' + '+((ITEMS[r.it]&&ITEMS[r.it].name)||'eşya'):''))}catch(e){}return true}
+function passInfo(){pRoll();var left=PEPOCH+(S.ps.s+1)*PSD-Date.now();return{season:S.ps.s+1,xp:S.ps.x,lv:pLevel(),xpl:PXL,max:PMAX,prem:!!(S.ps.prem||isFounderE()),left:Math.max(0,Math.ceil(left/864e5)),f:S.ps.f,p:S.ps.p}}
 function boot(){try{wrapBg();mountChar();chip();menuLink();bindOv();refresh();daily();setInterval(tick,1000)}catch(e){}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 window.addEventListener('ylang',function(){render()});

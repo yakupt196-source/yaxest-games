@@ -201,6 +201,7 @@ function start(cfg){
     var mt=R.meta||{};if(mt.stake>0&&!R.hot){var draw=(o.winner==null||o.winner<0)&&!(o.winners&&o.winners.length);
       try{if(win){var g=YX.earn(mt.pot,'pot',1);toast('+'+g+' 🪙 · '+T('Kazanılan pot'))}else if(draw){YX.earn(mt.stake,'refund',1);toast('+'+mt.stake+' 🪙 · '+T('Jeton iade'))}else toast('-'+mt.stake+' 🪙')}catch(e){}
       if(!R.isHost&&R.link)setTimeout(function(){try{R.link.send({t:'bal',b:coins()})}catch(e){}},300)}
+    try{if(window.YX&&!R.hot&&hasHuman){var dr=(o.winner==null||o.winner<0)&&!(o.winners&&o.winners.length);if(win)YX.trophyAdd(25);else if(!dr)YX.trophyAdd(-12)}}catch(e){}
     try{window.YS&&YS.play(win?'win':'over')}catch(e){}}
   var QC=["İyi oyun! 👋", "Güzel hamle!", "Hadi biraz hızlı! ⏳", "Bir saniye, düşünüyorum 🤔", "Şanssızlık! 😅", "Tebrikler! 🎉", "Bir tur daha?", "Teşekkürler 🙏", "Çok yakındı!", "Harika oyundu!", "Biraz sabır 🙂", "Hazırım ✅"],qcLast={};
   function showQc(seat,i){var el=document.querySelector('#pb .pl[data-s="'+seat+'"] .emo');if(!el)return;el.textContent=T(QC[i]);el.classList.add('qc');el.classList.remove('on');void el.offsetWidth;el.classList.add('on')}
