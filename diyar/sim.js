@@ -2,7 +2,7 @@
    Böylece hesaplar iki tarafta aynı olur; sunucu "yetkili", istemci yalnızca gösterir ve girdi yollar. */
 (function(root){
 'use strict';
-var TS=48,MW=200,MH=200,CX=MW/2,CY=MH/2;
+var TS=48,MW=320,MH=320,CX=MW/2,CY=MH/2,OFF=(MW-200)/2;
 function hash(x,y,s){var h=(x*374761393+y*668265263+(s||0)*2147483647)|0;h=(h^(h>>>13))*1274126177|0;return((h^(h>>>16))>>>0)/4294967296}
 function vn(x,y,s){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=hash(xi,yi,s),b=hash(xi+1,yi,s),c=hash(xi,yi+1,s),d=hash(xi+1,yi+1,s);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
 /* kutu türleri: 0 çimen, 1 orman, 2 kayalık, 3 su, 4 kasaba, 6 duvar */
@@ -35,14 +35,28 @@ var POIS=[
  {id:'zumrut',n:'Zümrüt Çağlayanı',ic:'🟢',a:15,d:84,lv:11,hi:16,node:'emerald',desc:'Şelalenin ardında yeşil kristaller.'},
  {id:'safir',n:'Safir Kıyısı',ic:'🔵',a:215,d:86,lv:12,hi:17,node:'sapphire',desc:'Gölün kenarında mavi safir kayaları.'},
  {id:'titan',n:'Titan Ocağı',ic:'🔹',a:285,d:93,lv:13,hi:18,node:'titan',desc:'Dünyanın kıyısında, titanyum cevherinin yuvası.'},
- {id:'krater',n:'Yıldız Krateri',ic:'🌠',a:55,d:94,lv:15,hi:20,node:'aster',desc:'Göktaşı düşmüş krater. Yıldız cevheri burada!'}];
+ {id:'krater',n:'Yıldız Krateri',ic:'🌠',a:55,d:94,lv:15,hi:20,node:'aster',desc:'Göktaşı düşmüş krater. Yıldız cevheri burada!'}
+ ,{id:'ruzgar',n:'Kayıp Şehir Harabesi',ic:'🏛️',a:345,d:100,lv:16,hi:21,node:'iron',desc:'Kumla örtülü eski bir şehir. Duvarlarda demir izleri var.'},
+ {id:'buzt',n:'Donmuş Tapınak',ic:'❄️',a:300,d:108,lv:17,hi:22,node:'titan',desc:'Buzlar içinde kalmış kadim bir tapınak.'},
+ {id:'yeti',n:'Yeti Mağarası',ic:'🧊',a:330,d:126,lv:20,hi:26,node:'silver',desc:'Soğuk nefesli bir mağara. Duvarlarda gümüş parıltısı.'},
+ {id:'kutup',n:'Kutup Işığı Zirvesi',ic:'🌌',a:285,d:146,lv:26,hi:32,node:'aster',desc:'Gökyüzünün dans ettiği, dünyanın en soğuk zirvesi.'},
+ {id:'kerv',n:'Batık Kervan',ic:'🐪',a:30,d:106,lv:16,hi:21,node:'goldore',desc:'Kuma gömülmüş bir kervanın altın dolu kalıntısı.'},
+ {id:'vaha',n:'Unutulmuş Vaha',ic:'🌴',a:60,d:128,lv:20,hi:26,node:'sapphire',desc:'Çölün ortasında saklı bir vaha. Safir kayalıklar çevresini sarar.'},
+ {id:'obel',n:'Çöl Obeliski',ic:'🗿',a:12,d:148,lv:26,hi:32,node:'mithril',desc:'Kimsenin okuyamadığı yazılarla dolu dev taş.'},
+ {id:'batkoy',n:'Batık Köy',ic:'🛖',a:130,d:108,lv:17,hi:22,node:'emerald',desc:'Bataklığa gömülmüş terk edilmiş bir köy.'},
+ {id:'cadi',n:'Cadı Kulübesi',ic:'🧙',a:160,d:128,lv:21,hi:27,node:'oldtree',desc:'Sisin içinde yanan tek bir ışık. Kadim ağaçlar çevresinde.'},
+ {id:'mantar',n:'Dev Mantar Ormanı',ic:'🍄',a:112,d:148,lv:26,hi:32,node:'ruby',desc:'Bina boyunda mantarların altında yakut damarları.'},
+ {id:'yanar',n:'Yanardağ Ağzı',ic:'🌋',a:225,d:108,lv:17,hi:22,node:'ruby',desc:'Kızgın lavın hâlâ akıp durduğu dev bir ağız.'},
+ {id:'obsid',n:'Obsidyen Yarığı',ic:'🖤',a:200,d:128,lv:21,hi:27,node:'titan',desc:'Kara cam gibi parlayan yarık. Titanyum cevheri bol.'},
+ {id:'cehdis',n:'Cehennem Dişleri',ic:'🦷',a:250,d:148,lv:27,hi:33,node:'aster',desc:'Yerden fırlamış devasa kayalar. Yıldız cevheri saklıyor.'},
+ {id:'fener',n:'Dünya Kıyısı Feneri',ic:'🗼',a:92,d:150,lv:24,hi:30,node:'rock',desc:'Dünyanın ucunda tek başına yanan eski bir fener.'}];
 var poiCache=null;
 function poiPos(){if(poiCache)return poiCache;poiCache=POIS.map(function(p){var r=p.a*Math.PI/180,tx=Math.round(CX+Math.cos(r)*p.d),ty=Math.round(CY+Math.sin(r)*p.d);tx=Math.max(9,Math.min(MW-10,tx));ty=Math.max(9,Math.min(MH-10,ty));var best=null;
   for(var q=0;q<14&&!best;q++)for(var dy=-q;dy<=q&&!best;dy++)for(var dx=-q;dx<=q;dx++){var x=tx+dx,y=ty+dy,z=zoneAt(x,y),ok=z!==3&&z!==4;if(ok){for(var ax=-2;ax<=2&&ok;ax+=2)for(var ay=-2;ay<=2;ay+=2)if(zoneAt(x+ax,y+ay)===3)ok=false}if(ok){best={tx:x,ty:y};break}}
   best=best||{tx:tx,ty:ty};return{id:p.id,tx:best.tx,ty:best.ty}});return poiCache}
 function poiNodeAt(tx,ty){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx>5||dx<-5||dy>5||dy<-5)continue;var d2=dx*dx+dy*dy;if(d2<2||d2>20)continue;var n=POIS[i].node;if(hash(tx,ty,31+i)<(POIS[i].id==='kule'?.18:.42))return n}return null}
 function poiOf(tx,ty,r){var P=poiPos();for(var i=0;i<P.length;i++){var dx=tx-P[i].tx,dy=ty-P[i].ty;if(dx*dx+dy*dy<=(r||7)*(r||7))return i}return -1}
-var OUTT=[[26,100],[174,100],[100,174],[30,30],[170,30]];
+var OUTT=[[26,100],[174,100],[100,174],[30,30],[170,30]].map(function(o){return[o[0]+OFF,o[1]+OFF]}).concat([[40,160],[160,40],[280,160],[160,280],[40,40],[280,40],[40,280],[280,280]]);
 function nodeAt(tx,ty){
   for(var oi=0;oi<OUTT.length;oi++)if(Math.hypot(tx-OUTT[oi][0],ty-OUTT[oi][1])<8.5)return null;
   var z=zoneAt(tx,ty);if(z===3||z===4||pondAt(tx,ty)>=0||inPond(tx+.5,ty+.5,7.5))return null;
@@ -76,7 +90,7 @@ var MATS={pt_s:{n:'Küçük Can İksiri',ic:'⚗️',v:18},pt_m:{n:'Can İksiri'
 var SMELT={copper:'i_copper',iron:'i_iron',silver:'i_silver',goldore:'i_gold',mithril:'i_mithril',titan:'i_titan',aster:'i_aster'};
 var TOOLS={pk:{n:'Kazma',t:['Taş Kazma','Bakır Kazma','Demir Kazma','Gümüş Kazma','Altın Kazma','Mitril Kazma','Titanyum Kazma'],c:[null,{wood:6,i_copper:3,gold:80},{wood:8,i_iron:4,gold:260},{wood:10,i_silver:5,gold:640},{wood:12,i_gold:5,gold:1500},{wood:14,i_mithril:5,gold:3400},{wood:16,i_titan:6,gold:7500}],lv:[1,2,4,6,8,10,13]},
  ax:{n:'Balta',t:['Taş Balta','Bakır Balta','Demir Balta','Gümüş Balta','Altın Balta'],c:[null,{wood:4,i_copper:3,gold:70},{i_iron:4,gold:240},{i_silver:5,gold:600},{i_gold:5,gold:1450}],lv:[1,2,4,7,10]}};
-var PVP=[{id:'vadi',n:'Kızıl Vadi',tx:156,ty:84,r:9},{id:'gecit',n:'Kurt Geçidi',tx:38,ty:62,r:9},{id:'zirve',n:'Zirve Arenası',tx:104,ty:28,r:9}];
+var PVP=[{id:'vadi',n:'Kızıl Vadi',tx:156+OFF,ty:84+OFF,r:9},{id:'gecit',n:'Kurt Geçidi',tx:38+OFF,ty:62+OFF,r:9},{id:'zirve',n:'Zirve Arenası',tx:104+OFF,ty:28+OFF,r:9}];
 var CLASSES={
  savasci:{n:'Savaşçı',ic:'⚔️',col:'#ff7a5c',hp:150,spd:150,rng:62,aspd:.55,dmg:16,melee:1,role:'Yakın dövüş, dengeli hasar',
   sk:[{id:'spin',n:'Girdap',ic:'🌀',cd:5,kind:'aoe',r:88,m:1.7},{id:'charge',n:'Atılış',ic:'💨',cd:8,kind:'dash',d:180,m:2,r:70},{id:'roar',n:'Savaş Narası',ic:'📣',cd:14,kind:'buff',dur:6,dmgm:1.5}]},
@@ -230,6 +244,6 @@ var UPI=[0,0,0,0,['i_copper',2],['i_copper',3],['i_iron',2],['i_iron',3],['i_sil
 function upCost(kind,n){var c=kind==='w'?{wood:4+3*n,stone:2+2*n,gold:10+15*n}:{wood:3+2*n,stone:3+3*n,gold:8+12*n},u=UPI[n];c.iron=0;if(u){c.ik=u[0];c.ic=u[1]+(kind==='w'?1:0)}return c}
 var PROF={wood:'Odunculuk',mine:'Madencilik'};
 function profNeed(l){return 8+l*8+l*l}
-root.YD={genWeekly:genWeekly,POIS:POIS,poiPos:poiPos,poiOf:poiOf,TS:TS,MW:MW,MH:MH,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,POND:POND,pier:pier,inPond:inPond,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,quad:quad,regionAt:regionAt,SECT:SECT,SECN:SECN,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,PETD:PETD,EGGMIN:EGGMIN,eggChance:eggChance,eggPrice:eggPrice,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:150,lvF:lvF,effT:effT,ARMOR:ARMOR,ZT:ZT,WT:WT,WLV:WLV};
+root.YD={genWeekly:genWeekly,POIS:POIS,poiPos:poiPos,poiOf:poiOf,TS:TS,MW:MW,MH:MH,OFF:OFF,CX:CX,CY:CY,hash:hash,vn:vn,zoneAt:zoneAt,POND:POND,pier:pier,inPond:inPond,nodeAt:nodeAt,NODE:NODE,TOOLS:TOOLS,MATS:MATS,CLASSES:CLASSES,DUNGEONS:DUNGEONS,MON:MON,monFor:monFor,monPick:monPick,lvMod:lvMod,lvIn:lvIn,zoneLv:zoneLv,quad:quad,regionAt:regionAt,SECT:SECT,SECN:SECN,xpNeed:xpNeed,mstat:mstat,pstat:pstat,upCost:upCost,PROF:PROF,PETD:PETD,EGGMIN:EGGMIN,eggChance:eggChance,eggPrice:eggPrice,WEAPONS:WEAPONS,RARITY:RARITY,RANKS:RANKS,rankOf:rankOf,pvpOk:pvpOk,skillPts:skillPts,skRank:skRank,genQuests:genQuests,SMELT:SMELT,PVP:PVP,profNeed:profNeed,MAXLV:150,lvF:lvF,effT:effT,ARMOR:ARMOR,ZT:ZT,WT:WT,WLV:WLV};
 if(typeof module!=='undefined')module.exports=root.YD;
 })(typeof window!=='undefined'?window:globalThis);
