@@ -4,7 +4,7 @@
   var p=location.pathname.split('/').filter(Boolean);if(p.length&&/\.html?$/.test(p[p.length-1]))p.pop();var cur=p.pop()||'';
   var MAP={
     sallan:'synth',kaydir:'chill',damla:'lofi',kir:'groove',radar:'synth',labirent:'chill',pota:'groove',mermi:'synth',nota:'piyano',zincir:'arcade',tirman:'arcade',lazer:'chill',bicak:'groove',duello:'arcade',tup:'lofi',
-    hedef:'arcade',sayi:'lofi',yol:'synth',isik:'chill',renk:'arcade',balon:'arcade',kule:'lofi',kosu:'synth',hole:'chill',blok:'chill',yilan:'arcade',hafiza:'lofi',birlestir:'piyano',kostebek:'arcade',yorunge:'chill',moda:'lofi'
+    hedef:'arcade',sayi:'lofi',yol:'synth',isik:'chill',renk:'arcade',balon:'arcade',kule:'lofi',kosu:'synth',hole:'chill',blok:'chill',yilan:'arcade',hafiza:'lofi',birlestir:'piyano',kostebek:'arcade',yorunge:'chill',moda:'lofi',kasaba:'chill'
   };
   var style=MAP[cur];if(!style)return;
   var on=true;try{on=localStorage.getItem('yx-music')!=='0'}catch(e){}
