@@ -52,7 +52,7 @@ function build(){if(L)return L;var st=document.createElement('style');st.textCon
   L=document.createElement('div');L.id='lobby';L.innerHTML='<div class="lbg"></div>'+
    '<div class="ltop"><canvas id="lbpt" width="44" height="44" style="width:44px;height:44px;border-radius:50%;border:2px solid #d9a441;background:#1b120a"></canvas><div class="me"><b id="lbn"></b><small id="lbc"></small></div><div class="chip" id="lbg"></div><div class="chip" id="lbj" title="Jeton"></div><button class="ib" id="lbset" aria-label="Ayarlar">⚙</button></div>'+
    '<div class="mid"><div class="stage"><canvas id="lbhero" width="120" height="132"></canvas><div class="ped"></div><div class="cls" id="lbcls"></div></div>'+
-   '<div class="go"><h1>Yaxest Diyarı</h1><div class="tag" id="lbtag">Açık dünya · zindanlar · arkadaşlarınla birlikte</div><button class="play" id="lbplay">⚔ OYNA</button><button class="wsel" id="lbw"><i></i><span id="lbwn"></span> ▸</button><a href="/diyar/muhur/" style="color:#ffd27a;font-weight:700;text-decoration:none;margin-top:6px">🗼 Yüz Mühür: 3D Kule →</a></div></div>'+
+   '<div class="go"><h1>Yaxest Diyarı</h1><div class="tag" id="lbtag">Açık dünya · zindanlar · arkadaşlarınla birlikte</div><button class="play" id="lbplay">⚔ OYNA</button><button class="wsel" id="lbw"><i></i><span id="lbwn"></span> ▸</button></div></div>'+
    '<nav><button id="lbn1"><span>🧍</span>Görünüm</button><button id="lbn2"><span>🛡</span>Sınıf</button><button id="lbn3"><span>📰</span>Haberler</button><button id="lbn4"><span>🛒</span>Mağaza</button><button id="lbn5"><span>⚙</span>Ayarlar</button></nav>'+
    '<div class="sheet" id="lbsheet"><div class="sh" id="lbsh"></div></div>';
   document.body.appendChild(L);
