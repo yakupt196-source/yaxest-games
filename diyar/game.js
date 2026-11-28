@@ -157,12 +157,12 @@ function leaveGame(){setTimeout(function(){if(window.YHB)YHB.draw()},0);if(windo
 var CAMP=9,MICO={slime:'🟢',wolf:'🐺',boar:'🐗',golem:'🗿',rabbit:'🐰',bee:'🐝',fox:'🦊',spider:'🕷',treant:'🌳',bat:'🦇',scorpion:'🦂',bear:'🐻',wraith:'👻',mushroom:'🍄',frog:'🐸',snail:'🐌',goblin:'👺',snake:'🐍',beetle:'🪲',wisp:'✨',harpy:'🦅',gargoyle:'🗿',icewolf:'🐺',yeti:'❄',frostwraith:'👻',iceelem:'🧊',mammoth:'🦣',frostdrake:'🐉',sandworm:'🪱',cobra:'🐍',mummy:'🧟',sandelem:'🏜',sphinx:'🦁',djinn:'🧞',bogtoad:'🐸',leech:'🪱',croc:'🐊',hag:'🧙',fenbeast:'👹',swampdrake:'🐉',magmaslime:'🔥',imp:'😈',lavagolem:'🌋',hellhound:'🐕',salamander:'🦎',lavadrake:'🐉',drake:'🐉',skel:'💀'};
 function campAt(cx,cy){var k=cx+','+cy;G.campC=G.campC||{};if(G.campC[k]!==undefined)return G.campC[k];var r=null;
   var tx=cx*CAMP+4,ty=cy*CAMP+4,h=Y.hash(cx,cy,71);if(tx>3&&ty>3&&tx<Y.MW-4&&ty<Y.MH-4){var dx=tx-Y.CX,dy=ty-Y.CY,d=Math.sqrt(dx*dx+dy*dy),z=Y.zoneAt(tx,ty);
-    if(d>=25&&z!==3&&z!==4&&!(Y.inPond&&Y.inPond(tx+.5,ty+.5,13))&&h<(d<56?.64:.52)){var type=Y.monPick(z,d,Y.hash(cx,cy,72),.5,Y.quad(dx,dy));if(type==='goldslime')type='slime';
+    var adx=Math.abs(dx),ady=Math.abs(dy),road=adx<4||ady<4||Math.abs(adx-ady)<3.5;/* güvenli yollar: merkezden dört yöne ve çaprazlara canavar kampı kurulmaz, keşif için açık kalır */if(d>=25&&!road&&z!==3&&z!==4&&!(Y.inPond&&Y.inPond(tx+.5,ty+.5,13))&&h<(d<56?.5:.38)){var type=Y.monPick(z,d,Y.hash(cx,cy,72),.5,Y.quad(dx,dy));if(type==='goldslime')type='slime';
       var lv=Math.max(1,Y.zoneLv(z,d)),M=Y.MON[type]||{};r={cx:cx,cy:cy,x:(tx+.5)*TS,y:(ty+.5)*TS,type:type,lv:lv,n:(M.n||type),ic:MICO[type]||'🐾',z:z,boss:false}}}
   G.campC[k]=r;return r}
 function initSpawns(){G.spawns=[];G.camps=[];G.campC={};
   for(var cy=0;cy*CAMP<Y.MH;cy++)for(var cx=0;cx*CAMP<Y.MW;cx++){var c=campAt(cx,cy);if(!c)continue;G.camps.push(c);
-    var n=3+Math.floor(Y.hash(cx,cy,73)*3),tries=0,put=0;while(put<n&&tries<24){tries++;var a=Y.hash(cx*7+tries,cy*3,74)*6.283,rr=1.2+Y.hash(cx,cy*5+tries,75)*3.2,px=c.x+Math.cos(a)*rr*TS,py=c.y+Math.sin(a)*rr*TS,tz=Y.zoneAt(Math.floor(px/TS),Math.floor(py/TS));
+    var n=2+Math.floor(Y.hash(cx,cy,73)*3),tries=0,put=0;while(put<n&&tries<24){tries++;var a=Y.hash(cx*7+tries,cy*3,74)*6.283,rr=1+Y.hash(cx,cy*5+tries,75)*2.4,px=c.x+Math.cos(a)*rr*TS,py=c.y+Math.sin(a)*rr*TS,tz=Y.zoneAt(Math.floor(px/TS),Math.floor(py/TS));
       if(tz===3||tz===4||(typeof blocked==='function'&&blocked(px,py)))continue;G.spawns.push({x:px,y:py,z:c.z,lv:c.lv,m:null,rt:0,type:c.type,camp:c});put++}
     /* nadir altın balçık: kampın kenarında tek başına */if(Y.hash(cx,cy,76)<.02&&(c.z===0||c.z===1))G.spawns.push({x:c.x+TS*4,y:c.y,z:c.z,lv:c.lv,m:null,rt:0,type:'goldslime',camp:c})}}
 function campNear(px,py,r){var cx=Math.floor(px/TS/CAMP),cy=Math.floor(py/TS/CAMP),b=null,bd=r||TS*6;for(var j=-1;j<=1;j++)for(var i=-1;i<=1;i++){var c=campAt(cx+i,cy+j);if(!c)continue;var d=hyp(c.x-px,c.y-py);if(d<bd){bd=d;b=c}}return b}
@@ -594,15 +594,15 @@ function monAi(m,dt){if(m.dead)return;
   if(m.dotT>0){m.dotT-=dt;m.dotAcc+=dt;if(m.dotAcc>=.5){m.dotAcc=0;dmgMon(m,m.dotD,1)}if(m.dead)return}
   if(m.slow>0)m.slow-=dt;if(m.taunt>0)m.taunt-=dt;if(m.hit>0)m.hit-=dt;
   if(m.sg&&window.YKU&&YKU.ai(m,dt))return;
-  var inDg=G.mode==='dungeon',tg=(inDg&&window.YDG)?YDG.tgt(m):null,dx=(tg?tg.x:G.px)-m.x,dy=(tg?tg.y:G.py)-m.y,dist=hyp(dx,dy),ar=m.taunt>0?420:(m.boss?400:175),sp=m.sp*(m.slow>0?.5:1);
+  var inDg=G.mode==='dungeon',tg=(inDg&&window.YDG)?YDG.tgt(m):null,dx=(tg?tg.x:G.px)-m.x,dy=(tg?tg.y:G.py)-m.y,dist=hyp(dx,dy),ar=m.taunt>0?420:(m.boss?400:150),sp=m.sp*(m.slow>0?.5:1);
   var tm=inDg||m.boss||m.taunt>0?2:temper(m),ok=(tg?!tg.dead:(G.evade<=0&&G.dead<=0))&&!inTownF()&&m.type!=='metin';
   if(!inDg&&!m.boss&&m.taunt<=0)ar=tm===2?150:0;
   var want=ok&&(m.hit>0||m.agro>0||(dist<ar&&(inDg||Math.max(chasers,chasersN)<MAXCH)));
   /* fark etme: saldırgan canavar önce "!" gösterip yarım saniye bekler; oyuncuya kaçma ya da hazırlanma payı */
   if(want&&!m.agro&&!m.hit&&!inDg&&!m.boss){m.nt=(m.nt||0)+dt;if(m.nt<.55)want=false;else m.agro=1}else if(!want&&!(m.hit>0))m.nt=0;
-  if(m.hit>0&&ok)m.agro=1;if(m.agro&&(dist>Math.max(320,ar*2.4)||!ok))m.agro=0;
+  if(m.hit>0&&ok)m.agro=1;if(m.agro&&(dist>Math.max(260,ar*2.2)||!ok))m.agro=0;
   var chase=want;if(chase&&!inDg)chasers++;
-  if(!inDg&&(m.home||hyp(m.x-m.sx,m.y-m.sy)>(m.boss?520:340))){m.hit=0;m.agro=0;m.nt=0;chase=false;if(!m.home&&m.sp0===undefined){m.home=1}}
+  if(!inDg&&(m.home||hyp(m.x-m.sx,m.y-m.sy)>(m.boss?520:290))){m.hit=0;m.agro=0;m.nt=0;chase=false;if(!m.home&&m.sp0===undefined){m.home=1}}
   /* eve dönüş: kamptan çok uzaklaşan canavar hızla döner ve canını yeniler */if(m.home&&!inDg){var hx0=m.sx-m.x,hy0=m.sy-m.y,hd0=hyp(hx0,hy0);if(hd0<24){m.home=0;m.hp=m.max}else{moveE(m,hx0/hd0*sp*1.6*dt,hy0/hd0*sp*1.6*dt);m.hp=Math.min(m.max,m.hp+m.max*.25*dt);return}}
   if(chase){if(dist>m.sz+18){moveE(m,dx/dist*sp*dt,dy/dist*sp*dt)}else{m.atkT-=dt;if(m.atkT<=0){m.atkT=1.15;if(m.dmg>0){if(tg)YDG.hurtR(tg.id,m.dmg,m.lv);else hurt(m.dmg*Y.lvIn(P.lv,m.lv))}}}}
   else{m.wt-=dt;if(m.wt<=0){m.wt=1.5+Math.random()*2;var a=Math.random()*6.28;m.wx=Math.cos(a);m.wy=Math.sin(a);if(hyp(m.x-m.sx,m.y-m.sy)>(inDg?120:70)){var hx=m.sx-m.x,hy=m.sy-m.y,hh=hyp(hx,hy)||1;m.wx=hx/hh;m.wy=hy/hh}}
@@ -737,7 +737,7 @@ window.addEventListener('blur',keyReset);document.addEventListener('visibilitych
 function boot(){try{YA.dom(document.body)}catch(e){}if(!window.YXAcct||!YXAcct.conf()){show('s-gate');$('gerr').textContent='Hesap sistemi şu an hazır değil.';return}
   if(acct())toChar();else show('s-gate')}
 window.addEventListener('yx-acct',function(){if(!G&&!acct())show('s-gate')});
-window.__yd={openAtlas:function(){if(!G||!P)return;openPan('p-npc');$('npt').innerHTML='🧭 Kaşif Defteri';$('npc').innerHTML=atlasHtml()},banner:banner,openChat:function(i){if(!G)return;chatTab=i||chatTab;drawChat();openPan('p-chat')},hurt:function(d){hurt(d)},dmgMon:function(m,d){dmgMon(m,d)},addFx:function(o){addFx(o)},get G(){return G},get P(){return P},get ctx(){return ctx},get VW(){return VW},get VH(){return VH},get dpr(){return dpr},say:say,floatTxt:floatTxt,saveNow:saveNow,openPan:openPan,closePan:closePan,giveXp:giveXp,mkMon:mkMon,moveE:moveE,inTownF:inTownF,S:S,enter:enter,cast:cast,attack:attack,interact:interact,openNpc:openNpc,enterDg:enterDg,dgStage:dgStage,dgDone:dgDone,dgReward:dgReward,exitDg:exitDg,killMon:killMon,die:die,respawn:respawn,drawSkills:drawSkills,Y:Y,myInv:myInv,itName:itName,itIc:itIc,itVal:itVal,closePan:closePan};
+window.__yd={stat:function(){return{camps:G.camps.length,spawns:G.spawns.length}},openAtlas:function(){if(!G||!P)return;openPan('p-npc');$('npt').innerHTML='🧭 Kaşif Defteri';$('npc').innerHTML=atlasHtml()},banner:banner,openChat:function(i){if(!G)return;chatTab=i||chatTab;drawChat();openPan('p-chat')},hurt:function(d){hurt(d)},dmgMon:function(m,d){dmgMon(m,d)},addFx:function(o){addFx(o)},get G(){return G},get P(){return P},get ctx(){return ctx},get VW(){return VW},get VH(){return VH},get dpr(){return dpr},say:say,floatTxt:floatTxt,saveNow:saveNow,openPan:openPan,closePan:closePan,giveXp:giveXp,mkMon:mkMon,moveE:moveE,inTownF:inTownF,S:S,enter:enter,cast:cast,attack:attack,interact:interact,openNpc:openNpc,enterDg:enterDg,dgStage:dgStage,dgDone:dgDone,dgReward:dgReward,exitDg:exitDg,killMon:killMon,die:die,respawn:respawn,drawSkills:drawSkills,Y:Y,myInv:myInv,itName:itName,itIc:itIc,itVal:itVal,closePan:closePan};
 setTimeout(boot,60);
 window.addEventListener('yl-img',function(){try{if(typeof drawNewPrev==='function'&&$('cnew')&&$('cnew').style.display!=='none')drawNewPrev();if(P)setAv();if($('s-wd').classList.contains('on'))drawWd();var pn=$('p-npc');if(pn&&pn.classList.contains('on')&&/Kahraman/.test($('npt').textContent))drawHeroShop()}catch(e){}});
 })();
