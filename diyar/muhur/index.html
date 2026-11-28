@@ -271,7 +271,24 @@ function kadd(n,x,y,z,ry,s,tint,sy){var m=KB&&KB[n];if(!m)return false;s=s||1;sy
  for(var i=0;i<k;i++){var px=m.p[i*3]*s,py=m.p[i*3+1]*sy,pz=m.p[i*3+2]*s;P.push(x+px*c+pz*sn,y+py,z-px*sn+pz*c);var nx=m.n[i*3],ny=m.n[i*3+1],nz=m.n[i*3+2];N.push(nx*c+nz*sn,ny,-nx*sn+nz*c);
   C.push(Math.pow(m.c[i*3]/255,1.5)*tint[0],Math.pow(m.c[i*3+1]/255,1.5)*tint[1],Math.pow(m.c[i*3+2]/255,1.5)*tint[2]);M.push(0)}return true}
 function lw(lx,lz,yaw){var c=Math.cos(yaw),s=Math.sin(yaw);return[lx*c+lz*s,-lx*s+lz*c]}
+var MV=null;try{fetch('assets/mvk.json').then(function(r){return r.json()}).then(function(j){MV=j;if(window.__onKB)window.__onKB()}).catch(function(e){console.warn('mvk',e)})}catch(e){}
+function mvadd(n,x,y,z,ry,sx,sy,sz,tint){var m=MV&&MV[n];if(!m)return false;var c=Math.cos(ry),sn=Math.sin(ry),k=m.p.length/3;tint=tint||[1,1,1];
+ for(var i=0;i<k;i++){var px=m.p[i*3]*sx,py=m.p[i*3+1]*sy,pz=m.p[i*3+2]*sz;P.push(x+px*c+pz*sn,y+py,z-px*sn+pz*c);var nx=m.n[i*3],ny=m.n[i*3+1],nz=m.n[i*3+2];N.push(nx*c+nz*sn,ny,-nx*sn+nz*c);
+  C.push(Math.pow(m.c[i*3]/255,1.5)*tint[0],Math.pow(m.c[i*3+1]/255,1.5)*tint[1],Math.pow(m.c[i*3+2]/255,1.5)*tint[2]);M.push(0)}return true}
+function mvhouse(cx,cz,W,D,F,yaw,o,y0,doorI){var s=3,sx=s/2,sy=.96,sz=1.15,tn=o.wood?[1.8,1.45,1.1]:[2.1,1.9,1.55];
+ function side(n,cnt,len,ang,ox,oz,fl,isFront){for(var i=0;i<cnt;i++){var u=(i-(cnt-1)/2)*s,p=lw(ox?ox:u,oz?oz:u,yaw),lx=ox?ox:u,lz=oz?oz:u;p=lw(lx,lz,yaw);
+   var y=y0+fl*s,br=fl===0&&!o.wood,nm;
+   if(isFront&&fl===0&&i===doorI)nm=br?'Wall_UnevenBrick_Door_Round':'Wall_Plaster_Door_Round';
+   else{var k=(i+fl+(ang>0?1:0))%3;nm=br?(k===0?'Wall_UnevenBrick_Window_Wide_Round':k===1?'Wall_UnevenBrick_Straight':'Wall_UnevenBrick_Window_Thin_Round'):o.wood?(k===1?'Wall_Plaster_WoodGrid':'Wall_Plaster_Window_Wide_Round'):(k===0?'Wall_Plaster_Window_Wide_Round':k===1?'Wall_Plaster_Straight':'Wall_Plaster_Window_Thin_Round')}
+   mvadd(nm,cx+p[0],y,cz+p[1],yaw+ang,sx,sy,sz,tn)}}
+ for(var f=0;f<F;f++){var hw=W*s/2-.08,hd=D*s/2-.08;
+  side(0,W,0,0,0,hd,f,true);side(0,W,0,Math.PI,0,-hd,f,false);side(0,D,0,Math.PI/2,hw,0,f,false);side(0,D,0,-Math.PI/2,-hw,0,f,false);
+  [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(c){var p=lw(c[0]*W*s/2,c[1]*D*s/2,yaw);mvadd('Corner_Exterior_Wood',cx+p[0],y0+f*s,cz+p[1],yaw,1.1,sy,1.1,[.85,.7,.55])})}
+ var yr=y0+F*s,rc=o.roofc||[.5,.2,.15],al=W>=D,Wf=W*s+1.2,Df=D*s+1.2,L=al?Wf:Df,Sp=al?Df:Wf;
+ mvadd('Roof_RoundTiles_6x6',cx,yr+.78*.62,cz,al?yaw:yaw+Math.PI/2,L/8.24,.62,Sp/8.03,[rc[0]*2.2,rc[1]*2.2,rc[2]*2.2]);
+ if(o.chimney){var p=lw(W*s*.22,-D*s*.18,yaw);mvadd('Prop_Chimney',cx+p[0],yr+.2,cz+p[1],yaw,1,1.15,1,[.9,.85,.8])}}
 function khouse(cx,cz,W,D,F,yaw,o){o=o||{};var s=3,y0=H(cx,cz)-.15,doorI=o.door==null?Math.floor(W/2):o.door,wood=o.wood?'wall-wood':'wall',tn=o.wood?[1.25,1.05,.85]:[1.35,1.18,.95];
+ if(MV){mvhouse(cx,cz,W,D,F,yaw,o,y0,doorI)}else{
  for(var f=0;f<F;f++){var y=y0+f*s;
   for(var i=0;i<W;i++){var lx=(i-(W-1)/2)*s,dz=(D-1)/2*s,p;
    var fr=(f===0&&i===doorI)?(o.wood?'wall-wood-door':'wall-door'):((i+f)%2?(o.wood?'wall-wood-window-shutters':'wall-window-shutters'):(o.wood?'wall-wood':'wall-window-glass'));
@@ -280,7 +297,7 @@ function khouse(cx,cz,W,D,F,yaw,o){o=o||{};var s=3,y0=H(cx,cz)-.15,doorI=o.door=
   for(var j=0;j<D;j++){var lz=(j-(D-1)/2)*s,dx=(W-1)/2*s,p;
    p=lw(dx,lz,yaw);kadd((j+f)%2?wood:'wall-window-small',cx+p[0],y,cz+p[1],yaw,s,tn);p=lw(-dx,lz,yaw);kadd((j+f)%2?'wall-window-small':wood,cx+p[0],y,cz+p[1],yaw+Math.PI,s,tn)}}
  var yr=y0+F*s;gable(cx,yr,cz,W*s+.5,D*s+.5,1.9+D*.35,.45,o.roofc||[.5,.2,.15],2,yaw);
- if(o.chimney){var p=lw(W*s*.22,-D*s*.18,yaw);kadd('chimney',cx+p[0]-.0,yr+.2,cz+p[1],yaw,s*.9,[.8,.75,.72],s*1.5)}
+ if(o.chimney){var p=lw(W*s*.22,-D*s*.18,yaw);kadd('chimney',cx+p[0]-.0,yr+.2,cz+p[1],yaw,s*.9,[.8,.75,.72],s*1.5)}}
  HSL.push([cx,cz,W*s/2,D*s/2,yaw]);
  for(var i=0;i<W;i++){if(i===doorI)continue;var lx=(i-(W-1)/2)*s;[-.75,.75].forEach(function(d){var p=lw(lx+d,(D*s)/2-.15,yaw);colliders.push([cx+p[0],cz+p[1],.7])});}
  for(var i=0;i<W;i++){var lx=(i-(W-1)/2)*s;[-.75,.75].forEach(function(d){var p=lw(lx+d,-(D*s)/2+.15,yaw);colliders.push([cx+p[0],cz+p[1],.7])})}
