@@ -270,7 +270,10 @@ function buildFloor(f){resetWorld();var R=realmOf(f),rn=rng(f*7919+13);FL.n=f;FL
  bonfire(SPAWNP[0],SPAWNP[1]);arch(0,56,0,6,5.4,[.5,.48,.46],true);lamp(-6,48);lamp(6,48);
  IA.push({k:'fire',x:SPAWNP[0],z:SPAWNP[1],r:3.2,lb:'🔥 Sönmeyen Ateş: dinlen'});IA.push({k:'town',x:0,z:54.2,r:3.6,lb:'🏙 Şehre dön'});
  /* boss arenası */
- for(var i=0;i<16;i++){var a=i/16*6.2832,sx=Math.sin(a);if(sx>.93)continue;var x=ARENA[0]+Math.cos(a)*17,z=ARENA[1]+sx*17,y=H(x,z)-.4,h=9+hash(i,5)*2.5;cone(x,y,z,1.5,h,10,[.38,.36,.4],1,1.25);box(x,y+h,z,3.2,.8,3.2,[.3,.28,.32],1);colliders.push([x,z,1.7])}
+ for(var i=0;i<16;i++){var a=i/16*6.2832,sx=Math.sin(a);if(sx>.93)continue;var x=ARENA[0]+Math.cos(a)*17,z=ARENA[1]+sx*17,y=H(x,z)-.4,h=9+hash(i,5)*2.5;var pc=[Math.min(.9,.22+R.gb[0]*.55),Math.min(.9,.22+R.gb[1]*.55),Math.min(.9,.24+R.gb[2]*.55)];cone(x,y,z,1.5,h,10,pc,1,1.25);box(x,y+h,z,3.2,.8,3.2,[pc[0]*.8,pc[1]*.8,pc[2]*.8],1);ball(x,y+h+.9,z,.45,[R.lc[0],R.lc[1],R.lc[2]],10);lamps.push([x,y+h+1.2,z]);colliders.push([x,z,1.7])}
+ var ay=H(ARENA[0],ARENA[1]);disc(ARENA[0],ay+.06,ARENA[1],11.5,[R.lc[0]*.55,R.lc[1]*.55,R.lc[2]*.55],10,28);disc(ARENA[0],ay+.09,ARENA[1],10.8,[R.gb[0]*.5,R.gb[1]*.5,R.gb[2]*.5],1,28);disc(ARENA[0],ay+.12,ARENA[1],6.2,[R.lc[0]*.4,R.lc[1]*.4,R.lc[2]*.4],10,24);disc(ARENA[0],ay+.15,ARENA[1],5.6,[R.gb[0]*.45,R.gb[1]*.45,R.gb[2]*.45],1,24);
+ for(var ri=0;ri<12;ri++){var ra=ri/12*6.2832+.26,rx=ARENA[0]+Math.cos(ra)*8.6,rz=ARENA[1]+Math.sin(ra)*8.6;if(Math.sin(ra)>.82)continue;lamps.push([rx,H(rx,rz)+1.2,rz]);ball(rx,H(rx,rz)+.35,rz,.32,[R.lc[0],R.lc[1],R.lc[2]],10)}
+ var pkeys=Object.keys(R.props);for(var pi=0;pi<14;pi++){var pa=pi/14*6.2832+.2,pr=21+rn()*6,px2=ARENA[0]+Math.cos(pa)*pr,pz2=ARENA[1]+Math.sin(pa)*pr;if(Math.abs(px2)<5&&pz2>-40)continue;var pk=pkeys[pi%pkeys.length];if(PF[pk])PF[pk](px2,pz2,1+rn()*.8)}
  for(var bx=-6;bx<=6.1;bx+=3)barrier.push([bx,-30.6,1.7]);barrier.forEach(function(b){colliders.push(b)});
  arch(0,-60,0,7,6.5,[.5,.48,.5],true);IA.push({k:'next',x:0,z:-57.5,r:3.6,lb:'⬆ Üst kata çık',lock:1});
  /* canavar kampları */
