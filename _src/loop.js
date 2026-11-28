@@ -5,7 +5,7 @@ function U(p,n){return gl.getUniformLocation(p,n)}
 var camSmooth=0,OV=$('ov'),oc=OV.getContext('2d'),oapCache={};
 function setCamera(fw){if(window.__kdc){cam.x=__kdc[0];cam.y=__kdc[1];cam.z=__kdc[2];return}var gy=H(pl.x,pl.z),tx=pl.x,ty=gy+1.55+(pl.roll>0?-.5:0),tz=pl.z;
  if(pl.fp){cam.x=tx;cam.z=tz;cam.y=gy+1.65}
- else{var dist=4.8-Math.max(0,-cam.pit)*1.2;if(window.__ent)dist=3.6;else if(WORLD==='town'&&inHouse(pl.x,pl.z))dist=2.1;var px=tx-fw[0]*dist,py=ty-fw[1]*dist+.4,pz=tz-fw[2]*dist;if(window.__ent&&window.__entOff){var eo=window.__entOff*dist;px-=Math.cos(cam.yaw)*eo;pz-=Math.sin(cam.yaw)*eo}var g=H(px,pz)+.45;if(py<g)py=g;cam.x=px;cam.z=pz;cam.y=py}
+ else{var dist=4.8-Math.max(0,-cam.pit)*1.2;if(window.__ent)dist=3.3;else if(WORLD==='town'&&inHouse(pl.x,pl.z))dist=2.1;var px=tx-fw[0]*dist,py=ty-fw[1]*dist+.4,pz=tz-fw[2]*dist;if(window.__ent&&window.__entOff){var eo=window.__entOff*dist;px-=Math.cos(cam.yaw)*eo;pz-=Math.sin(cam.yaw)*eo}var g=H(px,pz)+.45;if(py<g)py=g;cam.x=px;cam.z=pz;cam.y=py}
  if(shake>0){cam.x+=(Math.random()-.5)*shake*.4;cam.y+=(Math.random()-.5)*shake*.4;cam.z+=(Math.random()-.5)*shake*.4}}
 function apFor(o){var key=o.id+'|'+o.k+'|'+o.arm+'|'+o.oath+'|'+(o.ap?1:0);var c=oapCache[o.id];if(c&&c.key===key)return c.ap;
  var base=o.ap?Object.assign({},PRES.basic.ap,o.ap):LOOKS[(o.k|0)%LOOKS.length];var ap=dress(base,o.arm|0,o.oath);oapCache[o.id]={key:key,ap:ap};return ap}
