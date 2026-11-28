@@ -35,7 +35,15 @@ addEventListener('resize',resize);resize();
 /* ---- HUD ---- */
 var hc={};function setT(id,v){if(hc[id]!==v){hc[id]=v;$(id).textContent=v}}function setW(id,v){var w=Math.max(0,Math.min(100,v)).toFixed(1)+'%';if(hc[id]!==w){hc[id]=w;$(id).style.width=w}}
 var hudT=0;
-function hud(dt){hudT-=dt;if(hudT>0)return;hudT=.08;
+var mmC=null,mmT=0;
+function drawMM(){if(!mmC){mmC=$('mm');if(!mmC)return}var g=mmC.getContext('2d'),W=132,R=60,sc=R/42,y=cam.yaw,co=Math.cos(y),si=Math.sin(y);g.clearRect(0,0,W,W);g.save();g.translate(W/2,W/2);
+ function P(x,z){var dx=x-pl.x,dz=z-pl.z;return[dx*co+dz*si,-(dx*si-dz*co)]}
+ function dot(x,z,c,r,clamp){var p=P(x,z),sx=p[0]*sc,sy=p[1]*sc,d=Math.hypot(sx,sy);if(d>R-4){if(!clamp)return;sx*=(R-4)/d;sy*=(R-4)/d}g.fillStyle=c;g.beginPath();g.arc(sx,sy,r,0,6.283);g.fill()}
+ if(WORLD==='floor'){if(FL.open||FL.boss){var bm=FL.boss;dot(ARENA[0],ARENA[1],FL.open?'#ffd23f':'#7a6a30',5,true)}mobs.forEach(function(m){if(m.dead>0)return;dot(m.x,m.z,m.boss?'#ff4a3a':m.elite?'#ffa030':'#d05060',m.boss?4.5:2.6,false)})}
+ else{IA.forEach(function(a){if(a.k==='npc')dot(a.x,a.z,'#ffd23f',3,true);else if(a.k==='fire')dot(a.x,a.z,'#ff8a30',3,true);else if(a.k==='gate'||a.k==='next')dot(a.x,a.z,'#6af',4,true)});dot(0,-47,'#6af',4,true)}
+ if(window.NET&&NET.others){var os=NET.others();for(var k in os)dot(os[k].x,os[k].z,'#5f8',3,false)}
+ g.fillStyle='#fff';g.beginPath();g.moveTo(0,-6);g.lineTo(4.5,5);g.lineTo(0,2.5);g.lineTo(-4.5,5);g.closePath();g.fill();g.restore()}
+function hud(dt){hudT-=dt;if(hudT>0)return;hudT=.08;try{drawMM()}catch(e){}
  setT('pname',(S.oath?'☠ ':'')+S.nick+(S.title?' · '+S.title:''));setT('plv','Sv '+S.lv+(S.prof?' · '+PROF[S.prof].n:''));setW('hpi',pl.hp/pl.mhp*100);setT('hpt',Math.ceil(pl.hp)+' / '+pl.mhp);setW('sti',pl.st/pl.mst*100);$('sti').style.background=pl.stFlash>0?'#ff5050':'';setW('mpi',pl.mp);setW('xpi',S.xp/mxp(S.lv)*100);
  setT('gd',S.gold);setT('po',S.pot);
  if(WORLD==='floor'){setW('seali',FL.seal/FL.need*100);var sub='Önerilen Sv '+Math.round(RLf(FL.n))+' · Mühür '+FL.seal+'/'+FL.need+(FL.open?' (açık)':'');setT('fsub',sub)}else setT('fsub','Güvenli bölge · '+(roomOn()?'🔑 Oda '+S.room.n+' · '+Math.max(1,Math.ceil((S.room.exp-Date.now())/60000))+' dk':NET.status()));

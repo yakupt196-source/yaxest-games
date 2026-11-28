@@ -98,7 +98,7 @@ function die(){if(pl.dead>0)return;pl.dead=.001;var lost=Math.floor(S.gold*(S.oa
 function respawn(){pl.dead=0;pl.hp=pl.mhp;pl.st=pl.mst;pl.mp=0;$('die').style.display='none';mobs.forEach(function(m){if(m.dead<=0&&!m.add){m.st=0;if(m.boss)bossReset(m)}});tels=[];projs=[];
  if(FL.n>0&&WORLD==='floor'){pl.x=SPAWNP[0];pl.z=SPAWNP[1]-4;cam.yaw=0;pl.yaw=0}else{pl.x=0;pl.z=9}}
 function sparks(x,y,z,n,c){for(var i=0;i<n;i++){var a=Math.random()*6.283,s=2+Math.random()*4;fx.push({k:'sp',x:x,y:y,z:z,vx:Math.cos(a)*s,vy:2+Math.random()*3,vz:Math.sin(a)*s,t:0,l:.45+Math.random()*.2,c:c})}}
-function dmgMob(m,dm,crit,own){if(m.dead>0||m.hp<=0)return;if(m.boss&&!m.eng){bossWake(m)}
+function dmgMob(m,dm,crit,own){if(m.dead>0||m.hp<=0)return;if(crit)window.__hs=Math.max(window.__hs||0,.07);if(m.boss)window.__hs=Math.max(window.__hs||0,.03);if(m.boss&&!m.eng){bossWake(m)}
  m.hp-=dm;m.hurt=.16;sparks(m.x,H(m.x,m.z)+1.1*m.s,m.z,crit?14:7,crit?[1,.85,.25]:[1,.55,.3]);fl(m.x,H(m.x,m.z)+1.4*m.s+.5,m.z,''+dm,crit?'#ffd23f':'#fff',crit?1.5:1);var dx=m.x-pl.x,dz=m.z-pl.z,l=Math.hypot(dx,dz)||1;if(!m.boss){m.x+=dx/l*.3;m.z+=dz/l*.3}m.st=1;
  if(own&&window.NET)NET.mobHit(m.idx,dm);alertMates(m);
  if(m.hp<=0){sparks(m.x,H(m.x,m.z)+1,m.z,m.boss?60:22,[.8,.8,1]);if(m.boss)shake=.6;m.dead=.001;m.res=0;killReward(m,!own);if(m.boss)bossDown(m)}}
@@ -163,7 +163,7 @@ function enterFloor(f){f=Math.max(1,Math.min(f,S.maxF));if(f>S.maxF)return;WORLD
 function ensureQ(){var d=today();if(!S.q||S.q.d!==d){S.q={d:d,k:0,b:0,c:0,cl:[0,0,0]}}}
 var QDEF=[{n:'30 canavar avla',key:'k',goal:30,g:150,p:2},{n:'1 muhafız yen',key:'b',goal:1,g:300,p:3},{n:'2 kat fethet',key:'c',goal:2,g:450,p:3}];
 /* ---- güncelleme ---- */
-function stepPlayer(dt){
+function stepPlayer(dt){if(window.__hs>0){window.__hs-=dt;dt*=.12}
  if(S.q&&S.q.d!==today())ensureQ();
  var run=1,spd=4.4*CLS().spd*(1+(RB().sp||0)),mx=(keys.KeyD?1:0)-(keys.KeyA?1:0)+sx,mz=(keys.KeyS?1:0)-(keys.KeyW?1:0)+sz;
  if(pl.dead>0){pl.dead+=dt;mx=mz=0;if(pl.dead>3.2)respawn()}

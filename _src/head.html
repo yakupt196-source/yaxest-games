@@ -83,6 +83,9 @@ button:active{filter:brightness(1.3)}button.on{background:var(--gold);color:var(
 #go .bt{font-size:19px;padding:12px 34px;background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:800;border-radius:14px}
 #go a{color:#9ad0ff}
 @media (orientation:portrait) and (pointer:coarse){#rot{display:flex}}
+#mm{position:fixed;left:auto;bottom:auto;top:max(52px,calc(env(safe-area-inset-top) + 46px));right:max(8px,env(safe-area-inset-right));width:84px;height:84px;border-radius:50%;background:rgba(10,14,26,.55);border:1.5px solid rgba(255,210,63,.6);pointer-events:none;z-index:5}
+@media (min-width:900px) and (min-height:600px){#mm{width:116px;height:116px}}
+@media (pointer:coarse) and (max-height:520px){#fb{padding:5px 8px;font-size:11px}#fsub{font-size:10px}}
 @media (max-height:420px){#hud{width:min(220px,38vw)}#cht{bottom:max(140px,calc(env(safe-area-inset-bottom) + 130px));max-height:18vh}}
 
 #ent{position:fixed;inset:0;z-index:61;display:none;font-size:14px;line-height:1.45}
@@ -128,6 +131,7 @@ button:active{filter:brightness(1.3)}button.on{background:var(--gold);color:var(
 <div id="die"><span>YENİLDİN</span><small id="die2"></small></div>
 <div id="pnw"><div id="pnb"><div id="pnh"><b id="pnti"></b><button id="pnx" type="button">✕</button></div><div id="pnt"></div><div id="pnc"></div></div></div>
 <div id="rot"><b>📱↻ Telefonu yatay çevir</b><span>Yüz Mühür yatay ekranda oynanır.</span></div>
+<canvas id="mm" width="132" height="132"></canvas>
 <div id="ent"><div class="bgv"></div><div class="pn" id="entp"></div></div>
 <div id="go"><h1>YÜZ MÜHÜR</h1><div class="sb">KADİM KULE</div>
  <small>Denizden yükselen Kadim Kule'nin yüz katı, yüz mühürle kapatılmış. Her katta bir muhafız bekliyor. Mührü kır, üst kata çık. Parti kur, lonca kur, tüccar ol, demirci ol.</small>

@@ -241,7 +241,9 @@ function buildTown(){resetWorld();WP.amp=2.2;WP.r0=26;WP.r1=46;WP.bowl=70;WP.bs=
   {id:'quest',n:'Haberci Elif',role:'📜 Görevler',x:3.4,z:-9.2,yaw:3.1,ap:{h:'twin',hc:'#c9923e',t:'blouse',tc:'#e8718d',b:'skirt',bc:'#3f6fd0',sh:'boots',shc:'#4a3020',hat:'none',g:'f'}},
   {id:'guard',n:'Kule Bekçisi',role:'🗼 Kule Kapısı',x:0,z:-44.6,yaw:0,ap:{h:'short',hc:'#222',t:'armor',tc:'#8e9aaf',b:'trousers',bc:'#3a3f55',sh:'boots',shc:'#2a2a30',hat:'helmet',htc:'#aab3c2',bk:'cape',bkc:'#c0392b'}}];
  NP.forEach(function(n){n.ap=Object.assign({},PRES.basic.ap,n.ap);if(KB){var _h={merchant:HP.shop,smith:HP.smith,guild:HP.guild,inn:HP.inn,quest:HP.quest}[n.id],_o={merchant:[0,-1.7],smith:[-.9,-1.6],guild:[0,-1.6],inn:[3.4,-.5],quest:[.4,-1.6]}[n.id];if(_h){var q=npcIn(_h,_o[0],_o[1]);n.x=q[0];n.z=q[1];n.yaw=q[2]}}NPCL.push(n);colliders.push([n.x,n.z,.55]);IA.push({k:'npc',id:n.id,x:n.x,z:n.z,r:3.4,lb:n.role})});
- NPCL[5].big=1;uploadWorld()}
+ NPCL[5].big=1;
+ [['v1','Köylü',6,0,1,0],['v2','Köylü',7.5,2,-1,0],['v3','Köylü',0,0,1,1]].forEach(function(v){NPCL.push({id:v[0],n:v[1],role:'',vil:1,r:v[2],ph:v[3],dir:v[4],line:v[5],x:0,z:0,yaw:0,ap:Object.assign({},PRES.basic.ap)})});
+ uploadWorld()}
 /* ---- kat kur ---- */
 function bossDef(f){var R=realmOf(f),rr=rng(f*104729+7),id=(f%10===0)?R.rb:R.bp[Math.floor(rr()*R.bp.length)];if(f>=100&&f%100===0)id='yaxest';return id}
 var ADJ=['Kızıl','Kadim','Gölge','Demir','Kor','Fısıltılı','Çelik','Zehirli','Fırtına','Ay','Güneş','Sessiz','Yıkık','Altın','Mor','Buz','Kemik','Alev','Hortlak','Ulu','Kanlı','Pas','Sonsuz','Susuz','Karanlık'];
