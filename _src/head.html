@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://formsubmit.co wss://broker.emqx.io:8084 wss://broker.hivemq.com:8884 wss://test.mosquitto.org:8081; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#0b0f18">
+<title>Yüz Mühür: 3D Kule MMORPG | Yaxest Diyarı</title>
+<meta name="description" content="Yüz Mühür: Yaxest Diyarı'nın 3D kule macerası. Yüz katlı Kadim Kule'yi tırman, her katın muhafızını yen, mührü kır. Parti, lonca, tüccar, demirci. Tarayıcıda ücretsiz, telefonda yatay oynanır.">
+<link rel="canonical" href="https://yaxestgames.com/diyar/muhur/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yaxest Games">
+<meta property="og:title" content="Yüz Mühür: 3D Kule MMORPG | Yaxest Diyarı">
+<meta property="og:description" content="Yüz katlı Kadim Kule'yi tırman, muhafızları yen, mühürleri kır. Parti kur, lonca kur, tüccar ol. Ücretsiz, tarayıcıda 3D.">
+<meta property="og:url" content="https://yaxestgames.com/diyar/muhur/">
+<meta property="og:image" content="https://yaxestgames.com/og.png">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yüz Mühür: 3D Kule MMORPG | Yaxest Diyarı">
+<meta name="twitter:description" content="Yüz katlı Kadim Kule'yi tırman, muhafızları yen, mühürleri kır. Ücretsiz, tarayıcıda 3D.">
+<meta name="twitter:image" content="https://yaxestgames.com/og.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Yüz Mühür","url":"https://yaxestgames.com/diyar/muhur/","description":"Yüz katlı Kadim Kule'yi tırman, her katın muhafızını yen, mührü kır. Parti, lonca ve tüccar sistemi olan 3D çevrimiçi macera.","genre":"MMORPG","applicationCategory":"Game","gamePlatform":"Web browser","playMode":["SinglePlayer","MultiPlayer"],"inLanguage":"tr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"TRY"},"publisher":{"@type":"Organization","name":"Yaxest Games","url":"https://yaxestgames.com/"}}</script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0b0f18;--gold:#ffd23f;--ink:#1a1530;--pn:rgba(12,16,28,.72);--ln:rgba(255,255,255,.16)}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:system-ui,Segoe UI,Roboto,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+#vg{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%)}
+#ov{pointer-events:none}
+.pn{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:6px 9px;backdrop-filter:blur(4px)}
+button{font:inherit;color:#fff;background:rgba(255,210,63,.16);border:1px solid rgba(255,210,63,.5);border-radius:10px;padding:7px 11px;cursor:pointer}
+button:active{filter:brightness(1.3)}button.on{background:var(--gold);color:var(--ink)}button:disabled{opacity:.4;cursor:default}
+#hud{position:fixed;left:max(8px,env(safe-area-inset-left));top:max(8px,env(safe-area-inset-top));width:min(250px,42vw);pointer-events:none;font-size:12px}
+#hud .pn{margin-bottom:5px}
+#pnm{display:flex;justify-content:space-between;gap:6px;font-weight:700;margin-bottom:4px}#pnm small{opacity:.8;font-weight:500}
+.bar{height:13px;border-radius:7px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);position:relative;overflow:hidden;margin-top:3px}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:100%;display:block;transition:width .12s}
+.bar span{position:absolute;inset:0;text-align:center;font:700 10px/12px system-ui;text-shadow:0 1px 2px #000}
+#hpi{background:linear-gradient(#ff6a6a,#c0182f)}#sti{background:linear-gradient(#7affc0,#12a56a)}#xpi{background:#ffd23f}#mpi{background:linear-gradient(#b48cff,#6a3de8)}
+.bar.s{height:7px}
+#fb{font-size:11px;line-height:1.35}#fb b{font-size:13px;color:var(--gold)}
+#seal{height:8px;border-radius:5px;background:rgba(0,0,0,.5);overflow:hidden;margin-top:4px;border:1px solid rgba(255,255,255,.2)}#seali{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9a3d,#ffe27a)}
+#tr{position:fixed;right:max(8px,env(safe-area-inset-right));top:max(8px,env(safe-area-inset-top));display:flex;gap:6px;align-items:center;font-size:12px}
+#tr .pn{padding:5px 9px}#tr button{padding:6px 9px}
+#bossb{position:fixed;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);width:min(380px,40vw);text-align:center;display:none;pointer-events:none}
+#bossb b{font-size:13px;text-shadow:0 2px 6px #000;color:#ffb36b}#bossb .bar{height:14px}#bi{background:linear-gradient(#ff9a3d,#c02a12)}
+#cht{position:fixed;left:max(8px,env(safe-area-inset-left));bottom:max(150px,calc(env(safe-area-inset-bottom) + 140px));width:min(330px,46vw);max-height:22vh;overflow:hidden;font-size:11px;line-height:1.35;pointer-events:none;text-shadow:0 1px 3px #000}
+#cht div{opacity:.95;margin-top:1px}#cht .sys{color:#ffd98a}#cht .pt{color:#7affc0}#cht .cl{color:#9ad0ff}
+#cin{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(420px,90vw);display:none;z-index:30}#cin input{width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--gold);background:rgba(8,10,18,.92);color:#fff;font:inherit;outline:0}
+#stick{position:fixed;left:24px;bottom:34px;width:110px;height:110px;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);display:none;z-index:5}
+#knob{position:absolute;left:35px;top:35px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.35)}
+.act{position:fixed;border-radius:50%;padding:0;background:rgba(255,210,63,.22);border:2px solid var(--gold);touch-action:none;z-index:6;display:flex;align-items:center;justify-content:center;line-height:1}
+.act small{position:absolute;bottom:-1px;right:2px;font-size:9px;opacity:.7}
+#ba{width:84px;height:84px;font-size:34px;right:max(22px,env(safe-area-inset-right));bottom:max(30px,env(safe-area-inset-bottom))}
+#br{width:58px;height:58px;font-size:24px;right:max(116px,calc(env(safe-area-inset-right) + 94px));bottom:max(26px,env(safe-area-inset-bottom));background:rgba(122,255,192,.18);border-color:#7affc0}
+#s1,#s2,#s3{width:52px;height:52px;font-size:21px}
+#s1{right:max(120px,calc(env(safe-area-inset-right) + 98px));bottom:max(92px,calc(env(safe-area-inset-bottom) + 70px))}
+#s2{right:max(66px,calc(env(safe-area-inset-right) + 44px));bottom:max(122px,calc(env(safe-area-inset-bottom) + 100px))}
+#s3{right:max(14px,env(safe-area-inset-right));bottom:max(126px,calc(env(safe-area-inset-bottom) + 106px));background:rgba(180,140,255,.22);border-color:#b48cff}
+#bp{width:46px;height:46px;font-size:19px;right:max(14px,env(safe-area-inset-right));bottom:max(180px,calc(env(safe-area-inset-bottom) + 160px));background:rgba(255,106,106,.2);border-color:#ff6a6a}
+.act .cd{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;font:800 14px system-ui}
+#ctx{position:fixed;left:50%;bottom:max(70px,calc(env(safe-area-inset-bottom) + 60px));transform:translateX(-50%);display:none;z-index:7;padding:10px 18px;border-radius:14px;font-size:15px;font-weight:700;background:rgba(255,210,63,.95);color:var(--ink);border-color:#fff}
+#msg2{position:fixed;left:50%;top:30%;transform:translate(-50%);font:800 clamp(22px,5vw,40px) Georgia,serif;color:#ffe9a8;text-shadow:0 2px 14px #000,0 0 30px rgba(255,160,40,.7);display:none;text-align:center;pointer-events:none;z-index:8;max-width:90vw}
+#msg2 small{display:block;font:600 14px system-ui;color:#fff;margin-top:6px}
+#toast{position:fixed;left:50%;top:max(60px,calc(env(safe-area-inset-top) + 50px));transform:translateX(-50%);z-index:9;pointer-events:none}
+#toast div{margin:4px auto;padding:6px 12px;border-radius:10px;background:rgba(10,14,24,.85);border:1px solid var(--ln);font-size:13px;text-align:center;width:max-content;max-width:86vw}
+#die{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:radial-gradient(ellipse at center,rgba(120,0,10,.35),rgba(0,0,0,.82));z-index:12;font:800 38px Georgia,serif;color:#ff6a6a;text-shadow:0 2px 14px #000;pointer-events:none}#die small{font:600 14px system-ui;color:#fff}
+#pnw{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:rgba(4,6,12,.62);touch-action:pan-y}
+#pnb{width:min(640px,96vw);max-height:min(88vh,520px);display:flex;flex-direction:column;background:linear-gradient(180deg,#171b30,#0e1120);border:1.5px solid rgba(255,210,63,.55);border-radius:16px;box-shadow:0 10px 50px rgba(0,0,0,.7);overflow:hidden}
+#pnh{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--ln);background:rgba(255,210,63,.07)}#pnh b{flex:1;font-size:16px;color:var(--gold)}
+#pnt{display:flex;gap:5px;padding:7px 10px 0;flex-wrap:wrap}#pnt button{padding:5px 10px;font-size:12px}
+#pnc{padding:10px 12px 12px;overflow:auto;font-size:13px;line-height:1.45;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+#pnc h4{margin:10px 0 5px;color:#ffd98a;font-size:13px}#pnc h4:first-child{margin-top:0}
+.row{display:flex;align-items:center;gap:8px;padding:7px 8px;border:1px solid var(--ln);border-radius:10px;margin-bottom:5px;background:rgba(255,255,255,.04)}
+.row .t{flex:1;min-width:0}.row .t small{display:block;opacity:.75}.row .ic{font-size:22px;width:30px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:6px}.grid button{padding:6px 2px;font-size:12px;line-height:1.2}.grid button.ok{border-color:#7affc0;background:rgba(122,255,192,.15)}
+.tag{display:inline-block;padding:1px 7px;border-radius:8px;background:rgba(255,255,255,.12);font-size:11px;margin-left:4px}
+#pnc input,#pnc select{background:#0b0e1a;color:#fff;border:1px solid var(--ln);border-radius:8px;padding:6px 8px;font:inherit;width:100%}
+.gold{color:#ffd23f}.red{color:#ff8a8a}.grn{color:#7affc0}
+#rot,#go{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;padding:24px;background:rgba(8,10,18,.92);font-size:15px;line-height:1.5}
+#rot{z-index:70;background:#0b0f18}#rot b{font-size:22px}
+#go{display:none;background:radial-gradient(ellipse at 50% 30%,#2a2350,#0b0f18 70%);overflow:auto}
+#go h1{margin:0;font:900 clamp(34px,8vw,64px) Georgia,serif;letter-spacing:.06em;background:linear-gradient(#fff3c4,#f2c35e 50%,#b07a22);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 10px rgba(0,0,0,.6))}
+#go .sb{font:600 14px system-ui;color:#cdb994;letter-spacing:.2em;margin-top:-6px}
+#go small{opacity:.85;max-width:520px;display:block}
+#go .bt{font-size:19px;padding:12px 34px;background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:800;border-radius:14px}
+#go a{color:#9ad0ff}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:flex}}
+@media (max-height:420px){#hud{width:min(220px,38vw)}#cht{bottom:max(140px,calc(env(safe-area-inset-bottom) + 130px));max-height:18vh}}
+
+#ent{position:fixed;inset:0;z-index:61;display:none;font-size:14px;line-height:1.45}
+#ent.on{display:block}body.ent #hud,body.ent #tr,body.ent #stick,body.ent .act,body.ent #ctx,body.ent #cht,body.ent #cin,body.ent #bossb,body.ent #msg2{display:none!important}
+#ent .bgv{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#2a2350,#0b0f18 70%)}#ent.pv .bgv{background:linear-gradient(90deg,rgba(8,10,18,.94) 0,rgba(8,10,18,.82) min(470px,100%),rgba(8,10,18,0) calc(min(470px,100%) + 18%))}
+#ent .pn{position:absolute;left:0;top:0;bottom:0;width:min(470px,100%);padding:max(14px,env(safe-area-inset-top)) 16px 14px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:10px;overflow:auto;-webkit-overflow-scrolling:touch}
+#ent.ctr .pn{left:50%;transform:translateX(-50%);align-items:center;text-align:center;justify-content:center}
+#ent h1{margin:0;font:900 clamp(34px,8vw,60px) Georgia,serif;letter-spacing:.06em;background:linear-gradient(#fff3c4,#f2c35e 50%,#b07a22);-webkit-background-clip:text;background-clip:text;color:transparent}
+#ent h2{margin:0;font:800 20px Georgia,serif;color:#ffd98a}#ent h3{margin:8px 0 4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#cdb994}
+#ent small{opacity:.8;display:block}#ent .st{display:flex;gap:6px}#ent .st i{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.15)}#ent .st i.on{background:#f2c35e}
+#ent input[type=text],#ent input[type=email],#ent input[type=password]{width:100%;background:#0b0e1a;color:#fff;border:1px solid var(--ln);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px}
+#ent .g{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;width:100%}#ent .g3{grid-template-columns:repeat(3,1fr)}
+#ent .cd{padding:8px 10px;border:1.5px solid var(--ln);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;text-align:left;cursor:pointer;font:inherit;font-size:13px}#ent .cd b{display:block;font-size:14px}#ent .cd small{font-size:11.5px}
+#ent .cd.on{border-color:#f2c35e;background:rgba(242,195,94,.14)}
+#ent .sw{display:flex;gap:7px;flex-wrap:wrap}#ent .sw button{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0}#ent .sw button.ch{width:auto;height:auto;border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.05);border:1.5px solid var(--ln)}#ent .sw button.ch.on{border-color:#f2c35e;background:rgba(242,195,94,.18);box-shadow:none}#ent .sw button.on{border-color:#fff;box-shadow:0 0 0 2px #f2c35e}
+#ent .ch{padding:6px 12px;border:1.5px solid var(--ln);border-radius:999px;background:rgba(255,255,255,.05);color:#fff;cursor:pointer;font:inherit;font-size:13px}#ent .ch.on{border-color:#f2c35e;background:rgba(242,195,94,.14)}
+#ent .nv{display:flex;gap:8px;margin-top:auto;padding:10px 0 2px;position:sticky;bottom:-2px;background:linear-gradient(transparent,rgba(10,12,22,.96) 30%)}#ent .nv button{flex:1}#ent .err{color:#ff9a9a;min-height:1.3em;font-size:13px}
+#ent .bt{padding:12px 16px;font-size:16px}#ent .bt2{padding:12px 16px;font-size:15px;border-radius:12px;border:1.5px solid var(--ln);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}#ent .lk{background:none;border:0;color:#cdb994;text-decoration:underline;cursor:pointer;font:inherit;padding:4px}
+@media (max-height:520px),(max-width:760px){#ent{font-size:12px}#ent .pn{width:min(330px,50vw);padding:8px 10px;gap:6px}#ent h1{font-size:34px}#ent h2{font-size:16px}#ent h3{margin:4px 0 2px;font-size:10px}#ent .cd{padding:5px 8px;font-size:11px}#ent .cd b{font-size:12px}#ent .cd small{font-size:10px}#ent .g{gap:5px}#ent .sw{gap:5px}#ent .sw button{width:26px;height:26px}#ent .sw button.ch{padding:4px 9px;font-size:11px}#ent .bt,#ent .bt2{padding:8px 10px;font-size:13px}#ent input[type=text],#ent input[type=email],#ent input[type=password]{padding:7px 9px;font-size:14px}#ent.pv .bgv{background:linear-gradient(90deg,rgba(8,10,18,.94) 0,rgba(8,10,18,.82) min(330px,50vw),rgba(8,10,18,0) calc(min(330px,50vw) + 12%))}#ent.ctr .pn{width:min(380px,92vw)}#ent .nv{background:rgba(10,12,22,.98);padding:6px 0 2px;border-top:1px solid rgba(255,255,255,.08)}#ent .nv button{padding:7px 8px}#ent.ctr .pn{justify-content:flex-start}#ent.ctr .pn>:first-child{margin-top:auto}#ent.ctr .pn>:last-child{margin-bottom:auto}#ent.ctr h1{font-size:26px;margin:0}#ent.ctr .pn p{font-size:11px;margin:0}}
+#ent .ld{height:6px;width:min(320px,80vw);border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}#ent .ld i{display:block;height:100%;width:0;background:#f2c35e;transition:width .3s}
+</style></head><body>
+<canvas id="c"></canvas><canvas id="ov"></canvas><div id="vg"></div>
+<div id="hud">
+ <div class="pn"><div id="pnm"><span id="pname">Gezgin</span><small id="plv">Sv 1</small></div>
+  <div class="bar"><i id="hpi"></i><span id="hpt"></span></div>
+  <div class="bar s"><i id="sti"></i></div>
+  <div class="bar s"><i id="mpi" style="width:0"></i></div>
+  <div class="bar s"><i id="xpi" style="width:0"></i></div></div>
+ <div class="pn" id="fb"><b id="fname">Başlangıç Şehri</b><br><span id="fsub"></span><div id="seal" style="display:none"><i id="seali"></i></div></div>
+</div>
+<div id="bossb"><b id="bn"></b><div class="bar"><i id="bi"></i><span id="bt"></span></div></div>
+<div id="tr"><div class="pn">🪙 <b id="gd">0</b> · 🧪 <b id="po">0</b></div><button id="bch" type="button">💬</button><button id="bm" type="button">☰</button></div>
+<div id="cht"></div><div id="cin"><input id="cinp" maxlength="90" autocomplete="off" placeholder="Mesaj yaz… (/p parti, /l lonca, /d dünya)"></div>
+<div id="stick"><div id="knob"></div></div>
+<button class="act" id="ba" type="button">⚔️</button>
+<button class="act" id="br" type="button">🌀</button>
+<button class="act" id="s1" type="button">✦<div class="cd"></div></button>
+<button class="act" id="s2" type="button">⟳<div class="cd"></div></button>
+<button class="act" id="s3" type="button">☄<div class="cd"></div></button>
+<button class="act" id="bp" type="button">🧪</button>
+<button id="ctx" type="button"></button>
+<div id="msg2"></div><div id="toast"></div>
+<div id="die"><span>YENİLDİN</span><small id="die2"></small></div>
+<div id="pnw"><div id="pnb"><div id="pnh"><b id="pnti"></b><button id="pnx" type="button">✕</button></div><div id="pnt"></div><div id="pnc"></div></div></div>
+<div id="rot"><b>📱↻ Telefonu yatay çevir</b><span>Yüz Mühür yatay ekranda oynanır.</span></div>
+<div id="ent"><div class="bgv"></div><div class="pn" id="entp"></div></div>
+<div id="go"><h1>YÜZ MÜHÜR</h1><div class="sb">KADİM KULE</div>
+ <small>Denizden yükselen Kadim Kule'nin yüz katı, yüz mühürle kapatılmış. Her katta bir muhafız bekliyor. Mührü kır, üst kata çık. Parti kur, lonca kur, tüccar ol, demirci ol.</small>
+ <button id="gob" class="bt" type="button">Kuleye Gir</button>
+ <small id="gos">Sol yarı ekran: yürü · sağ yarı: bak · ⚔️ saldır · 🌀 yuvarlan (kaçış) · ✦ ⟳ ☄ Mühür Hamleleri · 🧪 iksir<br>Bilgisayar: W A S D yürü, fare bak, sol tık / Boşluk saldır, <b>Shift</b> yuvarlan, Q E R hamle, 1 iksir, F konuş, Enter sohbet</small>
+ <small><a href="../" id="gox">← Yaxest Diyarı</a> · Test sürümü (beta): sorun görürsen ☰ menüden 📋 Rapor'u gönder.</small></div>
+<script src="../../account-config.js"></script><script src="../../backup.js"></script><script src="../../account.js"></script>
+<script>
