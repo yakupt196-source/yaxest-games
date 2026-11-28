@@ -101,7 +101,7 @@ var GR=24000;
 load();recalc();if(S.qual){qi=S.qual;scale=[1,.75,.5][qi];resize()}else if(matchMedia('(pointer:coarse)').matches){qi=1;scale=.75;resize()}
 pl.hp=pl.mhp;pl.st=pl.mst;ensureQ();startTown(false);cam.x=0;cam.z=9;
 $('go').style.display='flex';
-$('gob').onclick=function(){started=true;if(!S.cls&&!S.clsPick)setTimeout(function(){openPanel('inn','cls')},500);$('go').style.display='none';snd('pick');if(S.net)NET.start();
+$('gob').onclick=function(){started=true;if(!S.introSeen&&!navigator.webdriver&&S.kills===0&&S.lv<=1)setTimeout(playIntro,200);if(!S.cls&&!S.clsPick)setTimeout(function(){openPanel('inn','cls')},500);$('go').style.display='none';snd('pick');if(S.net)NET.start();
  try{var d=document.documentElement;if(d.requestFullscreen)d.requestFullscreen().then(function(){try{screen.orientation.lock('landscape').catch(function(){})}catch(e){}}).catch(function(){})}catch(e){}
  if(!S.tut){S.tut=1;setTimeout(function(){banner('Yüz Mühür','Kule Kapısı kuzeyde. Önce Tüccar ve Demirci’ye uğra.',5000);say('Kule Kapısı kuzeyde. Bekçiye yaklaş ve F tuşuna / düğmeye bas.','sys')},400)}save()};
 window.addEventListener('beforeunload',save);document.addEventListener('visibilitychange',function(){if(document.hidden)save()});

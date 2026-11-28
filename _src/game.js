@@ -57,6 +57,19 @@ function toast(t,c){var el=$('toast'),d=document.createElement('div');d.textCont
 function fl(x,y,z,t,c,s){floats.push({x:x,y:y,z:z,t:t,c:c||'#fff',l:.9,s:s||1})}
 function say(t,k){var el=$('cht'),d=document.createElement('div');d.textContent=t;if(k)d.className=k;el.appendChild(d);while(el.children.length>9)el.removeChild(el.firstChild);setTimeout(function(){if(d.parentNode&&el.children.length>0&&Date.now()-d._t>20000)d.parentNode.removeChild(d)},21000);d._t=Date.now()}
 function banner(t,sub,ms){var m=$('msg2');m.innerHTML=esc(t)+(sub?'<small>'+esc(sub)+'</small>':'');m.style.display='block';clearTimeout(banner._t);banner._t=setTimeout(function(){m.style.display='none'},ms||3200)}
+/* ---- hikâye girişi ---- */
+var INTRO={run:0};
+function playIntro(){if(INTRO.run)return;INTRO.run=1;var el=$('intro'),it=$('it'),il=$('il'),done=0,t0=performance.now(),tm=[],cx=0,iv=0;
+ var L=['Yüzyıllar önce, bulutların üstüne uzanan bir kule yükseldi.','Adı Yüz Mühür. Her katı bir mühürle kilitli, her mühür bir muhafızla korunuyor.','Kapıdan girenler ilk mühürden öteye geçemedi. Kule kimseyi dışarı bırakmıyor.','Efsaneye göre yüzüncü mührü kıran, kulenin sahibi olacak ve herkesi özgür bırakacak.',S.nick+', bu yüzden çağrıldın.','Sönmeyen Ateş seni bekliyor. Önce şehirde hazırlan, sonra kuleye adım at.'];
+ el.classList.add('on');el.classList.remove('clear');window.__kdc=[0,26,58];cam.yaw=0;cam.pit=-.3;window.__ent=0;
+ function say(s,i){it.style.opacity=0;setTimeout(function(){it.textContent=s;it.style.opacity=1},300)}it.style.transition='opacity .6s';
+ L.forEach(function(s,i){tm.push(setTimeout(function(){if(i===0)el.classList.add('clear');say(s,i);try{snd(i===3?'boss':'pick')}catch(e){}},900+i*3600))});
+ var T0=900+L.length*3600;
+ tm.push(setTimeout(function(){it.style.opacity=0;il.classList.add('on');try{snd('open');snd('lvl')}catch(e){}},T0));
+ iv=setInterval(function(){var k=Math.min(1,(performance.now()-t0)/(T0+800)),e=k*k*(3-2*k);window.__kdc=[Math.sin(k*1.2)*5,26-e*19.5,58-e*40];cam.yaw=-Math.sin(k*1.2)*.08;cam.pit=-.3+e*.2},33);
+ function end(){if(done)return;done=1;tm.forEach(clearTimeout);clearInterval(iv);window.__kdc=undefined;cam.yaw=0;cam.pit=-.1;el.classList.remove('on');il.classList.remove('on');INTRO.run=0;S.introSeen=1;save();setTimeout(function(){banner('Başlangıç Şehri','Kule Kapısı kuzeyde. Önce Tüccar ve Demirci’ye uğra.',4200)},300)}
+ tm.push(setTimeout(end,T0+3400));$('ib').onclick=end}
+window.playIntro=playIntro;
 /* ---- ortam sesi ---- */
 var AMB={n:null,g:null,t:2,on:0};
 function ambient(dt){if(!S.snd||!AC||AC.state!=='running')return;try{

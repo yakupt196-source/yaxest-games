@@ -86,6 +86,7 @@ button:active{filter:brightness(1.3)}button.on{background:var(--gold);color:var(
 #mm{position:fixed;left:auto;bottom:auto;top:max(52px,calc(env(safe-area-inset-top) + 46px));right:max(8px,env(safe-area-inset-right));width:84px;height:84px;border-radius:50%;background:rgba(10,14,26,.55);border:1.5px solid rgba(255,210,63,.6);pointer-events:none;z-index:5}
 @media (min-width:900px) and (min-height:600px){#mm{width:116px;height:116px}}
 @media (pointer:coarse) and (max-height:520px){#fb{padding:5px 8px;font-size:11px}#fsub{font-size:10px}}
+#intro{position:fixed;inset:0;z-index:60;background:#000;display:none;flex-direction:column;align-items:center;justify-content:flex-end;color:#f1e7c8;font-family:Georgia,serif;text-align:center;padding:0 6vw 14vh;transition:background 1.5s}#intro.on{display:flex}#intro.clear{background:rgba(0,0,0,0)}#intro::after{content:'';position:absolute;left:0;right:0;bottom:0;height:42vh;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);pointer-events:none}#intro .bar{position:absolute;left:0;right:0;height:11vh;background:#000}#intro .bt{top:0}#intro .bb{bottom:0}#intro #it{font-size:clamp(16px,2.6vw,26px);line-height:1.5;max-width:800px;min-height:3.2em;text-shadow:0 2px 10px #000;position:relative;z-index:2}#intro #ib{position:absolute;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:3;background:rgba(0,0,0,.5);border:1px solid rgba(255,210,63,.5);color:#ffd23f;border-radius:10px;padding:6px 12px;font-size:13px;cursor:pointer;font-family:system-ui}#intro #il{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:2;font-size:clamp(34px,8vw,84px);letter-spacing:.2em;color:#fff;text-shadow:0 0 30px #7cf,0 0 60px #fff;opacity:0}#intro #il.on{display:flex;animation:ilk 3.2s ease-out forwards}@keyframes ilk{0%{opacity:0;transform:scale(1.3)}20%{opacity:1}100%{opacity:0;transform:scale(1)}}
 @media (max-height:420px){#hud{width:min(220px,38vw)}#cht{bottom:max(140px,calc(env(safe-area-inset-bottom) + 130px));max-height:18vh}}
 
 #ent{position:fixed;inset:0;z-index:61;display:none;font-size:14px;line-height:1.45}
@@ -131,6 +132,7 @@ button:active{filter:brightness(1.3)}button.on{background:var(--gold);color:var(
 <div id="die"><span>YENİLDİN</span><small id="die2"></small></div>
 <div id="pnw"><div id="pnb"><div id="pnh"><b id="pnti"></b><button id="pnx" type="button">✕</button></div><div id="pnt"></div><div id="pnc"></div></div></div>
 <div id="rot"><b>📱↻ Telefonu yatay çevir</b><span>Yüz Mühür yatay ekranda oynanır.</span></div>
+<div id="intro"><div class="bar bt"></div><div class="bar bb"></div><div id="il">KULE SENİ KABUL ETTİ</div><button id="ib">Atla ⏭</button><div id="it"></div></div>
 <canvas id="mm" width="132" height="132"></canvas>
 <div id="ent"><div class="bgv"></div><div class="pn" id="entp"></div></div>
 <div id="go"><h1>YÜZ MÜHÜR</h1><div class="sb">KADİM KULE</div>
