@@ -838,7 +838,7 @@ function stepMobs(dt){var safe=safeFor();
  for(var i=tels.length-1;i>=0;i--){var t=tels[i];t.t+=dt;if(t.t>=t.dur){tickTel(t);tels.splice(i,1)}}
  /* arka plan: skor/ekran */
 }
-function mobCollide(m){for(var i=0;i<colliders.length;i++){var q=colliders[i];if(q[3])continue;dx=m.x-q[0],dz=m.z-q[1],ll=Math.hypot(dx,dz),r=q[2]+.5*m.s;if(ll<r&&ll>1e-4){m.x=q[0]+dx/ll*r;m.z=q[1]+dz/ll*r}}}
+function mobCollide(m){for(var i=0;i<colliders.length;i++){var q=colliders[i];if(q[3])continue;var dx=m.x-q[0],dz=m.z-q[1],ll=Math.hypot(dx,dz),r=q[2]+.5*m.s;if(ll<r&&ll>1e-4){m.x=q[0]+dx/ll*r;m.z=q[1]+dz/ll*r}}}
 /* ---- boss ---- */
 function bossAbil(f){var a=['slam','charge'];if(f>=6)a.push('nova');if(f>=15)a.push('summon');if(f>=30)a.push('meteor');if(f%10===0){['nova','summon','meteor'].forEach(function(k){if(a.indexOf(k)<0)a.push(k)})}return a}
 function bossAI(m,dt,dx,dz,d,safe){
