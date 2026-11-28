@@ -97,7 +97,7 @@ button:active{filter:brightness(1.3)}button.on{background:var(--gold);color:var(
 #ent .g{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;width:100%}#ent .g3{grid-template-columns:repeat(3,1fr)}
 #ent .cd{padding:8px 10px;border:1.5px solid var(--ln);border-radius:12px;background:rgba(255,255,255,.05);color:#fff;text-align:left;cursor:pointer;font:inherit;font-size:13px}#ent .cd b{display:block;font-size:14px}#ent .cd small{font-size:11.5px}
 #ent .cd.on{border-color:#f2c35e;background:rgba(242,195,94,.14)}
-#ent .sw{display:flex;gap:7px;flex-wrap:wrap}#ent .sw button{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0}#ent .sw button.on{border-color:#fff;box-shadow:0 0 0 2px #f2c35e}
+#ent .sw{display:flex;gap:7px;flex-wrap:wrap}#ent .sw button{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;padding:0}#ent .sw button.ch{width:auto;height:auto;border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.05);border:1.5px solid var(--ln)}#ent .sw button.ch.on{border-color:#f2c35e;background:rgba(242,195,94,.18);box-shadow:none}#ent .sw button.on{border-color:#fff;box-shadow:0 0 0 2px #f2c35e}
 #ent .ch{padding:6px 12px;border:1.5px solid var(--ln);border-radius:999px;background:rgba(255,255,255,.05);color:#fff;cursor:pointer;font:inherit;font-size:13px}#ent .ch.on{border-color:#f2c35e;background:rgba(242,195,94,.14)}
 #ent .nv{display:flex;gap:8px;margin-top:auto;padding:10px 0 2px;position:sticky;bottom:-2px;background:linear-gradient(transparent,rgba(10,12,22,.96) 30%)}#ent .nv button{flex:1}#ent .err{color:#ff9a9a;min-height:1.3em;font-size:13px}
 #ent .bt{padding:12px 16px;font-size:16px}#ent .bt2{padding:12px 16px;font-size:15px;border-radius:12px;border:1.5px solid var(--ln);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}#ent .lk{background:none;border:0;color:#cdb994;text-decoration:underline;cursor:pointer;font:inherit;padding:4px}
@@ -1117,7 +1117,7 @@ function flush(setCommon){if(!q.length||!pK){q.length=0;return}var cull=gl.isEna
    gl.uniform3fv(gl.getUniformLocation(pK,'uTint'),p.tint||o.tint||[1,1,1]);gl.uniform1f(gl.getUniformLocation(pK,'uHit'),o.hit||0);
    pm.meshes.forEach(function(me){if(me.n!==p.mesh)return;gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,black());gl.uniform1i(gl.getUniformLocation(pK,'uEm'),1);gl.uniform1f(gl.getUniformLocation(pK,'uEmK'),0);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,me.tex.g);gl.uniform1f(gl.getUniformLocation(pK,'uAlpha'),0);gl.bindVertexArray(me.vao);gl.drawElements(gl.TRIANGLES,me.ni,gl.UNSIGNED_SHORT,0)})})}
  q.length=0;if(cull)gl.enable(gl.CULL_FACE);gl.bindVertexArray(null)}
-function boot(){var names=['imp','puglin','orc_male'];return loadAnims().then(function(){return loadChars()}).then(function(){return loadModel('props').then(function(p){PR=p}).then(function(){return loadModel('weapons')}).then(function(w){WPN=w});}).then(function(){return Promise.all(names.map(function(n){return loadModel(n).catch(function(e){console.warn('model',n,e)})}))}).then(function(){loaded=1;window.__skReady=1}).catch(function(e){console.warn('SKN boot',e)})}
+function boot(){var names=['imp','puglin','orc_male','orc_female','elf_male','elf_female'];return loadAnims().then(function(){return loadChars()}).then(function(){return loadModel('props').then(function(p){PR=p}).then(function(){return loadModel('weapons')}).then(function(w){WPN=w});}).then(function(){return Promise.all(names.map(function(n){return loadModel(n).catch(function(e){console.warn('model',n,e)})}))}).then(function(){loaded=1;window.__skReady=1}).catch(function(e){console.warn('SKN boot',e)})}
 return{boot:boot,CH:function(){return CH},partObj:partObj,Inst:Inst,models:MODELS,queue:queue,flush:flush,ready:function(){return loaded},anim:function(){return ANIM},qmat:qmat,m4:m4,props:function(){return PR}}
 })();
 
@@ -1134,20 +1134,25 @@ function skProps(tier,shield,cls){var P=[],T=SKT,c=cls||'warrior',nm=CWP[c]||'Sw
  if(shield)P.push({bone:'lowerarm_l',mesh:'shield_round',lm:ch(tr(T.shp[0],T.shp[1],T.shp[2]),rotM(T.shr[0],T.shr[1],T.shr[2]),sca(T.shs,T.shs,T.shs))});return P}
 
 var TONES=[{s:0,t:[1,1,1]},{s:0,t:[.96,.86,.78]},{s:0,t:[.86,.7,.56]},{s:1,t:[1.25,1.1,1]},{s:1,t:[1,.88,.78]},{s:1,t:[.78,.66,.58]}];
-var RACES={human:{n:'İnsan',sc:[1,1,1],tint:null,d:'Dengeli. Her ortama uyum sağlar.',b:{hp:.04,dm:.03},bt:'+%4 Can · +%3 Hasar'},elf:{n:'Elf',sc:[.94,1.07,.94],tint:null,d:'Uzun ve zarif. Hızlı ve keskin gözlü.',b:{sp:.06,dm:.04},bt:'+%6 Hız · +%4 Hasar'},orc:{n:'Ork',sc:[1.1,1.06,1.1],tint:[.62,.95,.5],d:'Yeşil tenli, iri ve dayanıklı.',b:{hp:.1},bt:'+%10 Can'},dwarf:{n:'Cüce',sc:[1.08,.86,1.08],tint:null,d:'Bodur, sağlam ve inatçı.',b:{dr:.04,hp:.04},bt:'+%4 Savunma · +%4 Can'}};
+var RACES={human:{n:'İnsan',sc:[1,1,1],tint:null,d:'Dengeli. Her ortama uyum sağlar.',b:{hp:.04,dm:.03},bt:'+%4 Can · +%3 Hasar'},elf:{n:'Elf',sc:[.94,1.07,.94],tint:null,d:'Uzun ve zarif. Hızlı ve keskin gözlü.',b:{sp:.06,dm:.04},bt:'+%6 Hız · +%4 Hasar'},orc:{n:'Ork',sc:[1.1,1.06,1.1],tint:[.62,.95,.5],d:'Yeşil tenli, iri ve dayanıklı.',b:{hp:.1},bt:'+%10 Can'},dwarf:{beard:1,n:'Cüce',sc:[1.12,.84,1.16],tint:null,d:'Bodur, sağlam ve inatçı.',b:{dr:.04,hp:.04},bt:'+%4 Savunma · +%4 Can'},imp:{n:'İmp',sc:[1.5,1.5,1.5],tint:null,mdl:'imp',skip:/Mace/,d:'Küçük, çevik ve kızgın bir cin. Zincirli, boynuzlu.',b:{dm:.08,sp:.05},bt:'+%8 Hasar · +%5 Hız'},puglin:{n:'Puglin',sc:[1.4,1.4,1.4],tint:null,mdl:'puglin',skip:/Stick/,d:'Azı dişli, iri bir domuz savaşçı. Dayanıklı.',b:{hp:.08,dr:.03},bt:'+%8 Can · +%3 Savunma'}};
 var HAIRS=[['Hair_SimpleParted','Düz'],['Hair_Buzzed','Kısa'],['Hair_BuzzedFemale','Kısa (K)'],['Hair_Long','Uzun'],['Hair_Buns','Topuz']];
 var HCOLS=['#3b2a1c','#1c1c1f','#8a5a2b','#c9923e','#d8d4c8','#a02a2a','#2f5fa8','#6b3fa0'];
 var APP0={g:'m',race:'human',tone:0,hair:'Hair_SimpleParted',hc:'#3b2a1c',beard:0,outfit:'peasant',ov:0,hood:0};
 function hexc(h){return[parseInt(h.substr(1,2),16)/255,parseInt(h.substr(3,2),16)/255,parseInt(h.substr(5,2),16)/255]}
+function MODN(ap){var r=RACES[ap.race];if(r&&r.mdl)return r.mdl;return(ap.race==='elf'||ap.race==='orc')?ap.race+'_'+(ap.g==='m'?'male':'female'):'human_'+ap.g}
 function appOf(){return Object.assign({},APP0,S.app||{})}
-function mkLook(it,app,arm){var key=JSON.stringify(app)+'|'+(arm>=4?1:0)+(arm>=6?1:0)+(arm>=8?1:0);if(it._ak===key)return;it._ak=key;var C=SKN.CH();if(!C||!it.m.name.startsWith('human'))return;var g=app.g,m=it.m,P=[],tn=TONES[app.tone%TONES.length],R=RACES[app.race]||RACES.human,tt=tn.t.slice();if(R.tint)tt=[tt[0]*R.tint[0],tt[1]*R.tint[1],tt[2]*R.tint[2]];var hc=hexc(app.hc),hl=hc.map(function(c){return Math.pow(c,2.2)*1.6}),hnd=tn.s===0?[tt[0]*1.7,tt[1]*1.55,tt[2]*1.45]:tt.slice();
- C.body[g].forEach(function(me){var mat=me.mat;if(/Eyes/.test(mat))P.push(SKN.partObj(me,m,me.tex,null,0));else if(/Hair/.test(mat))P.push(SKN.partObj(me,m,me.tex,hl,1));else P.push(SKN.partObj(me,m,me.tex[tn.s],tt,0))});
- var hr=C.hair[app.hair];if(hr)hr.forEach(function(me){P.push(SKN.partObj(me,m,me.tex,hl,1))});if(app.beard&&g==='m'&&C.hair.Hair_Beard)C.hair.Hair_Beard.forEach(function(me){P.push(SKN.partObj(me,m,me.tex,hl,1))});
- var rg=app.outfit==='ranger'||arm>=4,nm=(g==='m'?'Male_':'Female_')+(rg?'Ranger':'Peasant'),ov=app.ov?1:0;
- (C.outf[nm]||[]).forEach(function(me){if(/Pauldron/.test(me.name)&&arm<6)return;if(/Hood/.test(me.name)&&!(app.hood||arm>=8))return;var tx=Array.isArray(me.tex)?me.tex[ov]:me.tex,isHand=!Array.isArray(me.tex);var po=SKN.partObj(me,m,tx,isHand?hnd:(arm>=8?[1.25,1.1,.8]:null),0);po.infl=isHand?0:(/Pauldron/.test(me.name)?.012:.018);P.push(po)});
- it.parts=P;it.rs=R.sc}
+function mkLook(it,app,arm){var key=JSON.stringify(app)+'|'+(arm>=4?1:0)+(arm>=6?1:0)+(arm>=8?1:0);if(it._ak===key)return;it._ak=key;var C=SKN.CH();if(!C)return;var isH=it.m.name.startsWith('human');var g=app.g,m=it.m,P=[],tn=TONES[app.tone%TONES.length],R=RACES[app.race]||RACES.human,tt=tn.t.slice();if(R.tint)tt=[tt[0]*R.tint[0],tt[1]*R.tint[1],tt[2]*R.tint[2]];var hc=hexc(app.hc),hl=hc.map(function(c){return Math.pow(c,2.2)*1.6}),hnd=tn.s===0?[tt[0]*1.7,tt[1]*1.55,tt[2]*1.45]:tt.slice();
+ (isH?C.body[g]:[]).forEach(function(me){var mat=me.mat;if(/Eyes/.test(mat))P.push(SKN.partObj(me,m,me.tex,null,0));else if(/Hair/.test(mat))P.push(SKN.partObj(me,m,me.tex,hl,1));else P.push(SKN.partObj(me,m,me.tex[tn.s],tt,0))});
+ var hr=isH?C.hair[app.hair]:null;if(hr)hr.forEach(function(me){P.push(SKN.partObj(me,m,me.tex,hl,1))});if(isH&&(app.beard||R.beard)&&g==='m'&&C.hair.Hair_Beard)C.hair.Hair_Beard.forEach(function(me){P.push(SKN.partObj(me,m,me.tex,hl,1))});
+ var g2=it.m.name.indexOf('female')>=0?'f':g,pre=g2==='m'?'Male_':'Female_',tp=app.top||app.outfit||'peasant',lg=app.legs||app.outfit||'peasant',ft=app.feet||app.outfit||'peasant';if(arm>=4){tp=lg=ft='ranger'}
+ var ov=app.ov?1:0,oc=app.oc?hexc(app.oc):null,bel=app.belt==null?tp==='ranger':!!app.belt,brc=app.brac==null?tp==='ranger':!!app.brac,hood=!!app.hood||arm>=8,paul=!!app.paul||arm>=6;
+ function addP(set,re){(C.outf[pre+set]||[]).forEach(function(me){if(!re.test(me.name))return;var tx=Array.isArray(me.tex)?me.tex[ov]:me.tex,isHand=!Array.isArray(me.tex),po=SKN.partObj(me,m,tx,isHand?hnd:(arm>=8?[1.25,1.1,.8]:oc),0);po.infl=isHand?0:(/Pauldron/.test(me.name)?.01:.009);P.push(po)})}
+ function cap(x){return x==='ranger'?'Ranger':'Peasant'}
+ var isO=isH||/^(elf|orc)_/.test(it.m.name);if(isO){addP(cap(tp),/_Body$|_Arms$/);addP(cap(lg),/_Legs$/);addP(cap(ft),/_Feet/)}
+ if(isO&&bel)addP('Ranger',/Belt/);if(isO&&brc)addP('Ranger',/Bracer/);if(isO&&hood)addP('Ranger',/Hood/);if(isO&&paul)addP('Ranger',/Pauldron/);
+ it.parts=P;it.rs=(isH||R.mdl)?R.sc:(isO?[1,1,1]:[1,1,1])}
 var SKP={a:0,comb:0,roll:0,dead:0};
-function skPlayer(dt){if(!SKN.ready())return false;var ap=appOf(),key='me',mod='human_'+ap.g,it=skInst(key,mod);if(!it)return false;mkLook(it,ap,S.arm|0);var st=it.st||(it.st={a:0,roll:0,dead:0,fall:0});
+function skPlayer(dt){if(!SKN.ready())return false;var ap=appOf(),key='me',mod=MODN(ap),it=skInst(key,mod);if(!it)return false;mkLook(it,ap,S.arm|0);var st=it.st||(it.st={a:0,roll:0,dead:0,fall:0});
  var mv=pl.mv||0;
  if(pl.dead>0){if(!st.dead){st.dead=1;it.play('Hit_Knockback',{loop:0,speed:.9,fade:.08})}st.fall=Math.min(1,st.fall+dt*1.6)}
  else{if(st.dead){st.dead=0;st.fall=0;it.play('Idle_Shield_Loop',{force:1})}
@@ -1157,13 +1162,13 @@ function skPlayer(dt){if(!SKN.ready())return false;var ap=appOf(),key='me',mod='
    if(pl.atk>0){if(!st.a){st.a=1;var sk=pl.skill;if(sk===0){var c=pl.comb||1;it.play(c===1?'Sword_Regular_A':c===2?'Sword_Regular_B':'Sword_Regular_C',{loop:0,speed:c===1?1.45:c===2?1.8:3.2,fade:.04,force:1})}else if(sk===1)it.play('Sword_Heavy_Combo',{loop:0,speed:4,fade:.05,force:1});else if(sk===2)it.play('Melee_Hook',{loop:0,speed:1.1,fade:.05,force:1});else it.play('Shield_OneShot',{loop:0,speed:1.3,fade:.05,force:1})}}
    else{st.a=0;if(!it.cur||it.cur!=='Idle_Shield_Loop'&&(it.done||it.t>it.ad*.0&&(it.loop||it.done)))it.play('Idle_Shield_Loop',{fade:.18})}}}
  it.update(dt,pl.dead>0?0:mv>.05?1:0,mv*1.4+.4);
- var tier=pl.tier||0;SKN.queue(it,skMat(pl.x,H(pl.x,pl.z),pl.z,pl.yaw,1,st.fall,it.rs),{tint:[1,1,1],hit:pl.hurt>0?.35:0,rim:tier>=12?[.5,.4,.1]:tier>=6?[.12,.2,.35]:[0,0,0],props:skProps(tier,!!CLS().sh,S.cls)});return true}
-function skOther(o,dt){var h=skHash(o.id),ap=Object.assign({},APP0,{g:h%2?'m':'f',race:['human','elf','orc','dwarf'][h%4],tone:h%6,hair:HAIRS[h%5][0],hc:HCOLS[h%8],outfit:h%3?'peasant':'ranger',ov:h%2}),it=skInst('o'+o.id,'human_'+ap.g);if(!it)return false;mkLook(it,ap,o.arm|0);var mv=o.mv||0;
+ var tier=pl.tier||0;SKN.queue(it,skMat(pl.x,H(pl.x,pl.z),pl.z,pl.yaw+(window.__ent?(window.__entSpin||0):0),1,st.fall,it.rs),{skip:(RACES[ap.race]||{}).skip||null,tint:(ap.race==='elf'||ap.race==='orc')?TONES[ap.tone%TONES.length].t.map(function(v){return .55+v*.45}):[1,1,1],hit:pl.hurt>0?.35:0,rim:tier>=12?[.5,.4,.1]:tier>=6?[.12,.2,.35]:[0,0,0],props:skProps(tier,!!CLS().sh,S.cls)});return true}
+function skOther(o,dt){var h=skHash(o.id),ap=Object.assign({},APP0,{g:h%2?'m':'f',race:['human','elf','orc','dwarf'][h%4],tone:h%6,hair:HAIRS[h%5][0],hc:HCOLS[h%8],outfit:h%3?'peasant':'ranger',ov:h%2}),it=skInst('o'+o.id,MODN(ap));if(!it)return false;mkLook(it,ap,o.arm|0);var mv=o.mv||0;
  if(o.atk>0)it.play('Sword_Regular_A',{loop:0,speed:1.5,fade:.05});else if(it.cur!=='Idle_Shield_Loop'&&(it.done||it.loop))it.play('Idle_Shield_Loop');
  it.update(dt,mv>.05?1:0,mv*1.4+.4);SKN.queue(it,skMat(o.x,H(o.x,o.z),o.z,o.yaw,1,0,it.rs),{tint:[1,1,1],props:skProps(o.tier||0,true)});return true}
 var NPCA={hasan:3,ayten:5,orhan:6,nuri:1,elif:2,guard:7};var NPCM={hasan:'orc_male',ayten:'orc_female',orhan:'elf_male',nuri:'orc_male',elif:'elf_female',guard:'orc_male'};
 var NPCAPP={hasan:{g:'m',race:'dwarf',tone:2,hair:'Hair_Buzzed',hc:'#8a5a2b',beard:1,outfit:'peasant',ov:1},ayten:{g:'f',race:'human',tone:4,hair:'Hair_Buns',hc:'#1c1c1f',outfit:'ranger',ov:0},orhan:{g:'m',race:'human',tone:1,hair:'Hair_SimpleParted',hc:'#d8d4c8',beard:1,outfit:'ranger',ov:1},nuri:{g:'m',race:'orc',tone:0,hair:'Hair_Buzzed',hc:'#1c1c1f',outfit:'peasant',ov:0},elif:{g:'f',race:'elf',tone:0,hair:'Hair_Long',hc:'#c9923e',outfit:'peasant',ov:1},guard:{g:'m',race:'human',tone:3,hair:'Hair_Buzzed',hc:'#1c1c1f',outfit:'ranger',ov:1,hood:1}};
-function skNpc(n,x,y,z,yaw,dt){var ap=Object.assign({},APP0,NPCAPP[n.id]||{}),it=skInst('n'+n.id,'human_'+ap.g);if(!it)return false;mkLook(it,ap,n.id==='guard'?8:NPCA[n.id]||2);it.update(dt,0,0);SKN.queue(it,skMat(x,y,z,yaw,n.big?1.12:1,0,it.rs),{tint:[1,1,1],props:n.id==='ayten'||n.id==='guard'?skProps(n.id==='guard'?14:6,n.id==='guard'):[]});return true}
+function skNpc(n,x,y,z,yaw,dt){var ap=Object.assign({},APP0,NPCAPP[n.id]||{}),it=skInst('n'+n.id,MODN(ap));if(!it)return false;mkLook(it,ap,n.id==='guard'?8:NPCA[n.id]||2);it.update(dt,0,0);SKN.queue(it,skMat(x,y,z,yaw,n.big?1.12:1,0,it.rs),{tint:[1,1,1],props:n.id==='ayten'||n.id==='guard'?skProps(n.id==='guard'?14:6,n.id==='guard'):[]});return true}
 function skMob(m,dt){if(!SKN.ready())return false;var fam=FAM[m.id]||'biped';if(fam!=='biped')return false;var mod=m.boss?(skHash(m.id)%2?'orc_male':'imp'):(skHash(m.id)%3===0?'puglin':'imp');var it=m._sk;if(!it||it.m.name!==mod){var mm=SKN.models[mod];if(!mm)return false;it=m._sk=new SKN.Inst(mm);it.play('Zombie_Idle_Loop',{fade:0})}var st=it.st||(it.st={a:0,dead:0});
  var k=m.s*(m.boss?.75:.95);
  if(m.dead>0){if(!st.dead){st.dead=1;it.play('Hit_Knockback',{loop:0,speed:.9,fade:.06})}}
@@ -1286,11 +1291,13 @@ function conf(){try{return window.YXAcct&&YXAcct.conf()}catch(e){return false}}
 function made(){return !!(S.made||S.lv>1||S.clsPick||S.maxF>1||(S.nick&&!/^Gezgin\d+$/.test(S.nick)))}
 function ready(){return SKN.ready()}
 function preview(on,off){window.__ent=on?1:0;window.__entOff=on&&off&&innerWidth>720?.3:0;document.body.classList.toggle('ent',true);EN.classList.toggle('pv',!!on);EN.classList.toggle('ctr',!on);
- if(on){pl.x=0;pl.z=9;started=false;if(window.__entYaw==null)window.__entYaw=0;S.arm=0}}
-function steps(n){var s='<div class="st">';for(var i=0;i<4;i++)s+='<i'+(i<n?' class="on"':'')+'></i>';return s+'</div>'}
+ if(on){pl.x=0;pl.z=40;started=false;window.__entYaw=0;S.arm=0}}
+function steps(n){var s='<div class="st">';for(var i=0;i<5;i++)s+='<i'+(i<n?' class="on"':'')+'></i>';return s+'</div>'}
 function nav(prev,next,nl){return '<div class="nv">'+(prev?'<button class="bt2" data-a="go" data-v="'+prev+'" type="button">← Geri</button>':'')+'<button class="bt" data-a="go" data-v="'+next+'" type="button">'+(nl||'İleri →')+'</button></div>'}
 function sw(arr,cur,act,fn){var h='<div class="sw">';arr.forEach(function(c,i){h+='<button type="button" data-a="'+act+'" data-v="'+(fn?fn(c,i):i)+'" class="'+((fn?fn(c,i):i)==cur?'on':'')+'" style="background:'+c+'"></button>'});return h+'</div>'}
 function toneCol(t){var b=t.s?[150,112,88]:[242,208,184];return 'rgb('+b.map(function(v,i){return Math.min(255,Math.round(v*t.t[i]))}).join(',')+')'}
+var OCOLS=['','#c0392b','#2e6fd0','#2f8f4e','#8a4fd0','#2a2a2e','#d4a62a','#e8e8e8'];
+function chips(list,cur,act){var h='<div class="sw">';list.forEach(function(o){h+='<button class="ch'+(String(cur)===String(o[0])?' on':'')+'" data-a="'+act+'" data-v="'+o[0]+'" type="button">'+o[1]+'</button>'});return h+'</div>'}
 function render(){var a=appOf(),h='',pv=0;
  if(E.step==='login'){preview(0);
   var ac_=ac(),has=conf();
@@ -1299,25 +1306,31 @@ function render(){var a=appOf(),h='',pv=0;
   else{h+='<div style="width:min(360px,100%);display:flex;flex-direction:column;gap:8px">'+(has?'<input id="em" type="email" autocomplete="email" placeholder="E-posta" value="'+esc(E.mail)+'"><input id="pw" type="password" autocomplete="current-password" placeholder="Şifre (en az 6 karakter)"><div style="display:flex;gap:8px"><button class="bt" style="flex:1" data-a="in" type="button">Giriş yap</button><button class="bt2" style="flex:1" data-a="up" type="button">Kayıt ol</button></div><button class="lk" data-a="rs" type="button">Şifremi unuttum</button>':'<small>Hesap servisi şu an kullanılamıyor.</small>')+'<div class="err" id="er">'+esc(E.err)+'</div><button class="'+(has?'lk':'bt')+'" data-a="go" data-v="'+(made()?'welcome':'race')+'" type="button">'+(has?'Hesapsız (misafir) devam et':'Misafir olarak oyna')+'</button><small>Hesapla giriş yaparsan ilerlemen bulutta saklanır, Yaxest Diyarı ile aynı hesaptır.</small></div>'}
   h+='<div class="ld"><i id="ldb" style="width:'+(ready()?100:30)+'%"></i></div><small id="ldt">'+(ready()?'Hazır':'Modeller yükleniyor…')+'</small><small><a href="../" style="color:#9ad0ff">← Yaxest Diyarı</a> · Test sürümü (beta)</small>'}
  else if(E.step==='welcome'){preview(1,1);var c=CL[S.cls||'warrior'];
-  h=steps(4)+'<h2>Tekrar hoş geldin</h2><div class="cd on"><b>'+esc(S.nick)+'</b><small>Seviye '+S.lv+' · '+c.i+' '+c.n+' · '+((RACES[a.race]||RACES.human).n)+' · Kat '+S.maxF+'</small></div><small>Karakteri sürükleyerek döndürebilirsin.</small><div class="nv"><button class="bt" data-a="start" type="button">Kuleye Gir ⚔️</button></div><button class="bt2" data-a="edit" type="button">🎨 Görünümü düzenle</button><button class="lk" data-a="go" data-v="login" type="button">Hesap / çıkış</button>'}
- else if(E.step==='race'){preview(1,1);
-  h=steps(1)+'<h2>Irk ve beden</h2><h3>Cinsiyet</h3><div class="g"><button class="cd'+(a.g==='m'?' on':'')+'" data-a="g" data-v="m" type="button"><b>♂ Erkek</b></button><button class="cd'+(a.g==='f'?' on':'')+'" data-a="g" data-v="f" type="button"><b>♀ Kadın</b></button></div><h3>Irk</h3><div class="g">';
+  h=steps(5)+'<h2>Tekrar hoş geldin</h2><div class="cd on"><b>'+esc(S.nick)+'</b><small>Seviye '+S.lv+' · '+c.i+' '+c.n+' · '+((RACES[a.race]||RACES.human).n)+' · Kat '+S.maxF+'</small></div><small>Karakteri sürükleyerek döndürebilirsin.</small><div class="nv"><button class="bt" data-a="start" type="button">Kuleye Gir ⚔️</button></div><button class="bt2" data-a="edit" type="button">🎨 Görünümü düzenle</button><button class="lk" data-a="go" data-v="login" type="button">Hesap / çıkış</button>'}
+ else if(E.step==='race'){preview(1,1);var R0=RACES[a.race]||RACES.human;
+  h=steps(1)+'<h2>Irk</h2><small>Irkın bedenini, boyunu ve küçük bonuslarını belirler.</small>';
+  if(!R0.mdl)h+='<h3>Cinsiyet</h3><div class="g"><button class="cd'+(a.g==='m'?' on':'')+'" data-a="g" data-v="m" type="button"><b>♂ Erkek</b></button><button class="cd'+(a.g==='f'?' on':'')+'" data-a="g" data-v="f" type="button"><b>♀ Kadın</b></button></div>';
+  h+='<h3>Irklar</h3><div class="g">';
   Object.keys(RACES).forEach(function(k){var r=RACES[k];h+='<button class="cd'+(a.race===k?' on':'')+'" data-a="race" data-v="'+k+'" type="button"><b>'+r.n+'</b><small>'+r.d+'</small><small style="color:#ffd98a;opacity:1">'+r.bt+'</small></button>'});
   h+='</div>'+nav('login','look')}
- else if(E.step==='look'){preview(1,1);
-  h=steps(2)+'<h2>Görünüm</h2><h3>Ten rengi</h3>'+sw(TONES.map(toneCol),a.tone,'tone')+'<h3>Saç</h3><div class="sw">';
-  HAIRS.forEach(function(x){h+='<button class="ch'+(a.hair===x[0]?' on':'')+'" style="width:auto;height:auto;border-radius:999px;background:rgba(255,255,255,.05)" data-a="hair" data-v="'+x[0]+'" type="button">'+x[1]+'</button>'});
-  h+='</div><h3>Saç rengi</h3>'+sw(HCOLS,a.hc,'hc',function(c){return c});
-  if(a.g==='m')h+='<h3>Sakal</h3><div class="sw"><button class="ch'+(a.beard?'':' on')+'" style="width:auto;height:auto;border-radius:999px;background:rgba(255,255,255,.05)" data-a="beard" data-v="0" type="button">Yok</button><button class="ch'+(a.beard?' on':'')+'" style="width:auto;height:auto;border-radius:999px;background:rgba(255,255,255,.05)" data-a="beard" data-v="1" type="button">Sakallı</button></div>';
-  h+='<h3>Kıyafet</h3><div class="sw">';[['peasant',0,'Köylü'],['peasant',1,'Köylü (koyu)'],['ranger',0,'Korucu'],['ranger',1,'Korucu (koyu)']].forEach(function(o){var on=a.outfit===o[0]&&(a.ov|0)===o[1];h+='<button class="ch'+(on?' on':'')+'" style="width:auto;height:auto;border-radius:999px;background:rgba(255,255,255,.05)" data-a="outfit" data-v="'+o[0]+':'+o[1]+'" type="button">'+o[2]+'</button>'});
-  h+='</div>'+(E.edit?nav('welcome','welcome','Kaydet ✔'):nav('race','cls'))}
+ else if(E.step==='look'){preview(1,1);var R1=RACES[a.race]||RACES.human,hum=!(R1.mdl||a.race==='elf'||a.race==='orc');
+  h=steps(2)+'<h2>Yüz ve ten</h2><h3>Ten rengi</h3>'+sw(TONES.map(toneCol),a.tone,'tone');
+  if(hum){h+='<h3>Saç</h3>'+chips(HAIRS.map(function(x){return[x[0],x[1]]}),a.hair,'hair')+'<h3>Saç rengi</h3>'+sw(HCOLS,a.hc,'hc',function(c){return c});
+   if(a.g==='m'&&a.race!=='dwarf')h+='<h3>Sakal</h3>'+chips([['0','Yok'],['1','Sakallı']],String(a.beard?1:0),'beard');else if(a.race==='dwarf')h+='<small>Cüceler her zaman sakallıdır.</small>'}
+  else h+='<small>Bu ırkın yüzü ve saçı kendi modelinden gelir; ten tonu rengi hafifçe değiştirir.</small>';
+  h+=(E.edit?nav('race','outfit'):nav('race','outfit'))}
+ else if(E.step==='outfit'){preview(1,1);var R2=RACES[a.race]||RACES.human,hum2=!R2.mdl,OP=[['peasant','Köylü'],['ranger','Korucu']];
+  h=steps(3)+'<h2>Kıyafet</h2>';
+  if(hum2){h+='<h3>Üst</h3>'+chips(OP,a.top||a.outfit||'peasant','top')+'<h3>Alt</h3>'+chips(OP,a.legs||a.outfit||'peasant','legs')+'<h3>Ayakkabı</h3>'+chips(OP,a.feet||a.outfit||'peasant','feet')+'<h3>Doku</h3>'+chips([['0','Açık'],['1','Koyu']],String(a.ov|0),'ov')+'<h3>Kıyafet rengi</h3>'+sw(OCOLS.map(function(c){return c||'#9a8a7a'}),a.oc||'','oc',function(c,i){return OCOLS[i]})+'<h3>Aksesuar</h3><div class="sw">'+[['hood','Kukuleta'],['paul','Omuzluk'],['belt','Kemer'],['brac','Bileklik']].map(function(o){var on=o[0]==='belt'||o[0]==='brac'?(a[o[0]]==null?(a.top||a.outfit)==='ranger':!!a[o[0]]):!!a[o[0]];return '<button class="ch'+(on?' on':'')+'" data-a="tog" data-v="'+o[0]+'" type="button">'+o[1]+'</button>'}).join('')+'</div>'}
+  else h+='<small>'+R2.n+' ırkı çıplak derisiyle ve kendi doğal görünümüyle oynanır; kıyafet seçenekleri insan, elf, ork ve cücede vardır.</small>';
+  h+=(E.edit?nav('look','welcome','Kaydet ✔'):nav('look','cls'))}
  else if(E.step==='cls'){preview(1,1);var cc=S.cls||'';
-  h=steps(3)+'<h2>Sınıf</h2><small>Hamlelerini, silahını ve oyun tarzını belirler. Oyunda 300 🪙 karşılığı değiştirilebilir.</small><div class="g">';
+  h=steps(4)+'<h2>Sınıf</h2><small>Hamlelerini, silahını ve oyun tarzını belirler. Oyunda 300 🪙 karşılığı değiştirilebilir.</small><div class="g">';
   Object.keys(CL).forEach(function(k){var c=CL[k];h+='<button class="cd'+(cc===k?' on':'')+'" data-a="cls" data-v="'+k+'" type="button"><b>'+c.i+' '+c.n+'</b><small>'+c.d+'</small></button>'});
   h+='</div>';if(cc){var c=CL[cc];h+='<div class="cd on" style="width:100%"><b>'+c.i+' '+c.n+'</b><small>Q: '+c.q[2]+'<br>E: '+c.e[2]+'<br>R: '+c.r[2]+'</small></div>'}
-  h+=nav('look','name',cc?'İleri →':'Bir sınıf seç')}
+  h+=nav('outfit','name',cc?'İleri →':'Bir sınıf seç')}
  else if(E.step==='name'){preview(1,1);var nm=E.name||(S.nick&&!/^Gezgin\d+$/.test(S.nick)?S.nick:'');
-  h=steps(4)+'<h2>İsim</h2><small>3–16 karakter: harf, rakam, boşluk, alt çizgi. Çok oyunculu dünyada bu isimle görünürsün.</small><div style="display:flex;gap:8px"><input id="nm" type="text" maxlength="16" placeholder="Karakter adı" value="'+esc(nm)+'"><button class="bt2" data-a="dice" type="button" title="Rastgele">🎲</button></div><div class="err" id="er">'+esc(E.err)+'</div>'+(E.busy?'<small>Kontrol ediliyor…</small>':'')+nav('cls','fin','Maceraya Başla ⚔️')}
+  h=steps(5)+'<h2>İsim</h2><small>3–16 karakter: harf, rakam, boşluk, alt çizgi. Çok oyunculu dünyada bu isimle görünürsün.</small><div style="display:flex;gap:8px"><input id="nm" type="text" maxlength="16" placeholder="Karakter adı" value="'+esc(nm)+'"><button class="bt2" data-a="dice" type="button" title="Rastgele">🎲</button></div><div class="err" id="er">'+esc(E.err)+'</div>'+(E.busy?'<small>Kontrol ediliyor…</small>':'')+nav('cls','fin','Maceraya Başla ⚔️')}
  P.innerHTML=h;
  if(E.step==='cls'&&!S.cls){var b=P.querySelector('.nv .bt');if(b){b.dataset.a='noop'}}
 }
@@ -1330,11 +1343,11 @@ function fin(){var el=$('nm'),n=((el&&el.value)||'').trim().replace(/\s+/g,' ');
  function done(){S.nick=n;S.made=1;S.clsPick=1;if(!S.cls)S.cls='warrior';recalc();pl.hp=pl.mhp;pl.st=pl.mst;save();start()}
  if(a&&a.uid&&window.YXAcct&&YXAcct.claimNick){E.busy=1;render();YXAcct.claimNick(n).then(function(r){E.busy=0;if(r.ok){done()}else{E.err=r.why==='taken'?'Bu isim alınmış, başka bir isim dene.':r.why==='reserved'?'Bu isim ayrılmış.':'Bağlantı sorunu, tekrar dene.';render()}})}
  else done()}
-function start(){window.__ent=0;window.__entYaw=null;document.body.classList.remove('ent');EN.classList.remove('on','pv');pl.yaw=0;cam.yaw=0;cam.pit=-.1;$('go').style.display='flex';$('gob').onclick()}
+function start(){window.__entSpin=0;pl.x=0;pl.z=9;window.__ent=0;window.__entYaw=null;document.body.classList.remove('ent');EN.classList.remove('on','pv');pl.yaw=0;cam.yaw=0;cam.pit=-.1;$('go').style.display='flex';$('gob').onclick()}
 P.addEventListener('click',function(ev){var t=ev.target.closest('[data-a]');if(!t)return;var a=t.dataset.a,v=t.dataset.v;
  if(a==='go'){mailv();E.err='';if(v==='welcome'){E.edit=0;save()}if(v==='name'&&!S.cls)return;E.step=v;if(v==='fin'){E.step='name';fin();return}render();return}
  if(a==='start'){start();return}
- if(a==='edit'){E.edit=1;E.step='look';render();return}
+ if(a==='edit'){E.edit=1;E.step='race';render();return}
  if(a==='noop')return;
  if(a==='in'||a==='up'){mailv();if(!/^\S+@\S+\.\S+$/.test(E.mail)){say_('Geçerli bir e-posta yaz.');return}if(E.pw.length<6){say_('Şifre en az 6 karakter olmalı.');return}
   say_('Bağlanıyor…');var f=a==='in'?YXAcct.signIn:YXAcct.signUp;f(E.mail,E.pw).then(function(){E.pw='';afterLogin()},function(e){say_(e&&e.msg||'Bir sorun oluştu.')});return}
@@ -1342,8 +1355,10 @@ P.addEventListener('click',function(ev){var t=ev.target.closest('[data-a]');if(!
  if(a==='out'){try{YXAcct.signOut()}catch(e){}render();return}
  var ap=Object.assign({},S.app||{});
  if(a==='g'){ap.g=v;if(v==='f'&&ap.beard)ap.beard=0;if(v==='f'&&ap.hair==='Hair_Buzzed')ap.hair='Hair_BuzzedFemale';if(v==='m'&&ap.hair==='Hair_BuzzedFemale')ap.hair='Hair_Buzzed'}
- else if(a==='race')ap.race=v;else if(a==='tone')ap.tone=+v;else if(a==='hair')ap.hair=v;else if(a==='hc')ap.hc=v;else if(a==='beard')ap.beard=+v;
- else if(a==='outfit'){var q=v.split(':');ap.outfit=q[0];ap.ov=+q[1]}
+ else if(a==='race'){ap.race=v;if(RACES[v]&&RACES[v].mdl)ap.g='m';if(v==='dwarf'&&ap.g==='m')ap.beard=1}
+ else if(a==='tone')ap.tone=+v;else if(a==='hair')ap.hair=v;else if(a==='hc')ap.hc=v;else if(a==='beard')ap.beard=+v;
+ else if(a==='top')ap.top=v;else if(a==='legs')ap.legs=v;else if(a==='feet')ap.feet=v;else if(a==='ov')ap.ov=+v;else if(a==='oc')ap.oc=v;
+ else if(a==='tog'){var cu=ap[v];if(v==='belt'||v==='brac')cu=cu==null?(ap.top||ap.outfit)==='ranger':!!cu;ap[v]=cu?0:1}
  else if(a==='cls'){S.cls=v;recalc();render();snd('pick');return}
  else if(a==='dice'){var nn=NAMES[Math.floor(Math.random()*NAMES.length)]+NAMES[Math.floor(Math.random()*NAMES.length)].toLowerCase()+(Math.random()<.4?Math.floor(Math.random()*90+10):'');E.name=nn.slice(0,16);render();return}
  else return;
@@ -1352,7 +1367,7 @@ P.addEventListener('keydown',function(ev){if(ev.key==='Enter'){var t=ev.target;i
 P.addEventListener('input',function(ev){if(ev.target.id==='nm')E.name=ev.target.value});
 /* sürükleyerek döndür */
 var dg=null;EN.addEventListener('pointerdown',function(ev){if(ev.target.closest('.pn'))return;dg=ev.clientX});window.addEventListener('pointerup',function(){dg=null});
-window.addEventListener('pointermove',function(ev){if(dg==null||!window.__ent)return;window.__entYaw=(window.__entYaw||0)+(ev.clientX-dg)*.012;dg=ev.clientX});
+window.addEventListener('pointermove',function(ev){if(dg==null||!window.__ent)return;window.__entSpin=(window.__entSpin||0)+(ev.clientX-dg)*.012;dg=ev.clientX});
 /* başlat */
 $('go').style.display='none';EN.classList.add('on');document.body.classList.add('ent');
 if(ac()&&ac().email&&made()){E.step='welcome'}
@@ -1361,6 +1376,8 @@ var rt=setInterval(function(){if(ready()){var b=$('ldb'),t=$('ldt');if(b)b.style
 window.__entApi={render:render,get step(){return E.step},set step(v){E.step=v;render()}};
 })();
 window.__onKB=function(){if(WORLD==='town')buildTown()};if(window.__kbReady)window.__onKB();
+
+window.__skdbg=function(){try{return String(skPlayer(.016))+' '+JSON.stringify(Object.keys(SKN.models))}catch(x){return x.stack}};
 
 })();
 </script>
