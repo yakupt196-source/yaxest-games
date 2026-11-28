@@ -144,8 +144,8 @@ function usePotion(){if(pl.dead>0||pl.potCd>0)return;if(S.pot<=0){toast('İksiri
 function nearIA(){var best=null,bd=1e9;IA.forEach(function(a){if(a.lock&&!FL.bossDead)return;if((a.lvl|0)!==(window.__upY?1:0)&&(a.k==='up'||a.k==='down'||a.k==='bed'))return;var d=Math.hypot(a.x-pl.x,a.z-pl.z);if(d<a.r&&d<bd){bd=d;best=a}});return best}
 function doInteract(){if(pl.dead>0||paused)return;var a=nearIA();if(!a)return;
  if(a.k==='npc'){var m={merchant:'shop',smith:'smith',guild:'guild',inn:'inn',quest:'quest',guard:'gate'}[a.id];if(a.id==='guard'&&WORLD==='town'){openPanel('gate');return}openPanel(m)}
- else if(a.k==='up'){window.__upY=3.15;pl.x=a.x;pl.z=a.z;var qq=hin(window.__hotelH(),-6.1,.3);pl.x=qq[0];pl.z=qq[1];toast('⬆ Üst kat: salon ve ortak yatakhane','#ffd98a')}
- else if(a.k==='down'){window.__upY=0;var q2=hin(window.__hotelH(),-6.1,3.2);pl.x=q2[0];pl.z=q2[1]}
+ else if(a.k==='up'){window.__upY=3.15;var qq=hin(a.h,a.tx,a.tz);pl.x=qq[0];pl.z=qq[1];toast('⬆ Üst kat','#ffd98a')}
+ else if(a.k==='down'){window.__upY=0;var q2=hin(a.h,a.tx,a.tz);pl.x=q2[0];pl.z=q2[1]}
  else if(a.k==='bed'){if(roomOn()&&S.room.n===a.n){pl.hp=pl.mhp;pl.st=pl.mst;S.pot=Math.max(S.pot,3);toast('🛏 İyi dinlendin. Can ve dayanıklılık doldu.','#ffd98a');snd('pick');save()}else toast('Bu oda senin değil. Han Sahibi’nden kirala.','#ff9a9a')}
  else if(a.k==='fire'){pl.hp=pl.mhp;pl.st=pl.mst;pl.mp=Math.max(pl.mp,0);S.pot=Math.max(S.pot,3);toast('🔥 Dinlendin. Can ve dayanıklılık doldu.','#ffd98a');save()}
  else if(a.k==='town'){startTown(true)}

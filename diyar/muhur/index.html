@@ -173,7 +173,7 @@ function ball(cx,cy,cz,r,col,mat,sy){sy=sy||1;var v=[[1,0,0],[-1,0,0],[0,1,0],[0
    tri([cx+q[0][0]*r,cy+q[0][1]*r*sy,cz+q[0][2]*r],[cx+q[1][0]*r,cy+q[1][1]*r*sy,cz+q[1][2]*r],[cx+q[2][0]*r,cy+q[2][1]*r*sy,cz+q[2][2]*r],cc,mat)})})}
 /* ===================== YÜZ MÜHÜR: dünya, temalar, katlar ===================== */
 var WP={amp:2.2,r0:26,r1:46,bowl:70,bs:.09,gm:1,ga:[.12,.28,.08],gb:[.34,.55,.18],lim:78};
-function H(x,z){var r=Math.sqrt(x*x+z*z),UP=0;if(window.__upY&&window.__hotelH){var hh=window.__hotelH();if(hh){var c_=Math.cos(hh[5]),s_=Math.sin(hh[5]),dx_=x-hh[0],dz_=z-hh[1];if(Math.abs(dx_*c_-dz_*s_)<7.3&&Math.abs(dx_*s_+dz_*c_)<4.3)UP=window.__upY}}var f=sstep(WP.r0,WP.r1,r),k=WP.amp/2.2;
+function H(x,z){var r=Math.sqrt(x*x+z*z),UP=0;if(window.__upY&&window.__upL){for(var ui=0;ui<window.__upL.length;ui++){var u_=window.__upL[ui],hh=u_.h,c_=Math.cos(hh[5]),s_=Math.sin(hh[5]),dx_=x-hh[0],dz_=z-hh[1];if(Math.abs(dx_*c_-dz_*s_)<u_.hw&&Math.abs(dx_*s_+dz_*c_)<u_.hd){UP=window.__upY;break}}}var f=sstep(WP.r0,WP.r1,r),k=WP.amp/2.2;
  var h=Math.sin(x*.07+1.3)*Math.cos(z*.06)*WP.amp+(Math.sin(x*.19+z*.13)*.55+Math.sin(z*.23-x*.11)*.35)*k;
  return h*f+Math.max(0,r-WP.bowl)*WP.bs+UP}
 var HG='uniform vec4 uHP;uniform float uBS;uniform float uGM;uniform vec3 uGA;uniform vec3 uGB;uniform vec3 uHs[8];bool hh(vec2 w){for(int i=0;i<8;i++){if(uHs[i].z>0.&&length(w-uHs[i].xy)<uHs[i].z)return true;}return false;}\nfloat H(vec2 p){float r=length(p);float f=smoothstep(uHP.y,uHP.z,r);float k=uHP.x/2.2;float h=sin(p.x*.07+1.3)*cos(p.y*.06)*uHP.x+(sin(p.x*.19+p.y*.13)*.55+sin(p.y*.23-p.x*.11)*.35)*k;return h*f+max(0.,r-uHP.w)*uBS;}';
@@ -261,7 +261,7 @@ function inArena(x,z){return x*x+(z-ARENA[1])*(z-ARENA[1])<17*17}
 function uploadWorld(){var n=P.length/3,b=new Float32Array(n*10);
  for(var i=0;i<n;i++){b[i*10]=P[i*3];b[i*10+1]=P[i*3+1];b[i*10+2]=P[i*3+2];b[i*10+3]=N[i*3];b[i*10+4]=N[i*3+1];b[i*10+5]=N[i*3+2];b[i*10+6]=C[i*3];b[i*10+7]=C[i*3+1];b[i*10+8]=C[i*3+2];b[i*10+9]=M[i]}
  gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,b,gl.STATIC_DRAW);NV=n;P=[];N=[];C=[];M=[]}
-function resetWorld(){window.__upY=0;if(typeof pl!=='undefined')pl.up=0;P=[];N=[];C=[];M=[];colliders=[];lamps=[];barrier=[];IA=[];NPCL=[]}
+function resetWorld(){window.__upY=0;window.__upL=[];if(typeof pl!=='undefined')pl.up=0;P=[];N=[];C=[];M=[];colliders=[];lamps=[];barrier=[];IA=[];NPCL=[]}
 function terrain(R,colf){for(var gx=-R;gx<R;gx++)for(var gz=-R;gz<R;gz++){var cx=gx+.5,cz=gz+.5;if(cx*cx+cz*cz>R*R)continue;
   var x0=gx,x1=gx+1,z0=gz,z1=gz+1,a=[x0,H(x0,z0),z0],b=[x1,H(x1,z0),z0],c=[x1,H(x1,z1),z1],d=[x0,H(x0,z1),z1],cc=colf(cx,cz,(a[1]+c[1])/2);quad(a,d,c,b,cc[0],cc[1])}}
 
@@ -328,8 +328,8 @@ function hotel(h){var yaw=h[5],y0=H(h[0],h[1]),rn=roomOn()?S.room.n:0;
  var hy=y0-.15+3-.05;function slab(x0,x1,z0,z1){var p=hin(h,(x0+x1)/2,(z0+z1)/2);box(p[0],hy,p[1],x1-x0,.3,z1-z0,[.5,.34,.2],5,yaw)}
  slab(-7.45,7.45,-4.45,1.0);slab(-5.2,7.45,1.0,4.45);slab(-7.45,-7.0,1.0,4.45);
  for(var si=0;si<8;si++){var sp=hin(h,-6.1,3.9-si*.4);box(sp[0],y0,sp[1],1.7,(si+1)*.4,.4,[.55,.38,.22],5,yaw)}
- var sg=hin(h,-6.1,4.0);IA.push({k:'up',x:sg[0],z:sg[1],r:2.0,lb:'⬆ Üst kata çık'});
- var sg2=hin(h,-6.1,2.2);IA.push({k:'down',x:sg2[0],z:sg2[1],r:1.7,lb:'⬇ Aşağı in',lvl:1});
+ window.__upL.push({h:h,hw:7.3,hd:4.3});var sg=hin(h,-6.1,4.0);IA.push({k:'up',x:sg[0],z:sg[1],r:2.0,lb:'⬆ Üst kata çık',h:h,tx:-6.1,tz:.3});
+ var sg2=hin(h,-6.1,2.2);IA.push({k:'down',x:sg2[0],z:sg2[1],r:1.7,lb:'⬇ Aşağı in',lvl:1,h:h,tx:-6.1,tz:3.2});
  for(var wx=-7.4;wx<=7.4;wx+=.8){[-4.4,4.4].forEach(function(lz){var q=hin(h,wx,lz);colliders.push([q[0],q[1],.55,1])})}
  for(var wz=-4.4;wz<=4.4;wz+=.8){[-7.4,7.4].forEach(function(lx){var q=hin(h,lx,wz);colliders.push([q[0],q[1],.55,1])})}
  for(var bx=-6;bx<=6;bx+=3){var bq=hin(h,bx,-3.6);dadd('Bed_Twin1',bq[0],bq[1],yaw,.9,null,3,.9);colliders.push([bq[0],bq[1],1.1,1]);var cq=hin(h,bx+1.1,-3.4);dadd('Chest_Closed',cq[0],cq[1],yaw,.7,null,3,.5)}
@@ -338,6 +338,19 @@ function hotel(h){var yaw=h[5],y0=H(h[0],h[1]),rn=roomOn()?S.room.n:0;
  [-5,0,5].forEach(function(lx){var tq=hin(h,lx,4.2);dadd('torch_mounted',tq[0],tq[1],yaw,1,null,4.8)});
  lamps.push([h[0],y0+5.5,h[1]]);lamps.push(hin(h,-4,0).concat([0]).length?[hin(h,-4,0)[0],y0+5.5,hin(h,-4,0)[1]]:[h[0],y0+5.5,h[1]]);
  lamps.push([h[0],y0+2.4,h[1]])}
+function upperFloor(h){var yaw=h[5],s=3,hw=h[2]*s/2-.1,hd=h[3]*s/2-.1,y0=H(h[0],h[1]),hy=y0-.15+3-.05;
+ function sl(x0,x1,z0,z1){var p=hin(h,(x0+x1)/2,(z0+z1)/2);box(p[0],hy,p[1],x1-x0,.3,z1-z0,[.5,.34,.2],5,yaw)}
+ var hx1=-hw+1.8,hz0=hd-2.5;sl(-hw-.05,hw+.05,-hd-.05,hz0);sl(hx1,hw+.05,hz0,hd+.05);
+ for(var si=0;si<8;si++){var sp=hin(h,-hw+.9,hd-.2-si*.3);box(sp[0],y0,sp[1],1.6,(si+1)*.4,.3,[.55,.38,.22],5,yaw)}
+ window.__upL.push({h:h,hw:hw+.05,hd:hd+.05});
+ var a1=hin(h,-hw+.9,hd-.1);IA.push({k:'up',x:a1[0],z:a1[1],r:1.8,lb:'⬆ Üst kata çık',h:h,tx:-hw+.9,tz:hz0-.7});
+ var a2=hin(h,-hw+.9,hz0+.8);IA.push({k:'down',x:a2[0],z:a2[1],r:1.5,lb:'⬇ Aşağı in',lvl:1,h:h,tx:-hw+.9,tz:hd-1.2});
+ for(var t=-hw;t<=hw;t+=.8){[-hd,hd].forEach(function(lz){var q=hin(h,t,lz);colliders.push([q[0],q[1],.55,1])})}
+ for(var t2=-hd;t2<=hd;t2+=.8){[-hw,hw].forEach(function(lx){var q=hin(h,lx,t2);colliders.push([q[0],q[1],.55,1])})}
+ var b=hin(h,1.3,-hd+.9);dadd('Bed_Twin1',b[0],b[1],yaw,.9,null,3,.9);colliders.push([b[0],b[1],1.1,1]);
+ var c=hin(h,-.2,-hd+.6);dadd('Chest_Closed',c[0],c[1],yaw,.7,null,3,.5);
+ var tb=hin(h,hw-1,hz0+1);dadd('Table_Large',tb[0],tb[1],yaw,.7,null,3,1.1);colliders.push([tb[0],tb[1],.9,1]);
+ lamps.push([h[0],y0+5.4,h[1]])}
 function furnish(h,kind){var yaw=h[5],cx=h[0],cz=h[1];
  if(kind==='inn'){hotel(h);return}
  function put(n,lx,lz,s,dy,col,ry){var p=hin(h,lx,lz);dadd(n,p[0],p[1],yaw+(ry||0),s,null,dy||0,col)}
@@ -385,6 +398,7 @@ function buildTown(){resetWorld();WP.amp=2.2;WP.r0=26;WP.r1=46;WP.bowl=70;WP.bs=
  window.__hotelH=function(){return HP.inn};
  HS.forEach(function(h,i){if(KB){khouse(h[0],h[1],h[2],h[3],h[4],h[5],{wood:h[6],roofc:RC[i],door:h[7]==='inn'?2:1,chimney:i%2==0});h[7]=h[7]||0;if(h[7]){h[8]=2.7;HP[h[7]]=h}}else house(h[0],h[1],h[2]*3+1,h[3]*3,h[4]*3.4,h[5],[.68,.66,.6],RC[i])});
  if(KB&&DK)HS.forEach(function(h){if(h[7])furnish(h,h[7])});
+ if(KB&&MV)HS.forEach(function(h){if(h[4]===2&&!h[7])upperFloor(h)});
  if(KB){kdecor()}
  if(!KB)well(0,0);tent(8,6,1.1);tent(-7,7,.95);stall(-13,-16,0,[.8,.2,.2]);stall(18,-1,1.57,[.2,.5,.3]);
  [[5,-6],[-5,-6],[10,2],[-11,1],[4,9],[-3,-12],[6,-30],[-6,-30],[7,-40],[-7,-40]].forEach(function(p){lamp(p[0],p[1])});
@@ -770,8 +784,8 @@ function usePotion(){if(pl.dead>0||pl.potCd>0)return;if(S.pot<=0){toast('İksiri
 function nearIA(){var best=null,bd=1e9;IA.forEach(function(a){if(a.lock&&!FL.bossDead)return;if((a.lvl|0)!==(window.__upY?1:0)&&(a.k==='up'||a.k==='down'||a.k==='bed'))return;var d=Math.hypot(a.x-pl.x,a.z-pl.z);if(d<a.r&&d<bd){bd=d;best=a}});return best}
 function doInteract(){if(pl.dead>0||paused)return;var a=nearIA();if(!a)return;
  if(a.k==='npc'){var m={merchant:'shop',smith:'smith',guild:'guild',inn:'inn',quest:'quest',guard:'gate'}[a.id];if(a.id==='guard'&&WORLD==='town'){openPanel('gate');return}openPanel(m)}
- else if(a.k==='up'){window.__upY=3.15;pl.x=a.x;pl.z=a.z;var qq=hin(window.__hotelH(),-6.1,.3);pl.x=qq[0];pl.z=qq[1];toast('⬆ Üst kat: salon ve ortak yatakhane','#ffd98a')}
- else if(a.k==='down'){window.__upY=0;var q2=hin(window.__hotelH(),-6.1,3.2);pl.x=q2[0];pl.z=q2[1]}
+ else if(a.k==='up'){window.__upY=3.15;var qq=hin(a.h,a.tx,a.tz);pl.x=qq[0];pl.z=qq[1];toast('⬆ Üst kat','#ffd98a')}
+ else if(a.k==='down'){window.__upY=0;var q2=hin(a.h,a.tx,a.tz);pl.x=q2[0];pl.z=q2[1]}
  else if(a.k==='bed'){if(roomOn()&&S.room.n===a.n){pl.hp=pl.mhp;pl.st=pl.mst;S.pot=Math.max(S.pot,3);toast('🛏 İyi dinlendin. Can ve dayanıklılık doldu.','#ffd98a');snd('pick');save()}else toast('Bu oda senin değil. Han Sahibi’nden kirala.','#ff9a9a')}
  else if(a.k==='fire'){pl.hp=pl.mhp;pl.st=pl.mst;pl.mp=Math.max(pl.mp,0);S.pot=Math.max(S.pot,3);toast('🔥 Dinlendin. Can ve dayanıklılık doldu.','#ffd98a');save()}
  else if(a.k==='town'){startTown(true)}
